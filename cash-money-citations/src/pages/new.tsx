@@ -1,19 +1,27 @@
 import Form from "../components/Form";
 
-const NewPet = () => {
-  const petForm = {
-    name: "",
-    owner_name: "",
-    species: "",
-    age: 0,
-    poddy_trained: false,
-    diet: [],
+const NewReference = () => {
+  const referenceForm = {
+    type: "",
+    citekey: "",
+    title: "",
+    authorFirstName: "",
+    authorLastName: "",
+    authorMiddleInitial: "",
+    publisher: "",
+    year: "",
+    month: "",
+    address: "",
+    edition: "",
+    volume: "",
+    isbn: "",
+    doi: "",
+    pages: "",
+    journal: "",
     image_url: "",
-    likes: [],
-    dislikes: [],
   };
 
-  return <Form formId="add-pet-form" petForm={petForm} />;
+  return <Form formId="add-reference-form" referenceForm={referenceForm} />;
 };
 
-export default NewPet;
+export default NewReference;

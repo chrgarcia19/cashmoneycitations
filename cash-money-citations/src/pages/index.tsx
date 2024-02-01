@@ -1,47 +1,40 @@
 import Link from "next/link";
 import dbConnect from "../utils/dbConnect";
-import Pet, { Pets } from "../models/Pet";
+import Reference, { References } from "../models/Reference";
 import { GetServerSideProps } from "next";
 
 type Props = {
-  pets: Pets[];
+  references: References[];
 };
 
-const Index = ({ pets }: Props) => {
+const Index = ({ references }: Props) => {
   return (
     <>
-      {pets.map((pet) => (
-        <div key={pet._id}>
+      {references.map((reference) => (
+        <div key={reference._id}>
           <div className="card">
-            <img src={pet.image_url} />
-            <h5 className="pet-name">{pet.name}</h5>
+            <img src={reference.image_url} />
+            <h5 className="pet-name">{reference.title}</h5>
             <div className="main-content">
-              <p className="pet-name">{pet.name}</p>
-              <p className="owner">Owner: {pet.owner_name}</p>
+              <p className="pet-name">{reference.title}</p>
+              <p className="owner">Type: {reference.type}</p>
 
-              {/* Extra Pet Info: Likes and Dislikes */}
+              {/* Extra Pet Info: Year and Publisher */}
               <div className="likes info">
-                <p className="label">Likes</p>
-                <ul>
-                  {pet.likes.map((data, index) => (
-                    <li key={index}>{data} </li>
-                  ))}
-                </ul>
+                <p className="label">Year</p>
+                {reference.year}
               </div>
               <div className="dislikes info">
-                <p className="label">Dislikes</p>
+                <p className="label">Publisher</p>
                 <ul>
-                  {pet.dislikes.map((data, index) => (
-                    <li key={index}>{data} </li>
-                  ))}
+                  {reference.publisher}
                 </ul>
               </div>
-
               <div className="btn-container">
-                <Link href={{ pathname: "/[id]/edit", query: { id: pet._id } }}>
+                <Link href={{ pathname: "/[id]/edit", query: { id: reference._id } }}>
                   <button className="btn edit">Edit</button>
                 </Link>
-                <Link href={{ pathname: "/[id]", query: { id: pet._id } }}>
+                <Link href={{ pathname: "/[id]", query: { id: reference._id } }}>
                   <button className="btn view">View</button>
                 </Link>
               </div>
@@ -58,15 +51,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   await dbConnect();
 
   /* find all the data in our database */
-  const result = await Pet.find({});
+  const result = await Reference.find({});
 
   /* Ensures all objectIds and nested objectIds are serialized as JSON data */
-  const pets = result.map((doc) => {
-    const pet = JSON.parse(JSON.stringify(doc));
-    return pet;
+  const references = result.map((doc) => {
+    const reference = JSON.parse(JSON.stringify(doc));
+    return reference;
   });
 
-  return { props: { pets: pets } };
+  return { props: { references: references } };
 };
 
 export default Index;

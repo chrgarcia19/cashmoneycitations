@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import dbConnect from "../../utils/dbConnect";
-import Pet, { Pets } from "../../models/Pet";
+import Reference, { References } from "../../models/Reference";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ParsedUrlQuery } from "querystring";
 
@@ -11,55 +11,50 @@ interface Params extends ParsedUrlQuery {
 }
 
 type Props = {
-  pet: Pets;
+  reference: References;
 };
 
 /* Allows you to view pet card info and delete pet card*/
-const PetPage = ({ pet }: Props) => {
+const ReferencePage = ({ reference }: Props) => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const handleDelete = async () => {
-    const petID = router.query.id;
+    const referenceID = router.query.id;
 
     try {
-      await fetch(`/api/pets/${petID}`, {
+      await fetch(`/api/references/${referenceID}`, {
         method: "Delete",
       });
       router.push("/");
     } catch (error) {
-      setMessage("Failed to delete the pet.");
+      setMessage("Failed to delete the reference.");
     }
   };
 
   return (
-    <div key={pet._id}>
+    <div key={reference._id}>
       <div className="card">
-        <img src={pet.image_url} />
-        <h5 className="pet-name">{pet.name}</h5>
+        <img src={reference.image_url} />
+        <h5 className="pet-name">{reference.title}</h5>
         <div className="main-content">
-          <p className="pet-name">{pet.name}</p>
-          <p className="owner">Owner: {pet.owner_name}</p>
-
+          <p className="pet-name">{reference.title}</p>
+          <p className="owner">Type: {reference.type}</p>
           {/* Extra Pet Info: Likes and Dislikes */}
           <div className="likes info">
-            <p className="label">Likes</p>
+            <p className="label">Year</p>
             <ul>
-              {pet.likes.map((data, index) => (
-                <li key={index}>{data} </li>
-              ))}
+              {reference.year}
             </ul>
           </div>
           <div className="dislikes info">
-            <p className="label">Dislikes</p>
+            <p className="label">Publisher</p>
             <ul>
-              {pet.dislikes.map((data, index) => (
-                <li key={index}>{data} </li>
-              ))}
+              {reference.publisher}
             </ul>
           </div>
 
           <div className="btn-container">
-            <Link href={`/${pet._id}/edit`}>
+            <Link href={`/${reference._id}/edit`}>
               <button className="btn edit">Edit</button>
             </Link>
             <button className="btn delete" onClick={handleDelete}>
@@ -84,22 +79,22 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async ({
     };
   }
 
-  const pet = await Pet.findById(params.id).lean();
+  const reference = await Reference.findById(params.id).lean();
 
-  if (!pet) {
+  if (!reference) {
     return {
       notFound: true,
     };
   }
 
   /* Ensures all objectIds and nested objectIds are serialized as JSON data */
-  const serializedPet = JSON.parse(JSON.stringify(pet));
+  const serializedReference = JSON.parse(JSON.stringify(reference));
 
   return {
     props: {
-      pet: serializedPet,
+      reference: serializedReference,
     },
   };
 };
 
-export default PetPage;
+export default ReferencePage;

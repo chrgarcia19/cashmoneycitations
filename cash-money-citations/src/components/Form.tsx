@@ -265,7 +265,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         <input
           type="text"
           name="isbn"
-          value={form.volume}
+          value={form.isbn}
           onChange={handleChange}
         />
 

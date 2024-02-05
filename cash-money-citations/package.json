@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js"
+    "start": "next start"
   },
   "dependencies": {
     "@types/node": "^20.4.7",

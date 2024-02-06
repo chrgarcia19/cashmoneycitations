@@ -1,3 +1,4 @@
+import { Contributor } from "@/models/Contributor";
 import Form from "../components/Form";
 
 const NewReference = () => {
@@ -5,7 +6,7 @@ const NewReference = () => {
     type: "",
     citekey: "",
     title: "",
-    contributors: new Array(),
+    contributors: new Array<Contributor>(),
     publisher: "",
     year: "",
     month: "",

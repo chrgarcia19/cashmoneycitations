@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function ContributorForm({ updateFormData = (Array) => {} }) {
+function ContributorForm({ updateFormData = (Array) => {}, contributors}) {
   const [formFields, setFormFields] = useState([
     { contributorType: '', contributorFirstName: '', contributorLastName: '', contributorMiddleI: ''},
   ])

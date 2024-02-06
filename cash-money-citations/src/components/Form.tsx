@@ -9,7 +9,7 @@ interface FormData {
   type: string;
   citekey: string;
   title: string;
-  contributors: Array<Contributor>;
+  contributors: Contributor[];
   publisher: string;
   year: string;
   month: string;
@@ -190,7 +190,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           required
         />
 
-        <ContributorForm updateFormData ={ updateFormData }/>
+        <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
 
         <label htmlFor="publisher">Publisher</label>
         <input

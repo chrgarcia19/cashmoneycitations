@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
+import ContributorForm from "./ContributorForm";
+import { Contributor } from "@/models/Contributor";
+
 
 interface FormData {
   type: string;
   citekey: string;
   title: string;
-  contributorType: string;
-  authorFirstName: string;
-  authorLastName: string;
-  authorMiddleInitial: string;
+  contributors: Array<Contributor>;
   publisher: string;
   year: string;
   month: string;
@@ -27,9 +27,7 @@ interface Error {
   type?: string;
   citekey?: string;
   title?: string;
-  contributorType?: string;
-  authorFirstName?: string;
-  authorLastName?: string;
+  contributors?: string;
   publisher?: string;
   year?: string;
   image_url?: string;
@@ -51,10 +49,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     type: referenceForm.type,
     citekey: referenceForm.citekey,
     title: referenceForm.title,
-    contributorType: referenceForm.contributorType,
-    authorFirstName: referenceForm.authorFirstName,
-    authorLastName: referenceForm.authorLastName,
-    authorMiddleInitial: referenceForm.authorMiddleInitial,
+    contributors: referenceForm.contributors,
     publisher: referenceForm.publisher,
     year: referenceForm.year,
     month: referenceForm.month,
@@ -94,6 +89,14 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     } catch (error) {
       setMessage("Failed to update reference");
     }
+  };
+
+  //Handling contributor stuff
+  const updateFormData = (newData: Array<any>) => {
+    setForm({
+      ...form,
+      contributors: newData,
+    });
   };
 
   /* The POST method adds a new entry in the mongodb database. */
@@ -139,9 +142,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (!form.type) err.type = "Type is required";
     if (!form.citekey) err.citekey = "Citekey is required";
     if (!form.title) err.title = "Title is required";
-    if (!form.contributorType) err.contributorType = "Contributor Type is required";
-    if (!form.authorFirstName) err.authorFirstName = "Author Name is required";
-    if (!form.authorLastName) err.authorLastName = "Author Name is required";
+    if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
     if (!form.year) err.year = "Year is required";
     if (!form.image_url) err.image_url = "Image URL is required";
@@ -189,40 +190,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           required
         />
 
-        <label htmlFor="contributorType">Contributor</label>
-        <select name="contributorType" defaultValue={""} value={form.contributorType} onChange={handleChange} required>
-          <option value="" disabled hidden>Choose here</option>
-          <option value="author">Author</option>
-          <option value="editor">Editor</option>
-          <option value="translator">Translator</option>
-        </select>
-
-        <label htmlFor="authorFirstName">Author's First Name</label>
-        <input
-          type="text"
-          name="authorFirstName"
-          value={form.authorFirstName}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="authorMiddleInitial">Author's Middle Initial</label>
-        <input
-          type="text"
-          name="authorMiddleInitial"
-          value={form.authorMiddleInitial}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="authorLastName">Author's Last Name</label>
-        <input
-          type="text"
-          name="authorLastName"
-          value={form.authorLastName}
-          onChange={handleChange}
-          required
-        />
+        <ContributorForm updateFormData ={ updateFormData }/>
 
         <label htmlFor="publisher">Publisher</label>
         <input

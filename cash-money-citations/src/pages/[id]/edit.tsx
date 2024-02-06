@@ -24,6 +24,7 @@ const EditReference = () => {
     type: reference.type,
     citekey: reference.citekey,
     title: reference.title,
+    contributorType: "",
     authorFirstName: reference.authorFirstName,
     authorLastName: reference.authorLastName,
     authorMiddleInitial: reference.authorMiddleInitial,

@@ -5,6 +5,7 @@ const NewReference = () => {
     type: "",
     citekey: "",
     title: "",
+    contributorType: "",
     authorFirstName: "",
     authorLastName: "",
     authorMiddleInitial: "",

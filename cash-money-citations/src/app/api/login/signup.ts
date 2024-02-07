@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/User";
 
-export async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -17,19 +16,19 @@ export async function handler(
       try {
         const { username, password } = req.body;
 
-        // Find the user in the database
-        const user = await User.findOne({ username });
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        // If the user doesn't exist or the password is incorrect, send an error
-        if (!user || !await bcrypt.compare(password, user.password)) {
-          return res.status(400).json({ message: 'Invalid username or password' });
-        }
+        // Create a new user
+        const user = new User({
+            username,
+            password: hashedPassword,
+        });
 
-        // Create a JWT
-        const token = jwt.sign({ userId: user._id }, 'your_jwt_secret');
+        // Save the user to the database
+        await user.save();
 
-        // Send the JWT to the client
-        res.status(200).json({ token });
+        res.status(201).json({ message: 'User registered successfully' });
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/User";
 
-export async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

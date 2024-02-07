@@ -36,7 +36,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
 
   useEffect(() => {
     setIsClient(true);
-    if (isClient && contributors.length > 0) {
+    if (contributors.length > 0) {
       setFormFields([...contributors]);
     } else {
       setFormFields([

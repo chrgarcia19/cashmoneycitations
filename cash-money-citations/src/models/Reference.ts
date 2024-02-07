@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
+import { Contributor } from "./Contributor";
 
 export interface References extends mongoose.Document {
     type: string;
     citekey: string;
     title: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authorMiddleInitial: string;
+    contributors: Contributor[];
     publisher: string;
     year: string;
     month: string;
@@ -19,6 +18,22 @@ export interface References extends mongoose.Document {
     journal: string;
     image_url: string;
 }
+
+const ContributorSchema = new mongoose.Schema<Contributor>({
+  // Define Contributor schema fields
+  contributorType: {
+    type: String
+  },
+  contributorFirstName: {
+    type: String
+  },
+  contributorLastName: {
+    type: String
+  },
+  contributorMiddleI: {
+    type: String
+  }
+});
 
 //Schema to correspond the model to what is happening in MongoDB
 const ReferenceSchema = new mongoose.Schema<References>({
@@ -34,17 +49,7 @@ const ReferenceSchema = new mongoose.Schema<References>({
     type: String,
     required: [true, "Please provide the title."],
   },
-  authorFirstName: {
-    type: String,
-    required: [true, "Please provide the first name of the author."],
-  },
-  authorLastName: {
-    type: String,
-    required: [true, "Please provide the last name of the author."],
-  },
-  authorMiddleInitial: {
-    type: String,
-  },
+  contributors: [ContributorSchema],
   publisher: {
     type: String,
     required: [true, "Please provide the publisher."],

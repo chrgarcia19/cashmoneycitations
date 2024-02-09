@@ -1,0 +1,63 @@
+import { NextResponse, NextRequest } from "next/server";
+import dbConnect from "@/utils/dbConnect";
+import Reference from "@/models/Reference";
+
+// For API's use THIS TO GET PARAMS req: NextRequest, { params }: { params: { id: string } }
+
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+
+  await dbConnect();
+
+
+
+  const id = params.id;
+
+  try {
+
+    const reference = await Reference.findById(id);
+
+    if (!reference) {
+      return NextResponse.json({ success: false }, { status: 400 });
+    }
+    return NextResponse.json({ success: true, data: reference, status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false, status: 400 , data: id});
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  await dbConnect();
+
+  const id = params.id;
+
+  try {
+    const deletedReference = await Reference.deleteOne({ _id: id });
+
+    if (!deletedReference) {
+      return NextResponse.json({ success: false }, { status: 400 });
+    }
+    return NextResponse.json({ success: true, data: {} }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+}
+
+export async function PUT(request: NextRequest) {
+
+  await dbConnect();
+
+  const req = await request.json();
+  const searchParams = request.nextUrl.searchParams
+  const id = searchParams.get('id')
+  
+  try {
+
+    const reference = await Reference.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,})
+    return NextResponse.json({ success: true, data: reference }, { status: 201});
+  } catch (error) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+}
+

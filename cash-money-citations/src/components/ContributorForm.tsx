@@ -36,23 +36,21 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
     setFormFields(newData);
   };
 
-  // useEffect(() => {
-  //   setIsClient(true);
-  //   if (contributors.length > 0) {
-  //     setFormFields([...contributors]);
-  //   } else {
-  //     setFormFields([
-  //       {
-  //         contributorType: '',
-  //         contributorFirstName: '',
-  //         contributorLastName: '',
-  //         contributorMiddleI: ''
-  //       }
-  //     ]);
-  //   }
-  // }, []);
-
-
+  useEffect(() => {
+    setIsClient(true);
+    if (contributors.length > 0) {
+      setFormFields([...contributors]);
+    } else {
+      setFormFields([
+        {
+          contributorType: '',
+          contributorFirstName: '',
+          contributorLastName: '',
+          contributorMiddleI: ''
+        }
+      ]);
+    }
+  }, []);
 
   return (
     <div className="App">

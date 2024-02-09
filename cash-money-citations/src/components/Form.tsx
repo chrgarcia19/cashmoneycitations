@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
+import { Suspense } from 'react';
 
 
 interface FormData {
@@ -68,7 +69,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form: FormData) => {
-    const { id } = searchParams.values().next().value;
+    /*const id  = searchParams.get("id");
+    
 
 
     try {
@@ -92,7 +94,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       router.push("/");
     } catch (error) {
       setMessage("Failed to update reference");
-    }
+    }*/
   };
 
   //Handling contributor stuff

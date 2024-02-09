@@ -42,7 +42,7 @@ const fetcher = (url: string) =>
 
       <div key={reference._id}>
       <div className="card">
-        <img src={reference.image_url} />
+        <img src={reference.image_url} alt="Reference Cover" />
         <h5 className="pet-name">{reference.title}</h5>
         <div className="main-content">
           <p className="pet-name">{reference.title}</p>

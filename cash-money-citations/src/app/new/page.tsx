@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Contributor } from "@/models/Contributor";
 import Form from "../../components/Form";
 
@@ -19,8 +20,8 @@ const NewReference = () => {
     journal: "",
     image_url: "",
   };
-
-  return <Form formId="add-reference-form" referenceForm={referenceForm} />;
+  return <Suspense><Form formId="add-reference-form" referenceForm={referenceForm} /></Suspense>;
+  
 };
 
 export default NewReference;

@@ -8,7 +8,7 @@ function NavBar() {
         <div className="top-bar">
         <div className="nav">
           <Link href="/">Home</Link>
-          <Link href="/new">Add Pet</Link>
+          <Link href="/new">Add Reference</Link>
           <Link href="/login">Login</Link>
         </div>
 

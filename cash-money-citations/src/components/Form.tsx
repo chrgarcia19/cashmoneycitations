@@ -1,56 +1,78 @@
+'use client'
+
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
+import ContributorForm from "./ContributorForm";
+import { Contributor } from "@/models/Contributor";
+
 
 interface FormData {
-  name: string;
-  owner_name: string;
-  species: string;
-  age: number;
-  poddy_trained: boolean;
-  diet: string[];
+  type: string;
+  citekey: string;
+  title: string;
+  contributors: Contributor[];
+  publisher: string;
+  year: string;
+  month: string;
+  address: string;
+  edition: string;
+  volume: string;
+  isbn: string;
+  doi: string;
+  pages: string;
+  journal: string;
   image_url: string;
-  likes: string[];
-  dislikes: string[];
 }
 
 interface Error {
-  name?: string;
-  owner_name?: string;
-  species?: string;
+  type?: string;
+  citekey?: string;
+  title?: string;
+  contributors?: string;
+  publisher?: string;
+  year?: string;
   image_url?: string;
 }
 
 type Props = {
   formId: string;
-  petForm: FormData;
-  forNewPet?: boolean;
+  referenceForm: FormData;
+  forNewReference?: boolean;
 };
 
-const Form = ({ formId, petForm, forNewPet = true }: Props) => {
+const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const contentType = "application/json";
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
   const [form, setForm] = useState({
-    name: petForm.name,
-    owner_name: petForm.owner_name,
-    species: petForm.species,
-    age: petForm.age,
-    poddy_trained: petForm.poddy_trained,
-    diet: petForm.diet,
-    image_url: petForm.image_url,
-    likes: petForm.likes,
-    dislikes: petForm.dislikes,
+    type: referenceForm.type,
+    citekey: referenceForm.citekey,
+    title: referenceForm.title,
+    contributors: referenceForm.contributors,
+    publisher: referenceForm.publisher,
+    year: referenceForm.year,
+    month: referenceForm.month,
+    address: referenceForm.address,
+    edition: referenceForm.edition,
+    volume: referenceForm.volume,
+    isbn: referenceForm.isbn,
+    doi: referenceForm.doi,
+    pages: referenceForm.pages,
+    journal: referenceForm.journal,
+    image_url: referenceForm.image_url,
   });
 
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form: FormData) => {
-    const { id } = router.query;
+    const { id } = searchParams.values().next().value;
+
 
     try {
-      const res = await fetch(`/api/pets/${id}`, {
+      const res = await fetch(`/api/references/${id}`, {
         method: "PUT",
         headers: {
           Accept: contentType,
@@ -66,17 +88,25 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
 
       const { data } = await res.json();
 
-      mutate(`/api/pets/${id}`, data, false); // Update the local data without a revalidation
+      mutate(`/api/references/${id}`, data, false); // Update the local data without a revalidation
       router.push("/");
     } catch (error) {
-      setMessage("Failed to update pet");
+      setMessage("Failed to update reference");
     }
+  };
+
+  //Handling contributor stuff
+  const updateFormData = (newData: Array<any>) => {
+    setForm({
+      ...form,
+      contributors: newData,
+    });
   };
 
   /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form: FormData) => {
     try {
-      const res = await fetch("/api/pets", {
+      const res = await fetch("/api/references", {
         method: "POST",
         headers: {
           Accept: contentType,
@@ -92,18 +122,15 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
 
       router.push("/");
     } catch (error) {
-      setMessage("Failed to add pet");
+      setMessage("Failed to add reference");
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const target = e.target;
-    const value =
-      target.name === "poddy_trained"
-        ? (target as HTMLInputElement).checked
-        : target.value;
+    const value = target.value;
     const name = target.name;
 
     setForm({
@@ -112,12 +139,16 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
     });
   };
 
+
   /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
   const formValidate = () => {
     let err: Error = {};
-    if (!form.name) err.name = "Name is required";
-    if (!form.owner_name) err.owner_name = "Owner is required";
-    if (!form.species) err.species = "Species is required";
+    if (!form.type) err.type = "Type is required";
+    if (!form.citekey) err.citekey = "Citekey is required";
+    if (!form.title) err.title = "Title is required";
+    if (!form.contributors) err.contributors = "Contributor info is required";
+    if (!form.publisher) err.publisher = "Publisher is required";
+    if (!form.year) err.year = "Year is required";
     if (!form.image_url) err.image_url = "Image URL is required";
     return err;
   };
@@ -127,7 +158,7 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
     const errs = formValidate();
 
     if (Object.keys(errs).length === 0) {
-      forNewPet ? postData(form) : putData(form);
+      forNewReference ? postData(form) : putData(form);
     } else {
       setErrors({ errs });
     }
@@ -136,57 +167,114 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
   return (
     <>
       <form id={formId} onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
+
+        <label htmlFor="type">Type</label>
+        <select name="type" defaultValue={""} value={form.type} onChange={handleChange} required>
+          <option value="" disabled hidden>Choose here</option>
+          <option value="website">Website</option>
+          <option value="book">Book</option>
+          <option value="journal">Journal</option>
+        </select>
+
+        <label htmlFor="citekey">Citekey</label>
         <input
           type="text"
-          maxLength={20}
-          name="name"
-          value={form.name}
+          name="citekey"
+          value={form.citekey}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="owner_name">Owner</label>
+        <label htmlFor="title">Title</label>
         <input
           type="text"
-          maxLength={20}
-          name="owner_name"
-          value={form.owner_name}
+          name="title"
+          value={form.title}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="species">Species</label>
+        <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+
+        <label htmlFor="publisher">Publisher</label>
         <input
           type="text"
-          maxLength={30}
-          name="species"
-          value={form.species}
+          name="publisher"
+          value={form.publisher}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="age">Age</label>
+        <label htmlFor="year">Year</label>
         <input
-          type="number"
-          name="age"
-          value={form.age}
+          type="text"
+          name="year"
+          value={form.year}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="month">Month</label>
+        <input
+          type="text"
+          name="month"
+          value={form.month}
           onChange={handleChange}
         />
 
-        <label htmlFor="poddy_trained">Potty Trained</label>
+        <label htmlFor="address">Address</label>
         <input
-          type="checkbox"
-          name="poddy_trained"
-          checked={form.poddy_trained}
+          type="text"
+          name="address"
+          value={form.address}
           onChange={handleChange}
         />
 
-        <label htmlFor="diet">Diet</label>
-        <textarea
-          name="diet"
-          maxLength={60}
-          value={form.diet}
+        <label htmlFor="edtion">Edition</label>
+        <input
+          type="text"
+          name="edition"
+          value={form.edition}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="volume">Volume</label>
+        <input
+          type="text"
+          name="volume"
+          value={form.volume}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="isbn">ISBN</label>
+        <input
+          type="text"
+          name="isbn"
+          value={form.isbn}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="doi">DOI</label>
+        <input
+          type="text"
+          name="doi"
+          value={form.doi}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="pages">Pages</label>
+        <input
+          type="text"
+          name="pages"
+          value={form.pages}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="journal">Journal</label>
+        <input
+          type="text"
+          name="journal"
+          value={form.journal}
           onChange={handleChange}
         />
 
@@ -197,22 +285,6 @@ const Form = ({ formId, petForm, forNewPet = true }: Props) => {
           value={form.image_url}
           onChange={handleChange}
           required
-        />
-
-        <label htmlFor="likes">Likes</label>
-        <textarea
-          name="likes"
-          maxLength={60}
-          value={form.likes}
-          onChange={handleChange}
-        />
-
-        <label htmlFor="dislikes">Dislikes</label>
-        <textarea
-          name="dislikes"
-          maxLength={60}
-          value={form.dislikes}
-          onChange={handleChange}
         />
 
         <button type="submit" className="btn">

@@ -169,7 +169,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       <form id={formId} onSubmit={handleSubmit}>
 
         <label htmlFor="type">Type</label>
-        <select name="type" defaultValue={""} value={form.type} onChange={handleChange} required>
+        <select name="type" defaultValue={form.type} onChange={handleChange} required>
           <option value="" disabled hidden>Choose here</option>
           <option value="website">Website</option>
           <option value="book">Book</option>
@@ -194,7 +194,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           required
         />
 
-        {/* <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/> */}
+        <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
 
         <label htmlFor="publisher">Publisher</label>
         <input

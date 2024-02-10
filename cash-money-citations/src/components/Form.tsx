@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
+import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 import { Suspense } from 'react';
@@ -67,6 +68,27 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     image_url: referenceForm.image_url,
   });
 
+  const id  = searchParams.get("id");
+
+  const fetcher = async (url: string) => {
+    const res = await fetch(`/api/references/${id}`);
+    if (!res.ok) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+    return res.json();
+  };
+
+  const useData = (url: string) => {
+    const { data, error, mutate } = useSWR(url, fetcher);
+
+    return {
+      data,
+      error,
+      isLoading: !data && !error,
+      mutate,
+    };
+  };
+
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form: FormData) => {
     const id  = searchParams.get("id");
@@ -88,7 +110,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
       const { data } = await res.json();
 
-      mutate(`/api/references/${id}`, data, false); // Update the local data without a revalidation
+      mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
       router.push("/");
     } catch (error) {
       setMessage("Failed to update reference");

@@ -91,17 +91,17 @@
   transition: 0.5s all;
 }
 
-.owner {
+.reference-type {
   color: grey;
   font-size: 110%;
 }
 
-.pet-name {
+.reference-name {
   font-weight: bold;
   font-size: 130%;
 }
 
-h5.pet-name {
+h5.reference-name {
   color: white;
   position: absolute;
   left: 0;
@@ -176,8 +176,8 @@ li {
   margin-left: 10px;
 }
 
-/* Delete Pet */
-.pet-container {
+/* Delete Reference */
+.reference-container {
   width: 100%;
 }
 

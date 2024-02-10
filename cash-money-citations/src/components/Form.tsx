@@ -140,7 +140,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   };
 
 
-  /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
+  /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
   const formValidate = () => {
     let err: Error = {};
     if (!form.type) err.type = "Type is required";

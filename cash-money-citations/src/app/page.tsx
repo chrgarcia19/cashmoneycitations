@@ -27,12 +27,12 @@ export default async function HomePage() {
           <div key={reference._id}>
             <div className="card">
               <img src={reference.image_url} alt="Image of a Reference Cover" />
-              <h5 className="pet-name">{reference.title}</h5>
+              <h5 className="reference-name">{reference.title}</h5>
               <div className="main-content">
-                <p className="pet-name">{reference.title}</p>
+                <p className="reference-name">{reference.title}</p>
                 <p className="owner">Type: {reference.type}</p>
   
-                {/* Extra Pet Info: Year and Publisher */}
+                {/* Extra Reference Info: Year and Publisher */}
                 <div className="likes info">
                   <p className="label">Year</p>
                   {reference.year}

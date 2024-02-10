@@ -42,17 +42,16 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
 
   await dbConnect();
 
   const req = await request.json();
-  const searchParams = request.nextUrl.searchParams
-  const id = searchParams.get('id')
-  
+  const id = params.id
+
   try {
 
-    const reference = await Reference.findByIdAndUpdate(id, req.body, {
+    const reference = await Reference.findByIdAndUpdate(id, req, {
       new: true,
       runValidators: true,})
     return NextResponse.json({ success: true, data: reference }, { status: 201});
@@ -60,4 +59,3 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
 }
-

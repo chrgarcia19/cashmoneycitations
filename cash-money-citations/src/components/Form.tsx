@@ -69,9 +69,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form: FormData) => {
-    /*const id  = searchParams.get("id");
-    
-
+    const id  = searchParams.get("id");
 
     try {
       const res = await fetch(`/api/references/${id}`, {
@@ -94,7 +92,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       router.push("/");
     } catch (error) {
       setMessage("Failed to update reference");
-    }*/
+    }
   };
 
   //Handling contributor stuff
@@ -196,7 +194,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           required
         />
 
-        <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+        {/* <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/> */}
 
         <label htmlFor="publisher">Publisher</label>
         <input

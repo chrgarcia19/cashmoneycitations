@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 export interface Users extends mongoose.Document {
     username: string;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
 }
@@ -14,12 +14,12 @@ const UserSchema = new mongoose.Schema<Users>({
         /*The username associated with the account*/
         type: String,
     },
-    first_name: {
+    firstName: {
         /* The name of the user */
 
         type: String,
     },
-    last_name: {
+    lastName: {
         /* The name of the user */
 
         type: String,

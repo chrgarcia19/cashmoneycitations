@@ -5,7 +5,7 @@ import {AiFillFacebook} from 'react-icons/ai'
 
 export default function Login() {
   return (
-    <div className='relative w-full h-screen bg-zinc-900/90'>
+    <div className='relative w-full h-screen bg-zinc-700'>
     <div className='flex justify-center items-center h-full'>
         <form className='max-w-[400px] w-full mx-auto bg-white p-8'>
             <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
@@ -22,7 +22,7 @@ export default function Login() {
                 <input className='border relative bg-gray-100 p-2' type="password" />
             </div>
             <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
-            <p className='flex items-center mt-2'><input className='mr-2' type="checkbox"  />Remember Me</p>
+            <p className='flex gap-3 ml-2 mr-1 mb-1 mt-4'><input className='w-6 h-6' type="checkbox"/>Remember Me</p>
             <p className='text-center mt-8'>Not a member? Sign up now</p>
         </form>
     </div>

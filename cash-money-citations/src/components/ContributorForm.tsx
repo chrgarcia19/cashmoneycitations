@@ -12,7 +12,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   const [formFields, setFormFields] = useState<Contributor[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, index: number) => {
     const { name, value } = event.target;
     const newData = [...formFields];
     newData[index][name as keyof Contributor] = value;
@@ -60,13 +60,12 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
       <form>
         {formFields.map((form, index) => (
           <div key={index} className="display-block inline-flex">
-            <input
-              name='contributorType'
-              placeholder='Contributor Type (Author, Editor, etc.)'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorType}
-              className="w-1/3 pr-0.5 mr-0.5"
-            />
+            <select name="type" className="bg-white border-gray-300 rounded-lg w-1/3 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
+              <option value="" disabled hidden>Contributor Type</option>
+              <option value="Author">Author</option>
+              <option value="Editor">Editor</option>
+              <option value="Translator">Translator</option>
+            </select>
             <input
               name='contributorFirstName'
               placeholder='Contributor First Name'

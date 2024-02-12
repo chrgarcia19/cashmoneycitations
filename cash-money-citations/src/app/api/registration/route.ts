@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/User";
 import url from "url";
+import bcryptjs from "bcryptjs"
 
 export const dynamic = 'force-dynamic';
 
@@ -37,14 +38,25 @@ export async function PUT(request: NextRequest) {
 export async function POST(request: NextRequest){
     await dbConnect();
 
-    const req = await request.json();
-
     try {
-        const user = await User.create(
-            req,
+        const reqBody = await request.json()
+        const {username, first_name, last_name, email, password} = reqBody
+
+        const user = await User.findOne({email})
+
+        if(user) {
+            return NextResponse.json({error: "Email already exists"}, {status: 400})
+
+        }
+        const userCreate = await User.create(
+            reqBody,
         );
-        return NextResponse.json({ success: true, data: user}, {status: 201});
+        return NextResponse.json({ success: true, data: userCreate}, {status: 201});
     } catch (error) {
         return NextResponse.json({ success: false }, { status: 400 });
     }
+
+
+
+    
 }

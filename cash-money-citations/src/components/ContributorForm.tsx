@@ -53,14 +53,14 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   }, []);
 
   return (
-    <div className="App">
+    <div className="App m-0 justify-center items-center">
       <div className="flex justify-center items-center">
         <h1 className="text-xl align-middle">Contributor Information (Type, First Name, Last Name, Middle Initial)</h1>
       </div>
-      <form>
+      <form className="m-0 justify-center items-center w-full max-w-screen-lg">
         {formFields.map((form, index) => (
-          <div key={index} className="display-block inline-flex">
-            <select name="type" className="bg-white border-gray-300 rounded-lg w-1/3 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
+          <div key={index} className="display-block inline-flex ">
+            <select name="type" className="bg-white border-gray-300 rounded-lg w-2/3 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
               <option value="" disabled hidden>Contributor Type</option>
               <option value="Author">Author</option>
               <option value="Editor">Editor</option>
@@ -71,14 +71,14 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               placeholder='Contributor First Name'
               onChange={(event) => handleFormChange(event, index)}
               value={form.contributorFirstName}
-              className="w-1/3 pr-0.5 mr-0.5"
+              className="w-2/3 pr-0.5 mr-0.5"
             />
             <input
               name='contributorLastName'
               placeholder='Contributor Last Name'
               onChange={(event) => handleFormChange(event, index)}
               value={form.contributorLastName}
-              className="w-1/3 pr-0.5 mr-0.5"
+              className="w-2/3 pr-0.5 mr-0.5"
             />
             <input
               name='contributorMiddleI'
@@ -87,7 +87,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               value={form.contributorMiddleI}
               className="w-2/12 pr-0.5 mr-0.5"
             />
-            <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm" onClick={() => removeFields(index)}>Remove</button>
+            <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5" onClick={() => removeFields(index)}>Remove</button>
           </div>
         ))}
         <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg" onClick={addFields}>Add More..</button>

@@ -48,12 +48,24 @@ export async function POST(request: NextRequest){
             return NextResponse.json({error: "Email already exists"}, {status: 400})
 
         }
-        const userCreate = await User.create(
-            reqBody,
-        );
-        return NextResponse.json({ success: true, data: userCreate}, {status: 201});
-    } catch (error) {
-        return NextResponse.json({ success: false }, { status: 400 });
+
+        const salt = await bcryptjs.genSalt(12)
+        const hashedPass = await bcryptjs.hash(password, salt)
+
+        const newUser = new User({
+            username,
+            first_name,
+            last_name,
+            email,
+            password: hashedPass,
+        })
+        
+        const createUser = await newUser.save()
+
+        return NextResponse.json({message: "User Created", success: true, createUser})
+
+    } catch (error: any) {
+        return NextResponse.json({error: error.message}, { status: 400 });
     }
 
 

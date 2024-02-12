@@ -1,6 +1,7 @@
 import "../../../css/style.css";
 import "../../../css/form.css";
 import Link from "next/link";
+import { SignOut } from "@/components/AuthButtons";
 
 function NavBar() {
     return (
@@ -10,6 +11,7 @@ function NavBar() {
           <Link href="/">Home</Link>
           <Link href="/new">Add Reference</Link>
           <Link href="/login">Login</Link>
+          <SignOut />
         </div>
 
         <img

@@ -184,3 +184,9 @@ li {
 .confirmation-box.show {
   display: block;
 }
+
+.reference-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

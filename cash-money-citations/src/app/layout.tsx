@@ -17,7 +17,9 @@ export default async function RootLayout({
         <html lang="en">
             <body>
                 <NavBar />
-                {children}
+                <div className="reference-wrapper">
+                    {children}
+                </div>
             </body>
         </html>
     )

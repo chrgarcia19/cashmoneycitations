@@ -2,12 +2,28 @@ import React from 'react'
 import {FcGoogle} from 'react-icons/fc'
 import {AiFillFacebook} from 'react-icons/ai'
 import Link from 'next/link'
+import { getProviders } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
+import { SignIn } from '@/components/AuthButtons'
 
 
-export default function Login() {
+export default async function Login() {
+    const session = await getServerSession()
+    const providers = await getProviders()
+
+    if (session) {
+        redirect("/");
+    }
+
+    if (!providers) {
+        return <div>Sign in not available</div>
+    }
+
   return (
     <div className='relative w-full h-screen bg-zinc-900/90'>
     <div className='flex justify-center items-center h-full'>
+        <SignIn providers={providers}/>;
         <form className='max-w-[400px] w-full mx-auto bg-white p-8'>
             <h2 className='text-4xl font-bold text-center py-4'>BRAND.</h2>
             <div className='flex justify-between py-8'>

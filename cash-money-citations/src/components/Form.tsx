@@ -112,6 +112,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
       mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
       router.push("/");
+      router.refresh();
     } catch (error) {
       setMessage("Failed to update reference");
     }
@@ -141,8 +142,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       if (!res.ok) {
         throw new Error(res.status.toString());
       }
-
       router.push("/");
+      router.refresh();
     } catch (error) {
       setMessage("Failed to add reference");
     }
@@ -188,6 +189,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
+    <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
       <form id={formId} onSubmit={handleSubmit}>
 
         <label htmlFor="type">Type</label>
@@ -215,8 +217,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           onChange={handleChange}
           required
         />
-
-        <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
 
         <label htmlFor="publisher">Publisher</label>
         <input

@@ -22,6 +22,7 @@ const fetcher = (url: string) =>
                 method: "Delete",
               });
               router.push('/');
+              router.refresh();
             } catch (error) {
             }
           };

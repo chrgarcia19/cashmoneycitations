@@ -5,7 +5,7 @@ import Link from "next/link";
 function NavBar() {
     return (
         <>
-        <div className="top-bar bg-slate-800">
+        <div className="top-bar bg-bankerblue">
         <div className="nav">
           <Link className="hover:bg-slate-950 text-white" href="/">Home</Link>
           <Link className="hover:bg-slate-950 text-white" href="/new">Add Reference</Link>
@@ -14,8 +14,8 @@ function NavBar() {
 
         <img
           id="title"
-          src="https://cdn.iconscout.com/icon/free/png-256/free-cashapp-3244513-2701881.png"
-          alt="Cashmoneycitations logo"
+          src="cashmoney_logo.png"
+          alt="Cash Money Citations logo"
         ></img>
       </div>
 

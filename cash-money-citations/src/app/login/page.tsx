@@ -24,7 +24,7 @@ export default function Login() {
             </div>
             <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
             <p className='flex items-center mt-2'><input className='mr-2' type="checkbox"  />Remember Me</p>
-            <Link className="bg-white p-2 text-center mt-8" href={"/login/registerUser"}>Not a member? Sign up now</Link>
+            <Link className="bg-white p-2 text-center mt-8" href={"/login/register"}>Not a member? Sign up now</Link>
         </form>
     </div>
     </div>

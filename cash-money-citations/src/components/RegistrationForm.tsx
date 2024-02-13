@@ -64,7 +64,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
         const id = searchParams.get("id");
     
         try {
-            const res = await fetch(`/api/registration/${id}`, {
+            const res = await fetch(`/api/register/${id}`, {
                 method: "PUT",
                 headers: {
                     Accept: contentType,
@@ -78,7 +78,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
             }
 
             const { data } = await res.json();
-            mutate(`/api/registration/${id}`, data, true);
+            mutate(`/api/register/${id}`, data, true);
 
             router.push("/");
             router.refresh();
@@ -89,7 +89,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
 
     const postData = async (form: RegistrationData) => {
         try {
-            const res = await fetch("/api/registration", {
+            const res = await fetch("/api/register", {
                 method: "POST",
                 headers: {
                     Accept: contentType,
@@ -144,67 +144,78 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
 
     return (
         <>
-        <form id={formId} onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
+            <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white p-8">
+            <h2 className='text-4xl font-bold text-center py-4 text-green-600'>Register</h2>
+                <div className="flex flex-col mb-4">
+                <label className="capitalize">Username:</label>
+                <input
+                    name="username" 
+                    className="border p-2 w-full bg-gray-100"
+                    type="text"
+                    value={form.username}
+                    onChange={handleChange}
+                    placeholder="Username"
+                />
+                </div>
 
-            <label>Username:</label>
-            <input
-                name="username" 
-                className="border border-slate-500"
-                type="text"
-                value={form.username}
-                onChange={handleChange}
-                placeholder="Username"
-            />
+                <div className="flex flex-col mb-4">
+                <label className="capitalize">First Name:</label>
+                <input
+                    name="firstName" 
+                    className="border p-2 w-full bg-gray-100"
+                    type="text"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                />
+                </div>
 
-            <label>First Name:</label>
-            <input
-                name="firstName" 
-                className="border border-slate-500"
-                type="text"
-                value={form.firstName}
-                onChange={handleChange}
-                placeholder="First Name"
-            />
+                <div className="flex flex-col mb-4">
+                <label className="capitalize">Last Name:</label>
+                <input
+                    name="lastName" 
+                    className="border p-2 w-full bg-gray-100"
+                    type="text"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                />
+                </div>
 
-            <label>Last Name:</label>
-            <input
-                name="lastName" 
-                className="border border-slate-500"
-                type="text"
-                value={form.lastName}
-                onChange={handleChange}
-                placeholder="Last Name"
-            />
+                <div className="flex flex-col mb-4">
+                <label className="capitalize">Email:</label>
+                <input
+                    name="email" 
+                    className="border p-2 w-full bg-gray-100"
+                    type="text"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                />
+                </div>
 
-            <label>Email:</label>
-            <input
-                name="email" 
-                className="border border-slate-500"
-                type="text"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email"
-            />
+                <div className="flex flex-col mb-4">
+                <label className="capitalize">Password:</label>
+                <input
+                    name="password" 
+                    className="border p-2 w-full bg-gray-100"
+                    type="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                />
+                </div>
 
-            <label>Password:</label>
-            <input
-                name="password" 
-                className="border border-slate-500"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Password"
-            />
-
-            <button type="submit" className="w-full py-3 mt-8 bg-indigo-600 
-            hover:bg-indigo-500 relative text-white">Register</button>
-        </form>
-        <p>{message}</p>
+                <button type="submit" className="w-full py-3 mt-8 bg-green-600 hover:bg-green-500 relative text-white">Sign Up</button>
+            </form>
         <div>
+            <p>{message}</p>
             {Object.keys(errors).map((err, index) => (
                 <li key={index}>{err}</li>
             ))}
         </div>
+    </div>
     </>
     );
 };

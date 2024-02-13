@@ -1,12 +1,11 @@
 'use client'
 
 import { useState } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
 import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
-import { Suspense } from 'react';
 
 
 interface FormData {

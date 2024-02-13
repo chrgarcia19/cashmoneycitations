@@ -1,6 +1,7 @@
 import React from 'react'
 import {FcGoogle} from 'react-icons/fc'
 import {AiFillFacebook} from 'react-icons/ai'
+import Link from 'next/link'
 
 
 export default function Login() {
@@ -23,7 +24,7 @@ export default function Login() {
             </div>
             <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
             <p className='flex gap-3 ml-2 mr-1 mb-1 mt-4'><input className='w-6 h-6' type="checkbox"/>Remember Me</p>
-            <p className='text-center mt-8'>Not a member? Sign up now</p>
+            <Link className="bg-white p-2 text-center mt-8" href={"/login/register"}>Not a member? Sign up now</Link>
         </form>
     </div>
     </div>

@@ -186,137 +186,151 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     }
   };
 
+  let formTitle: String;
+  if (form.type) {
+    formTitle = "Edit Reference"
+  }
+  else {
+    formTitle = "Add Reference"
+  }
+
   return (
     <>
-    <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
-      <form id={formId} onSubmit={handleSubmit}>
+    <div className="bg-gray-100 w-2/5 rounded-xl">
+      <div className="flex justify-center items-center">
+        <h1 className="text-2xl align-middle">{formTitle}</h1>
+      </div>
+      <br/>
+      <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+        <form id={formId} onSubmit={handleSubmit}>
 
-        <label htmlFor="type">Type</label>
-        <select name="type" defaultValue={form.type} onChange={handleChange} required>
-          <option value="" disabled hidden>Choose here</option>
-          <option value="website">Website</option>
-          <option value="book">Book</option>
-          <option value="journal">Journal</option>
-        </select>
+          <label htmlFor="type">Type</label>
+          <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
+            <option value="" disabled hidden>Choose here</option>
+            <option value="website">Website</option>
+            <option value="book">Book</option>
+            <option value="journal">Journal</option>
+          </select>
 
-        <label htmlFor="citekey">Citekey</label>
-        <input
-          type="text"
-          name="citekey"
-          value={form.citekey}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="citekey">Citekey</label>
+          <input
+            type="text"
+            name="citekey"
+            value={form.citekey}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="publisher">Publisher</label>
-        <input
-          type="text"
-          name="publisher"
-          value={form.publisher}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="publisher">Publisher</label>
+          <input
+            type="text"
+            name="publisher"
+            value={form.publisher}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="year">Year</label>
-        <input
-          type="text"
-          name="year"
-          value={form.year}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="year">Year</label>
+          <input
+            type="text"
+            name="year"
+            value={form.year}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="month">Month</label>
-        <input
-          type="text"
-          name="month"
-          value={form.month}
-          onChange={handleChange}
-        />
+          <label htmlFor="month">Month</label>
+          <input
+            type="text"
+            name="month"
+            value={form.month}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="address">Address</label>
-        <input
-          type="text"
-          name="address"
-          value={form.address}
-          onChange={handleChange}
-        />
+          <label htmlFor="address">Address</label>
+          <input
+            type="text"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="edtion">Edition</label>
-        <input
-          type="text"
-          name="edition"
-          value={form.edition}
-          onChange={handleChange}
-        />
+          <label htmlFor="edtion">Edition</label>
+          <input
+            type="text"
+            name="edition"
+            value={form.edition}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="volume">Volume</label>
-        <input
-          type="text"
-          name="volume"
-          value={form.volume}
-          onChange={handleChange}
-        />
+          <label htmlFor="volume">Volume</label>
+          <input
+            type="text"
+            name="volume"
+            value={form.volume}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="isbn">ISBN</label>
-        <input
-          type="text"
-          name="isbn"
-          value={form.isbn}
-          onChange={handleChange}
-        />
+          <label htmlFor="isbn">ISBN</label>
+          <input
+            type="text"
+            name="isbn"
+            value={form.isbn}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="doi">DOI</label>
-        <input
-          type="text"
-          name="doi"
-          value={form.doi}
-          onChange={handleChange}
-        />
+          <label htmlFor="doi">DOI</label>
+          <input
+            type="text"
+            name="doi"
+            value={form.doi}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="pages">Pages</label>
-        <input
-          type="text"
-          name="pages"
-          value={form.pages}
-          onChange={handleChange}
-        />
+          <label htmlFor="pages">Pages</label>
+          <input
+            type="text"
+            name="pages"
+            value={form.pages}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="journal">Journal</label>
-        <input
-          type="text"
-          name="journal"
-          value={form.journal}
-          onChange={handleChange}
-        />
+          <label htmlFor="journal">Journal</label>
+          <input
+            type="text"
+            name="journal"
+            value={form.journal}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="image_url">Image URL</label>
-        <input
-          type="url"
-          name="image_url"
-          value={form.image_url}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="image_url">Image URL</label>
+          <input
+            type="url"
+            name="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit" className="btn">
-          Submit
-        </button>
-      </form>
-      <p>{message}</p>
-      <div>
-        {Object.keys(errors).map((err, index) => (
-          <li key={index}>{err}</li>
-        ))}
+          <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
+            Submit
+          </button>
+        </form>
+        <p>{message}</p>
+        <div>
+          {Object.keys(errors).map((err, index) => (
+            <li key={index}>{err}</li>
+          ))}
+        </div>
       </div>
     </>
   );

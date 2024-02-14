@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import {FcGoogle} from 'react-icons/fc'
 import Link from 'next/link'
-import { getProviders, signIn } from 'next-auth/react'
+import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
@@ -28,29 +28,30 @@ const LoginForm = ({formId, loginForm}: Props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [providers, setProviders] = useState<Record<LiteralUnion<string, string>, ClientSafeProvider>>({});
 
     const router = useRouter();
 
-    // useEffect(() => {
-    //     const fetchProviders = async () => {
-    //         const providersData = await getProviders();
-    //         setProviders(providersData);
-    //     };
+    useEffect(() => {
+        const fetchProviders = async () => {
+            const providersData = await getProviders();
+            setProviders(providersData);
+        };
 
-    //     fetchProviders();
-    // })
+        fetchProviders();
+    }, []);
     
-    const fetchProviders = async() => {
-        const providers = await getProviders();
+    // const fetchProviders = async() => {
+    //     const providers = await getProviders();
 
-        if (!providers) {
-            return <div>Sign in not available</div>
-        }
+    //     if (!providers) {
+    //         return <div>Sign in not available</div>
+    //     }
 
-        return providers
-    }
+    //     return providers
+    // }
 
-    const providers = fetchProviders();
+    // const providers = fetchProviders();
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

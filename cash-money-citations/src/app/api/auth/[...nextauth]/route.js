@@ -1,16 +1,37 @@
+import dbConnect from "../../../../utils/dbConnect";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcryptjs';
 
 const authOptions = {
   providers: [
     CredentialsProvider({
+      name: "Github",
+      credentials: {},
       name: "credentials",
       credentials: {},
 
 
       async authorize(credentials){
-        const user = { id: "1"};
-        return user;
+        const { username, password } = credentials;
+        try {
+          await dbConnect();
+          const user = await User.findOne({username});
+
+          /*if (!user){
+            return null;
+          }*/
+
+          const passwordMatch = await bcrypt.compare(password, user.password);
+
+          /*if (!passwordMatch){
+            return null;
+          }*/
+
+          return user;
+        } catch (error) {
+          console.log("Error: ", error);
+        }
       },
     }),
   ],

@@ -33,8 +33,6 @@ const LoginForm = async ({formId, loginForm}: Props) => {
     const router = useRouter();
     const providers = await getProviders();
 
-    const id = searchParams.get("id");
-
     if (!providers) {
         return <div>Sign in not available</div>
     }

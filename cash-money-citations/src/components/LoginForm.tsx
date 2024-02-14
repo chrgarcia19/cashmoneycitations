@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {FcGoogle} from 'react-icons/fc'
 import Link from 'next/link'
 import { getProviders, signIn } from 'next-auth/react'
@@ -24,27 +24,44 @@ type Props = {
     loginForm: LoginData;
 };
     
-const LoginForm = async ({formId, loginForm}: Props) => {
+const LoginForm = ({formId, loginForm}: Props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const searchParams = useSearchParams();
     const router = useRouter();
-    const providers = await getProviders();
 
-    if (!providers) {
-        return <div>Sign in not available</div>
+    // useEffect(() => {
+    //     const fetchProviders = async () => {
+    //         const providersData = await getProviders();
+    //         setProviders(providersData);
+    //     };
+
+    //     fetchProviders();
+    // })
+    
+    const fetchProviders = async() => {
+        const providers = await getProviders();
+
+        if (!providers) {
+            return <div>Sign in not available</div>
+        }
+
+        return providers
     }
+
+    const providers = fetchProviders();
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
             const res = await signIn('credentials', {
-                username,
-                password,
                 redirect: false,
+                username: username,
+                password: password,
+                
             });
 
             if (res?.error){
@@ -57,7 +74,7 @@ const LoginForm = async ({formId, loginForm}: Props) => {
             console.log(error);
         }
     }
-    
+
 
     return (
         <div className='relative w-full h-screen bg-zinc-700'>
@@ -74,13 +91,18 @@ const LoginForm = async ({formId, loginForm}: Props) => {
                     <label>Username</label>
                     <input 
                     className='border relative bg-gray-100 p-2'
-                    type="text" />
+                    type="text" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    />
                 </div>
                 <div className='flex flex-col '>
                     <label>Password</label>
                     <input 
                     className='border relative bg-gray-100 p-2' 
-                    type="password" />
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
     

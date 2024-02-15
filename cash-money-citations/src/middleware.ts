@@ -3,6 +3,7 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 // paths that require authentication or authorization
 const requireAuth: string[] = ["/admin"];
+
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
   const pathname = request.nextUrl.pathname;
@@ -12,17 +13,17 @@ export async function middleware(request: NextRequest) {
       secret: process.env.SECRET,
     });
     //check not logged in
-    console.log(token)
     if (!token) {
       const url = new URL(`/api/auth/signin`, request.url);
       url.searchParams.set("callbackUrl", encodeURI(request.url));
       return NextResponse.redirect(url);
     }
     //check if not authorized
-    if (token.role !== "admin") {
-      const url = new URL(`/403`, request.url);
-      return NextResponse.rewrite(url);
-    }
+    // We will have to add in a role option to the mongoose model and database
+    // if (token.role !== "admin") {
+    //   const url = new URL(`/403`, request.url);
+    //   return NextResponse.rewrite(url);
+    // }
   }
   return res;
 }

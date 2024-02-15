@@ -94,6 +94,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
                     className='border relative bg-gray-100 p-2'
                     type="text" 
                     value={username}
+                    name='username'
                     onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
@@ -103,6 +104,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
                     className='border relative bg-gray-100 p-2' 
                     type="password" 
                     value={password}
+                    name='password'
                     onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>

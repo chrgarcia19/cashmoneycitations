@@ -1,19 +1,28 @@
-import { withAuth } from 'next-auth/middleware'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
- 
-export default withAuth(
-  
-  function middleware(req) {
-    console.log(req.nextauth.token)
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
+// middleware.ts
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
+// paths that require authentication or authorization
+const requireAuth: string[] = ["/admin"];
+export async function middleware(request: NextRequest) {
+  const res = NextResponse.next();
+  const pathname = request.nextUrl.pathname;
+  if (requireAuth.some((path) => pathname.startsWith(path))) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.SECRET,
+    });
+    //check not logged in
+    console.log(token)
+    if (!token) {
+      const url = new URL(`/api/auth/signin`, request.url);
+      url.searchParams.set("callbackUrl", encodeURI(request.url));
+      return NextResponse.redirect(url);
+    }
+    //check if not authorized
+    if (token.role !== "admin") {
+      const url = new URL(`/403`, request.url);
+      return NextResponse.rewrite(url);
     }
   }
-)
- 
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  return res;
 }

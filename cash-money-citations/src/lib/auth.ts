@@ -53,21 +53,21 @@ export const authConfig: NextAuthOptions = ({
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/app/login",
+    signIn: "/login",
   },
 });
 
-export async function loginIsRequiredServer() {
-  const session = await getServerSession(authConfig);
-  if (!session) return redirect("/");
+// export async function loginIsRequiredServer() {
+//   const session = await getServerSession(authConfig);
+//   if (!session) return redirect("/");
 
-}
+// }
 
-export function loginIsRequiredClient() {
-  if (typeof window !== "undefined") {
-    const session = useSession();
-    const router = useRouter();
-    if (!session) router.push("/");
-  }
-}
+// export function loginIsRequiredClient() {
+//   if (typeof window !== "undefined") {
+//     const session = useSession();
+//     const router = useRouter();
+//     if (!session) router.push("/");
+//   }
+// }
 

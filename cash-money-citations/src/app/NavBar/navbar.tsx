@@ -10,6 +10,7 @@ function NavBar() {
         <div className="nav">
 
           <Link className="hover:bg-slate-950 text-white" href="/">Home</Link>
+          <Link className="hover:bg-slate-950 text-white" href="/input-doi">DOI Input</Link>
           <Link className="hover:bg-slate-950 text-white" href="/new">Add Reference</Link>
           <Link className="hover:bg-slate-950 text-white" href="/login">Login</Link>
           <SignOut />

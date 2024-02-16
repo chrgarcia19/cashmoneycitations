@@ -1,25 +1,25 @@
-'use client'
-
-import { useState } from "react";
+'use client';
+import React, { useState } from "react";
 
 function InputDOI() {
+    const [tableShown, setTableShown] = useState<boolean>(false);
+    const [searchVal, setSearchVal] = useState<string>("");
+    const [data, setData] = useState<any[]>([]);
 
-    const [tableShown, setTableShown] = useState(false);
-    const [searchVal, setSearchVal] = useState("");
-
-    function showResults(e: React.FormEvent<HTMLFormElement>) {
-        setTableShown(false);
+    async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setTableShown(false);
+        const res = await fetch(`https://api.crossref.org/works?query=${searchVal}&rows=100`);
+        const result = await res.json();
+        setData(result.message.items);
+        console.log(data);
         setTableShown(true);
     }
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-      ) => {
-        const target = e.target;
-        const value = target.value;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
         setSearchVal(value);
-      };
+    };
 
     return (
         <>
@@ -37,7 +37,25 @@ function InputDOI() {
                 </div>
             </form>
             {tableShown && (
-                <h1>Table should be here</h1>
+                <table className="table-auto">
+                <thead>
+                  <tr>
+                    <th>DOI</th>
+                    <th>Title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {data.map(item => (
+                        <tr key={item.DOI}>
+                            <td>{item.DOI}</td>
+                            <td>{item.title}</td>
+                            <td>
+                                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24">Add to list</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+              </table>
             )}
         </div>
         </>

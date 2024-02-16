@@ -8,27 +8,26 @@ module.exports = {
   ],
   theme: {
     colors: {
-      'cashgreen': {
-        DEFAULT: '#24e19c',
-        dark: '#20bc73',
+      'newdollagreen': {
+        DEFAULT: '#1fde55',
+        dark: '#1bc14a',
       },
-      'pennyred': {
-        DEFAULT: '#e14724',
-        dark: '#bd2d20',
+      'nofundsred': {
+        DEFAULT: '#f53325',
+        dark: '#d82d20',
       },
       'goldcoin': {
-        DEFAULT: '#e1d224',
-        dark: '#bca220',
+        DEFAULT: '#f4f219',
+        dark: '#d8d416',
       },
-      'ivymoney': {
-        light: '#65c2a0',
-        DEFAULT: '#54aa8b',
-        dark: '#468870',
+      'crumpleddollagreen': {
+        light: '#34e176',
+        DEFAULT: '#2dc467',
+        dark: '#26a657',
       },
       'bankerblue': {
-        light: '#4d25dc',
-        DEFAULT: '#481fc3',
-        dark: '#381ba1',
+        DEFAULT: '#2d25f5',
+        dark: '#2620d8',
       },
       zinc: colors.zinc,
       white: colors.white,

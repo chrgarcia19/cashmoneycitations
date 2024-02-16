@@ -18,7 +18,7 @@ function NavBar() {
 
         <img
           id="title"
-          src="cashmoney_logo.png"
+          src="cashmoneycitations_logo.png"
           alt="Cash Money Citations logo"
         ></img>
       </div>

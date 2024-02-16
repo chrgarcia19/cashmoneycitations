@@ -16,15 +16,23 @@ async function getReferences() {
   return references;
 }
 
+export function ReferenceTable() {
+  
+
+  <table>
+    <thead>
+    </thead>
+  </table>
+}
+
 export default async function HomePage() {
   const references = await getReferences();
 
-  return (
-
-     
+  return (    
       <>
         {references.map((reference) => (
           <div key={reference._id}>
+            
             <div className="card">
               <img src={reference.image_url} alt="Image of a Reference Cover" />
               <h5 className="reference-name">{reference.title}</h5>

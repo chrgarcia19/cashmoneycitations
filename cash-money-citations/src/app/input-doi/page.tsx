@@ -1,10 +1,14 @@
 'use client';
+import { Contributor } from "@/models/Contributor";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
+    const router = useRouter();
+    const contentType = "application/json";
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -20,6 +24,58 @@ function InputDOI() {
         const value = e.target.value;
         setSearchVal(value);
     };
+
+    const addToDB = async (item: any) => {
+        let i = 0;
+        let contributors = new Array<Contributor>();
+        for (i; i<item.author.length; i++) {
+            let newContributor: Contributor = {
+                contributorType: "Author",
+                contributorFirstName: item.author[i].given,
+                contributorLastName: item.author[i].family,
+                contributorMiddleI: ""
+            };
+            contributors.push(newContributor);
+        }
+        let doiReference: any = {
+            type: "journal",
+            citekey: "please edit this",
+            title: item.title[0],
+            contributors: contributors,
+            publisher: item.publisher,
+            year: item.created['date-parts'][0][0],
+            month: item.created['date-parts'][0][1],
+            address: "",
+            edition: "",
+            volume: item.volume,
+            isbn: "",
+            doi: item.DOI,
+            pages: item.page,
+            journal: "",
+            image_url: "https://marvel-b1-cdn.bc0a.com/f00000000181213/www.valpo.edu/computing-information-sciences/files/2015/02/20150204-JLH-Nick-Rosasco-004-800x800.jpg",
+        };
+        
+        try {
+            const res = await fetch("/api/references", {
+              method: "POST",
+              headers: {
+                Accept: contentType,
+                "Content-Type": contentType,
+              },
+              body: JSON.stringify(doiReference),
+            });
+      
+            // Throw error with status code in case Fetch API req failed
+            if (!res.ok) {
+              throw new Error(res.status.toString());
+            }
+            router.push("/");
+            router.refresh();
+          } catch (error) {
+            console.log("Failed to add reference");
+          }
+
+    }
 
     return (
         <>
@@ -50,7 +106,7 @@ function InputDOI() {
                             <td>{item.DOI}</td>
                             <td>{item.title}</td>
                             <td>
-                                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24">Add to list</button>
+                                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
                             </td>
                         </tr>
                     ))}

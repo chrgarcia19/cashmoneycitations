@@ -1,13 +1,13 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
+import ViewToggle from '@/components/ViewToggle';
 import ReferenceTable from '@/components/ReferenceTable';
-import ReferenceGallery from '@/components/ReferenceGallery';
 
 export default async function HomePage() {
 
+    
+  
   return(
     <>
-    <input type="checkbox" className="toggle" />
-    
     <ReferenceTable />
     </>
     

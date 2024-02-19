@@ -27,20 +27,49 @@ function InputDOI() {
 
     const addToDB = async (item: any) => {
         let i = 0;
+        let title = "";
+        let newContributor: Contributor = {
+            contributorType: "",
+            contributorFirstName: "",
+            contributorLastName: "",
+            contributorMiddleI: ""
+        };
         let contributors = new Array<Contributor>();
-        for (i; i<item.author.length; i++) {
-            let newContributor: Contributor = {
+
+        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+        if (item.author) {
+            for (i; i<item.author.length; i++) {
+                newContributor = {
+                    contributorType: "Author",
+                    contributorFirstName: item.author[i].given,
+                    contributorLastName: item.author[i].family,
+                    contributorMiddleI: ""
+                };
+                contributors.push(newContributor);
+            }
+        }
+        else {
+            newContributor = {
                 contributorType: "Author",
-                contributorFirstName: item.author[i].given,
-                contributorLastName: item.author[i].family,
+                contributorFirstName: "Unknown",
+                contributorLastName: "Unknown",
                 contributorMiddleI: ""
             };
             contributors.push(newContributor);
         }
+
+        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
+        if (item.title) {
+            title = item.title[0];
+        }
+        else {
+            title = "Unknown";
+        }
+        
         let doiReference: any = {
             type: "journal",
             citekey: "please edit this",
-            title: item.title[0],
+            title: title,
             contributors: contributors,
             publisher: item.publisher,
             year: item.created['date-parts'][0][0],

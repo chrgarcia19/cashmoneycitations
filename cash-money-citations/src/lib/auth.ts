@@ -20,6 +20,7 @@ export const authConfig: NextAuthOptions = ({
       async authorize(credentials){
         if (!credentials || !credentials.username || !credentials.password) {
           return null;
+          
         }
         
         try {
@@ -48,6 +49,21 @@ export const authConfig: NextAuthOptions = ({
     }),
     
   ],
+
+    callbacks: {
+    async session({session, token, user}) {
+      if (token && session.user) {
+        session.user.role = user.role;
+      }
+      return session;
+    },
+    async jwt({token, user}) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+  },
   session: {
     strategy: "jwt",
   },
@@ -56,18 +72,4 @@ export const authConfig: NextAuthOptions = ({
     signIn: "/login",
   },
 });
-
-// export async function loginIsRequiredServer() {
-//   const session = await getServerSession(authConfig);
-//   if (!session) return redirect("/");
-
-// }
-
-// export function loginIsRequiredClient() {
-//   if (typeof window !== "undefined") {
-//     const session = useSession();
-//     const router = useRouter();
-//     if (!session) router.push("/");
-//   }
-// }
 

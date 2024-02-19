@@ -122,16 +122,17 @@ function InputDOI() {
                 </div>
             </form>
             {tableShown && (
-                <table className="table-auto">
-                <thead>
+                <table className="table-auto mt-4">
+                <thead className="bg-zinc-700 text-white">
                   <tr>
                     <th>DOI</th>
                     <th>Title</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                     {data.map(item => (
-                        <tr key={item.DOI}>
+                        <tr key={item.DOI} className="border-b hover:bg-gray-100">
                             <td>{item.DOI}</td>
                             <td>{item.title}</td>
                             <td>

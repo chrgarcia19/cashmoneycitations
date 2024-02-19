@@ -81,7 +81,7 @@ function InputDOI() {
             doi: item.DOI,
             pages: item.page,
             journal: "",
-            image_url: "https://marvel-b1-cdn.bc0a.com/f00000000181213/www.valpo.edu/computing-information-sciences/files/2015/02/20150204-JLH-Nick-Rosasco-004-800x800.jpg",
+            image_url: "",
         };
         
         try {

@@ -318,7 +318,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             name="image_url"
             value={form.image_url}
             onChange={handleChange}
-            required
           />
 
           <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">

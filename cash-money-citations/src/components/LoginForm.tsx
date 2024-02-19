@@ -35,7 +35,9 @@ const LoginForm = ({formId, loginForm}: Props) => {
     useEffect(() => {
         const fetchProviders = async () => {
             const providersData = await getProviders();
-            setProviders(providersData);
+            if (providersData){
+                setProviders(providersData);
+            }
         };
 
         fetchProviders();

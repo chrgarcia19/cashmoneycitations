@@ -5,9 +5,6 @@ import useSWR from "swr";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-
-
-
 const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())

@@ -18,12 +18,13 @@ export async function middleware(request: NextRequest) {
       url.searchParams.set("callbackUrl", encodeURI(request.url));
       return NextResponse.redirect(url);
     }
-    //check if not authorized
+    // check if not authorized
     // We will have to add in a role option to the mongoose model and database
-    // if (token.role !== "admin") {
-    //   const url = new URL(`/403`, request.url);
-    //   return NextResponse.rewrite(url);
-    // }
+    if (token.role !== "admin") {
+      const url = new URL(`/error`, request.url);
+      console.log("You do not have proper credentials")
+      return NextResponse.rewrite(url);
+    }
   }
   return res;
 }

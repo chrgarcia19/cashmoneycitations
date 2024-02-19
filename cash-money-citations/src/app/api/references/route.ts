@@ -9,12 +9,12 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
 
-  const session = await getServerSession();
+  // const session = await getServerSession();
 
   
-  if (!session) {
-    redirect('/')
-  }
+  // if (!session) {
+  //   redirect('/')
+  // }
 
   await dbConnect();
 

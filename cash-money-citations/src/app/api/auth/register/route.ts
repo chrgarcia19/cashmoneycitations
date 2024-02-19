@@ -29,6 +29,7 @@ export async function POST(request: Request) {
             lastName,
             email,
             password: hashedPassword,
+            role: 'user',
         });
 
         // Save the user to the database

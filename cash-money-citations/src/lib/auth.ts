@@ -53,14 +53,18 @@ export const authConfig: NextAuthOptions = ({
     
   ],
 
-    callbacks: {
-      async jwt({token, user}) {
-        if (user) {
-          token.role = user.role;
-        }
-        return token;
-      },
-    async session({session, token}) {
+  callbacks: {
+    async jwt({token, trigger, user, session }) {
+      if (trigger === "update" && session) {
+        return { ...token, ...session?.user };
+      }
+
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({session, token, user }) {
       if (token && session.user) {
         session.user.role = token.role;
       }

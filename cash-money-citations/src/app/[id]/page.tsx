@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import Link from "next/link";
-
+import { useSession } from "next-auth/react";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -14,6 +14,11 @@ const fetcher = (url: string) =>
       const searchParams = useSearchParams();
       const router = useRouter();
       const id = searchParams.get('id');
+
+      // Following lines used to test user session status
+      // const {data: session, status} = useSession();
+      // console.log("status", status);
+      // console.log("session", session);
 
       const handleDelete = async () => {
 

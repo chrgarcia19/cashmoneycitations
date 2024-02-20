@@ -89,7 +89,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
 
     const postData = async (form: RegistrationData) => {
         try {
-            const res = await fetch("/api/register", {
+            const res = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
                     Accept: contentType,

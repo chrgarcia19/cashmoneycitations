@@ -13,22 +13,23 @@ interface IProps {
 }
 
 
-export function SignIn({ providers }: IProps) {
-  return Object.values(providers).map((provider) => (
-      <button
-        onClick={() => signIn(provider.id)}
-        type="button"
-      >
-        <FaGithubSquare className="mr-2" />
-
-        {provider.name}
-      </button>
-  ));
+export function SignInGitHub({ providers }: IProps) {
+  const provider = providers.github;
+  return (
+    <>
+      {provider && (
+        <button onClick={() => signIn(provider.id)} type="button">
+          <FaGithubSquare className="mr-2" />
+          {provider.name}
+        </button>
+      )}
+    </>
+  );
 }
 
 export function SignOut() {
   return (
-    <button onClick={() => signOut()} type="button">
+    <button className="hover:bg-slate-950 text-white" onClick={() => signOut()} type="button">
       Sign Out
     </button>
   );

@@ -2,17 +2,38 @@ import "../../../css/style.css";
 import "../../../css/form.css";
 import Link from "next/link";
 import { SignOut } from "@/components/AuthButtons";
+import { getServerAuthSession } from "@/lib/auth";
 
-function NavBar() {
+export default async function NavBar() {
+  const authSession = await getServerAuthSession();
+  const linkClass = "hover:bg-slate-950 text-white";
+
     return (
         <>
         <div className="top-bar bg-bankerblue">
         <div className="nav">
+          
+          <Link className={linkClass} href="/">Home</Link>
 
-          <Link className="hover:bg-slate-950 text-white" href="/">Home</Link>
-          <Link className="hover:bg-slate-950 text-white" href="/new">Add Reference</Link>
-          <Link className="hover:bg-slate-950 text-white" href="/login">Login</Link>
-          <SignOut />
+          {/* Checks for base 'user' role */}
+          {authSession?.user?.role && (
+            <>
+              <Link className={linkClass} href="/new">Add Reference</Link>
+              <SignOut />
+            </>
+
+          )}
+
+          {/* Checks to see if the user is logged in */}
+          {!authSession?.user && (
+            <Link className={linkClass} href="/login">Login</Link>
+          )}
+
+          {/* Checks to see if user is an admin */}
+          {authSession?.user?.role === "admin" && (
+            <Link className={linkClass} href="/admin">Admin</Link>
+          )}
+
 
         </div>
 
@@ -27,5 +48,3 @@ function NavBar() {
 
     )
 }
-
-export default NavBar;

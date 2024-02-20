@@ -7,25 +7,41 @@ export default function AdminDashboard() {
 
     const { data: session, update } = useSession();
     
-    const handleUpdateUser = async () => {
+    function handleUpdateUser(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const userRoleSelect = formData.get('userRoleSelect');
+
+        fetch('/api/auth/updateUser', { method: "PUT", body: formData})
         const newSession = {
             ...session,
             user: {
                 ...session?.user,
-                role: "testuser"
+                role: userRoleSelect
             },
         }
 
-        await update(newSession)
+        update(newSession)
     }
     
-    console.log("session", session);
     return (
         <div>
             <h1>Admin Dashboard</h1>
-            <button onClick={handleUpdateUser}>Update Role For User</button>
+            <form method='PUT' onSubmit={handleUpdateUser}>
+                <select name='userRoleSelect' > 
+                    <option value="user">
+                        User
+                    </option>
+                    <option value="admin">
+                        Admin
+                    </option>
+                </select>
+                <button type='submit' >Submit</button>
+
+            </form>
         </div>
     );
 };
 
-// export default AdminDashboard;

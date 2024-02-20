@@ -19,6 +19,8 @@ export default async function NavBar() {
           {authSession?.user?.role && (
             <>
               <Link className={linkClass} href="/new">Add Reference</Link>
+              <Link className="hover:bg-slate-950 text-white" href="/input-doi">DOI Input</Link>
+
               <SignOut />
             </>
 

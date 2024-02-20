@@ -6,6 +6,7 @@ export interface Users extends mongoose.Document {
     lastName: string;
     email: string;
     password: string;
+    role: string;
 }
 
 /* UserSchema will correspond to a collection in your MongoDB database. */
@@ -34,6 +35,10 @@ const UserSchema = new mongoose.Schema<Users>({
 
         type: String,
     },
+    role: {
+        type: String,
+        default: 'user',
+    }
 });
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

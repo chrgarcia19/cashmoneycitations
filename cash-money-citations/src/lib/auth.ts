@@ -4,8 +4,7 @@ import bcrypt from 'bcryptjs';
 import User from "@/models/User";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { redirect, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+
 
 
 export const authConfig: NextAuthOptions = ({
@@ -80,4 +79,7 @@ export const authConfig: NextAuthOptions = ({
     signIn: "/login",
   },
 });
+
+export const getServerAuthSession = () => getServerSession(authConfig); //(6) 
+
 

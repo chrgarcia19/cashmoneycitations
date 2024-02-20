@@ -7,7 +7,7 @@ import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-aut
 import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import { SignIn } from '@/components/AuthButtons'
+import { SignInGitHub } from '@/components/AuthButtons'
 
 interface LoginData {
     username: string;
@@ -78,7 +78,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
             <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>
                 <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignIn providers={providers} /></p>
+                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGitHub providers={providers} /></p>
                     
                     <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><FcGoogle className='mr-2' /> Google</p>
                 </div>

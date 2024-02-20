@@ -1,35 +1,45 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 export default function AdminDashboard() {
+    const [userEmail, setUserEmail] = useState('');
+
+    function handleTextInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setUserEmail(e.target.value);
+    }
 
     const { data: session, update } = useSession();
     
     function handleUpdateUser(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+        e.preventDefault();
         
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
         const userRoleSelect = formData.get('userRoleSelect');
-
-        fetch('/api/auth/updateUser', { method: "PUT", body: formData})
+        
+        // Add userEmail to the form data
+        formData.append('userEmail', userEmail);
+        
+        fetch('/api/auth/updateUser', { method: "PUT", body: formData });
         const newSession = {
             ...session,
             user: {
                 ...session?.user,
                 role: userRoleSelect
             },
-        }
+        };
 
-        update(newSession)
+        update(newSession);
     }
     
     return (
         <div>
             <h1>Admin Dashboard</h1>
             <form method='PUT' onSubmit={handleUpdateUser}>
+                <input type="text" value={userEmail} onChange={handleTextInputChange} placeholder="User Email"   className="input w-full max-w-xs" />
+
                 <select name='userRoleSelect' > 
                     <option value="user">
                         User

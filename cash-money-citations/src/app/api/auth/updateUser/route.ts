@@ -12,8 +12,8 @@ export async function PUT(request: Request) {
         
         const req = await request.formData();
 
-        const email = session?.user?.email;
-        const role = req.get('userRoleSelect')
+        const email = req.get('userEmail');
+        const role = req.get('userRoleSelect');
 
         // Update user
         const update = { role: role }

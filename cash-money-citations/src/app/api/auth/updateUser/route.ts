@@ -1,12 +1,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from "../../../../utils/dbConnect";
 import User from "../../../../models/User";
-import { getServerSession } from 'next-auth';
-import { getSession } from 'next-auth/react';
 
 export async function PUT(request: Request) {
     await dbConnect();
-    const session = await getServerSession();
         
     try {
         

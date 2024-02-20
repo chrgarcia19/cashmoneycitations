@@ -43,17 +43,6 @@ const LoginForm = ({formId, loginForm}: Props) => {
         fetchProviders();
     }, []);
     
-    // const fetchProviders = async() => {
-    //     const providers = await getProviders();
-
-    //     if (!providers) {
-    //         return <div>Sign in not available</div>
-    //     }
-
-    //     return providers
-    // }
-
-    // const providers = fetchProviders();
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,6 +62,9 @@ const LoginForm = ({formId, loginForm}: Props) => {
             }
 
             router.replace("/");
+
+            // To initiate the getServerSession() to generate dynamic NavBar
+            router.refresh();
         } catch (error) {
             console.log(error);
         }

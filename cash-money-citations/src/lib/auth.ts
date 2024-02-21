@@ -43,7 +43,7 @@ export const authConfig: NextAuthOptions = ({
     }),
     GithubProvider({
       async profile(profile) {
-        return Promise.resolve({ id: profile.id, role: profile.role ?? "admin" });
+        return Promise.resolve({ id: profile.id, role: profile.role ?? "user" });
       },
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,

@@ -35,7 +35,11 @@ export default async function NavBar() {
           {authSession?.user?.role === "admin" && (
             <Link className={linkClass} href="/admin">Admin</Link>
           )}
-          <SignOut />
+
+          {authSession && (
+            <SignOut />
+
+          )}
 
         </div>
 

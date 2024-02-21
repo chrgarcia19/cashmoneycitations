@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
-import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-
+import { FaGithubSquare } from "react-icons/fa";
+import {FcGoogle} from 'react-icons/fc'
+import { IconContext } from "react-icons";
 
 interface LoginData {
     username: string;
@@ -81,9 +82,22 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 )}
                 <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' onClick={() => signIn('github', { callbackUrl })}></p>
+                    <IconContext.Provider value={{ color: 'black', className: ''}}>
+                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('github', { callbackUrl })}>
+                            <FaGithubSquare className='h-6 w-6' name='GitHub'/>
+                            <div className='badge text-black px-2 py-2 relative flex items-center'>GitHub</div>
+                            
+                        </button>
+
+                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('google', { callbackUrl })}>
+                            <FcGoogle className='h-6 w-6' name='Google'/>
+                            <div className='badge text-black px-2 py-2 relative flex items-center'>Google</div>
+                            
+                        </button>
+
+                    </IconContext.Provider>
                     
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' onClick={() => signIn('google', { callbackUrl })}></p>
+                    
                 </div>
                 <div className='flex flex-col mb-4'>
                     <label>Username</label>

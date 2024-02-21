@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import {FcGoogle} from 'react-icons/fc'
 import Link from 'next/link'
 import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import { SignInGitHub } from '@/components/AuthButtons'
+import { SignInGoogle } from '@/components/AuthButtons';
 
 interface LoginData {
     username: string;
@@ -80,7 +80,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 <div className='flex justify-between py-8'>
                     <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGitHub providers={providers} /></p>
                     
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><FcGoogle className='mr-2' /> Google</p>
+                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGoogle providers={providers} /></p>
                 </div>
                 <div className='flex flex-col mb-4'>
                     <label>Username</label>

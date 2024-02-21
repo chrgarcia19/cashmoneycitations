@@ -47,17 +47,14 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 redirect: false,
                 username: username,
                 password: password,
-                callbackUrl,
                 
             });
 
             setLoading(false);
 
             if (res?.error){
-                router.push(callbackUrl);
-
-            } else {
-                setError("Invalid Credentials");
+                setError('Invalid Credentials');
+                return;
 
             }
 
@@ -77,9 +74,6 @@ const LoginForm = ({formId, loginForm}: Props) => {
         <div className='flex justify-center items-center h-full'>
             
             <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>
-                {error && (
-                    <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
-                )}
                 <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
                     <IconContext.Provider value={{ color: 'black', className: ''}}>

@@ -6,8 +6,7 @@ import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-aut
 import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import { SignInGitHub } from '@/components/AuthButtons'
-import { SignInGoogle } from '@/components/AuthButtons';
+
 
 interface LoginData {
     username: string;
@@ -28,20 +27,13 @@ const LoginForm = ({formId, loginForm}: Props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [providers, setProviders] = useState<Record<LiteralUnion<string, string>, ClientSafeProvider>>({});
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
-    useEffect(() => {
-        const fetchProviders = async () => {
-            const providersData = await getProviders();
-            if (providersData){
-                setProviders(providersData);
-            }
-        };
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
 
-        fetchProviders();
-    }, []);
     
 
 
@@ -49,23 +41,31 @@ const LoginForm = ({formId, loginForm}: Props) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const res = await signIn('credentials', {
                 redirect: false,
                 username: username,
                 password: password,
+                callbackUrl,
                 
             });
 
+            setLoading(false);
+
             if (res?.error){
+                router.push(callbackUrl);
+
+            } else {
                 setError("Invalid Credentials");
-                return;
+
             }
 
             router.replace("/");
 
             // To initiate the getServerSession() to generate dynamic NavBar
             router.refresh();
-        } catch (error) {
+        } catch (error: any) {
+            setLoading(false);
             console.log(error);
         }
     }
@@ -76,11 +76,14 @@ const LoginForm = ({formId, loginForm}: Props) => {
         <div className='flex justify-center items-center h-full'>
             
             <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>
+                {error && (
+                    <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
+                )}
                 <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGitHub providers={providers} /></p>
+                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' onClick={() => signIn('github', { callbackUrl })}></p>
                     
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGoogle providers={providers} /></p>
+                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' onClick={() => signIn('google', { callbackUrl })}></p>
                 </div>
                 <div className='flex flex-col mb-4'>
                     <label>Username</label>

@@ -16,39 +16,27 @@ export async function middleware(request: NextRequest) {
     return token;
   }
 
-
-
-  if (request.nextUrl.pathname.startsWith('/new')) {
-    const token = await getUserToken();
-
-    if (!token) {
-      const url = new URL(`/api/auth/signin`, request.url);
-      url.searchParams.set("callbackUrl", encodeURI(request.url));
-      return NextResponse.redirect(url);
-    }
-
-
-    if (token.role === null) {
-      const url = new URL(`/error/401`, request.url);
-      return NextResponse.rewrite(url);
-    }
+  function redirectOrRewrite(urlPath: string, isRewrite = false) {
+    const url = new URL(urlPath, request.url);
+    url.searchParams.set("callbackUrl", encodeURI(request.url));
+    return isRewrite ? NextResponse.rewrite(url) : NextResponse.redirect(url);
   }
 
   if (requireAuth.some((path) => pathname.startsWith(path))) {
     const token = await getUserToken();
 
-    //check not authenticated
     if (!token) {
-      const url = new URL(`/api/auth/signin`, request.url);
-      url.searchParams.set("callbackUrl", encodeURI(request.url));
-      return NextResponse.redirect(url);
+      return redirectOrRewrite(`/api/auth/signin`);
     }
 
-    // check if not authorized
-    if (token.role !== "admin") {
-      const url = new URL(`/error/401`, request.url);
-      return NextResponse.rewrite(url);
+    if (pathname.startsWith('/new') && token.role === null) {
+      return redirectOrRewrite(`/error/401`, true);
+    }
+
+    if (pathname.startsWith('/admin') && token.role !== "admin") {
+      return redirectOrRewrite(`/error/401`, true);
     }
   }
+
   return res;
 }

@@ -61,6 +61,24 @@ export const authConfig: NextAuthOptions = ({
   ],
 
   callbacks: {
+    async signIn({ user, account, profile }) {
+      await dbConnect();
+
+      let dbUser = await User.findOne({ email: profile?.email });
+        
+        if (!dbUser) {
+          dbUser = await User.create({ 
+            // Create 1st time user fields (OAuth users)
+            username: profile?.name, 
+            email: profile?.email, 
+            image: profile?.image, 
+            accounts: [{ provider: account?.provider, providerAccountId: account?.id }] 
+          })
+  
+        }
+      
+      return Promise.resolve(true)
+    },
     async jwt({token, trigger, user, session }) {
       if (trigger === "update" && session) {
         return { ...token, ...session?.user };
@@ -68,15 +86,17 @@ export const authConfig: NextAuthOptions = ({
 
       if (user) {
         token.role = user.role;
+        token.id = user.id;
       }
       return token;
     },
     async session({session, token, user }) {
       if (token && session.user) {
         session.user.role = token.role;
+        session.user.id = token.id;
       }
       return session;
-    },
+    }
 
   },
   session: {

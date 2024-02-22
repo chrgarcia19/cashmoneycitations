@@ -1,5 +1,6 @@
 import dbConnect from "@/utils/dbConnect";
 import Reference from "@/models/Reference";
+import ReferenceCheckbox from "./ReferenceCheckbox";
 
 async function getReferences() {
     await dbConnect();
@@ -19,22 +20,22 @@ async function ReferenceTable(){
     return(
         <>
         <div className='mt-10'>
-        <table className='table-lg'>
+        <table className='table table-lg table-pin-rows table-pin-cols'>
           <thead>
             <tr>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Select</th>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Reference Type</th>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Reference Title</th>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Contributors</th>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Publisher</th>
-              <th className="border border-slate-600 text-center bg-newdollagreen">Year</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Select</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Reference Type</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Reference Title</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Contributors</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Publisher</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-green-600">Year</th>
             </tr>
           </thead>
           <tbody>
             {references.map((reference) => (
               <>
               <tr className="hover:bg-zinc-500" key={reference._id}>
-                <td className="border border-slate-600"><input type='checkbox' className='rounded' /></td>
+                <td className="border border-slate-600"><ReferenceCheckbox refID={reference._id}/></td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          

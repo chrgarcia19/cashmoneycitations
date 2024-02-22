@@ -6,7 +6,7 @@ import { SignOut } from "@/components/AuthButtons";
 function NavBar() {
     return (
         <>
-        <div className="top-bar bg-bankerblue">
+        <div className="top-bar bg-blue-800">
         <div className="nav">
 
           <Link className="hover:bg-slate-950 text-white" href="/">Home</Link>

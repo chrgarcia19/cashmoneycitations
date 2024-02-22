@@ -1,12 +1,14 @@
 import React, { Suspense } from 'react';
-import ViewToggle from '@/components/ViewToggle';
 import ReferenceTable from '@/components/ReferenceTable';
+import ViewToggle from '@/components/ViewToggle';
 
 export default async function HomePage() {
   
   return(
     <>
-      <ReferenceTable />
+    <div>
+      <Suspense><ReferenceTable /></Suspense>
+    </div>
     </>
     
   )

@@ -14,7 +14,7 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
+        <html data-theme="light" lang="en">
             <body>
                 <NavBar />
                 <div className="reference-wrapper">

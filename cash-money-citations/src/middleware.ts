@@ -1,7 +1,7 @@
 // middleware.ts
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-// paths that require authentication or authorization
+// Paths that require authentication or authorization
 const requireAuth: string[] = ["/admin"];
 
 export async function middleware(request: NextRequest) {
@@ -29,8 +29,7 @@ export async function middleware(request: NextRequest) {
 
 
     if (token.role === null) {
-      const url = new URL(`/`, request.url);
-      console.log("You do not have proper credentials")
+      const url = new URL(`/error/401`, request.url);
       return NextResponse.rewrite(url);
     }
   }
@@ -47,8 +46,7 @@ export async function middleware(request: NextRequest) {
 
     // check if not authorized
     if (token.role !== "admin") {
-      const url = new URL(`/`, request.url);
-      console.log("You do not have proper credentials")
+      const url = new URL(`/error/401`, request.url);
       return NextResponse.rewrite(url);
     }
   }

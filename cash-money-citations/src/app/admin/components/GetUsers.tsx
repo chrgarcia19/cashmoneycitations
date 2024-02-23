@@ -15,12 +15,33 @@ export default async function GetUsers() {
       
     return (
         <>
-            {users.map((user) => (
-                <div key={user._id}>
-                    <div>{user.username}</div>
-                    <div>{user.type}</div>
-                </div>
-            ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user) => (
+                        <tr key={user._id}>
+                            <td>{user.username}</td>
+                            <td>{user.role}</td>
+                            <td>{user.email}</td>
+                            <td>
+                                <ul>
+                                    {user.accounts.map((account: any) => (
+                                <li key={account}>{JSON.parse(JSON.stringify(account.provider))}</li>))}
+                                    
+                                </ul>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
         </>
     )
 }

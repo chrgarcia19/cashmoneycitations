@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             email,
             password: hashedPassword,
             role: 'user',
+            accounts: [{ provider: "credential" }],
         });
 
         // Save the user to the database

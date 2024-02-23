@@ -32,24 +32,7 @@ async function ReferenceTable(){
             </tr>
           </thead>
           <tbody>
-            {references.map((reference) => (
-              <>
-              <tr className="hover:bg-zinc-500" key={reference._id}>
-                <td className="border border-slate-600"><ReferenceCheckbox refID={reference._id}/></td>
-                <td className="border border-slate-600 text-center">{reference.type}</td>
-                <td className="border border-slate-600 text-center">{reference.title}</td>   
-                <td className="border border-slate-600 text-center">          
-                {reference.contributors.map((contributor: any) => {
-                  return(
-                    <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}</div>
-                  )
-                })}
-                </td>
-                <td className="border border-slate-600 text-center">{reference.publisher}</td>
-                <td className="border border-slate-600 text-center">{reference.year}</td>
-                </tr>
-              </>  
-            ))}
+            <ReferenceCheckbox references={references}></ReferenceCheckbox>
           </tbody>
         </table>
         </div>

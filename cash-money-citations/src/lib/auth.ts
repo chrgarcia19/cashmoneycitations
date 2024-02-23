@@ -90,7 +90,7 @@ export const authConfig: NextAuthOptions = ({
       }
       return token;
     },
-    async session({session, token, user }) {
+    async session({session, token }) {
       if (token && session.user) {
         session.user.role = token.role;
         session.user.id = token.id;

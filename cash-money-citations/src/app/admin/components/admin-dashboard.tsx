@@ -1,10 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import dbConnect from '@/utils/dbConnect';
-import User from '@/models/User';
-import useSWR from 'swr';
-import { useSearchParams } from 'next/navigation';
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState('');

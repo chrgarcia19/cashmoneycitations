@@ -41,29 +41,23 @@ export default async function NavBar() {
         </div>
         <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
           <li>
-            <a className="justify-between">
               {/* Checks to see if the user is logged in */}
               {!authSession?.user && (
                 <Link href="/login">Login</Link>
               )}
-            </a>
           </li>
           <li>
-            <a className="justify-between">
               {/* Checks to see if user is an admin */}
               {authSession?.user?.role === "admin" && (
                 <Link href="/admin">Admin</Link>
               )}
-            </a>
           </li>
           <li><a>Settings</a></li>
           <li>
-            <a className="justify-between">
               {/* Checks to see if the user is logged in */}
               {authSession?.user && (
                 <SignOut />
               )}
-            </a>
           </li>
         </ul>
       </div>

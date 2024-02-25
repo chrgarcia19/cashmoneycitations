@@ -45,10 +45,10 @@ export default async function HomePage() {
                 </div>
                 <div className="btn-container">
                   <Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id } }}>
-                    <button className="btn edit">Edit</button>
+                    <button className="btn edit bg-green-400">Edit</button>
                   </Link>
                   <Link href={{ pathname: `/${reference._id}/`, query: { id: reference._id } }}>
-                    <button className="btn view">View</button>
+                    <button className="btn view bg-blue-400">View</button>
                   </Link>
                 </div>
               </div>

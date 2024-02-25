@@ -61,6 +61,8 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 return;
             }
 
+            alert("You have successfully logged in.");
+
             router.replace("/");
 
             // To initiate the getServerSession() to generate dynamic NavBar

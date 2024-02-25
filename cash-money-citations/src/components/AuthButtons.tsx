@@ -7,6 +7,7 @@ import {
   signIn,
   signOut,
 } from "next-auth/react";
+import { Suspense } from "react";
 
 interface IProps {
   providers: Record<LiteralUnion<string, string>, ClientSafeProvider>;
@@ -29,8 +30,8 @@ export function SignInGitHub({ providers }: IProps) {
 
 export function SignOut() {
   return (
-    <button className="hover:bg-slate-950 text-white" onClick={() => signOut()} type="button">
-      Sign Out
+    <button onClick={() => signOut()} type="button">
+      Logout
     </button>
   );
 }

@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+const Cite = require('citation-js')
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -11,6 +12,7 @@ const fetcher = (url: string) =>
     .then((json) => json.data);
 
     const ReferencePage = () => {
+      let mlaOutput = "";
       const searchParams = useSearchParams();
       const router = useRouter();
       const id = searchParams.get('id');
@@ -21,7 +23,6 @@ const fetcher = (url: string) =>
       // console.log("session", session);
 
       const handleDelete = async () => {
-
             try {
               await fetch(`/api/references/${id}`, {
                 method: "Delete",
@@ -42,6 +43,52 @@ const fetcher = (url: string) =>
       if (error) return <p>Failed to load</p>;
       if (isLoading) return <p>Loading...</p>;
       if (!reference) return null;
+
+      function exportCitation() {
+        // Map your MongoDB data to CSL format
+        let type = "";
+        
+        if (reference.type === 'journal'){
+          type = 'article-journal'
+        }
+        if (reference.type === 'website'){
+          type = reference.type
+        }
+        if (reference.type === 'book'){
+          type = reference.type
+        }
+        const cslData = {
+          id: reference._id,
+          type: type,
+          title: reference.title,
+          author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
+            family: contributor.contributorFirstName,
+            given: contributor.contributorLastName,
+          })),
+          issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
+          publisher: reference.publisher,
+          DOI: reference.doi,
+          URL: reference.url,
+          ISBN: reference.isbn
+        };
+      
+        // Create a Cite instance
+        const citation = new Cite(cslData);
+        //Generate Vancouver citation
+        const vanOutput = citation.format('bibliography', {
+          format: 'text',
+          template: 'vancouver',
+          lang: 'en-US'
+        });
+        //Generate apa citation
+        const apaOutput = citation.format('bibliography', {
+          format: 'text',
+          template: 'apa',
+          lang: 'en-US'
+        });
+        // Implement the logic to display or prepare the citation for download
+        alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
+      }
 
       return (
         <>
@@ -73,6 +120,9 @@ const fetcher = (url: string) =>
             </Link>
             <button className="btn delete" onClick={handleDelete}>
               Delete
+            </button>
+            <button className="btn export" onClick={exportCitation}>
+              Export
             </button>
           </div>
         </div>

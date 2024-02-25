@@ -171,6 +171,11 @@ li {
   margin-left: 10px;
 }
 
+.export.btn {
+  --accent: orange;
+  margin-left: 10px;
+}
+
 .view.btn {
   --accent: blue;
   margin-left: 10px;

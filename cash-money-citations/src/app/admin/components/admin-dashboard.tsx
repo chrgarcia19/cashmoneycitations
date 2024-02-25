@@ -1,8 +1,10 @@
 'use client'
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState('');
+    const router = useRouter();
 
     function handleTextInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setUserEmail(e.target.value);
@@ -19,7 +21,7 @@ export default function AdminDashboardClient() {
         formData.append('userEmail', userEmail);
         
         fetch('/api/auth/updateUser', { method: "PUT", body: formData });
-
+        router.refresh()
     }
 
 

@@ -4,20 +4,21 @@ import Link from "next/link";
 import { SignOut } from "@/components/AuthButtons";
 import { getServerAuthSession } from "@/lib/auth";
 import { Suspense } from "react";
+import LinkBtn from "@/components/LinkBtn";
 
 export default async function NavBar() {
   const authSession = await getServerAuthSession();
-  const linkClass = "hover:bg-slate-950 text-white";
+  //const linkClass = "hover:bg-slate-950 text-white";
 
   return(
   <div className="navbar bg-blue-800">
-    <Link className={linkClass} href="/">
+    <Link className="linkBtn inline-block rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200" href="/">
       <img 
         className="cursor-pointer"
         id="Logo"
         src="cashmoneycitations_logo.png"
         alt="Cash Money Citations Logo"
-        width={90}
+        width={80}
       >
       </img>
     </Link>
@@ -27,8 +28,8 @@ export default async function NavBar() {
       {/* Checks for base 'user' role */}
       {authSession?.user?.role && (
         <>
-          <Link className={linkClass} href="/new">Add Reference</Link>
-          <Link className="hover:bg-slate-950 text-white" href="/input-doi">DOI Input</Link>
+          <LinkBtn linkData="/new" text="Add Reference" />
+          <LinkBtn linkData="/input-doi" text="DOI Input" />
         </>
       )}
     </div>
@@ -64,66 +65,4 @@ export default async function NavBar() {
     </div>
   </div>
   )
-    /*return (
-      <>
-        <div className="navbar bg-blue-800 h-25 w-full shadow-xl">  
-          <div className="nav flex items-center h-full w-full">
-            <Link className={linkClass} href="/">
-              <img 
-                className="cursor-pointer"
-                id="Logo"
-                src="cashmoneycitations_logo.png"
-                alt="Cash Money Citations Logo"
-                width={100}
-                height={100}
-              >
-              </img>
-            </Link>
-            <div className="absolute right-6">
-              {/* Checks for base 'user' role *///}
-              /*{authSession?.user?.role && (
-                <>
-                  <ul className="hidden sm:flex">
-                    <Link className={linkClass} href="/new">
-                      <li className="hover:border-b text-xl">Add Reference</li>
-                    </Link>
-                    <Link className="hover:bg-slate-950 text-white" href="/input-doi">
-                      <li className="hover:border-b text-xl">DOI Input</li>
-                    </Link>
-                    <SignOut />
-                  </ul>
-                </>
-
-              )}
-
-              {/* Checks to see if the user is logged in *///}
-              /*{!authSession?.user && (
-                <ul className="hidden sm:flex">
-                  <Link className={linkClass} href="/login">
-                    <li className="hover:border-b text-xl">Login</li>
-                  </Link>
-                </ul>
-              )}
-
-              {/* Checks to see if user is an admin *///
-              /*{authSession?.user?.role === "admin" && (
-                <ul className="hidden sm:flex">
-                  <Link className={linkClass} href="/admin">
-                    <li className="hover:border-b text-xl">Admin</li>
-                  </Link>
-                </ul>
-                
-              )}
-
-              <div className="avatar placeholder">
-                <div className="bg-neutral-400 text-center rounded-full w-8 ">
-                  <span className="text-2xl">D</span>
-                </div>
-              </div> 
-            </div>
-          </div>
-      </div>
-
-        </>
-    )*/
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import dbConnect from '@/utils/dbConnect';
 import User from '@/models/User';
-
+import UserView from './UserView';
 
 export default async function GetUsers() {
 
@@ -12,9 +12,12 @@ export default async function GetUsers() {
         const user = JSON.parse(JSON.stringify(doc));
         return user;
     });
-      
+
+
+
     return (
         <>
+        <div>
             <table className='border-collapse border-spacing-2 border border-slate-400 divide-y divide-gray-200'>
                 <thead>
                     <tr>
@@ -22,26 +25,17 @@ export default async function GetUsers() {
                         <th>Role</th>
                         <th>Email</th>
                         <th>Type</th>
+                        <th>Select</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user._id} >
-                            <td className='border border-slate-300'>{user.username}</td>
-                            <td className='border border-slate-300'>{user.role}</td>
-                            <td className='border border-slate-300'>{user.email}</td>
-                            <td className='border border-slate-300'>
-                                <ul>
-                                    {user.accounts.map((account: any) => (
-                                        <li key={account}>{JSON.parse(JSON.stringify(account.provider))}</li>))}
-                                    
-                                </ul>
-                            </td>
-                        </tr>
-                    ))}
+                        <UserView key={user._id} {...user}/>
+                        ))}
+
                 </tbody>
             </table>
-            
+        </div>
 
         </>
     )

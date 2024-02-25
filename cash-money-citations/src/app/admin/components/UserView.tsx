@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import { startTransition, useState, useTransition } from 'react';
+import React, { startTransition, useState, useTransition } from 'react';
 
 export default function UserView(user: any) {
     const router = useRouter();
@@ -29,6 +29,24 @@ export default function UserView(user: any) {
             formData.append(`userEmail`, email);
         })
         await fetch('/api/auth/updateUser', { method: "PUT", body: formData });
+        setIsFetching(false);
+        startTransition(() => {
+            router.refresh();
+
+        })
+    }
+
+    async function handleDeleteUser(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        
+        // Add userEmail to the form data
+        userEmail.forEach((email) => {
+            formData.append(`userEmail`, email);
+        })
+        await fetch('/api/auth/updateUser', { method: "POST", body: formData });
         setIsFetching(false);
         startTransition(() => {
             router.refresh();
@@ -73,6 +91,9 @@ export default function UserView(user: any) {
                         </option>
                     </select>
                     <button type='submit'>Submit</button>
+                </form>
+                <form onSubmit={(event) => handleDeleteUser(event)}>
+                    <button type='submit'>Delete</button>
                 </form>
 
             </td>

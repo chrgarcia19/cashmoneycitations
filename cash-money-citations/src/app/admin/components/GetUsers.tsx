@@ -15,7 +15,7 @@ export default async function GetUsers() {
       
     return (
         <>
-            <table>
+            <table className='border-collapse border-spacing-2 border border-slate-400 divide-y divide-gray-200'>
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -26,14 +26,14 @@ export default async function GetUsers() {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user._id}>
-                            <td>{user.username}</td>
-                            <td>{user.role}</td>
-                            <td>{user.email}</td>
-                            <td>
+                        <tr key={user._id} >
+                            <td className='border border-slate-300'>{user.username}</td>
+                            <td className='border border-slate-300'>{user.role}</td>
+                            <td className='border border-slate-300'>{user.email}</td>
+                            <td className='border border-slate-300'>
                                 <ul>
                                     {user.accounts.map((account: any) => (
-                                <li key={account}>{JSON.parse(JSON.stringify(account.provider))}</li>))}
+                                        <li key={account}>{JSON.parse(JSON.stringify(account.provider))}</li>))}
                                     
                                 </ul>
                             </td>
@@ -41,6 +41,7 @@ export default async function GetUsers() {
                     ))}
                 </tbody>
             </table>
+            
 
         </>
     )

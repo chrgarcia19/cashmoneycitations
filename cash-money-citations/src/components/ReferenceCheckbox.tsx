@@ -118,7 +118,7 @@ export const Checkbox = ({ references }: IProps) => {
                     checked={isChecked[index]}
                     onChange={() => checkHandler(index)}
                 />
-                {countSelected(isChecked) == 1 ? singleMenu(reference._id) : ""}
+                {countSelected(isChecked) == 1 && isChecked[index] ? singleMenu(reference._id) : ""}
                 {countSelected(isChecked) > 1 ? multiMenu() : ""}
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>

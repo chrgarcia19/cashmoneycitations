@@ -12,7 +12,7 @@ export default async function AdminDashboard() {
         <>
             <GetUsers />
             {/* <SessionInfo /> */}
-            <AdminDashboardClient />
+            {/* <AdminDashboardClient /> */}
         </>
     );
 };

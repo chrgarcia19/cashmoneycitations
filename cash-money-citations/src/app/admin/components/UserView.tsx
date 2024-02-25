@@ -6,10 +6,14 @@ import { startTransition, useState, useTransition } from 'react';
 export default function UserView(user: any) {
     const router = useRouter();
     const [isFetching, setIsFetching] = useState(false);
-    const [userEmail, setUserEmail] = useState('');
+    const [userEmail, setUserEmail] = useState<string[]>([]);
 
-    function handleTextInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setUserEmail(e.target.value);
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>, email: any) {
+        if (e.target.checked) {
+            setUserEmail([...userEmail, email]);
+        } else {
+            setUserEmail(userEmail.filter(uesrEmail => userEmail !== email));
+        }
     }
 
     
@@ -21,8 +25,9 @@ export default function UserView(user: any) {
         const formData = new FormData(form);
         
         // Add userEmail to the form data
-        formData.append('userEmail', userEmail);
-        
+        userEmail.forEach((email) => {
+            formData.append(`userEmail`, email);
+        })
         await fetch('/api/auth/updateUser', { method: "PUT", body: formData });
         setIsFetching(false);
         startTransition(() => {
@@ -52,16 +57,12 @@ export default function UserView(user: any) {
                 </ul>
             </td>
             <td className='border border-slate-300'>
-                <input 
+                <input
+                    key={user._id}
                     type='checkbox'
-                    onChange={(e) => {
-                        if (e.target.checked) {
-                            setUserEmail(user.email);
-                        } else {
-                            setUserEmail('');
-                        }
-                    }}
+                    onChange={(e) => handleChange(e, user.email)}
                 />
+
                 <form onSubmit={(event) => handleUpdateUser(event)}>
                     <select name='userRoleSelect' > 
                         <option value="user">

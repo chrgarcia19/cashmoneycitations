@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import { useSession } from 'next-auth/react';
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState('');
@@ -9,28 +8,18 @@ export default function AdminDashboardClient() {
         setUserEmail(e.target.value);
     }
 
-    const { data: session, update } = useSession();
     
     function handleUpdateUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
-        const userRoleSelect = formData.get('userRoleSelect');
         
         // Add userEmail to the form data
         formData.append('userEmail', userEmail);
         
         fetch('/api/auth/updateUser', { method: "PUT", body: formData });
-        const newSession = {
-            ...session,
-            user: {
-                ...session?.user,
-                role: userRoleSelect
-            },
-        };
 
-        update(newSession);
     }
 
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const citationDisplay = () => {
   const searchParams = useSearchParams();
-  const [citationData, setCitationData] = useState({ van: '', apa: '' });
+  const [citationData, setCitationData] = useState({ van: '', apa: '', bibtex: '' });
   useEffect(() => {
     const citation = searchParams.get('citation');
     if (citation) {
@@ -19,6 +19,7 @@ const citationDisplay = () => {
     <div>
       <p>Vancouver Citation: {citationData.van}</p>
       <p>APA Citation: {citationData.apa}</p>
+      <p>BibTex: {citationData.bibtex}</p>
     </div>
   )
 };

@@ -9,13 +9,25 @@ function InputDOI() {
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();
     const contentType = "application/json";
+    const errorItem: any = [
+        {
+            DOI: "Please enter a complete DOI",
+            title: "Unknown"
+        }
+    ]
+        
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setTableShown(false);
         const res = await fetch(`https://api.crossref.org/works?filter=doi:${searchVal}&rows=100`);
         const result = await res.json();
-        setData(result.message.items);
+        if (result.message.items){
+            setData(result.message.items);
+        }
+        else {
+            setData(errorItem)
+        }
         console.log(data);
         setTableShown(true);
     }

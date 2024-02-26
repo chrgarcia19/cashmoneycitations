@@ -33,7 +33,7 @@ export default function HomePage() {
           </figure>
           <div className="card-body items-center text-center">
             <h2 className="card-title">Cash Money Citations Project Roadmap</h2>
-            <p>Note: Do not forget to change iteration to sprint when viewing the roadmap.</p>
+            <p>Note: Do not forget to change "iteration" to "sprint" when viewing the roadmap.</p>
             <div className="card-actions">
               <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap"/>
             </div>

@@ -110,7 +110,7 @@ function InputDOI() {
             if (!res.ok) {
               throw new Error(res.status.toString());
             }
-            router.push("/");
+            router.push("/reference-table");
             router.refresh();
           } catch (error) {
             console.log("Failed to add reference");

@@ -42,25 +42,25 @@ const ViewReference = () => {
             <>
                 <div className="flex justify-center items-center pt-10">
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
-                        <span className="block h-16 rounded-lg">
+                        <span className="block h-auto rounded-lg">
                             <label className="font-bold">Reference Type:</label>
                             {reference.type}
                         </span>
-                        <span className="block h-20 rounded-lg">
+                        <span className="block h-auto rounded-lg">
                             <label className="font-bold">Title:</label>
                             {reference.title}
                         </span>
-                        <span className="block h-16 rounded-lg">
+                        <span className="block h-auto rounded-lg">
                             <label className="font-bold">Contributors:</label>
                             {reference.contributors.map((contributor: any) => (
                             <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></div>
                         ))}
                         </span>
-                        <span className="block h-16 rounded-lg">
+                        <span className="block h-auto rounded-lg">
                             <label className="font-bold">Publisher:</label>
                             {reference.publisher}
                         </span>
-                        <span className="block h-24 rounded-lg">
+                        <span className="block h-16 rounded-lg">
                             <label className="font-bold">Date Published:</label>
                             {reference.month} {reference.year}
                         </span>

@@ -64,15 +64,15 @@ const ViewReference = () => {
                             <label className="font-bold">Date Published:</label>
                             {reference.month} {reference.year}
                         </span>
-                        <span>
-                            <button className="bg-cyan-300 text-cyan-800 hover:active">
+                        <span className="space-x-5">
+                            <button className="linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
                                 <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
                             </button>
-                            <button className="bg-red-300 text-red-800 hover:active"
+                            <button className="linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
                                 onClick={handleDelete}>
                                 <span>Delete</span>
                             </button>
-                            <button className="bg-orange-300 text-orange-800 hover:active">
+                            <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
                                 <span>Export</span>
                             </button>
                         </span>

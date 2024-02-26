@@ -1,6 +1,7 @@
 import LinkBtn from "@/components/LinkBtn";
 import Image from 'next/image';
 import cmcLogo from '../../public/cashmoneycitations_logo.png';
+import Link from "next/link";
 
 export default function HomePage() {
   return(
@@ -37,7 +38,9 @@ export default function HomePage() {
             <h2 className="card-title">Cash Money Citations Project Roadmap</h2>
             <p>Note: Do not forget to change "iteration" to "sprint" when viewing the roadmap.</p>
             <div className="card-actions">
-              <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap" />
+              <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
+                <span><Link href="https://github.com/users/chrgarcia19/projects/2">To Roadmap</Link></span>
+              </button>
             </div>
           </div>
         </div>

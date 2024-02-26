@@ -48,7 +48,7 @@ export default async function ReferenceGallery() {
                         <Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id } }}>
                           <button className="btn edit bg-green-400">Edit</button>
                         </Link>
-                        <Link href={{ pathname: `/${reference._id}/`, query: { id: reference._id } }}>
+                        <Link href={{ pathname: `/${reference._id}/view`, query: { id: reference._id} } }>
                           <button className="btn view bg-blue-400">View</button>
                         </Link>
                       </div>

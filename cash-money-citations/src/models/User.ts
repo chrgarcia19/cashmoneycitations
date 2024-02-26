@@ -7,6 +7,10 @@ export interface Users extends mongoose.Document {
     email: string;
     password: string;
     role: string;
+    accounts: [{
+        provider: string,
+        providerAccountId: string,
+    }]
 }
 
 /* UserSchema will correspond to a collection in your MongoDB database. */
@@ -38,7 +42,11 @@ const UserSchema = new mongoose.Schema<Users>({
     role: {
         type: String,
         default: 'user',
-    }
+    },
+    accounts: [{
+        provider: String,
+        providerAccountId: String,
+    }],
 });
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

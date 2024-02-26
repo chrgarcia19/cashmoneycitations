@@ -1,6 +1,4 @@
 "use client"
-import Reference from "@/models/Reference";
-import dbConnect from "@/utils/dbConnect";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
@@ -40,32 +38,48 @@ const ViewReference = () => {
       if (!reference) return null;
       
     return(
-        <>
-            <div className="bg-green-200 p-4 mx-16 space-y-4"> 
-                <span className="block h-12 rounded-lg ">Reference Type: {reference.type}</span>
-                <span className="block h-12 rounded-lg">Title: {reference.title}</span>
-                <span className="block h-12 rounded-lg">Contributors: {reference.contributors.map((contributor: any) => (
-                    <span key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></span>
-                ))}</span>
-                <span className="block h-12 rounded-lg">Publisher: {reference.publisher}</span>
-                <span className="block h-12 rounded-lg">Month: {reference.month}</span>
-                <span className="block h-12 rounded-lg">Year: {reference.year}</span>
-                <span>
-                    <button className="bg-cyan-300 text-cyan-800 hover:active">
-                        <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
-                    </button>
-                    <button className="bg-red-300 text-red-800 hover:active"
-                        onClick={handleDelete}>
-                        <span>Delete</span>
-                    </button>
-                    <button className="bg-orange-300 text-orange-800 hover:active">
-                        <span>Export</span>
-                    </button>
-                </span>
-            </div> 
-            
-            
-        </> 
+        <div className='w-full h-screen bg-zinc-700'>
+            <>
+                <div className="flex justify-center items-center pt-10">
+                    <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
+                        <span className="block h-16 rounded-lg">
+                            <label className="font-bold">Reference Type:</label>
+                            {reference.type}
+                        </span>
+                        <span className="block h-20 rounded-lg">
+                            <label className="font-bold">Title:</label>
+                            {reference.title}
+                        </span>
+                        <span className="block h-16 rounded-lg">
+                            <label className="font-bold">Contributors:</label>
+                            {reference.contributors.map((contributor: any) => (
+                            <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></div>
+                        ))}
+                        </span>
+                        <span className="block h-16 rounded-lg">
+                            <label className="font-bold">Publisher:</label>
+                            {reference.publisher}
+                        </span>
+                        <span className="block h-24 rounded-lg">
+                            <label className="font-bold">Date Published:</label>
+                            {reference.month} {reference.year}
+                        </span>
+                        <span>
+                            <button className="bg-cyan-300 text-cyan-800 hover:active">
+                                <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
+                            </button>
+                            <button className="bg-red-300 text-red-800 hover:active"
+                                onClick={handleDelete}>
+                                <span>Delete</span>
+                            </button>
+                            <button className="bg-orange-300 text-orange-800 hover:active">
+                                <span>Export</span>
+                            </button>
+                        </span>
+                    </div> 
+                </div>  
+            </> 
+        </div>
     )
     
 }

@@ -87,8 +87,12 @@ const fetcher = (url: string) =>
           lang: 'en-US'
         });
         // Implement the logic to display or prepare the citation for download
-        alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
+        // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
+
+        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput });
+        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
       }
+
 
       return (
         <>

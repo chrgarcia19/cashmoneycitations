@@ -3,12 +3,10 @@ import "../../../css/form.css";
 import Link from "next/link";
 import { SignOut } from "@/components/AuthButtons";
 import { getServerAuthSession } from "@/lib/auth";
-import { Suspense } from "react";
 import LinkBtn from "@/components/LinkBtn";
 
 export default async function NavBar() {
   const authSession = await getServerAuthSession();
-  //const linkClass = "hover:bg-slate-950 text-white";
 
   return(
   <div className="navbar bg-blue-800">

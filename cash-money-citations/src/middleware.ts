@@ -8,7 +8,6 @@ export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
   const pathname = request.nextUrl.pathname;
 
-
   async function getUserToken() {
     const token = await getToken({
       req: request,
@@ -18,7 +17,8 @@ export async function middleware(request: NextRequest) {
   }
 
 
-  if ( request.nextUrl.pathname.startsWith('/new')) {
+
+  if (request.nextUrl.pathname.startsWith('/new')) {
     const token = await getUserToken();
 
     if (!token) {

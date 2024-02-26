@@ -29,6 +29,7 @@ export default async function NavBar() {
       {authSession?.user?.role && (
         <>
           <LinkBtn linkData="/new" text="Add Reference" />
+          <LinkBtn linkData="/reference-gallery" text="Gallery" />
           <LinkBtn linkData="/input-doi" text="DOI Input" />
         </>
       )}

@@ -1,61 +1,17 @@
-import React from 'react';
-import Link from 'next/link';
-import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
+import LinkBtn from "@/components/LinkBtn";
 
-
-async function getReferences() {
-  await dbConnect();
-
-  const result = await Reference.find({});
-  const references = result.map((doc) => {
-    const reference = JSON.parse(JSON.stringify(doc));
-    return reference;
-  });
-
-  return references;
-}
-
-export default async function HomePage() {
-  const references = await getReferences();
-
-  return (
-
-     
-      <>
-        {references.map((reference) => (
-          <div key={reference._id}>
-            <div className="card">
-              <img src={reference.image_url} alt="Image of a Reference Cover" />
-              <h5 className="reference-name">{reference.title}</h5>
-              <div className="main-content">
-                <p className="reference-name">{reference.title}</p>
-                <p className="owner">Type: {reference.type}</p>
-  
-                {/* Extra Reference Info: Year and Publisher */}
-                <div className="likes info">
-                  <p className="label">Year</p>
-                  {reference.year}
-                </div>
-                <div className="dislikes info">
-                  <p className="label">Publisher</p>
-                  <ul>
-                    {reference.publisher}
-                  </ul>
-                </div>
-                <div className="btn-container">
-                  <Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id } }}>
-                    <button className="btn edit bg-green-400">Edit</button>
-                  </Link>
-                  <Link href={{ pathname: `/${reference._id}/`, query: { id: reference._id } }}>
-                    <button className="btn view bg-blue-400">View</button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </>
-
+export default function HomePage() {
+  return(
+    <div className="card w-96 bg-slate-200 shadow-xl">
+      <figure className="px-10 pt-10">
+        <img src="https://avatars.githubusercontent.com/u/93625102?v=4" alt="GitHub Icon" className="rounded-xl" />
+      </figure>
+      <div className="card-body items-center text-center">
+        <h2 className="card-title">Cash Money Citations GitHub Repository</h2>
+        <div className="card-actions">
+          <LinkBtn linkData="https://github.com/chrgarcia19/cashmoneycitations" text="To GitHub"/>
+        </div>
+      </div>
+    </div>
   )
 }

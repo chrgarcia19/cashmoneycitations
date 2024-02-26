@@ -16,7 +16,7 @@ async function getReferences() {
   return references;
 }
 
-export default async function HomePage() {
+export default async function ReferenceGallery() {
   const references = await getReferences();
 
   return (

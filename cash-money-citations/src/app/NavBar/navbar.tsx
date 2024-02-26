@@ -28,6 +28,7 @@ export default async function NavBar() {
         <>
           <LinkBtn linkData="/new" text="Add Reference" />
           <LinkBtn linkData="/reference-gallery" text="Gallery"  />
+          <LinkBtn linkData="/reference-table" text="Table"  />
           <LinkBtn linkData="/input-doi" text="DOI Input" />
         </>
       )}

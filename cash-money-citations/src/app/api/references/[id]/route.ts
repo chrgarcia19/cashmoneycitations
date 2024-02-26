@@ -34,7 +34,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const deletedReference = await Reference.deleteOne({ _id: id });
 
     if (!deletedReference) {
-      return NextResponse.json({ success: false }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Reference not deleted!"}, { status: 400 });
     }
     return NextResponse.json({ success: true, data: {} }, { status: 200 });
   } catch (error) {

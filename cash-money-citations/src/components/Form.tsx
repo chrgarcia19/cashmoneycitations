@@ -206,9 +206,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           <label htmlFor="type">Type</label>
           <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
             <option value="" disabled hidden>Choose here</option>
-            <option value="website">Website</option>
-            <option value="book">Book</option>
-            <option value="journal">Journal</option>
+            <option value="Website">Website</option>
+            <option value="Book">Book</option>
+            <option value="Journal">Journal</option>
           </select>
 
           <label htmlFor="citekey">Citekey</label>

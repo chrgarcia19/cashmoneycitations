@@ -1,4 +1,6 @@
 import LinkBtn from "@/components/LinkBtn";
+import Image from 'next/image';
+import cmcLogo from '../../public/cashmoneycitations_logo.png';
 
 export default function HomePage() {
   return(
@@ -7,7 +9,7 @@ export default function HomePage() {
         <div className='h-screen flex items-center justify-center pb-20'>
         <div className="card w-96 bg-slate-200 shadow-xl">
             <figure className="px-10 pt-10">
-              <img src="cashmoneycitations_logo.png" alt="Cash Money Citations Logo" className="rounded-xl" />
+              <Image src={cmcLogo} alt="Cash Money Citations Logo" />
             </figure>
             <div className="card-body items-center text-center">
               <h2 className="card-title">Welcome to Cash Money Citations!</h2>

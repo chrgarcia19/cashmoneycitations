@@ -11,6 +11,8 @@ function NavBar() {
 
           <Link className="hover:bg-slate-950 text-white" href="/">Home</Link>
           <Link className="hover:bg-slate-950 text-white" href="/new">Add Reference</Link>
+          <Link className="hover:bg-slate-950 text-white" href="/reference-table">Table</Link>
+          <Link className="hover:bg-slate-950 text-white" href="/reference-gallery">Gallery</Link>
           <Link className="hover:bg-slate-950 text-white" href="/login">Login</Link>
           <SignOut />
 

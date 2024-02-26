@@ -4,8 +4,7 @@ import bcrypt from 'bcryptjs';
 import User from "@/models/User";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-
-
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authConfig: NextAuthOptions = ({
   providers: [
@@ -44,10 +43,19 @@ export const authConfig: NextAuthOptions = ({
     }),
     GithubProvider({
       async profile(profile) {
-        return Promise.resolve({ id: profile.id, role: profile.role ?? "admin" });
+        return Promise.resolve({ id: profile.id, role: profile.role ?? "user" });
       },
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
+    }),
+
+    GoogleProvider({
+      async profile(profile) {
+        return Promise.resolve({ id: profile.sub, name: profile.name, role: profile.role ?? "user" });
+      },
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+
     }),
     
   ],

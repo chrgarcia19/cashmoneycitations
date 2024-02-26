@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import {FcGoogle} from 'react-icons/fc'
 import Link from 'next/link'
 import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
-import { getServerSession } from 'next-auth'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import { SignInGitHub } from '@/components/AuthButtons'
+import { FaGithubSquare } from "react-icons/fa";
+import {FcGoogle} from 'react-icons/fc'
+import { IconContext } from "react-icons";
 
 interface LoginData {
     username: string;
@@ -28,20 +28,13 @@ const LoginForm = ({formId, loginForm}: Props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [providers, setProviders] = useState<Record<LiteralUnion<string, string>, ClientSafeProvider>>({});
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
-    useEffect(() => {
-        const fetchProviders = async () => {
-            const providersData = await getProviders();
-            if (providersData){
-                setProviders(providersData);
-            }
-        };
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
 
-        fetchProviders();
-    }, []);
     
 
 
@@ -49,6 +42,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
             const res = await signIn('credentials', {
                 redirect: false,
                 username: username,
@@ -56,9 +50,12 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 
             });
 
+            setLoading(false);
+
             if (res?.error){
-                setError("Invalid Credentials");
+                setError('Invalid Credentials');
                 return;
+
             }
 
             alert("You have successfully logged in.");
@@ -67,7 +64,8 @@ const LoginForm = ({formId, loginForm}: Props) => {
 
             // To initiate the getServerSession() to generate dynamic NavBar
             router.refresh();
-        } catch (error) {
+        } catch (error: any) {
+            setLoading(false);
             console.log(error);
         }
     }
@@ -80,9 +78,22 @@ const LoginForm = ({formId, loginForm}: Props) => {
             <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>
                 <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><SignInGitHub providers={providers} /></p>
+                    <IconContext.Provider value={{ color: 'black', className: ''}}>
+                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('github', { callbackUrl })}>
+                            <FaGithubSquare className='h-6 w-6' name='GitHub'/>
+                            <div className='badge text-black px-2 py-2 relative flex items-center'>GitHub</div>
+                            
+                        </button>
+
+                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('google', { callbackUrl })}>
+                            <FcGoogle className='h-6 w-6' name='Google'/>
+                            <div className='badge text-black px-2 py-2 relative flex items-center'>Google</div>
+                            
+                        </button>
+
+                    </IconContext.Provider>
                     
-                    <p className='border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center'><FcGoogle className='mr-2' /> Google</p>
+                    
                 </div>
                 <div className='flex flex-col mb-4'>
                     <label>Username</label>

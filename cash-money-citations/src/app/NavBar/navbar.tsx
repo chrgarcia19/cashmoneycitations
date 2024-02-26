@@ -26,9 +26,9 @@ export default async function NavBar() {
       {/* Checks for base 'user' role */}
       {authSession?.user?.role && (
         <>
-          <LinkBtn linkData="/new" text="Add Reference" />
-          <LinkBtn linkData="/reference-gallery" text="Gallery" />
-          <LinkBtn linkData="/input-doi" text="DOI Input" />
+          <LinkBtn linkData="/new" text="Add Reference" color="sky" textColor="cyan"/>
+          <LinkBtn linkData="/reference-gallery" text="Gallery" color="sky" textColor="cyan"/>
+          <LinkBtn linkData="/input-doi" text="DOI Input" color="sky" textColor="cyan"/>
         </>
       )}
     </div>

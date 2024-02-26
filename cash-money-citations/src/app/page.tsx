@@ -23,19 +23,19 @@ export default function HomePage() {
             <div className="card-body items-center text-center">
               <h2 className="card-title">Cash Money Citations GitHub Repository</h2>
               <div className="card-actions">
-                <LinkBtn linkData="https://github.com/chrgarcia19/cashmoneycitations" text="To GitHub"/>
+                <LinkBtn linkData="https://github.com/chrgarcia19/cashmoneycitations" text="To GitHub" color="amber" textColor="orange"/>
               </div>
             </div>
           </div>
           <div className="card w-96 bg-slate-200 shadow-xl">
           <figure className="px-10 pt-10">
-            <img src="https://github.blog/wp-content/uploads/2020/07/87728232-766b4a80-c777-11ea-8f81-1d468fc360ab.png?fit=1200%2C630" alt="GitHub Icon" className="rounded-xl" />
+            <img src="https://github.blog/wp-content/uploads/2020/07/87728232-766b4a80-c777-11ea-8f81-1d468fc360ab.png?fit=1200%2C630" alt="GitHub Icon" className="rounded-xl"/>
           </figure>
           <div className="card-body items-center text-center">
             <h2 className="card-title">Cash Money Citations Project Roadmap</h2>
             <p>Note: Do not forget to change "iteration" to "sprint" when viewing the roadmap.</p>
             <div className="card-actions">
-              <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap"/>
+              <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap" color="sky" textColor="cyan"/>
             </div>
           </div>
         </div>

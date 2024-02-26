@@ -69,9 +69,9 @@ const fetcher = (url: string) =>
 
           <div className="btn-container">
             <Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id } }}>
-              <button className="btn edit">Edit</button>
+              <button className="btn edit bg-green-400">Edit</button>
             </Link>
-            <button className="btn delete" onClick={handleDelete}>
+            <button className="btn delete bg-red-400" onClick={handleDelete}>
               Delete
             </button>
           </div>

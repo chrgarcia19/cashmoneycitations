@@ -1,6 +1,7 @@
 import React from "react";
 import { Metadata } from 'next';
 import NavBar from '../app/NavBar/navbar';
+import { AuthProvider } from "./Providers"
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
@@ -14,11 +15,11 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html data-theme="light" lang="en">
+        <html lang="en" data-theme="light">
             <body>
                 <NavBar />
                 <div className="reference-wrapper">
-                    {children}
+                    <AuthProvider>{children}</AuthProvider>
                 </div>
             </body>
         </html>

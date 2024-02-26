@@ -84,7 +84,6 @@ const ReferenceSchema = new mongoose.Schema<References>({
   },
   image_url: {
     type: String,
-    // required: [true, "Please provide the image URL."],
   },
 });
 

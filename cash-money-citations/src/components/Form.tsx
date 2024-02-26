@@ -171,7 +171,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
     if (!form.year) err.year = "Year is required";
-    if (!form.image_url) err.image_url = "Image URL is required";
     return err;
   };
 
@@ -318,7 +317,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             name="image_url"
             value={form.image_url}
             onChange={handleChange}
-            required
           />
 
           <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">

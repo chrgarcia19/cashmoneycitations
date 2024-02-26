@@ -2,10 +2,19 @@ import { NextResponse, NextRequest } from "next/server";
 import url from "url";
 import dbConnect from "../../../utils/dbConnect";
 import Reference from "../../../models/Reference";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+
+  // const session = await getServerSession();
+
+  
+  // if (!session) {
+  //   redirect('/')
+  // }
 
   await dbConnect();
 

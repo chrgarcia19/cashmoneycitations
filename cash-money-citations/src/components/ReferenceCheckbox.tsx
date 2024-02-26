@@ -135,7 +135,6 @@ export const Checkbox = ({ references }: IProps) => {
     return (
         <>
             {references.map((reference: any, index: any) => (
-              <>
               <tr className="hover:bg-zinc-500" key={index}>
                 <td className="border border-slate-600">
                 <input 
@@ -162,7 +161,6 @@ export const Checkbox = ({ references }: IProps) => {
                 <td className="border border-slate-600 text-center">{reference.publisher}</td>
                 <td className="border border-slate-600 text-center">{reference.year}</td>
                 </tr>
-              </>  
             ))}
         </>
     )    

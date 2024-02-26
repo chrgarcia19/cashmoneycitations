@@ -23,7 +23,7 @@ export default function HomePage() {
             <div className="card-body items-center text-center">
               <h2 className="card-title">Cash Money Citations GitHub Repository</h2>
               <div className="card-actions">
-                <LinkBtn linkData="https://github.com/chrgarcia19/cashmoneycitations" text="To GitHub" color="amber" textColor="orange"/>
+                <LinkBtn linkData="https://github.com/chrgarcia19/cashmoneycitations" text="To GitHub" />
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@ export default function HomePage() {
             <h2 className="card-title">Cash Money Citations Project Roadmap</h2>
             <p>Note: Do not forget to change "iteration" to "sprint" when viewing the roadmap.</p>
             <div className="card-actions">
-              <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap" color="sky" textColor="cyan"/>
+              <LinkBtn linkData="https://github.com/users/chrgarcia19/projects/2" text="To Roadmap" />
             </div>
           </div>
         </div>

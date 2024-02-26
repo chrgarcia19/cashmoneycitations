@@ -3,17 +3,18 @@ import dbConnect from '@/utils/dbConnect';
 import User from '@/models/User';
 import UserView from './UserView';
 
-export default async function GetUsers() {
+export default async function GetUsers(currentUser: any) {
 
     await dbConnect();
-    
-    const result = await User.find({});
+    const query = { email: { $ne: currentUser.currentUser } }
+
+    const result = await User.find(query);
     const users = result.map((doc) => {
         const user = JSON.parse(JSON.stringify(doc));
         return user;
     });
 
-
+    
 
     return (
         <>

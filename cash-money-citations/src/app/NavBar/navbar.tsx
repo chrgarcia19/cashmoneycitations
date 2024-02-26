@@ -4,10 +4,10 @@ import Link from "next/link";
 import { SignOut } from "@/components/AuthButtons";
 import { getServerAuthSession } from "@/lib/auth";
 import LinkBtn from "@/components/LinkBtn";
+import User from "@/models/User";
 
 export default async function NavBar() {
   const authSession = await getServerAuthSession();
-
   return(
   <div className="navbar bg-blue-800">
     <Link className="linkBtn inline-block rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200" href="/">
@@ -35,9 +35,13 @@ export default async function NavBar() {
     </div>
     <div className="flex-none gap-2 pr-4">
       <div className="dropdown dropdown-end">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder">
+        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar ">
           <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-            User
+            {authSession?.user?.image && (
+              <img src={authSession?.user?.image} alt="User" />
+            ) || (
+              <span className="text-center">User</span>
+            )}
           </div>
         </div>
         <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">

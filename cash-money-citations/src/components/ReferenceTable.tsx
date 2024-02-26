@@ -19,8 +19,8 @@ async function ReferenceTable(){
 
     return(
         <>
-        <div className='mt-10'>
-        <table className='table table-lg table-pin-rows table-pin-cols'>
+        <div className='mt-10 mb-20 pr-10 pl-10'>
+        <table className='table table-lg table-pin-rows table-pin-cols '>
           <thead>
             <tr>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Select</th>

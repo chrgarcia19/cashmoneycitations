@@ -28,7 +28,6 @@ function InputDOI() {
         else {
             setData(errorItem)
         }
-        console.log(data);
         setTableShown(true);
     }
 

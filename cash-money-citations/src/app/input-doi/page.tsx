@@ -9,14 +9,25 @@ function InputDOI() {
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();
     const contentType = "application/json";
+    const errorItem: any = [
+        {
+            DOI: "Please enter a complete DOI",
+            title: "Unknown"
+        }
+    ]
+        
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setTableShown(false);
-        const res = await fetch(`https://api.crossref.org/works?query=${searchVal}&rows=100`);
+        const res = await fetch(`https://api.crossref.org/works?filter=doi:${searchVal}&rows=100`);
         const result = await res.json();
-        setData(result.message.items);
-        console.log(data);
+        if (result.message.items){
+            setData(result.message.items);
+        }
+        else {
+            setData(errorItem)
+        }
         setTableShown(true);
     }
 
@@ -98,7 +109,7 @@ function InputDOI() {
             if (!res.ok) {
               throw new Error(res.status.toString());
             }
-            router.push("/");
+            router.push("/reference-table");
             router.refresh();
           } catch (error) {
             console.log("Failed to add reference");
@@ -122,7 +133,7 @@ function InputDOI() {
                 </div>
             </form>
             {tableShown && (
-                <table className="table-auto mt-4">
+                <table className="table-auto mt-4 border-solid">
                 <thead className="bg-zinc-700 text-white">
                   <tr>
                     <th>DOI</th>
@@ -133,9 +144,9 @@ function InputDOI() {
                 <tbody>
                     {data.map(item => (
                         <tr key={item.DOI} className="border-b hover:bg-gray-100">
-                            <td>{item.DOI}</td>
-                            <td>{item.title}</td>
-                            <td>
+                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.DOI}</td>
+                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title}</td>
+                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
                                 <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
                             </td>
                         </tr>

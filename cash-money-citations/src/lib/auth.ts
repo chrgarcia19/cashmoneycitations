@@ -4,8 +4,7 @@ import bcrypt from 'bcryptjs';
 import User from "@/models/User";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-
-
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authConfig: NextAuthOptions = ({
   providers: [
@@ -44,15 +43,42 @@ export const authConfig: NextAuthOptions = ({
     }),
     GithubProvider({
       async profile(profile) {
-        return Promise.resolve({ id: profile.id, role: profile.role ?? "admin" });
+        return Promise.resolve({ id: profile.id, image: profile.avatar_url, role: profile.role ?? "user" });
       },
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
+    }),
+
+    GoogleProvider({
+      async profile(profile) {
+        return Promise.resolve({ id: profile.sub, image: profile.picture, name: profile.name, role: profile.role ?? "user" });
+      },
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+
     }),
     
   ],
 
   callbacks: {
+    async signIn({ user, account, profile }) {
+      await dbConnect();
+
+      let dbUser = await User.findOne({ email: profile?.email });
+        
+        if (!dbUser) {
+          dbUser = await User.create({ 
+            // Create 1st time user fields (OAuth users)
+            username: profile?.name, 
+            email: profile?.email, 
+            image: profile?.image, 
+            accounts: [{ provider: account?.provider, providerAccountId: account?.id }] 
+          })
+  
+        }
+      
+      return Promise.resolve(true)
+    },
     async jwt({token, trigger, user, session }) {
       if (trigger === "update" && session) {
         return { ...token, ...session?.user };
@@ -60,15 +86,21 @@ export const authConfig: NextAuthOptions = ({
 
       if (user) {
         token.role = user.role;
+        token.id = user.id;
+        token.image = user.image;
+
       }
       return token;
     },
-    async session({session, token, user }) {
+    async session({session, token }) {
       if (token && session.user) {
         session.user.role = token.role;
+        session.user.id = token.id;
+        session.user.image = token.image;
+
       }
       return session;
-    },
+    }
 
   },
   session: {

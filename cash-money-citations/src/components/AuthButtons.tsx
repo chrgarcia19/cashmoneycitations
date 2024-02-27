@@ -1,36 +1,16 @@
 "use client";
-import { FaGithubSquare } from "react-icons/fa";
 
 import {
-  ClientSafeProvider,
-  LiteralUnion,
-  signIn,
   signOut,
 } from "next-auth/react";
-
-interface IProps {
-  providers: Record<LiteralUnion<string, string>, ClientSafeProvider>;
-}
+import { Suspense } from "react";
 
 
-export function SignInGitHub({ providers }: IProps) {
-  const provider = providers.github;
-  return (
-    <>
-      {provider && (
-        <button onClick={() => signIn(provider.id)} type="button">
-          <FaGithubSquare className="mr-2" />
-          {provider.name}
-        </button>
-      )}
-    </>
-  );
-}
 
 export function SignOut() {
   return (
-    <button className="hover:bg-slate-950 text-white" onClick={() => signOut()} type="button">
-      Sign Out
+    <button onClick={() => signOut({ callbackUrl: '/login'})} type="button">
+      Logout
     </button>
   );
 }

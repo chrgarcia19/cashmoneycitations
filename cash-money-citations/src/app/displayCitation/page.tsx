@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const citationDisplay = () => {
   const searchParams = useSearchParams();
-  const [citationData, setCitationData] = useState({ van: '', apa: '' });
+  const [citationData, setCitationData] = useState({ van: '', apa: '', bibtex: '' });
   useEffect(() => {
     const citation = searchParams.get('citation');
     if (citation) {
@@ -37,6 +37,10 @@ const citationDisplay = () => {
         <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
         </button>
       </div>
+      <div>
+         <p>BibTex: {citationData.bibtex}</p>
+      </div>
+
     </div>
   )
 };

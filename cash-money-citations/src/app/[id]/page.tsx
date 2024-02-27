@@ -5,6 +5,9 @@ import useSWR from "swr";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 const Cite = require('citation-js')
+require('@citation-js/plugin-bibtex')
+const { plugins } = require('@citation-js/core')
+const config = plugins.config.get('@bibtex')
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -86,10 +89,15 @@ const fetcher = (url: string) =>
           template: 'apa',
           lang: 'en-US'
         });
+        const bibtexOutput = citation.format('bibtex', {
+          format: 'text',
+          template: 'bibtex',
+          lang: 'en-US'
+        })
         // Implement the logic to display or prepare the citation for download
         // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
 
-        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput });
+        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: bibtexOutput });
         router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
       }
 

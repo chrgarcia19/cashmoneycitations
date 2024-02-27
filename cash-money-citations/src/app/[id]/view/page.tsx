@@ -2,6 +2,10 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
+const Cite = require('citation-js')
+require('@citation-js/plugin-bibtex')
+const { plugins } = require('@citation-js/core')
+const config = plugins.config.get('@bibtex')
 
 
 
@@ -25,6 +29,60 @@ const ViewReference = () => {
         } catch (error) {
         }
     };
+
+    function exportCitation() {
+        // Map your MongoDB data to CSL format
+        let type = "";
+        
+        if (reference.type === 'journal'){
+          type = 'article-journal'
+        }
+        if (reference.type === 'website'){
+          type = reference.type
+        }
+        if (reference.type === 'book'){
+          type = reference.type
+        }
+        const cslData = {
+          id: reference._id,
+          type: type,
+          title: reference.title,
+          author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
+            family: contributor.contributorFirstName,
+            given: contributor.contributorLastName,
+          })),
+          issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
+          publisher: reference.publisher,
+          DOI: reference.doi,
+          URL: reference.url,
+          ISBN: reference.isbn
+        };
+      
+        // Create a Cite instance
+        const citation = new Cite(cslData);
+        //Generate Vancouver citation
+        const vanOutput = citation.format('bibliography', {
+          format: 'text',
+          template: 'vancouver',
+          lang: 'en-US'
+        });
+        //Generate apa citation
+        const apaOutput = citation.format('bibliography', {
+          format: 'text',
+          template: 'apa',
+          lang: 'en-US'
+        });
+        const bibtexOutput = citation.format('bibtex', {
+          format: 'text',
+          template: 'bibtex',
+          lang: 'en-US'
+        })
+        // Implement the logic to display or prepare the citation for download
+        // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
+
+        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: bibtexOutput });
+        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
+      }
 
     const {
         data: reference,
@@ -72,7 +130,8 @@ const ViewReference = () => {
                                 onClick={handleDelete}>
                                 <span>Delete</span>
                             </button>
-                            <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
+                            <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
+                                onClick={exportCitation}>
                                 <span>Export</span>
                             </button>
                         </span>

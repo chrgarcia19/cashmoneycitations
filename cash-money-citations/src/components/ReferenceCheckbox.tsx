@@ -5,6 +5,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+const Cite = require('citation-js')
+require('@citation-js/plugin-bibtex')
+const { plugins } = require('@citation-js/core')
+const config = plugins.config.get('@bibtex')
+import { Contributor } from "@/models/Contributor";
 
 interface IProps {
     references: any;
@@ -30,6 +35,58 @@ export const Checkbox = ({ references }: IProps) => {
         } catch (error) {
         }
     };
+
+    const exportCitation = async (reference: any) => {
+        // Map your MongoDB data to CSL format
+        let refType = "";
+        if (reference.type === 'journal'){
+            refType = 'article-journal'
+        }
+        if (reference.type === 'website'){
+            refType = reference.type
+        }
+        if (reference.type === 'book'){
+            refType = reference.type
+        }
+        const cslData = {
+            id: reference._id,
+            type: refType,
+            title: reference.title,
+            author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
+                family: contributor.contributorFirstName,
+                given: contributor.contributorLastName,
+            })),
+            issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
+            publisher: reference.publisher,
+            DOI: reference.doi,
+            URL: reference.url,
+            ISBN: reference.isbn
+        };
+        
+        // Create a Cite instance
+        const citation = new Cite(cslData);
+        //Generate Vancouver citation
+        const vanOutput = citation.format('bibliography', {
+            format: 'text',
+            template: 'vancouver',
+            lang: 'en-US'
+        });
+        //Generate apa citation
+        const apaOutput = citation.format('bibliography', {
+            format: 'text',
+            template: 'apa',
+            lang: 'en-US'
+        });
+        const bibtexOutput = citation.format('bibtex', {
+            format: 'text',
+            template: 'bibtex',
+            lang: 'en-US'
+        })
+        // Implement the logic to display or prepare the citation for download
+        // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
+        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: bibtexOutput });
+        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
+    }
 
     const handleDeleteMany = async (refIDs: string[]) => {
         for (let i = 0; i < refIDs.length; i++){
@@ -108,7 +165,7 @@ export const Checkbox = ({ references }: IProps) => {
         setIsChecked(checkState)
     }
 
-    const singleMenu = (refID: string) => {
+    const singleMenu = (refID: string, reference: any) => {
         return (
             <div className="btm-nav">
                 <Link className="bg-green-300 text-green-800 hover:active" style={{display: 'grid'}} href={{ pathname: `/${refID}/edit`, query: { id: refID} } }>
@@ -124,7 +181,8 @@ export const Checkbox = ({ references }: IProps) => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 109.484 122.88" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.347,9.633h38.297V3.76c0-2.068,1.689-3.76,3.76-3.76h21.144 c2.07,0,3.76,1.691,3.76,3.76v5.874h37.83c1.293,0,2.347,1.057,2.347,2.349v11.514H0V11.982C0,10.69,1.055,9.633,2.347,9.633 L2.347,9.633z M8.69,29.605h92.921c1.937,0,3.696,1.599,3.521,3.524l-7.864,86.229c-0.174,1.926-1.59,3.521-3.523,3.521h-77.3 c-1.934,0-3.352-1.592-3.524-3.521L5.166,33.129C4.994,31.197,6.751,29.605,8.69,29.605L8.69,29.605z M69.077,42.998h9.866v65.314 h-9.866V42.998L69.077,42.998z M30.072,42.998h9.867v65.314h-9.867V42.998L30.072,42.998z M49.572,42.998h9.869v65.314h-9.869 V42.998L49.572,42.998z"/></svg>
                     <span className="btm-nav-label">Delete</span>
                 </button>
-                <button className="bg-orange-300 text-orange-800 hover:active">
+                <button className="bg-orange-300 text-orange-800 hover:active"
+                onClick={() => exportCitation(reference)}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.93" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.33,0.02h29.41v20.6H20.36v80.7h82.1V84.79h20.36v37.14H0V0.02H8.33L8.33,0.02z M122.88,0H53.3l23.74,23.18l-33.51,33.5 l21.22,21.22L98.26,44.4l24.62,24.11V0L122.88,0z"/></svg>
                     <span className="btm-nav-label">Export</span>
                 </button>
@@ -171,7 +229,7 @@ export const Checkbox = ({ references }: IProps) => {
                     checked={isChecked[index]}
                     onChange={() => checkHandler(index)}
                 />
-                {countSelected(isChecked) == 1 && isChecked[index] ? singleMenu(reference._id) : ""}
+                {countSelected(isChecked) == 1 && isChecked[index] ? singleMenu(reference._id, reference) : ""}
                 {countSelected(isChecked) > 1 ? multiMenu(getSelected(isChecked)) : ""}
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>

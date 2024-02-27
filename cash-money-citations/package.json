@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@citation-js/core": "^0.7.6",
     "@next-auth/prisma-adapter": "^0.4.4-canary.81",
     "@prisma/client": "^5.9.1",
     "@types/node": "^20.4.7",

@@ -15,11 +15,32 @@ const citationDisplay = () => {
     }
   }, [searchParams]);
 
+  const copyToClipboard = (text : string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  };
+
   return (
-    <div>
-      <p>Vancouver Citation: {citationData.van}</p>
-      <p>APA Citation: {citationData.apa}</p>
-      <p>BibTex: {citationData.bibtex}</p>
+    <div className='flex flex-row items-start w-screen'>
+     <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
+        <p className='mt-3'>Vancouver Citation: {citationData.van}</p>
+        <button onClick={() => copyToClipboard(citationData.van)}>
+        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
+        </button>
+      </div>
+      <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
+        <p className='mt-3'>APA Citation: {citationData.apa}</p>
+        <button onClick={() => copyToClipboard(citationData.apa)}>
+        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
+        </button>
+      </div>
+      <div>
+         <p>BibTex: {citationData.bibtex}</p>
+      </div>
+
     </div>
   )
 };

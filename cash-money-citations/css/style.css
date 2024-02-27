@@ -171,6 +171,11 @@ li {
   margin-left: 10px;
 }
 
+.export.btn {
+  --accent: orange;
+  margin-left: 10px;
+}
+
 .view.btn {
   --accent: blue;
   margin-left: 10px;
@@ -189,4 +194,19 @@ li {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* Copy Icon */
+
+.copy-icon {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.5s ease-in-out;
+  margin: 10px;
+  /* height: max-content; */
+}
+
+.copy-icon:hover {
+  transform: scale(1.1);
+   opacity: 1;
 }

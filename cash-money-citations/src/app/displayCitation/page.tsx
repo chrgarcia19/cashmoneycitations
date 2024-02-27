@@ -37,9 +37,13 @@ const citationDisplay = () => {
         <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
         </button>
       </div>
-      <div>
-         <p>BibTex: {citationData.bibtex}</p>
+      <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
+        <p className='mt-3'>BibTex: {citationData.bibtex}</p>
+        <button onClick={() => copyToClipboard(citationData.bibtex)}>
+        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
+        </button>
       </div>
+
 
     </div>
   )

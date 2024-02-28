@@ -19,7 +19,7 @@ async function ReferenceTable(){
 
     return(
         <>
-        <div className='mt-10 mb-20 pr-10 pl-10'>
+        <div className='mt-20 mb-20 pr-10 pl-10'>
         <table className='table table-lg table-pin-rows table-pin-cols '>
           <thead>
             <tr>

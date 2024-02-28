@@ -35,19 +35,25 @@ export default async function NavBar() {
     </div>
     <div className="flex-none gap-2 pr-4">
       <div className="dropdown dropdown-end">
-        {authSession?.user?.image && (
+        {authSession?.user?.image && authSession?.user && (
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar ">
             <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
               <img src={authSession?.user?.image} alt="User" />
             </div>
           </div>
-        ) || (
+        )} {!authSession?.user?.image && authSession?.user && (
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder">
             <div className="w-32 rounded-full bg-teal-300 ring ring-primary ring-offset-base-100 ring-offset-2">
-              User
+              <span className="font-bold">User</span>
             </div>
           </div>
-        )} 
+        )} {!authSession?.user && (
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder">
+            <div className="w-32 rounded-full bg-teal-300 ring ring-primary ring-offset-base-100 ring-offset-2">
+              <span className="text-3xl font-bold">?</span>
+            </div>
+          </div>
+        )}
         <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
           <li>
               {/* Checks to see if the user is logged in */}

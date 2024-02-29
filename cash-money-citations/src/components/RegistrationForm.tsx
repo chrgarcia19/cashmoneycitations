@@ -3,6 +3,7 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
+import { createUser } from "./actions";
 
 interface RegistrationData {
     username: string;
@@ -86,7 +87,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
             setMessage("Failed to add user!");
         }
     };
-
+//
     const postData = async (form: RegistrationData) => {
         try {
             const res = await fetch("/api/auth/register", {
@@ -136,7 +137,12 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
         const errs = formValidate();
 
         if (Object.keys(errs).length === 0) {
-            forNewUser ? postData(form) : putData(form);
+            try {
+                createUser(form);
+                router.push('/');
+            } catch(error) {
+                console.log(error)
+            }
         } else {
             setErrors( { errs });
         }

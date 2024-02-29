@@ -36,13 +36,18 @@ export async function createUser(form: RegistrationData) {
 
       const { username, firstName, lastName, email, password } = req;
 
+ 
       const userExists = await User.findOne({email});
 
-      if(userExists){
-        const error = "User exists!"
-          return error;
+      if (userExists) {
+        return {
+          exists: true,
+          status: 409,
+          message: "Email already in use."
+        };
       }
-
+      
+      
       // Hash the password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -64,6 +69,9 @@ export async function createUser(form: RegistrationData) {
       
       revalidatePath('/');
   } catch (error) {
-    return error;
+    return {
+      status: 409,
+      message: "Unknown user creation error. Please try again."
+    };
   }
 }

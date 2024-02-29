@@ -36,7 +36,6 @@ export default function HomePage() {
           </figure>
           <div className="card-body items-center text-center">
             <h2 className="card-title">Cash Money Citations Project Roadmap</h2>
-            <p>Note: Do not forget to change "iteration" to "sprint" when viewing the roadmap.</p>
             <div className="card-actions">
               <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
                 <span><Link href="https://github.com/users/chrgarcia19/projects/2">To Roadmap</Link></span>

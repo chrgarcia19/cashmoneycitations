@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import dbConnect from "@/utils/dbConnect";
 import Reference from "@/models/Reference";
-import getReferences from './actions';
+import {getReferences} from './actions';
 
 export default async function ReferenceGallery() {
   const references = await getReferences();

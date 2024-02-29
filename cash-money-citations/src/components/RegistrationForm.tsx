@@ -1,9 +1,9 @@
 'use client'
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import useSWR, { mutate } from "swr";
 import { createUser } from "./actions";
+import { ErrorButton } from "./ErrorButton";
 
 interface RegistrationData {
     username: string;
@@ -27,12 +27,11 @@ type Props = {
     forNewUser?: boolean;
 };
 
-const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props) => {
-    const searchParams = useSearchParams();
+const RegistrationForm = ({formId, registrationForm}: Props) => {
     const router = useRouter();
-    const contentType = "application/json";
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
+    const [emailInUse, setEmailInUse] = useState(false);
 
     const [form, setForm] = useState({
         username: registrationForm.username,
@@ -42,72 +41,6 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
         password: registrationForm.password,
     });
 
-    const id = searchParams.get("id");
-
-    const fetcher = async (url: string) => {
-        const res = await fetch(`/api/registration/${id}`);
-        if (!res.ok){ throw new Error("An error occurred while fetching the data."); }
-        return res.json();
-    };
-
-    const useData = (url: string) => {
-        const { data, error, mutate } = useSWR(url, fetcher);
-
-        return {
-            data,
-            error,
-            isLoading: !data && !error,
-            mutate,
-        };
-    };
-
-    const putData = async (form: RegistrationData) => {
-        const id = searchParams.get("id");
-    
-        try {
-            const res = await fetch(`/api/register/${id}`, {
-                method: "PUT",
-                headers: {
-                    Accept: contentType,
-                    "Content-Type": contentType,
-                },
-                body: JSON.stringify(form),
-            });
-
-            if (!res.ok){
-                throw new Error(res.status.toString());
-            }
-
-            const { data } = await res.json();
-            mutate(`/api/register/${id}`, data, true);
-
-            router.push("/");
-            router.refresh();
-        } catch (error) {
-            setMessage("Failed to add user!");
-        }
-    };
-
-    const postData = async (form: RegistrationData) => {
-        try {
-            const res = await fetch("/api/auth/register", {
-                method: "POST",
-                headers: {
-                    Accept: contentType,
-                    "Content-Type": contentType,
-                },
-                body: JSON.stringify(form),
-            });
-
-            if (!res.ok){
-                throw new Error(res.status.toString());
-            }
-            router.push("/");
-            router.refresh();
-        } catch (error) {
-            setMessage("Failed to add user!");
-        }
-    };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -132,17 +65,21 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
         return err;
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const errs = formValidate();
 
         if (Object.keys(errs).length === 0) {
-            try {
-                createUser(form);
+            
+            const createUserResponse = await createUser(form);
+            if (createUserResponse?.exists) {
+                setEmailInUse(true);
+            } else {
+                setEmailInUse(false);
                 router.push('/');
-            } catch(error) {
-                console.log(error)
             }
+
+           
         } else {
             setErrors( { errs });
         }
@@ -152,6 +89,7 @@ const RegistrationForm = ({formId, registrationForm, forNewUser = true }: Props)
         <>
         <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
             <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white p-8">
+                {emailInUse && <ErrorButton />}
             <h2 className='text-4xl font-bold text-center py-4 text-green-600'>Register</h2>
                 <div className="flex flex-col mb-4">
                 <label className="capitalize">Username:</label>

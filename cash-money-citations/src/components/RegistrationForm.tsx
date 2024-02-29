@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "./actions";
-import { ErrorButton } from "./ErrorButton";
+import { EmailInUseError } from "./EmailInUseError";
 
 interface RegistrationData {
     username: string;
@@ -89,7 +89,7 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         <>
         <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
             <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white p-8">
-                {emailInUse && <ErrorButton />}
+                {emailInUse && <EmailInUseError />}
             <h2 className='text-4xl font-bold text-center py-4 text-green-600'>Register</h2>
                 <div className="flex flex-col mb-4">
                 <label className="capitalize">Username:</label>

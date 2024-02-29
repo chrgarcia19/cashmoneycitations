@@ -1,14 +1,17 @@
 "use client"
 
-import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const citationDisplay = () => {
-  const searchParams = useSearchParams();
+export default function citationDisplay({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string | undefined }
+}){
   const [citationData, setCitationData] = useState({ van: '', apa: '', bibtex: '' });
   useEffect(() => {
-    const citation = searchParams.get('citation');
+    const citation = searchParams.citation;
     if (citation) {
       const parsedData = JSON.parse(decodeURIComponent(citation));
       setCitationData(parsedData);
@@ -48,5 +51,3 @@ const citationDisplay = () => {
     </div>
   )
 };
-
-export default citationDisplay;

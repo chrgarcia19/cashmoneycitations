@@ -1,18 +1,7 @@
 import dbConnect from "@/utils/dbConnect";
 import Reference from "@/models/Reference";
 import ReferenceCheckbox from "./ReferenceCheckbox";
-
-async function getReferences() {
-    await dbConnect();
-  
-    const result = await Reference.find({});
-    const references = result.map((doc) => {
-      const reference = JSON.parse(JSON.stringify(doc));
-      return reference;
-    });
-  
-    return references;
-}
+import getReferences from "./actions";
 
 async function ReferenceTable(){
     const references = await getReferences();

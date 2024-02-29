@@ -2,19 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import dbConnect from "@/utils/dbConnect";
 import Reference from "@/models/Reference";
+import getReferences from './actions';
 
-
-async function getReferences() {
-  await dbConnect();
-
-  const result = await Reference.find({});
-  const references = result.map((doc) => {
-    const reference = JSON.parse(JSON.stringify(doc));
-    return reference;
-  });
-
-  return references;
-}
 
 export default async function ReferenceGallery() {
   const references = await getReferences();

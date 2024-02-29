@@ -17,11 +17,12 @@ export default async function RootLayout({
     return (
         <html lang="en" data-theme="light">
             <body>
-                <NavBar />
-                <div className="reference-wrapper">
-                    <AuthProvider>{children}</AuthProvider>
-
-                </div>
+                <Suspense>
+                    <NavBar />
+                    <div className="reference-wrapper">
+                        <AuthProvider>{children}</AuthProvider>
+                    </div>
+                </Suspense>
             </body>
         </html>
     )

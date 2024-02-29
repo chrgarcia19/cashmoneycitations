@@ -1,7 +1,5 @@
-import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import ReferenceCheckbox from "./ReferenceCheckbox";
-import getReferences from "./actions";
+import { getReferences } from "./actions";
 
 async function ReferenceTable(){
     const references = await getReferences();

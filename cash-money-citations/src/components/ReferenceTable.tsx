@@ -1,5 +1,3 @@
-import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import ReferenceCheckbox from "./ReferenceCheckbox";
 import {getReferences} from "./actions";
 

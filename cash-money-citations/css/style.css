@@ -7,6 +7,13 @@
   box-sizing: border-box;
 }
 
+/* For the dark background */
+.background {
+  background-color: rgb(63 63 70 / 1);
+  height: auto;
+  width: auto;
+}
+
 /* Nav Area */
 .top-bar {
   width: 100%;
@@ -218,7 +225,14 @@ li {
   align-items: center;
 }
 
-/*CSS taken and modified from DaisyUI*/
+.content-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*CSS for the reference table view bottom bar
+taken and modified from DaisyUI*/
 .btm-bar {
   position: fixed;
   bottom: 0px;
@@ -299,3 +313,12 @@ li {
   font-size: 1rem/* 16px */;
   line-height: 1.5rem/* 24px */;
 } 
+
+/*CSS from DaisyUI for pinning the table rows*/
+.table :where(.table-pin-row thead tr) {
+  position: sticky;
+  top: 95px;
+  z-index: 50;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+}

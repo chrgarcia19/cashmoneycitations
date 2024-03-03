@@ -7,6 +7,20 @@ import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 
+/*Creating an array of days for a select box*/
+const days = new Array<number>();
+for (let i = 1; i < 32; i++){
+  days.push(i);
+}
+
+interface WebData{
+  url: string;
+  month_accessed: string;
+  day_accessed: number;
+  year_accessed: number;
+  article_title: string;
+  website_title: string;
+}
 
 interface FormData {
   type: string;
@@ -14,8 +28,9 @@ interface FormData {
   title: string;
   contributors: Contributor[];
   publisher: string;
-  year: string;
-  month: string;
+  year_published: string;
+  day_published: number;
+  month_published: string;
   address: string;
   edition: string;
   volume: string;
@@ -55,8 +70,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     title: referenceForm.title,
     contributors: referenceForm.contributors,
     publisher: referenceForm.publisher,
-    year: referenceForm.year,
-    month: referenceForm.month,
+    year_published: referenceForm.year_published,
+    month_published: referenceForm.month_published,
+    day_published: referenceForm.day_published,
     address: referenceForm.address,
     edition: referenceForm.edition,
     volume: referenceForm.volume,
@@ -68,6 +84,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   });
 
   const id  = searchParams.get("id");
+
+  const createDates = () => {
+    
+  };
 
   const fetcher = async (url: string) => {
     const res = await fetch(`/api/references/${id}`);
@@ -170,7 +190,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
-    if (!form.year) err.year = "Year is required";
+    if (!form.year_published) err.year = "Year is required";
     return err;
   };
 
@@ -203,15 +223,24 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
         <form id={formId} onSubmit={handleSubmit}>
 
-          <label htmlFor="type">Type</label>
-          <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
+          <label className="font-bold" htmlFor="type">
+            Type
+          </label>
+          <select 
+            name="type" 
+            className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" 
+            defaultValue={form.type} 
+            onChange={handleChange} 
+            required>
             <option value="" disabled hidden>Choose here</option>
-            <option value="Website">Website</option>
-            <option value="Book">Book</option>
-            <option value="Journal">Journal</option>
+            <option value="website">Website</option>
+            <option value="book">Book</option>
+            <option value="journal">Journal</option>
           </select>
 
-          <label htmlFor="citekey">Citekey</label>
+          <label className="font-bold" htmlFor="citekey">
+            Citekey
+          </label>
           <input
             type="text"
             name="citekey"
@@ -220,104 +249,221 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             required
           />
 
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="publisher">Publisher</label>
-          <input
-            type="text"
-            name="publisher"
-            value={form.publisher}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="year">Year</label>
-          <input
-            type="text"
-            name="year"
-            value={form.year}
-            onChange={handleChange}
-            required
-          />
-
-          <label htmlFor="month">Month</label>
-          <input
-            type="text"
-            name="month"
-            value={form.month}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="edtion">Edition</label>
-          <input
-            type="text"
-            name="edition"
-            value={form.edition}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="volume">Volume</label>
-          <input
-            type="text"
-            name="volume"
-            value={form.volume}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="isbn">ISBN</label>
-          <input
-            type="text"
-            name="isbn"
-            value={form.isbn}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="doi">DOI</label>
-          <input
-            type="text"
-            name="doi"
-            value={form.doi}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="pages">Pages</label>
-          <input
-            type="text"
-            name="pages"
-            value={form.pages}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="journal">Journal</label>
-          <input
-            type="text"
-            name="journal"
-            value={form.journal}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="image_url">Image URL</label>
+          <label 
+            className="font-bold" 
+            htmlFor="image_url">
+              Image URL (Optional)
+          </label>
           <input
             type="url"
             name="image_url"
             value={form.image_url}
             onChange={handleChange}
           />
+
+          {form.type == "website" && (
+            <>
+              <label 
+                className="font-bold" 
+                htmlFor="article_title">
+                  Article Title
+              </label>
+                <input
+                  type="text"
+                  name="article_title"
+                  onChange={handleChange}
+                  required 
+                />
+              <label 
+                className="font-bold"
+                htmlFor="website_title">
+                  Website Title
+              </label>
+                <input
+                  type="text"
+                  name="website_title"
+                  onChange={handleChange}
+                  required 
+                />
+              <label 
+                className="font-bold"
+                htmlFor="url">
+                  Website URL
+              </label>
+                <input
+                  type="text"
+                  name="url"
+                  onChange={handleChange}
+                  required 
+                />
+              
+              
+              <label className="font-bold" htmlFor="date_published">
+                Date Accessed (Month, Day, Year)
+              </label>
+              <div className="join w-auto">
+                <div className="me-3">
+                  <div className="join join-vertical">
+                    <div className="label">
+                      <span className="label-text">Month</span>
+                    </div>
+                    <select
+                      name="month_published"
+                      className="select select-sm select-bordered w-40"
+                      defaultValue={form.month_published}
+                      onChange={handleChange}>
+                      <option value="" disabled selected>Pick a Month</option>
+                      <option value="January">January</option>
+                      <option value="February">February</option>
+                      <option value="March">March</option>
+                      <option value="April">April</option>
+                      <option value="May">May</option>
+                      <option value="June">June</option>
+                      <option value="July">July</option>
+                      <option value="August">August</option>
+                      <option value="September">September</option>
+                      <option value="October">October</option>
+                      <option value="November">November</option>
+                      <option value="December">December</option>
+                    </select> 
+                  </div>
+                </div>
+                <div className="me-3">
+                  <div className="join join-vertical">
+                    <div className="label">
+                      <span className="label-text">Day</span>
+                    </div>
+                    <select 
+                      name="day_published"
+                      className="select select-sm select-bordered w-40"
+                      defaultValue={form.day_published}
+                      onChange={handleChange}>
+                      <option disabled selected>Pick a day</option>
+                      {days.map((day, i) => (
+                          <option 
+                            key={i}
+                            defaultValue={form.day_published}>
+                            {day}
+                          </option>
+                        ))}
+                    
+                    </select>
+                  </div>
+                </div>
+                <div className="join join-vertical">
+                  <div className="label">
+                    <span className="label-text">Year</span>
+                  </div>
+                  <input
+                    className="h-8 w-52"
+                    placeholder="Pick a Year"
+                    type="text"
+                    name="year_published"
+                    value={form.year_published}
+                    onChange={handleChange}
+                    required 
+                  />
+                </div>
+              </div>             
+            </>
+          )}
+
+          {form.type == "book" && (
+            <>
+              <label
+                className="font-bold"
+                htmlFor="book_title">
+                Book Title
+              </label>
+              <input
+                type="text"
+                name="book_title"
+                onChange={handleChange}
+                required
+              />
+            </>
+          )}
+
+          <label className="font-bold" htmlFor="date_published">
+            Date Published (Month, Day, Year)
+          </label>
+            <div className="join w-auto">
+              <div className="me-3">
+                <div className="join join-vertical">
+                  <div className="label">
+                    <span className="label-text">Month</span>
+                  </div>
+                  <select
+                    name="month_published"
+                    className="select select-sm select-bordered w-40"
+                    defaultValue={form.month_published}
+                    onChange={handleChange}>
+                    <option value="" disabled selected>Pick a Month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select> 
+                </div>
+              </div>
+              <div className="me-3">
+                <div className="join join-vertical">
+                  <div className="label">
+                    <span className="label-text">Day</span>
+                  </div>
+                  <select 
+                    name="day_published"
+                    className="select select-sm select-bordered w-40"
+                    defaultValue={form.day_published}
+                    onChange={handleChange}>
+                    <option disabled selected>Pick a day</option>
+                    {days.map((day, i) => (
+                        <option 
+                          key={i}
+                          defaultValue={form.day_published}>
+                          {day}
+                        </option>
+                      ))}
+                  
+                  </select>
+                </div>
+              </div>
+              <div className="join join-vertical">
+                <div className="label">
+                  <span className="label-text">Year</span>
+                </div>
+                <input
+                  className="h-8 w-52"
+                  placeholder="Pick a Year"
+                  type="text"
+                  name="year_published"
+                  value={form.year_published}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+            </div>     
+
+          <label
+            className="font-bold"
+            htmlFor="publisher">
+              Publisher
+          </label>
+          <input
+            type="text"
+            name="publisher"
+            value={form.publisher}
+            onChange={handleChange}
+            required
+          />        
 
           <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
             Submit

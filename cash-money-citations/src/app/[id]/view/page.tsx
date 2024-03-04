@@ -57,7 +57,13 @@ function ReferenceDetails({ reference }: any) {
 }
 
 function ReferenceActions({ onEdit, onDelete, onExport }: any) {
-
+  return (
+    <div>
+      <Button color="green" onClick={onEdit}>Edit</Button>
+      <Button color="red" onClick={onDelete}>Delete</Button>
+      <Button color="orange" onClick={onExport}>Export</Button>
+    </div>
+  )
 }
 
 const ViewReference = () => {
@@ -101,24 +107,22 @@ const ViewReference = () => {
       if (!reference) return null;
       
 
+    const handleEdit = () => {
+      router.push(`/${reference._id}/edit?id=${encodeURIComponent(reference._id)}`);
+    };
+
+    const handleExport = () => {
+
+    }
     return(
         <div className='w-full h-screen bg-zinc-700'>
             <>
                 <div className="flex justify-center items-center pt-10">
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
+                        <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
+
                         <span className="space-x-5">
-                            <button className="linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
-                                <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
-                            </button>
-                            <button className="linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
-                                onClick={handleDelete}>
-                                <span>Delete</span>
-                            </button>
-                            <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
-                                onClick={exportCitation}>
-                                <span>Export</span>
-                            </button>
                             <select
                               value={styleChoice}
                               onChange={e => setStyleChoice(e.target.value)}

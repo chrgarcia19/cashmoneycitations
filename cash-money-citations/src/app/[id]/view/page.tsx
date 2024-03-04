@@ -13,6 +13,20 @@ import CiteDisplay from "./citeDisplay";
 import { useState } from "react";
 import { CreateCitation } from "./actions";
 
+// Styles buttons for Edit, Delete, & Export
+function Button({ color, onClick, children }: any) {
+  return (
+    <button
+      className={`linkBtn inline-block bg-gradient-to-r from-${color}-400 to-${color}-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
+      onClick={onClick}
+    >
+      <span>{children}</span>
+    </button>
+  );
+}
+
+
+// Displays reference details
 function ReferenceDetails({ reference }: any) {
   return (
     <>
@@ -42,6 +56,9 @@ function ReferenceDetails({ reference }: any) {
   )
 }
 
+function ReferenceActions({ onEdit, onDelete, onExport }: any) {
+
+}
 
 const ViewReference = () => {
     const fetcher = (url: string) =>

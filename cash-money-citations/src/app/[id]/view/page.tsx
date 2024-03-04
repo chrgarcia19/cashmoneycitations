@@ -10,6 +10,7 @@ const { plugins } = require('@citation-js/core')
 // const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
 // import { getStyles, getCslStyle } from "./actions";
 import CiteDisplay from "./citeDisplay";
+import { useState } from "react";
 
 const ViewReference = () => {
     const fetcher = (url: string) =>
@@ -20,6 +21,7 @@ const ViewReference = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
+    const [styleChoice, setStyleChoice] = useState('university-of-york-mla.csl');
 
     const handleDelete = async () => {
         try {
@@ -78,9 +80,9 @@ const ViewReference = () => {
           format: 'text',
           template: 'bibtex',
           lang: 'en-US'
-        })
-
-        let test2 = await CiteDisplay(cslData);
+        });
+        console.log(styleChoice)
+        let test2 = await CiteDisplay(cslData, styleChoice);
         // Implement the logic to display or prepare the citation for download
         const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: test2 });
         router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
@@ -137,6 +139,17 @@ const ViewReference = () => {
                                 onClick={exportCitation}>
                                 <span>Export</span>
                             </button>
+                            <select
+                              value={styleChoice}
+                              onChange={e => setStyleChoice(e.target.value)}
+                            >
+                              <option value="university-of-york-mla.csl">
+                                MLA
+                              </option>
+                              <option value='university-of-york-chicago.csl'>
+                                Chicago
+                              </option>
+                            </select>
                         </span>
                     </div> 
                 </div>  

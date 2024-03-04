@@ -4,10 +4,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
+require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
-const config = plugins.config.get('@bibtex')
-
-
+// const config = plugins.config.get('@bibtex')
+// const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
+// import { getStyles, getCslStyle } from "./actions";
+import CiteDisplay from "./citeDisplay";
 
 const ViewReference = () => {
     const fetcher = (url: string) =>
@@ -30,7 +32,7 @@ const ViewReference = () => {
         }
     };
 
-    function exportCitation() {
+    async function exportCitation() {
         // Map your MongoDB data to CSL format
         let type = "";
         
@@ -77,10 +79,10 @@ const ViewReference = () => {
           template: 'bibtex',
           lang: 'en-US'
         })
-        // Implement the logic to display or prepare the citation for download
-        // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
 
-        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: bibtexOutput });
+        let test2 = await CiteDisplay(cslData);
+        // Implement the logic to display or prepare the citation for download
+        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: test2 });
         router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
       }
 
@@ -95,6 +97,7 @@ const ViewReference = () => {
       if (isLoading) return <p>Loading...</p>;
       if (!reference) return null;
       
+
     return(
         <div className='w-full h-screen bg-zinc-700'>
             <>

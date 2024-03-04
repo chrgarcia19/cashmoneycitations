@@ -5,12 +5,14 @@ const { plugins } = require('@citation-js/core')
 const fs = require('fs');
 import path from 'path';
 
-export default async function CiteDisplay(cslData: any) {
+export default async function CiteDisplay(cslData: any, styleChoice: string) {
 
-    const stylePath = path.resolve('./csl_styles/harvard-cite-them-right.csl')
+    let templateName = "harvard-cite-them-right.csl"
+
+    // Retrieve CSL Style from root server
+    const stylePath = path.resolve(`./csl_styles/${templateName}`)
     const styleData = fs.readFileSync(stylePath, 'utf8');
 
-    let templateName = 'chicago'
         
     const config = plugins.config.get('@csl')
 
@@ -22,7 +24,6 @@ export default async function CiteDisplay(cslData: any) {
         template: templateName,
         lang: 'en-us'
     })
-    console.log(test2)
 
 
     return test2;

@@ -3,11 +3,12 @@ const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
 const fs = require('fs');
+import path from 'path';
 
 export default async function CiteDisplay(cslData: any) {
 
-
-    const styleData = fs.readFileSync("/home/vyre/cmc/cashmoneycitations/cash-money-citations/src/app/[id]/view/harvard-cite-them-right.csl", 'utf8');
+    const stylePath = path.resolve('./csl_styles/harvard-cite-them-right.csl')
+    const styleData = fs.readFileSync(stylePath, 'utf8');
 
     let templateName = 'chicago'
         

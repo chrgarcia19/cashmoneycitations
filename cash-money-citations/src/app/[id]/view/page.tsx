@@ -11,6 +11,7 @@ const { plugins } = require('@citation-js/core')
 // import { getStyles, getCslStyle } from "./actions";
 import CiteDisplay from "./citeDisplay";
 import { useState } from "react";
+import { CreateCitation } from "./actions";
 
 const ViewReference = () => {
     const fetcher = (url: string) =>
@@ -35,56 +36,9 @@ const ViewReference = () => {
     };
 
     async function exportCitation() {
-        // Map your MongoDB data to CSL format
-        let type = "";
-        
-        if (reference.type === 'journal'){
-          type = 'article-journal'
-        }
-        if (reference.type === 'website'){
-          type = reference.type
-        }
-        if (reference.type === 'book'){
-          type = reference.type
-        }
-        const cslData = {
-          id: reference._id,
-          type: type,
-          title: reference.title,
-          author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-            family: contributor.contributorFirstName,
-            given: contributor.contributorLastName,
-          })),
-          issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
-          publisher: reference.publisher,
-          DOI: reference.doi,
-          URL: reference.url,
-          ISBN: reference.isbn
-        };
-      
-        // Create a Cite instance
-        const citation = new Cite(cslData);
-        //Generate Vancouver citation
-        const vanOutput = citation.format('bibliography', {
-          format: 'text',
-          template: 'vancouver',
-          lang: 'en-US'
-        });
-        //Generate apa citation
-        const apaOutput = citation.format('bibliography', {
-          format: 'text',
-          template: 'apa',
-          lang: 'en-US'
-        });
-        const bibtexOutput = citation.format('bibtex', {
-          format: 'text',
-          template: 'bibtex',
-          lang: 'en-US'
-        });
-        console.log(styleChoice)
-        let test2 = await CiteDisplay(cslData, styleChoice);
-        // Implement the logic to display or prepare the citation for download
-        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: test2 });
+      // Call to server action to create citations
+        const citationData = await CreateCitation(reference)
+        console.log(citationData)
         router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
       }
 

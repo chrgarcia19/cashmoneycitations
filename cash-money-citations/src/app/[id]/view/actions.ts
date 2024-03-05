@@ -8,8 +8,7 @@ require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 
-export async function CreateCitation(reference: any) {
-
+export async function CreateCitation(reference: any, styleChoice: any) {
 
     let type = "";
         
@@ -38,9 +37,11 @@ export async function CreateCitation(reference: any) {
     };
     
     // Create a Cite instance
-    const citation = new Cite(cslData);
+    let cslJson = Cite.input(reference);
+    const citation = new Cite(cslJson);
 
-    let templateName = "harvard-cite-them-right.csl"
+    let templateName = styleChoice
+    console.log(templateName)
 
     // Retrieve CSL Style from root server
     const stylePath = path.resolve(`./csl_styles/${templateName}`)
@@ -52,24 +53,24 @@ export async function CreateCitation(reference: any) {
     config.templates.add(templateName, styleData)
     
     const customCitation = citation.format('bibliography', {
-        format: 'text',
+        format: 'html',
         template: templateName,
         lang: 'en-us'
     });
 
     const vanOutput = citation.format('bibliography', {
-        format: 'text',
+        format: 'html',
         template: 'vancouver',
         lang: 'en-US'
     });
     //Generate apa citation
     const apaOutput = citation.format('bibliography', {
-        format: 'text',
+        format: 'html',
         template: 'apa',
         lang: 'en-US'
     });
     const bibtexOutput = citation.format('bibtex', {
-        format: 'text',
+        format: 'html',
         template: 'bibtex',
         lang: 'en-US'
     });

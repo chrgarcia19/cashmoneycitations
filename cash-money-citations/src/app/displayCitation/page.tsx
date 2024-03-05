@@ -29,7 +29,7 @@ export default function citationDisplay({
   return (
     <div className='flex flex-row items-start w-screen'>
      <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
-        <p className='mt-3'>Vancouver Citation: {citationData.van}</p>
+        <div className='mt-3'>Vancouver Citation: {citationData.van}</div>
         <button onClick={() => copyToClipboard(citationData.van)}>
         <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
         </button>

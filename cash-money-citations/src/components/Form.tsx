@@ -8,27 +8,58 @@ import { HandleInitialReference } from "./citationActions";
 enum EntryType {
   Article = 'article',
   Book = 'book',
-  Booklet = 'booklet',
-  Conference = 'conference',
-  Inbook = 'inbook',
-  Incollection = 'incollection',
-  Inproceedings = 'inproceedings',
-  Manual = 'manual',
-  Masterthesis = 'masterthesis',
-  Misc = 'misc',
-  Phdthesis = 'phdthesis',
-  Proceedings = 'proceedings',
-  Techreport = 'techreport',
-  Unpublished = 'unpublished',
+  Chapter = 'chapter',
+  ArticleJournal = 'article-journal',
+  ArticleMagazine = 'article-magazine',
+  ArticleNewspaper = 'article-newspaper',
+  Bill = 'bill',
+  Broadcast = 'broadcast',
+  Classic = 'classic',
+  Collection = 'collection',
+  Dataset = 'dataset',
+  Document = 'document',
+  Entry = 'entry',
+  EntryDictionary = 'entry-dictionary',
+  EntryEncyclopedia = 'entry-encyclopedia',
+  Event = 'event',
+  Figure = 'figure',
+  Graphic = 'graphic',
+  Hearing = 'hearing',
+  Interview = 'interview',
+  LegalCase = 'legal_case',
+  Legislation = 'legislation',
+  Manuscript = 'manuscript',
+  Map = 'map',
+  MotionPicture = 'motion_picture',
+  MusicalScore = 'musical_score',
+  Pamphlet = 'pamphlet',
+  PaperConference = 'paper-conference',
+  Patent = 'patent',
+  Performance = 'performance',
+  Periodical = 'periodical',
+  PersonalCommunication = 'personal_communication',
+  Post = 'post',
+  PostWeblog = 'post-weblog',
+  Regulation = 'regulation',
+  Report = 'report',
+  Review = 'review',
+  ReviewBook = 'review-book',
+  Software = 'software',
+  Song = 'song',
+  Speech = 'speech',
+  Standard = 'standard',
+  Thesis = 'thesis',
+  Treaty = 'treaty',
+  Webpage = 'webpage'
 }
+
 
 interface FormData {
   entryType: {
     type: string,
     enum: EntryType
   }
-  type: string;
-  citekey: string;
+  //type: string;
   title: string;
   contributors: Contributor[];
   publisher: string;
@@ -64,8 +95,7 @@ const Form = ({ formId, referenceForm}: Props) => {
 
   const [form, setForm] = useState({
     entryType: referenceForm.entryType,
-    type: referenceForm.type,
-    citekey: referenceForm.citekey,
+    //type: referenceForm.type,
     title: referenceForm.title,
     contributors: referenceForm.contributors,
     publisher: referenceForm.publisher,
@@ -108,7 +138,7 @@ const Form = ({ formId, referenceForm}: Props) => {
   /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
   const formValidate = () => {
     let err: Error = {};
-    if (!form.type) err.type = "Type is required";
+    //if (!form.type) err.type = "Type is required";
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
@@ -127,31 +157,31 @@ const Form = ({ formId, referenceForm}: Props) => {
     // }
   };
 
-  let formTitle: String;
-  if (form.type) {
-    formTitle = "Edit Reference"
-  }
-  else {
-    formTitle = "Add Reference"
-  }
+  // let formTitle: String;
+  // if (form.type) {
+  //   formTitle = "Edit Reference"
+  // }
+  // else {
+  //   formTitle = "Add Reference"
+  // }
 
   return (
     <>
     <div className="bg-gray-100 w-2/5 rounded-xl">
       <div className="flex justify-center items-center">
-        <h1 className="text-2xl align-middle">{formTitle}</h1>
+        <h1 className="text-2xl align-middle">Add Reference</h1>
       </div>
       <br/>
       <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
         <form id={formId} onSubmit={handleSubmit}>
 
-          <label htmlFor="type">Type</label>
+          {/* <label htmlFor="type">Type</label>
           <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
             <option value="" disabled hidden>Choose here</option>
             <option value="website">Website</option>
             <option value="book">Book</option>
             <option value="journal">Journal</option>
-          </select>
+          </select> */}
 
           <select name="entryType" onChange={handleChange}>
             {Object.values(EntryType).map((value) => (

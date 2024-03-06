@@ -20,9 +20,10 @@ function toCslJson(reference: any) {
 }
 
 // Creates citeKey based off of first author last name and year
-async function InitializeCiteKey(_id: string, contributorLastName: string, year: number) {
+async function InitializeCiteKey(_id: string, contributorLastName: string, year: Date) {
     try{
-        const newCiteKey = String(contributorLastName + year)
+        const fullYear = year.getUTCFullYear();
+        const newCiteKey = (contributorLastName + fullYear)
         await BibTexModel.findByIdAndUpdate(_id, { citeKey: newCiteKey })
     } catch(error) {
         console.error(error)

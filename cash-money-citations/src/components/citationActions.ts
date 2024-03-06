@@ -63,7 +63,7 @@ async function HandleInitialFormat(bibResponse: any) {
     const cslJson = await toCslJson(bibtexOutput)
 
     // Adds the CSL-JSON to the existing database collection
-    InitializeCslJson(bibResponse._id, cslJson);
+    InitializeCslJson(bibResponse.id, cslJson);
 }
 
 export async function HandleInitialReference(form: any) {

@@ -2,6 +2,7 @@
 
 import { Contributor } from '@/models/Contributor';
 import React, { useState, useEffect } from 'react';
+import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
 
 interface ContributorFormProps {
   updateFormData: (newData: Contributor[]) => void;
@@ -53,44 +54,50 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   }, []);
 
   return (
-    <div className="App m-0 justify-center items-center">
+    <div className="m-0 justify-center items-center">
       <div className="flex justify-center items-center">
         <h1 className="text-xl align-middle">Contributor Information (Type, First Name, Last Name, Middle Initial)</h1>
       </div>
-      <form className="m-0 justify-center items-center w-full max-w-screen-lg">
+      <form className="m-0 w-full max-w-screen-md">
         {formFields.map((form, index) => (
-          <div key={index} className="display-block inline-flex ">
-            <select name="type" className="bg-white border-gray-300 rounded-lg w-2/3 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
-              <option value="" disabled hidden>Contributor Type</option>
-              <option value="Author">Author</option>
-              <option value="Editor">Editor</option>
-              <option value="Translator">Translator</option>
-            </select>
-            <input
-              name='contributorFirstName'
-              placeholder='Contributor First Name'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorFirstName}
-              className="w-2/3 pr-0.5 mr-0.5"
-            />
-            <input
-              name='contributorLastName'
-              placeholder='Contributor Last Name'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorLastName}
-              className="w-2/3 pr-0.5 mr-0.5"
-            />
-            <input
-              name='contributorMiddleI'
-              placeholder='Contributor Middle Initial'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorMiddleI}
-              className="w-2/12 pr-0.5 mr-0.5"
-            />
-            <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5" onClick={() => removeFields(index)}>Remove</button>
-          </div>
+          <>
+            <div key={index} className="flex items-center justify-center">
+              <select name="type" className="bg-white border-gray-300 rounded-lg w-2/5d pl-0.5 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
+                <option value="" disabled hidden>Role</option>
+                <option value="Author">Author</option>
+                <option value="Editor">Editor</option>
+                <option value="Translator">Translator</option>
+                <option value="Compiler">Compiler</option>
+              </select>
+              <input
+                name='contributorFirstName'
+                placeholder='Contributor First Name'
+                onChange={(event) => handleFormChange(event, index)}
+                value={form.contributorFirstName}
+                className="w-2/4 pr-0.5 mr-0.5" />
+              <input
+                name='contributorLastName'
+                placeholder='Contributor Last Name'
+                onChange={(event) => handleFormChange(event, index)}
+                value={form.contributorLastName}
+                className="w-2/4 pr-0.5 mr-0.5" />
+              <input
+                name='contributorMiddleI'
+                placeholder='Contributor Middle Initial'
+                onChange={(event) => handleFormChange(event, index)}
+                value={form.contributorMiddleI}
+                className="w-1/4 pr-0.5 mr-0.5" />
+                <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
+            </div>
+          </>
         ))}
-        <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg" onClick={addFields}>Add More..</button>
+        <div className='join join-horizontal'>
+          <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg p-1 me-2" onClick={addFields}><BiPlusCircle /></button>
+          <label 
+            className='font-bold label-text text-indigo-600 pt-5'>
+              Add Contributors
+          </label>
+        </div>        
       </form>
     </div>
   );

@@ -6,39 +6,11 @@ import { mutate } from "swr";
 import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
-
-/*Creating an array of days for a select box*/
-const days = new Array<number>();
-for (let i = 1; i < 32; i++){
-  days.push(i);
-}
-
-interface WebData{
-  url: string;
-  month_accessed: string;
-  day_accessed: number;
-  year_accessed: number;
-  article_title: string;
-  website_title: string;
-}
+import WebForm from "./form-components/WebForm";
+import BookForm from "./form-components/BookForm";
 
 interface FormData {
   type: string;
-  citekey: string;
-  title: string;
-  contributors: Contributor[];
-  publisher: string;
-  year_published: string;
-  day_published: number;
-  month_published: string;
-  address: string;
-  edition: string;
-  volume: string;
-  isbn: string;
-  doi: string;
-  pages: string;
-  journal: string;
-  image_url: string;
 }
 
 interface Error {
@@ -58,115 +30,44 @@ type Props = {
 };
 
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const contentType = "application/json";
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState("");
 
+  const webData = {
+    type: "",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    article_title: "",
+    website_title: "",
+    website_url: "",
+    month_accessed: "",
+    day_accessed: 0,
+    year_accessed: 0,
+    month_published: "",
+    day_published: 0,
+    year_published: 0,
+    publisher: "",
+  };
+
+  const bookData = {
+    type: "book",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    book_title: "",
+    volume: "",
+    edition: "",
+    month_published: "",
+    day_published: 0,
+    year_published: 0,
+    publisher: "",
+    city: "",
+    state: "",
+  };
+
+  /*Set initial state to website so the page is not blank*/
   const [form, setForm] = useState({
-    type: referenceForm.type,
-    citekey: referenceForm.citekey,
-    title: referenceForm.title,
-    contributors: referenceForm.contributors,
-    publisher: referenceForm.publisher,
-    year_published: referenceForm.year_published,
-    month_published: referenceForm.month_published,
-    day_published: referenceForm.day_published,
-    address: referenceForm.address,
-    edition: referenceForm.edition,
-    volume: referenceForm.volume,
-    isbn: referenceForm.isbn,
-    doi: referenceForm.doi,
-    pages: referenceForm.pages,
-    journal: referenceForm.journal,
-    image_url: referenceForm.image_url,
+    type: "website",
   });
-
-  const id  = searchParams.get("id");
-
-  const createDates = () => {
-    
-  };
-
-  const fetcher = async (url: string) => {
-    const res = await fetch(`/api/references/${id}`);
-    if (!res.ok) {
-      throw new Error("An error occurred while fetching the data.");
-    }
-    return res.json();
-  };
-
-  const useData = (url: string) => {
-    const { data, error, mutate } = useSWR(url, fetcher);
-
-    return {
-      data,
-      error,
-      isLoading: !data && !error,
-      mutate,
-    };
-  };
-
-  /* The PUT method edits an existing entry in the mongodb database. */
-  const putData = async (form: FormData) => {
-    const id  = searchParams.get("id");
-
-    try {
-      const res = await fetch(`/api/references/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      const { data } = await res.json();
-
-      mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setMessage("Failed to update reference");
-    }
-  };
-
-  //Handling contributor stuff
-  const updateFormData = (newData: Array<any>) => {
-    setForm({
-      ...form,
-      contributors: newData,
-    });
-  };
-
-  /* The POST method adds a new entry in the mongodb database. */
-  const postData = async (form: FormData) => {
-    try {
-      const res = await fetch("/api/references", {
-        method: "POST",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setMessage("Failed to add reference");
-    }
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -181,30 +82,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-
-  /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
-  const formValidate = () => {
-    let err: Error = {};
-    if (!form.type) err.type = "Type is required";
-    if (!form.citekey) err.citekey = "Citekey is required";
-    if (!form.title) err.title = "Title is required";
-    if (!form.contributors) err.contributors = "Contributor info is required";
-    if (!form.publisher) err.publisher = "Publisher is required";
-    if (!form.year_published) err.year = "Year is required";
-    return err;
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const errs = formValidate();
-
-    if (Object.keys(errs).length === 0) {
-      forNewReference ? postData(form) : putData(form);
-    } else {
-      setErrors({ errs });
-    }
-  };
-
   let formTitle: String;
   if (form.type) {
     formTitle = "Edit Reference"
@@ -215,20 +92,18 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-    <div className="bg-gray-100 w-2/5 rounded-xl">
-      <div className="flex justify-center items-center">
-        <h1 className="text-2xl align-middle">{formTitle}</h1>
-      </div>
-      <br/>
-      <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
-        <form id={formId} onSubmit={handleSubmit}>
-
+    <div className="pt-5 pb-5 w-full flex items-center justify-center">
+      <div className="bg-gray-100 w-2/5 rounded-xl">
+        <div className="flex justify-center items-center">
+          <h1 className="text-2xl align-middle pl-">{formTitle}</h1>
+        </div>
+        <div className="pl-14">
           <label className="font-bold" htmlFor="type">
             Type
           </label>
           <select 
             name="type" 
-            className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" 
+            className="bg-white border-gray-300 rounded-lg w-52 h-8 border-t border-r border-l border-b" 
             defaultValue={form.type} 
             onChange={handleChange} 
             required>
@@ -237,243 +112,16 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             <option value="book">Book</option>
             <option value="journal">Journal</option>
           </select>
+        </div>
+        <br/>
 
-          <label className="font-bold" htmlFor="citekey">
-            Citekey
-          </label>
-          <input
-            type="text"
-            name="citekey"
-            value={form.citekey}
-            onChange={handleChange}
-            required
-          />
+            {form.type == "website" && (
+              <WebForm formID={"add-web-reference"} type={"website"} webForm={webData}  />
+            )}
 
-          <label 
-            className="font-bold" 
-            htmlFor="image_url">
-              Image URL (Optional)
-          </label>
-          <input
-            type="url"
-            name="image_url"
-            value={form.image_url}
-            onChange={handleChange}
-          />
-
-          {form.type == "website" && (
-            <>
-              <label 
-                className="font-bold" 
-                htmlFor="article_title">
-                  Article Title
-              </label>
-                <input
-                  type="text"
-                  name="article_title"
-                  onChange={handleChange}
-                  required 
-                />
-              <label 
-                className="font-bold"
-                htmlFor="website_title">
-                  Website Title
-              </label>
-                <input
-                  type="text"
-                  name="website_title"
-                  onChange={handleChange}
-                  required 
-                />
-              <label 
-                className="font-bold"
-                htmlFor="url">
-                  Website URL
-              </label>
-                <input
-                  type="text"
-                  name="url"
-                  onChange={handleChange}
-                  required 
-                />
-              
-              
-              <label className="font-bold" htmlFor="date_published">
-                Date Accessed (Month, Day, Year)
-              </label>
-              <div className="join w-auto">
-                <div className="me-3">
-                  <div className="join join-vertical">
-                    <div className="label">
-                      <span className="label-text">Month</span>
-                    </div>
-                    <select
-                      name="month_published"
-                      className="select select-sm select-bordered w-40"
-                      defaultValue={form.month_published}
-                      onChange={handleChange}>
-                      <option value="" disabled selected>Pick a Month</option>
-                      <option value="January">January</option>
-                      <option value="February">February</option>
-                      <option value="March">March</option>
-                      <option value="April">April</option>
-                      <option value="May">May</option>
-                      <option value="June">June</option>
-                      <option value="July">July</option>
-                      <option value="August">August</option>
-                      <option value="September">September</option>
-                      <option value="October">October</option>
-                      <option value="November">November</option>
-                      <option value="December">December</option>
-                    </select> 
-                  </div>
-                </div>
-                <div className="me-3">
-                  <div className="join join-vertical">
-                    <div className="label">
-                      <span className="label-text">Day</span>
-                    </div>
-                    <select 
-                      name="day_published"
-                      className="select select-sm select-bordered w-40"
-                      defaultValue={form.day_published}
-                      onChange={handleChange}>
-                      <option disabled selected>Pick a day</option>
-                      {days.map((day, i) => (
-                          <option 
-                            key={i}
-                            defaultValue={form.day_published}>
-                            {day}
-                          </option>
-                        ))}
-                    
-                    </select>
-                  </div>
-                </div>
-                <div className="join join-vertical">
-                  <div className="label">
-                    <span className="label-text">Year</span>
-                  </div>
-                  <input
-                    className="h-8 w-52"
-                    placeholder="Pick a Year"
-                    type="text"
-                    name="year_published"
-                    value={form.year_published}
-                    onChange={handleChange}
-                    required 
-                  />
-                </div>
-              </div>             
-            </>
-          )}
-
-          {form.type == "book" && (
-            <>
-              <label
-                className="font-bold"
-                htmlFor="book_title">
-                Book Title
-              </label>
-              <input
-                type="text"
-                name="book_title"
-                onChange={handleChange}
-                required
-              />
-            </>
-          )}
-
-          <label className="font-bold" htmlFor="date_published">
-            Date Published (Month, Day, Year)
-          </label>
-            <div className="join w-auto">
-              <div className="me-3">
-                <div className="join join-vertical">
-                  <div className="label">
-                    <span className="label-text">Month</span>
-                  </div>
-                  <select
-                    name="month_published"
-                    className="select select-sm select-bordered w-40"
-                    defaultValue={form.month_published}
-                    onChange={handleChange}>
-                    <option value="" disabled selected>Pick a Month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                  </select> 
-                </div>
-              </div>
-              <div className="me-3">
-                <div className="join join-vertical">
-                  <div className="label">
-                    <span className="label-text">Day</span>
-                  </div>
-                  <select 
-                    name="day_published"
-                    className="select select-sm select-bordered w-40"
-                    defaultValue={form.day_published}
-                    onChange={handleChange}>
-                    <option disabled selected>Pick a day</option>
-                    {days.map((day, i) => (
-                        <option 
-                          key={i}
-                          defaultValue={form.day_published}>
-                          {day}
-                        </option>
-                      ))}
-                  
-                  </select>
-                </div>
-              </div>
-              <div className="join join-vertical">
-                <div className="label">
-                  <span className="label-text">Year</span>
-                </div>
-                <input
-                  className="h-8 w-52"
-                  placeholder="Pick a Year"
-                  type="text"
-                  name="year_published"
-                  value={form.year_published}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-            </div>     
-
-          <label
-            className="font-bold"
-            htmlFor="publisher">
-              Publisher
-          </label>
-          <input
-            type="text"
-            name="publisher"
-            value={form.publisher}
-            onChange={handleChange}
-            required
-          />        
-
-          <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
-            Submit
-          </button>
-        </form>
-        <p>{message}</p>
-        <div>
-          {Object.keys(errors).map((err, index) => (
-            <li key={index}>{err}</li>
-          ))}
+            {form.type == "book" && (
+              <BookForm formID={"add-book-reference"} type={"book"} bookForm={bookData} />
+            )}
         </div>
       </div>
     </>

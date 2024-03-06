@@ -46,7 +46,6 @@ interface FormData {
 
 interface Error {
   type?: string;
-  citekey?: string;
   title?: string;
   contributors?: string;
   publisher?: string;
@@ -57,10 +56,9 @@ interface Error {
 type Props = {
   formId: string;
   referenceForm: FormData;
-  forNewReference?: boolean;
 };
 
-const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
+const Form = ({ formId, referenceForm}: Props) => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 

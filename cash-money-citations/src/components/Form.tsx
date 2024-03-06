@@ -1,9 +1,6 @@
 'use client'
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { mutate } from "swr";
-import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 import { HandleInitialReference } from "./citationActions";
@@ -35,7 +32,7 @@ interface FormData {
   title: string;
   contributors: Contributor[];
   publisher: string;
-  year: string;
+  year: number;
   month: string;
   address: string;
   edition: string;
@@ -64,9 +61,6 @@ type Props = {
 };
 
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const contentType = "application/json";
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
@@ -89,56 +83,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     image_url: referenceForm.image_url,
   });
 
-  const id  = searchParams.get("id");
-
-  const fetcher = async (url: string) => {
-    const res = await fetch(`/api/references/${id}`);
-    if (!res.ok) {
-      throw new Error("An error occurred while fetching the data.");
-    }
-    return res.json();
-  };
-
-  const useData = (url: string) => {
-    const { data, error, mutate } = useSWR(url, fetcher);
-
-    return {
-      data,
-      error,
-      isLoading: !data && !error,
-      mutate,
-    };
-  };
-
-  /* The PUT method edits an existing entry in the mongodb database. */
-  const putData = async (form: FormData) => {
-    const id  = searchParams.get("id");
-
-    try {
-      const res = await fetch(`/api/references/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      const { data } = await res.json();
-
-      mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setMessage("Failed to update reference");
-    }
-  };
-
   //Handling contributor stuff
   const updateFormData = (newData: Array<any>) => {
     setForm({
@@ -147,28 +91,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-  /* The POST method adds a new entry in the mongodb database. */
-  const postData = async (form: FormData) => {
-    try {
-      const res = await fetch("/api/references", {
-        method: "POST",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
 
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      setMessage("Failed to add reference");
-    }
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -188,7 +111,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const formValidate = () => {
     let err: Error = {};
     if (!form.type) err.type = "Type is required";
-    if (!form.citekey) err.citekey = "Citekey is required";
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
@@ -241,14 +163,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             ))}
           </select>
 
-          <label htmlFor="citekey">Citekey</label>
-          <input
-            type="text"
-            name="citekey"
-            value={form.citekey}
-            onChange={handleChange}
-            required
-          />
 
           <label htmlFor="title">Title</label>
           <input

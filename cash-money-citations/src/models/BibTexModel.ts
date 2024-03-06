@@ -75,7 +75,8 @@ const BibTexSchema = new Schema({
     dateCreated: {
         type: Date,
         default: Date.now
-    }
+    },
+    image_url: String
 });
 
 export default mongoose.models.BibTexModel || mongoose.model("BibTexModel", BibTexSchema); 

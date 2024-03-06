@@ -1,6 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
 import { Contributor } from "./Contributor";
 
+function generateCiteKey() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 const ContributorSchema = new mongoose.Schema<Contributor>({
     // Define Contributor schema fields
     contributorType: {
@@ -17,6 +21,7 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     }
 });
 
+// 3/6/24 Need to decide which fields are optional and which are required
 const BibTexSchema = new Schema({
     entryType: {
         type: String,
@@ -37,7 +42,10 @@ const BibTexSchema = new Schema({
             'unpublished',
         ]
     },
-    citeKey: String,
+    citeKey: {
+      type: String,
+      default: generateCiteKey
+    },
     address: String,
     annote: String,
     contributors: [ContributorSchema],

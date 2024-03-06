@@ -12,7 +12,6 @@ const contentType = "application/json"
 
 // Takes reference data & converts to CSL-JSON
 function toCslJson(reference: any) {
-    console.log(reference)
     const cslJson = Cite.input(reference);
     // Last working on a way to validate CSL-JSON and save in Database
     // Last last working on ensuring that the input to cslJson will always return CSL no matter if it is manual input or DOI
@@ -42,8 +41,8 @@ export async function HandleInitialReference(form: any) {
         const bibResponse = await BibTexModel.create(
             form
         )
-
-        const {_id, contributorLastName, year} = bibResponse
+        const {_id, contributors, year} = bibResponse
+        const contributorLastName = contributors[0].contributorLastName;
         InitializeCiteKey(_id, contributorLastName, year)
 
       } catch (error) {
@@ -53,7 +52,6 @@ export async function HandleInitialReference(form: any) {
     // Create CSL-JSON Entry
     try {
         const cslJson = toCslJson(form)
-        console.log(cslJson)
         await Citation.create(
             cslJson
         )

@@ -6,9 +6,30 @@ import { mutate } from "swr";
 import useSWR from "swr";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
+import { HandleInitialReference } from "./citationActions";
 
+enum EntryType {
+  Article = 'article',
+  Book = 'book',
+  Booklet = 'booklet',
+  Conference = 'conference',
+  Inbook = 'inbook',
+  Incollection = 'incollection',
+  Inproceedings = 'inproceedings',
+  Manual = 'manual',
+  Masterthesis = 'masterthesis',
+  Misc = 'misc',
+  Phdthesis = 'phdthesis',
+  Proceedings = 'proceedings',
+  Techreport = 'techreport',
+  Unpublished = 'unpublished',
+}
 
 interface FormData {
+  entryType: {
+    type: string,
+    enum: EntryType
+  }
   type: string;
   citekey: string;
   title: string;
@@ -50,6 +71,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [message, setMessage] = useState("");
 
   const [form, setForm] = useState({
+    entryType: referenceForm.entryType,
     type: referenceForm.type,
     citekey: referenceForm.citekey,
     title: referenceForm.title,
@@ -177,12 +199,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errs = formValidate();
-
-    if (Object.keys(errs).length === 0) {
-      forNewReference ? postData(form) : putData(form);
-    } else {
-      setErrors({ errs });
-    }
+    HandleInitialReference(form)
+    // if (Object.keys(errs).length === 0) {
+    //   forNewReference ? HandleInitialReference(form) : putData(form);
+    // } else {
+    //   setErrors({ errs });
+    // }
   };
 
   let formTitle: String;
@@ -206,9 +228,17 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           <label htmlFor="type">Type</label>
           <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
             <option value="" disabled hidden>Choose here</option>
-            <option value="Website">Website</option>
-            <option value="Book">Book</option>
-            <option value="Journal">Journal</option>
+            <option value="website">Website</option>
+            <option value="book">Book</option>
+            <option value="journal">Journal</option>
+          </select>
+
+          <select name="entryType" onChange={handleChange}>
+            {Object.values(EntryType).map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </select>
 
           <label htmlFor="citekey">Citekey</label>

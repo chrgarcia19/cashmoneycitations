@@ -69,3 +69,5 @@ const BibTexSchema = new Schema({
         default: Date.now
     }
 });
+
+export default mongoose.models.BibTexModel || mongoose.model("BibTexModel", BibTexSchema); 

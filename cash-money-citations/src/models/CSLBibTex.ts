@@ -112,4 +112,4 @@ const CSLBibSchema = new Schema({
     image_url: String
 });
 
-export default mongoose.models.CSLBibSchema || mongoose.model("CSLBibModel", CSLBibSchema); 
+export default mongoose.models.CSLBibModel || mongoose.model("CSLBibModel", CSLBibSchema); 

@@ -11,8 +11,8 @@ import BibTexModel from "@/models/BibTexModel";
 const contentType = "application/json"
 
 // Takes reference data & converts to CSL-JSON
-function toCslJson(reference: any) {
-    const cslJson = Cite.input(reference);
+function toCslJson(bibtexReference: any) {
+    const cslJson = Cite.input(bibtexReference);
     // Last working on a way to validate CSL-JSON and save in Database
     // Last last working on ensuring that the input to cslJson will always return CSL no matter if it is manual input or DOI
     // We may need to alter the references model to fix this
@@ -30,33 +30,35 @@ async function InitializeCiteKey(_id: string, contributorLastName: string, year:
     }
 }
 
+async function InitializeCslJson(_id: string, cslJson: object) {
+    try {
+        await BibTexModel.findByIdAndUpdate(_id, { cslJson: cslJson })
+    } catch(error) {
+        console.error(error)
+    }
+}
+
 export async function HandleInitialReference(form: any) {
 
     await dbConnect();
     // Create reference entry
     try {
 
-        const res = await Reference.create(
-            form
-        )
         const bibResponse = await BibTexModel.create(
             form
         )
+        console.log(bibResponse)
+
         const {_id, contributors, year} = bibResponse
         const contributorLastName = contributors[0].contributorLastName;
         InitializeCiteKey(_id, contributorLastName, year)
 
+        const cslJson = await toCslJson(BibTexModel.findById(_id))
+            console.log(cslJson)
+        InitializeCslJson(_id, cslJson);
       } catch (error) {
         console.error(error)
       }
 
-    // Create CSL-JSON Entry
-    try {
-        const cslJson = toCslJson(form)
-        await Citation.create(
-            cslJson
-        )
-    } catch(error) {
-        console.error(error)
-    }
+
 }

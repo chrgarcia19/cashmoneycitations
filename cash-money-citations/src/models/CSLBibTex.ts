@@ -103,7 +103,7 @@ const CSLBibSchema = new Schema({
     note: String,
     number: Number,
     organization: String,
-    pages: Number,
+    pages: String,
     publisher: String,
     school: String,
     series: String,
@@ -112,7 +112,8 @@ const CSLBibSchema = new Schema({
     volume: String,
     year: Date,
     doi: String,
-    issn: String,
+    issn: [String],
+    issnType: [Object],
     isbn: String,
     url: String,
     cslJson: Object,
@@ -124,8 +125,8 @@ const CSLBibSchema = new Schema({
     issue: String,
     abstract: String,
     apiSource: String,
+    subject: [String],
     referencesUsed: [referencesUsedSchema],
-
 
 });
 

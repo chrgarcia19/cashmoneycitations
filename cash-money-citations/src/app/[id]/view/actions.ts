@@ -10,7 +10,7 @@ const { plugins } = require('@citation-js/core')
 import CSLBibModel from "@/models/CSLBibTex";
 import dbConnect from "@/utils/dbConnect";
 
-export async function CreateCitation(reference: any, styleChoice: any) {
+export async function CreateCitation(referenceId: any, styleChoice: any) {
 
     await dbConnect();
     // let type = "";
@@ -40,14 +40,13 @@ export async function CreateCitation(reference: any, styleChoice: any) {
     // };
     
     // NEED TO CONVERT FROM USING THE REFERENCE MODEL TO THE NEW CSLBIBMODEL
-    let tempCslJson = await CSLBibModel.findById("65e8d11a59e08b35e2ea8a1f")
+    let tempCslJson = await CSLBibModel.findById(referenceId)
     const cslJson = tempCslJson.cslJson
 
     // Create a Cite instance
     const citation = new Cite(cslJson);
 
     let templateName = styleChoice
-    console.log(templateName)
 
     // Retrieve CSL Style from root server
     const stylePath = path.resolve(`./csl_styles/${templateName}`)

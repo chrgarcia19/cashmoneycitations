@@ -14,13 +14,26 @@ const { plugins } = require('@citation-js/core')
 const contentType = "application/json"
 
 // Takes reference data & converts to CSL-JSON
-function toCslJson(bibtexReference: any) {
-    const cslJson = Cite.input(bibtexReference);
-    // Last working on a way to validate CSL-JSON and save in Database
-    // Last last working on ensuring that the input to cslJson will always return CSL no matter if it is manual input or DOI
-    // We may need to alter the references model to fix this
+function toCslJson(ReferenceData: any) {
+    const cslJson = Cite.input(ReferenceData);
     return cslJson;
 }
+
+// Creates CSL-JSON for auto input -> DOI, ISBN, ISSN, etc.
+export async function CreateCslJsonDocument(automaticInput: any) {
+    try {
+        await dbConnect();
+        const input = automaticInput
+        const result = toCslJson(input);
+        //console.log(typeof(JSON.stringify(result[0].title)))
+
+        await CSLBibModel.create(result);
+    } catch(error) {
+        console.error(error)
+    }
+}
+// LAST WORKING ON GETTING DOI INPUT TO WORK CORRECTLY
+// RECIEVING AN ERROR WHERE THE CITE.INPUT IS UNABLE TO CONVERT THE TITLE ARRAY TO A STRING.
 
 // Creates citeKey based off of first author last name and year
 async function InitializeCiteKey(_id: string, contributorLastName: string, year: Date) {

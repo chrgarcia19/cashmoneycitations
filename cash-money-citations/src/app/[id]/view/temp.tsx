@@ -76,7 +76,8 @@ const ViewReference = () => {
     const id = searchParams.get('id');
     const router = useRouter();
     const [styleChoice, setStyleChoice] = useState('university-of-york-mla.csl');
-
+    const [referenceId, setReferenceId] = useState(id);
+    
     const handleDelete = async () => {
         try {
           await fetch(`/api/references/${reference._id}`, {
@@ -90,7 +91,7 @@ const ViewReference = () => {
 
     async function exportCitation() {
       // Call to server action to create citations
-        const citationData = await CreateCitation(reference, styleChoice)
+        const citationData = await CreateCitation(referenceId, styleChoice)
         router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
       }
 

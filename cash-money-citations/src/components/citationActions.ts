@@ -4,18 +4,18 @@ const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import CSLBibModel from "@/models/CSLBibTex";
-import { resolve } from "path";
+import { Contributor } from "@/models/Contributor";
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
 
-
 const contentType = "application/json"
 
-
-const typeMap = {
-    'author': 'contributors'
+// Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
+const typeMap: {[key: string]: string } = {
+    "created.date-parts.0.0": 'year',
+    'DOI': 'doi',
+    'ISBN': 'isbn'
   }
   
 // Takes reference data & converts to CSL-JSON
@@ -24,12 +24,49 @@ function toCslJson(ReferenceData: any) {
     return cslJson;
 }
 
-function translateForeignModel(result: any, input: any) {
-    const CSLBibTexData: { [key: string]: any } = {}; 
-        
-    for (const key in input) {
+// Uses type mapping to translate foreign fields to our reference fields
+function translateForeignModel(result: any) {
+    let i = 0;
+    let newContributor: Contributor = {
+        contributorType: "",
+        contributorFirstName: "",
+        contributorLastName: "",
+        contributorMiddleI: ""
+    };
+    let contributors = new Array<Contributor>();
+
+    //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+    if (result[0].author) {
+        for (i; i<result[0].author.length; i++) {
+            newContributor = {
+                contributorType: "Author",
+                contributorFirstName: result[0].author[i].given,
+                contributorLastName: result[0].author[i].family,
+                contributorMiddleI: ""
+            };
+            contributors.push(newContributor);
+        }
+    }
+    else {
+        newContributor = {
+            contributorType: "Author",
+            contributorFirstName: "Unknown",
+            contributorLastName: "Unknown",
+            contributorMiddleI: ""
+        };
+        contributors.push(newContributor);
+    }
+
+
+    const CSLBibTexData: { [key: string]: any } = {
+        year: result[0].created['date-parts'][0][0],
+        month: result[0].created['date-parts'][0][1],
+        contributors: contributors,
+    }; 
+    for (const key in result[0]) {
+        console.log(key)
         if (typeMap[key as keyof typeof typeMap]) {
-            CSLBibTexData[typeMap[key as keyof typeof typeMap]] = input[key];
+            CSLBibTexData[typeMap[key as keyof typeof typeMap]] = result[0][key];
         }
     }
 
@@ -45,9 +82,9 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         const input = automaticInput
         const result = toCslJson(input);
 
-        const mergedData = translateForeignModel(result, input);
+        const mergedData = translateForeignModel(result);
 
-        console.log(mergedData)
+        //console.log(mergedData)
 
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()

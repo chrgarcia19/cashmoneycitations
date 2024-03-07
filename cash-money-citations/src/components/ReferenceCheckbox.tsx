@@ -250,7 +250,7 @@ export const Checkbox = ({ references }: IProps) => {
                 <td className="border border-slate-600 text-center">          
                 {reference.contributors.map((contributor: any) => {
                   return(
-                    <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}</div>
+                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div>
                   )
                 })}
                 </td>

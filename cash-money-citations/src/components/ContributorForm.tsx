@@ -23,10 +23,11 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
 
   const addFields = () => {
     const newField: Contributor = {
-      contributorType: '',
-      contributorFirstName: '',
-      contributorLastName: '',
-      contributorMiddleI: ''
+      role: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      suffix: "",
     };
     setFormFields([...formFields, newField]);
   };
@@ -44,10 +45,11 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
     } else {
       setFormFields([
         {
-          contributorType: '',
-          contributorFirstName: '',
-          contributorLastName: '',
-          contributorMiddleI: ''
+          role: "",
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          suffix: "",
         }
       ]);
     }
@@ -62,30 +64,30 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
         {formFields.map((form, index) => (
           <>
             <div key={index} className="flex items-center justify-center">
-              <select name="type" className="bg-white border-gray-300 rounded-lg w-2/5d pl-0.5 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
-                <option value="" disabled hidden>Role</option>
+              <select name="role" className="bg-white border-gray-300 rounded-lg w-2/5d pl-0.5 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
+                <option value="" disabled selected>Role</option>
                 <option value="Author">Author</option>
                 <option value="Editor">Editor</option>
                 <option value="Translator">Translator</option>
                 <option value="Compiler">Compiler</option>
               </select>
               <input
-                name='contributorFirstName'
-                placeholder='Contributor First Name'
+                name='firstName'
+                placeholder='First Name'
                 onChange={(event) => handleFormChange(event, index)}
-                value={form.contributorFirstName}
+                defaultValue={form.firstName}
                 className="w-2/4 pr-0.5 mr-0.5" />
               <input
-                name='contributorLastName'
-                placeholder='Contributor Last Name'
+                name='lastName'
+                placeholder='Last Name'
                 onChange={(event) => handleFormChange(event, index)}
-                value={form.contributorLastName}
+                defaultValue={form.lastName}
                 className="w-2/4 pr-0.5 mr-0.5" />
               <input
-                name='contributorMiddleI'
-                placeholder='Contributor Middle Initial'
+                name='middleName'
+                placeholder='Middle Name or Initial'
                 onChange={(event) => handleFormChange(event, index)}
-                value={form.contributorMiddleI}
+                defaultValue={form.middleName}
                 className="w-1/4 pr-0.5 mr-0.5" />
                 <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
             </div>

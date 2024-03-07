@@ -258,7 +258,6 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 name="edition"
                                 defaultValue={form.edition}
                                 onChange={handleChange}
-                                required
                             />
                         </div>
                     </div>

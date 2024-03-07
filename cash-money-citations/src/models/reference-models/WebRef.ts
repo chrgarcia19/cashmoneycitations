@@ -19,19 +19,21 @@ export interface WebReference extends mongoose.Document {
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
-    // Define Contributor schema fields
-    contributorType: {
-      type: String
+    role: {
+      type: String,
     },
-    contributorFirstName: {
-      type: String
+    firstName: {
+      type: String,
     },
-    contributorLastName: {
-      type: String
+    middleName: {
+      type: String,
     },
-    contributorMiddleI: {
-      type: String
-    }
+    lastName: {
+      type: String,
+    },
+    suffix: {
+      type: String,
+    },
 });
 
 const WebSchema = new mongoose.Schema<WebReference>({

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Contributor } from "./Contributor";
+import { StringLiteral } from "typescript";
 
 export interface References extends mongoose.Document {
     type: string;
@@ -17,6 +18,14 @@ export interface References extends mongoose.Document {
     pages: string;
     journal: string;
     image_url: string;
+    /* Adjusted schema for data that exists for all citations
+    type: string;
+    source_title: string;
+    contributors: Contributor[]
+    month_published: string;
+    day_published: string;
+    year_published: string;
+    */
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({

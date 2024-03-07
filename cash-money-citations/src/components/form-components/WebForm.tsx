@@ -17,22 +17,22 @@ interface WebData {
     citekey: string;
     image_url: string;
     contributors: Contributor[];
-    article_title: string;
+    source_title: string;
     website_title: string;
     website_url: string;
     month_accessed: string;
-    day_accessed: number;
-    year_accessed: number;
+    day_accessed: string;
+    year_accessed: string;
     month_published: string;
-    day_published: number;
-    year_published: number;
+    day_published: string;
+    year_published: string;
     publisher: string;
 }
 
 interface Error {
     type?: string;
     citekey?: string;
-    article_title?: string;
+    source_title?: string;
     contributors?: string;
     publisher?: string;
     year?: string;
@@ -57,7 +57,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
         citekey: webForm.citekey,
         image_url: webForm.image_url,
         contributors: webForm.contributors,
-        article_title: webForm.article_title,
+        source_title: webForm.source_title,
         website_title: webForm.website_title,
         website_url: webForm.website_url,
         month_accessed: webForm.month_accessed,
@@ -72,7 +72,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/references/${id}`);
+        const res = await fetch(`/api/webRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -95,7 +95,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/references/${id}`, {
+        const res = await fetch(`/api/webRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -111,7 +111,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
 
         const { data } = await res.json();
 
-        mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/webRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -130,7 +130,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
     /* The POST method adds a new entry in the mongodb database. */
     const postData = async (form: WebData) => {
         try {
-        const res = await fetch("/api/references", {
+        const res = await fetch("/api/webRef", {
             method: "POST",
             headers: {
             Accept: contentType,
@@ -168,7 +168,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
         let err: Error = {};
         if (!form.type) err.type = "Type is required";
         if (!form.citekey) err.citekey = "Citekey is required";
-        if (!form.article_title) err.article_title = "Article title is required";
+        if (!form.source_title) err.source_title = "Article title is required";
         if (!form.contributors) err.contributors = "Contributor info is required";
         if (!form.publisher) err.publisher = "Publisher is required";
         if (!form.year_published) err.year = "Year is required";
@@ -203,7 +203,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                     <input
                         type="text"
                         name="citekey"
-                        value={form.citekey}
+                        defaultValue={form.citekey}
                         onChange={handleChange}
                         required
                     /> 
@@ -216,7 +216,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                     <input
                         type="url"
                         name="image_url"
-                        value={form.image_url}
+                        defaultValue={form.image_url}
                         onChange={handleChange}
                     />
 
@@ -228,6 +228,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                         <input
                         type="text"
                         name="article_title"
+                        defaultValue={form.source_title}
                         onChange={handleChange}
                         required 
                         />
@@ -239,6 +240,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                         <input
                         type="text"
                         name="website_title"
+                        defaultValue={form.website_title}
                         onChange={handleChange}
                         required 
                         />
@@ -249,7 +251,8 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                     </label>
                         <input
                         type="text"
-                        name="url"
+                        name="website_url"
+                        defaultValue={form.website_url}
                         onChange={handleChange}
                         required 
                         />
@@ -362,7 +365,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                                 <select 
                                     name="day_published"
                                     className="select select-sm select-bordered w-40"
-                                    defaultValue={form.day_accessed}
+                                    defaultValue={form.day_published}
                                     onChange={handleChange}>
                                     <option disabled selected>Pick a day</option>
                                     {days.map((day, i) => (
@@ -400,7 +403,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                     <input
                         type="text"
                         name="publisher"
-                        value={form.publisher}
+                        defaultValue={form.publisher}
                         onChange={handleChange}
                         required
                     />        

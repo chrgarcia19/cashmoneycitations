@@ -16,13 +16,13 @@ interface BookData {
     type: string;
     citekey: string;
     image_url: string;
-    book_title: string;
+    source_title: string;
     volume: string;
     edition: string;
     contributors: Contributor[];
     month_published: string;
-    day_published: number;
-    year_published: number;
+    day_published: string;
+    year_published: string;
     publisher: string;
     city: string;
     state: string;
@@ -56,7 +56,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
         citekey: bookForm.citekey,
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
-        book_title: bookForm.book_title,
+        source_title: bookForm.source_title,
         volume: bookForm.volume,
         edition: bookForm.edition,
         month_published: bookForm.month_published,
@@ -70,7 +70,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/references/${id}`);
+        const res = await fetch(`/api/bookRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -93,7 +93,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/references/${id}`, {
+        const res = await fetch(`/api/bookRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -109,7 +109,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
 
         const { data } = await res.json();
 
-        mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/bookRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -128,7 +128,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
     /* The POST method adds a new entry in the mongodb database. */
     const postData = async (form: BookData) => {
         try {
-        const res = await fetch("/api/references", {
+        const res = await fetch("/api/bookRef", {
             method: "POST",
             headers: {
             Accept: contentType,
@@ -200,7 +200,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                     <input
                         type="text"
                         name="citekey"
-                        value={form.citekey}
+                        defaultValue={form.citekey}
                         onChange={handleChange}
                         required
                     /> 
@@ -213,7 +213,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                     <input
                         type="url"
                         name="image_url"
-                        value={form.image_url}
+                        defaultValue={form.image_url}
                         onChange={handleChange}
                     />
 
@@ -225,6 +225,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                     <input
                         type="text"
                         name="book_title"
+                        defaultValue={form.source_title}
                         onChange={handleChange}
                         required
                     />
@@ -241,8 +242,8 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     className="w-64"
                                     type="text"
                                     name="volume"
+                                    defaultValue={form.volume}
                                     onChange={handleChange}
-                                    required
                                 />
                             </div>
                         </div>
@@ -256,6 +257,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 className="w-64"
                                 type="text"
                                 name="edition"
+                                defaultValue={form.edition}
                                 onChange={handleChange}
                                 required
                             />
@@ -273,8 +275,8 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 className="w-64"
                                 type="text"
                                 name="city"
+                                defaultValue={form.city}
                                 onChange={handleChange}
-                                required
                             />
                         </div>
                         <div className="join join-vertical">
@@ -286,9 +288,9 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                             <input
                             className="w-64"
                                 type="text"
-                                name="State"
+                                name="state"
+                                defaultValue={form.state}
                                 onChange={handleChange}
-                                required
                             />
                         </div>
                     </div>
@@ -301,7 +303,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                     <input
                         type="text"
                         name="publisher"
-                        value={form.publisher}
+                        defaultValue={form.publisher}
                         onChange={handleChange}
                         required
                     />     

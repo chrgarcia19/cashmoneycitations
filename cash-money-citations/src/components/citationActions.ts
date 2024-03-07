@@ -48,7 +48,7 @@ async function HandleInitialFormat(bibResponse: any) {
     //config.parse.sentenceCase = 'always';
     // plugins.input.forceType = "@else/list+object"
     // config.types.bibtex.target['conference'] = 'conference'
-    config.parse.strict = true
+    // config.parse.strict = true
 
     //console.log(config.constants.required)
     // Converts our mimic CSLBib-JSON schema thing to BibLaTex

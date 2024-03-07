@@ -21,6 +21,17 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     }
 });
 
+const referencesUsedSchema = new mongoose.Schema({
+  referenceId: String,
+  doiAssertedBy: String,
+  firstPage: String,
+  doi: String,
+  volume: String,
+  author: String,
+  year: String,
+  journalTitle: String
+})
+
 // 3/6/24 Need to decide which fields are optional and which are required
 // Each entry type has its own required fields
 const CSLBibSchema = new Schema({
@@ -109,7 +120,13 @@ const CSLBibSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    image_url: String
+    image_url: String,
+    issue: String,
+    abstract: String,
+    apiSource: String,
+    referencesUsed: [referencesUsedSchema],
+
+
 });
 
 export default mongoose.models.CSLBibModel || mongoose.model("CSLBibModel", CSLBibSchema); 

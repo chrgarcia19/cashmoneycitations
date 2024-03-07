@@ -28,7 +28,7 @@ export default function EditReference( {
   if (!reference) return null;
 
   const referenceForm = {
-    type: reference.type,
+    entryType: reference.entryType,
     citekey: reference.citekey,
     title: reference.title,
     contributors: reference.contributors,
@@ -45,5 +45,5 @@ export default function EditReference( {
     image_url: reference.image_url,
   };
 
-  return <Form formId="edit-reference-form" referenceForm={referenceForm} forNewReference={false} />;
+  return <Form formId="edit-reference-form" referenceForm={referenceForm} forNewReference={false}/>;
 };

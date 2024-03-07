@@ -4,7 +4,6 @@ const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 import dbConnect from "@/utils/dbConnect";
-import Citation from "@/models/Citation";
 import Reference from "@/models/Reference";
 import CSLBibModel from "@/models/CSLBibTex";
 import { resolve } from "path";
@@ -45,11 +44,13 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 async function HandleInitialFormat(bibResponse: any) {
 
     // Used for configuring format for BibTex & BibLaTex
-    //const config = plugins.config.get('@bibtex')
+    const config = plugins.config.get('@bibtex')
     //config.parse.sentenceCase = 'always';
     // plugins.input.forceType = "@else/list+object"
     // config.types.bibtex.target['conference'] = 'conference'
+    config.parse.strict = true
 
+    //console.log(config.constants.required)
     // Converts our mimic CSLBib-JSON schema thing to BibLaTex
     const toBibTex = new Cite(JSON.stringify(bibResponse))
 

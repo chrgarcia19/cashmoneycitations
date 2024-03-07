@@ -185,206 +185,231 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
         }
     };
 
-    return (
-        <>
-            <div className="flex items-center justify-center">
-                <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
-            </div>
-
-                <form id={formID} onSubmit={handleSubmit} className="pb-5">
-
-                    <label className="font-bold" htmlFor="citekey">
-                        Citekey
-                    </label>
-                    <input
-                        type="text"
-                        name="citekey"
-                        defaultValue={form.citekey}
-                        onChange={handleChange}
-                        required
-                    /> 
-
-                    <label 
-                        className="font-bold" 
-                        htmlFor="image_url">
-                        Image URL (Optional)
-                    </label>
-                    <input
-                        type="url"
-                        name="image_url"
-                        defaultValue={form.image_url}
-                        onChange={handleChange}
-                    />
-
-                    <label
-                        className="font-bold"
-                        htmlFor="source_title">
-                        Book Title
-                    </label>
-                    <input
-                        type="text"
-                        name="source_title"
-                        defaultValue={form.source_title}
-                        onChange={handleChange}
-                        required
-                    />
-
-                    <div className="join w-auto pt-1">
-                        <div className="me-10">
+    const formContent = () => {
+        return (
+            <>
+                <div className="flex items-center justify-center">
+                    <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+                </div>
+    
+                    <form id={formID} onSubmit={handleSubmit} className="pb-5">
+    
+                        <label className="font-bold" htmlFor="citekey">
+                            Citekey
+                        </label>
+                        <input
+                            type="text"
+                            name="citekey"
+                            defaultValue={form.citekey}
+                            onChange={handleChange}
+                            required
+                        /> 
+    
+                        <label 
+                            className="font-bold" 
+                            htmlFor="image_url">
+                            Image URL (Optional)
+                        </label>
+                        <input
+                            type="url"
+                            name="image_url"
+                            defaultValue={form.image_url}
+                            onChange={handleChange}
+                        />
+    
+                        <label
+                            className="font-bold"
+                            htmlFor="source_title">
+                            Book Title
+                        </label>
+                        <input
+                            type="text"
+                            name="source_title"
+                            defaultValue={form.source_title}
+                            onChange={handleChange}
+                            required
+                        />
+    
+                        <div className="join w-auto pt-1">
+                            <div className="me-10">
+                                <div className="join join-vertical">
+                                    <label
+                                        className="font-bold me-2"
+                                        htmlFor="volume">
+                                        Volume
+                                    </label>
+                                    <input
+                                        className="w-64"
+                                        type="text"
+                                        name="volume"
+                                        defaultValue={form.volume}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
                             <div className="join join-vertical">
                                 <label
                                     className="font-bold me-2"
-                                    htmlFor="volume">
-                                    Volume
+                                    htmlFor="edition">
+                                    Edition
                                 </label>
                                 <input
                                     className="w-64"
                                     type="text"
-                                    name="volume"
-                                    defaultValue={form.volume}
+                                    name="edition"
+                                    defaultValue={form.edition}
                                     onChange={handleChange}
                                 />
                             </div>
                         </div>
-                        <div className="join join-vertical">
-                            <label
-                                className="font-bold me-2"
-                                htmlFor="edition">
-                                Edition
-                            </label>
-                            <input
+    
+                        <div className="join w-auto pt-1">
+                            <div className="join join-vertical me-10">
+                                <label
+                                    className="font-bold me-2" 
+                                    htmlFor="city">
+                                    City
+                                </label>
+                                <input
+                                    className="w-64"
+                                    type="text"
+                                    name="city"
+                                    defaultValue={form.city}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="join join-vertical">
+                                <label
+                                    className="font-bold"
+                                    htmlFor="state">
+                                    State
+                                </label>
+                                <input
                                 className="w-64"
-                                type="text"
-                                name="edition"
-                                defaultValue={form.edition}
-                                onChange={handleChange}
-                            />
+                                    type="text"
+                                    name="state"
+                                    defaultValue={form.state}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="join w-auto pt-1">
-                        <div className="join join-vertical me-10">
-                            <label
-                                className="font-bold me-2" 
-                                htmlFor="city">
-                                City
-                            </label>
-                            <input
-                                className="w-64"
-                                type="text"
-                                name="city"
-                                defaultValue={form.city}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="join join-vertical">
-                            <label
-                                className="font-bold"
-                                htmlFor="state">
-                                State
-                            </label>
-                            <input
-                            className="w-64"
-                                type="text"
-                                name="state"
-                                defaultValue={form.state}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    <label
-                        className="font-bold"
-                        htmlFor="publisher">
-                        Publisher
-                    </label>
-                    <input
-                        type="text"
-                        name="publisher"
-                        defaultValue={form.publisher}
-                        onChange={handleChange}
-                        required
-                    />     
-                    
-                    <label className="font-bold pt-1" htmlFor="date_published">
-                        Date Published (Month, Day, Year)
-                    </label>
-                    <div className="join w-auto">
-                        <div className="me-3">
+    
+                        <label
+                            className="font-bold"
+                            htmlFor="publisher">
+                            Publisher
+                        </label>
+                        <input
+                            type="text"
+                            name="publisher"
+                            defaultValue={form.publisher}
+                            onChange={handleChange}
+                            required
+                        />     
+                        
+                        <label className="font-bold pt-1" htmlFor="date_published">
+                            Date Published (Month, Day, Year)
+                        </label>
+                        <div className="join w-auto">
+                            <div className="me-3">
+                                <div className="join join-vertical">
+                                    <div className="label">
+                                        <span className="label-text">Month</span>
+                                    </div>
+                                    <select
+                                        name="month_published"
+                                        className="select select-sm select-bordered w-40"
+                                        defaultValue={form.month_published}
+                                        onChange={handleChange}>
+                                        <option value="" disabled selected>Pick a Month</option>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                    </select> 
+                                </div>
+                            </div>
+                            <div className="me-3">
+                                <div className="join join-vertical">
+                                    <div className="label">
+                                        <span className="label-text">Day</span>
+                                    </div>
+                                    <select 
+                                        name="day_published"
+                                        className="select select-sm select-bordered w-40"
+                                        defaultValue={form.day_published}
+                                        onChange={handleChange}>
+                                        <option disabled selected>Pick a day</option>
+                                        {days.map((day, i) => (
+                                            <option 
+                                                key={i}
+                                                defaultValue={form.day_published}>
+                                                {day}
+                                            </option>
+                                            ))} 
+                                    </select>
+                                </div>
+                            </div>
                             <div className="join join-vertical">
                                 <div className="label">
-                                    <span className="label-text">Month</span>
+                                    <span className="label-text">Year</span>
                                 </div>
-                                <select
-                                    name="month_published"
-                                    className="select select-sm select-bordered w-40"
-                                    defaultValue={form.month_published}
-                                    onChange={handleChange}>
-                                    <option value="" disabled selected>Pick a Month</option>
-                                    <option value="January">January</option>
-                                    <option value="February">February</option>
-                                    <option value="March">March</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="June">June</option>
-                                    <option value="July">July</option>
-                                    <option value="August">August</option>
-                                    <option value="September">September</option>
-                                    <option value="October">October</option>
-                                    <option value="November">November</option>
-                                    <option value="December">December</option>
-                                </select> 
+                                <input
+                                    className="h-8 w-52"
+                                    placeholder="Pick a Year"
+                                    type="text"
+                                    name="year_published"
+                                    defaultValue={form.year_published}
+                                    onChange={handleChange}
+                                    required 
+                                />
                             </div>
-                        </div>
-                        <div className="me-3">
-                            <div className="join join-vertical">
-                                <div className="label">
-                                    <span className="label-text">Day</span>
-                                </div>
-                                <select 
-                                    name="day_published"
-                                    className="select select-sm select-bordered w-40"
-                                    defaultValue={form.day_published}
-                                    onChange={handleChange}>
-                                    <option disabled selected>Pick a day</option>
-                                    {days.map((day, i) => (
-                                        <option 
-                                            key={i}
-                                            defaultValue={form.day_published}>
-                                            {day}
-                                        </option>
-                                        ))} 
-                                </select>
-                            </div>
-                        </div>
-                        <div className="join join-vertical">
-                            <div className="label">
-                                <span className="label-text">Year</span>
-                            </div>
-                            <input
-                                className="h-8 w-52"
-                                placeholder="Pick a Year"
-                                type="text"
-                                name="year_published"
-                                defaultValue={form.year_published}
-                                onChange={handleChange}
-                                required 
-                            />
-                        </div>
-                    </div> 
-                    
-                    <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
-                        Submit
-                    </button> 
-            </form>
-            <p>{message}</p>
-            <div>
-            {Object.keys(errors).map((err, index) => (
-                <li key={index}>{err}</li>
-            ))}
+                        </div> 
+                        
+                        <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
+                            Submit
+                        </button> 
+                </form>
+                <p>{message}</p>
+                <div>
+                {Object.keys(errors).map((err, index) => (
+                    <li key={index}>{err}</li>
+                ))}
+                </div>
+            </>
+        )
+    }
+
+    return (
+        <>
+        {!forNewReference && (
+            <div className="pt-5 pb-5 w-full flex items-center justify-center">
+                <div className="bg-gray-100 w-2/5 rounded-xl">
+                    <div className="flex justify-center items-center">
+                        <h1 className="text-2xl align-middle pt-5">Edit Reference</h1>
+                    </div>
+                    <div className="pt-5">
+                        {formContent()}
+                    </div>
+                
+                </div>
             </div>
+        )}
+        {forNewReference && (
+            formContent()
+        )}
         </>
     )
+
+    
 
 }
 

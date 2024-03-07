@@ -2,7 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
-import Form from "../../../components/Form";
+import WebForm from "@/components/form-components/WebForm";
+import BookForm from "@/components/form-components/BookForm";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -24,23 +25,47 @@ const EditReference = () => {
 
   const referenceForm = {
     type: reference.type,
-    citekey: reference.citekey,
-    title: reference.title,
-    contributors: reference.contributors,
-    publisher: reference.publisher,
-    year: reference.year,
-    month: reference.month,
-    address: reference.address,
-    edition: reference.edition,
-    volume: reference.volume,
-    isbn: reference.isbn,
-    doi: reference.doi,
-    pages: reference.pages,
-    journal: reference.journal,
-    image_url: reference.image_url,
   };
 
-  return <Form formId="edit-reference-form" referenceForm={referenceForm} forNewReference={false} />;
+  if (referenceForm.type == "website"){
+
+    const webForm = {
+      type: reference.type,
+      citekey: reference.citekey,
+      image_url: reference.image_url,
+      contributors: reference.contributors,
+      source_title: reference.source_title,
+      website_title: reference.website_title,
+      website_url: reference.website_url,
+      month_accessed: reference.month_accessed,
+      day_accessed: reference.day_accessed,
+      year_accessed: reference.year_accessed,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      publisher: reference.publisher,
+    };
+    
+    return <WebForm formID={"edit-web-form"} webForm={webForm} forNewReference={false} />
+  } else if (referenceForm.type == "book") {
+    const bookForm = {
+      type: reference.type,
+      citekey: reference.citekey,
+      image_url: reference.image_url,
+      contributors: reference.contributors,
+      source_title: reference.source_title,
+      volume: reference.volume,
+      edition: reference.edition,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      publisher: reference.publisher,
+      city: reference.city,
+      state: reference.state,
+    }
+
+    return <BookForm formID={"edit-book-form"} bookForm={bookForm} forNewReference={false} />
+  }
 };
 
 export default EditReference;

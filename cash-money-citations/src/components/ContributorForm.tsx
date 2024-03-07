@@ -65,7 +65,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
           <>
             <div key={index} className="flex items-center justify-center">
               <select name="role" className="bg-white border-gray-300 rounded-lg w-1/3 pl-0.5 pr-1 mr-1 h-8 border-t border-r border-l border-b" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
-                <option value="" disabled selected>Role</option>
+                <option value="" disabled>Role</option>
                 <option value="Author">Author</option>
                 <option value="Editor">Editor</option>
                 <option value="Translator">Translator</option>

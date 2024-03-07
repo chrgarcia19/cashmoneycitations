@@ -141,16 +141,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-  const id  = searchParams.get("id");
-
-  const fetcher = async (url: string) => {
-    const res = await fetch(`/api/references/${id}`);
-    if (!res.ok) {
-      throw new Error("An error occurred while fetching the data.");
-    }
-    return res.json();
-  };
-
   const putData = async (form: FormData) => {
     const id  = searchParams.get("id");
 
@@ -172,7 +162,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       const { data } = await res.json();
 
       mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
-      router.push("/");
       router.refresh();
     } catch (error) {
       setMessage("Failed to update reference");

@@ -13,9 +13,14 @@ const contentType = "application/json"
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
-    "created.date-parts.0.0": 'year',
     'DOI': 'doi',
-    'ISBN': 'isbn'
+    'ISBN': 'isbn',
+    'page': 'pages',
+    'source': 'apiSource',
+    'journal-title': 'journalTitle',
+    'first-page': 'firstPage',
+    'doi-asserted-by': 'doiAssertedBy',
+    'key': 'referenceId',
   }
   
 // Takes reference data & converts to CSL-JSON
@@ -62,7 +67,8 @@ function translateForeignModel(result: any) {
         year: result[0].created['date-parts'][0][0],
         month: result[0].created['date-parts'][0][1],
         contributors: contributors,
-    }; 
+    };
+
     for (const key in result[0]) {
         console.log(key)
         if (typeMap[key as keyof typeof typeMap]) {

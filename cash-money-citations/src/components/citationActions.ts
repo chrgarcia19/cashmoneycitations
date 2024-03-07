@@ -13,10 +13,29 @@ const { plugins } = require('@citation-js/core')
 
 const contentType = "application/json"
 
+
+const typeMap = {
+    'author': 'contributors'
+  }
+  
 // Takes reference data & converts to CSL-JSON
 function toCslJson(ReferenceData: any) {
     const cslJson = Cite.input(ReferenceData);
     return cslJson;
+}
+
+function translateForeignModel(result: any, input: any) {
+    const CSLBibTexData: { [key: string]: any } = {}; 
+        
+    for (const key in input) {
+        if (typeMap[key as keyof typeof typeMap]) {
+            CSLBibTexData[typeMap[key as keyof typeof typeMap]] = input[key];
+        }
+    }
+
+    const mergedData = { ...result[0], ...CSLBibTexData };
+
+    return mergedData
 }
 
 // Creates CSL-JSON for auto input -> DOI, ISBN, ISSN, etc.
@@ -25,9 +44,18 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         await dbConnect();
         const input = automaticInput
         const result = toCslJson(input);
-        //console.log(typeof(JSON.stringify(result[0].title)))
 
-        await CSLBibModel.create(result);
+        const mergedData = translateForeignModel(result, input);
+
+        console.log(mergedData)
+
+        const CSLBibTexDocument = new CSLBibModel(mergedData);
+        await CSLBibTexDocument.save()
+
+        console.log(CSLBibTexDocument)
+
+
+        //await CSLBibModel.create(result);
     } catch(error) {
         console.error(error)
     }

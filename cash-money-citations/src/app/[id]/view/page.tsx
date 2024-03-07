@@ -8,7 +8,6 @@ const { plugins } = require('@citation-js/core')
 const config = plugins.config.get('@bibtex')
 
 
-
 const ViewReference = () => {
     const fetcher = (url: string) =>
     fetch(url)
@@ -46,12 +45,12 @@ const ViewReference = () => {
         const cslData = {
           id: reference._id,
           type: type,
-          title: reference.title,
-          author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-            family: contributor.contributorFirstName,
-            given: contributor.contributorLastName,
+          title: reference.source_title,
+          author: reference.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
+            family: contributor.firstName,
+            given: contributor.lastName,
           })),
-          issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
+          issued: { "date-parts": [[parseInt(reference.year_published, 10), reference.month_published ? parseInt(reference.month_published, 10) : 0]] },
           publisher: reference.publisher,
           DOI: reference.doi,
           URL: reference.url,
@@ -99,42 +98,49 @@ const ViewReference = () => {
         <div className='w-full h-screen bg-zinc-700'>
             <>
                 <div className="flex justify-center items-center pt-10">
-                    <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
-                        <span className="block h-auto rounded-lg">
-                            <label className="font-bold">Reference Type:</label>
-                            {reference.type}
-                        </span>
-                        <span className="block h-auto rounded-lg">
-                            <label className="font-bold">Title:</label>
-                            {reference.title}
-                        </span>
-                        <span className="block h-auto rounded-lg">
-                            <label className="font-bold">Contributors:</label>
-                            {reference.contributors.map((contributor: any) => (
-                            <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></div>
-                        ))}
-                        </span>
-                        <span className="block h-auto rounded-lg">
-                            <label className="font-bold">Publisher:</label>
-                            {reference.publisher}
-                        </span>
-                        <span className="block h-16 rounded-lg">
-                            <label className="font-bold">Date Published:</label>
-                            {reference.month} {reference.year}
-                        </span>
-                        <span className="space-x-5">
-                            <button className="linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
-                                <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
-                            </button>
-                            <button className="linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
-                                onClick={handleDelete}>
-                                <span>Delete</span>
-                            </button>
-                            <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
-                                onClick={exportCitation}>
-                                <span>Export</span>
-                            </button>
-                        </span>
+                    <div className="bg-gray-100 w-1/2 rounded-xl p-4 space-y-4">
+                      <div className="hero bg-gray-300">
+                        <div className="hero-content flex-col lg:flex-row">
+                          <img src={reference.image_url} className="max-w-sm rounded-lg shadow-2xl" />
+                          <div className="pl-5">
+                            <span className="block h-auto rounded-lg">
+                                <label className="font-bold">Reference Type:</label>
+                                {reference.type}
+                            </span>
+                            <span className="block h-auto rounded-lg">
+                                <label className="font-bold">Title:</label>
+                                {reference.source_title}
+                            </span>
+                            <span className="block h-auto rounded-lg">
+                                <label className="font-bold">Contributors:</label>
+                                {reference.contributors.map((contributor: any) => (
+                                <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName}{contributor.suffix}<br></br></div>
+                            ))}
+                            </span>
+                            <span className="block h-auto rounded-lg">
+                                <label className="font-bold">Publisher:</label>
+                                {reference.publisher}
+                            </span>
+                            <span className="block h-16 rounded-lg">
+                                <label className="font-bold">Date Published:</label>
+                                {reference.month_published} {reference.day_published}, {reference.year_published}
+                            </span>
+                            <span className="space-x-5">
+                                <button className="linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200">
+                                    <span><Link href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>Edit</Link></span>
+                                </button>
+                                <button className="linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
+                                    onClick={handleDelete}>
+                                    <span>Delete</span>
+                                </button>
+                                <button className="linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
+                                    onClick={exportCitation}>
+                                    <span>Export</span>
+                                </button>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div> 
                 </div>  
             </> 

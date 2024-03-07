@@ -4,6 +4,8 @@ import { useState } from "react";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 import { HandleInitialReference } from "./citationActions";
+import { useRouter, useSearchParams } from "next/navigation";
+import { mutate } from "swr";
 
 enum EntryType {
   Article = 'article',
@@ -87,11 +89,15 @@ interface Error {
 type Props = {
   formId: string;
   referenceForm: FormData;
+  forNewReference?: boolean;
 };
 
-const Form = ({ formId, referenceForm}: Props) => {
+const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const contentType = "application/json";
 
   const [form, setForm] = useState({
     entryType: referenceForm.entryType,
@@ -134,6 +140,44 @@ const Form = ({ formId, referenceForm}: Props) => {
     });
   };
 
+  const id  = searchParams.get("id");
+
+  const fetcher = async (url: string) => {
+    const res = await fetch(`/api/references/${id}`);
+    if (!res.ok) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+    return res.json();
+  };
+
+  const putData = async (form: FormData) => {
+    const id  = searchParams.get("id");
+
+    try {
+      const res = await fetch(`/api/references/${id}`, {
+        method: "PUT",
+        headers: {
+          Accept: contentType,
+          "Content-Type": contentType,
+        },
+        body: JSON.stringify(form),
+      });
+
+      // Throw error with status code in case Fetch API req failed
+      if (!res.ok) {
+        throw new Error(res.status.toString());
+      }
+
+      const { data } = await res.json();
+
+      mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      setMessage("Failed to update reference");
+    }
+  };
+
 
   /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
   const formValidate = () => {
@@ -149,12 +193,12 @@ const Form = ({ formId, referenceForm}: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errs = formValidate();
-    HandleInitialReference(form)
-    // if (Object.keys(errs).length === 0) {
-    //   forNewReference ? HandleInitialReference(form) : putData(form);
-    // } else {
-    //   setErrors({ errs });
-    // }
+
+    if (Object.keys(errs).length === 0) {
+      forNewReference ? HandleInitialReference(form) : putData(form);
+    } else {
+      setErrors({ errs });
+    }
   };
 
   // let formTitle: String;

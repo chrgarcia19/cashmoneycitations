@@ -98,6 +98,20 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
 
+        // DIVIDE THIS FUNCTION UP ASAP
+        const toBibTex = new Cite(JSON.stringify(result))
+
+        const bibtexOutput = toBibTex.format('biblatex', {
+            format: 'text',
+            template: 'biblatex',
+            lang: 'en-US'
+        });
+    
+        // Converts the BibTex to CSL-JSON
+        const cslJson = await toCslJson(bibtexOutput)
+        // Adds the CSL-JSON to the existing database collection
+        InitializeCslJson(CSLBibTexDocument.id, cslJson);
+
         //await CSLBibModel.create(result);
     } catch(error) {
         console.error(error)

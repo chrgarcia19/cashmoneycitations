@@ -40,7 +40,6 @@ interface Error {
 
 type Props = {
     formID: string;
-    type: string;
     webForm: WebData;
     forNewReference?: boolean;
 };

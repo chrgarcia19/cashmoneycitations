@@ -32,7 +32,7 @@ type Props = {
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   const webData = {
-    type: "",
+    type: "website",
     citekey: "",
     image_url: "",
     contributors: new Array<Contributor>(),
@@ -116,11 +116,11 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         <br/>
 
             {form.type == "website" && (
-              <WebForm formID={"add-web-reference"} type={"website"} webForm={webData}  />
+              <WebForm formID={"add-web-reference"} webForm={webData}  />
             )}
 
             {form.type == "book" && (
-              <BookForm formID={"add-book-reference"} type={"book"} bookForm={bookData} />
+              <BookForm formID={"add-book-reference"} bookForm={bookData} />
             )}
         </div>
       </div>

@@ -39,7 +39,6 @@ interface Error {
 
 type Props = {
     formID: string;
-    type: string;
     bookForm: BookData;
     forNewReference?: boolean;
 };
@@ -219,12 +218,12 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
 
                     <label
                         className="font-bold"
-                        htmlFor="book_title">
+                        htmlFor="source_title">
                         Book Title
                     </label>
                     <input
                         type="text"
-                        name="book_title"
+                        name="source_title"
                         defaultValue={form.source_title}
                         onChange={handleChange}
                         required

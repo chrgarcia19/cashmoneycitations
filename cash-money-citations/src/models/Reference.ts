@@ -5,27 +5,13 @@ import { StringLiteral } from "typescript";
 export interface References extends mongoose.Document {
     type: string;
     citekey: string;
-    title: string;
-    contributors: Contributor[];
-    publisher: string;
-    year: string;
-    month: string;
-    address: string;
-    edition: string;
-    volume: string;
-    isbn: string;
-    doi: string;
-    pages: string;
-    journal: string;
-    image_url: string;
-    /* Adjusted schema for data that exists for all citations
-    type: string;
     source_title: string;
-    contributors: Contributor[]
+    contributors: Contributor[];
     month_published: string;
     day_published: string;
     year_published: string;
-    */
+    publisher: string;
+    image_url: string;
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
@@ -54,42 +40,24 @@ const ReferenceSchema = new mongoose.Schema<References>({
     type: String,
     // required: [true, "Please provide the citekey for this reference."],
   },
-  title: {
+  source_title: {
     type: String,
     // required: [true, "Please provide the title."],
   },
   contributors: [ContributorSchema],
-  publisher: {
+  month_published: {
     type: String,
-    // required: [true, "Please provide the publisher."],
   },
-  year: {
+  day_published: {
+    type: String,
+  },
+  year_published: {
     type: String,
     // required: [true, "Please provide the year."],
   },
-  month: {
+  publisher: {
     type: String,
-  },
-  address: {
-    type: String,
-  },
-  edition: {
-    type: String,
-  },
-  volume: {
-    type: String,
-  },
-  isbn: {
-    type: String,
-  },
-  doi: {
-    type: String,
-  },
-  pages: {
-    type: String,
-  },
-  journal: {
-    type: String,
+    // required: [true, "Please provide the publisher."],
   },
   image_url: {
     type: String,

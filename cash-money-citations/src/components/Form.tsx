@@ -82,20 +82,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-  let formTitle: String;
-  if (form.type) {
-    formTitle = "Edit Reference"
-  }
-  else {
-    formTitle = "Add Reference"
-  }
-
   return (
     <>
     <div className="pt-5 pb-5 w-full flex items-center justify-center">
       <div className="bg-gray-100 w-2/5 rounded-xl">
         <div className="flex justify-center items-center">
-          <h1 className="text-2xl align-middle pl-">{formTitle}</h1>
+          <h1 className="text-2xl align-middle pt-5">Add Reference</h1>
         </div>
         <div className="pl-14">
           <label className="font-bold" htmlFor="type">

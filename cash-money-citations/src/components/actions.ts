@@ -5,8 +5,7 @@ import Reference from "@/models/Reference";
 import User from "@/models/User";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from "next/cache";
-import { Router } from "next/router";
-import { error } from "console";
+import CSLBibModel from "@/models/CSLBibTex";
 
 interface RegistrationData {
   username: string;
@@ -26,6 +25,19 @@ export async function getReferences() {
     });
   
     return references;
+}
+
+export async function getSpecificReferenceById(id: string | string[] | undefined) {
+  try {
+    const result = await CSLBibModel.findById(id);
+    if (result) {
+      return result;
+    } else {
+      return false;
+    }
+  } catch(error) {
+    console.error(error)
+  }
 }
 
 export async function createUser(form: RegistrationData) {

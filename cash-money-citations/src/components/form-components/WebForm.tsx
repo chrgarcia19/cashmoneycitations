@@ -226,7 +226,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                     </label>
                         <input
                         type="text"
-                        name="article_title"
+                        name="source_title"
                         defaultValue={form.source_title}
                         onChange={handleChange}
                         required 

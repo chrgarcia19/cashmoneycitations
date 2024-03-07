@@ -6,7 +6,7 @@ export interface WebReference extends mongoose.Document {
     citekey: string;
     image_url: string;
     contributors: Contributor[];
-    article_title: string;
+    source_title: string;
     website_title: string;
     website_url: string;
     month_accessed: string;
@@ -45,7 +45,7 @@ const WebSchema = new mongoose.Schema<WebReference>({
         type: String,
     },
     contributors: [ContributorSchema],
-    article_title: {
+    source_title: {
         type: String,
     },
     website_title: {

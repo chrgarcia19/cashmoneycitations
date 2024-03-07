@@ -31,7 +31,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const id = params.id;
 
   try {
-    const deletedReference = await Reference.deleteOne({ _id: id });
+    const deletedReference = await CSLBibModel.deleteOne({ _id: id });
 
     if (!deletedReference) {
       return NextResponse.json({ success: false, message: "Reference not deleted!"}, { status: 400 });

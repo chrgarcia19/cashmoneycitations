@@ -74,7 +74,6 @@ function translateForeignModel(result: any) {
     };
 
     for (const key in result[0]) {
-        console.log(key)
         if (typeMap[key as keyof typeof typeMap]) {
             CSLBibTexData[typeMap[key as keyof typeof typeMap]] = result[0][key];
         }
@@ -98,9 +97,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
 
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
-
-        console.log(CSLBibTexDocument)
-
 
         //await CSLBibModel.create(result);
     } catch(error) {

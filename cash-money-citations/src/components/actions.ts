@@ -18,7 +18,7 @@ interface RegistrationData {
 export async function getReferences() {
     await dbConnect();
   
-    const result = await Reference.find({});
+    const result = await CSLBibModel.find({});
     const references = result.map((doc) => {
       const reference = JSON.parse(JSON.stringify(doc));
       return reference;

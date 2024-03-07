@@ -96,7 +96,7 @@ const CSLBibSchema = new Schema({
     publisher: String,
     school: String,
     series: String,
-    title: String,
+    title: [String],
     type: String,
     volume: String,
     year: Date,

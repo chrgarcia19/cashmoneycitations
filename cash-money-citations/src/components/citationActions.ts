@@ -15,12 +15,16 @@ const contentType = "application/json"
 const typeMap: {[key: string]: string } = {
     'DOI': 'doi',
     'ISBN': 'isbn',
+    'ISSN': 'issn',
+    'issn-type': 'issnType',
     'page': 'pages',
     'source': 'apiSource',
     'journal-title': 'journalTitle',
     'first-page': 'firstPage',
     'doi-asserted-by': 'doiAssertedBy',
     'key': 'referenceId',
+    'reference': 'referencesUsed',
+    'URL': 'url',
   }
   
 // Takes reference data & converts to CSL-JSON

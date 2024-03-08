@@ -30,12 +30,13 @@ function Button({ color, onClick, children }: any) {
 }
 
 interface SelectionCSLProps {
-  onStyleChoiceChange: (styleChoice: string) => void;
+  // Fix the typescript for onStyleChoiceChange was previosly string[]
+  onStyleChoiceChange: (styleChoices: any) => void;
 }
 
 // Maps over CSL Style selection
 function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
-  const [styleChoice, setStyleChoice] = useState('');
+  const [styleChoices, setStyleChoices] = useState<string[]>([]);
 
   const {
     data: cslStyles,
@@ -48,27 +49,33 @@ function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
   if (isLoading) return <p>Loading...</p>;
   if (!cslStyles) return null;
 
-  const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStyleChoice = e.target.value;
-    setStyleChoice(newStyleChoice);
-    onStyleChoiceChange(newStyleChoice);
+  const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const styleChoice = e.target.value;
+    if (e.target.checked) {
+      setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
+      onStyleChoiceChange([...styleChoices, styleChoice]);
+    } else {
+      const newChoices = styleChoices.filter(choice => choice !== styleChoice);
+      setStyleChoices(newChoices);
+      onStyleChoiceChange(newChoices);
+    }
   };
 
   return (
       <span className="space-x-5">
-          <select
-              value={styleChoice}
-              onChange={handleStyleChoiceChange}    
-          >
-            <option value={"default"} disabled selected>
-              Select Citation Style
-            </option>
-              {cslStyles.map((cslStyle: any) => (
-                  <option key={cslStyle.id} value={cslStyle.id}>
-                      {cslStyle.name}
-                  </option>
-              ))}
-          </select>
+        {cslStyles.map((cslStyle: any) => (
+          <div key={cslStyle.id}>
+            <label>
+              <input
+              type="checkbox"
+              value={cslStyle.name}
+              checked={styleChoices.includes(cslStyle.name)}
+              onChange={handleStyleChoiceChange}
+              />
+              {cslStyle.name}
+            </label>
+          </div>
+        ))}
       </span>
   );
 }

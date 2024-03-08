@@ -217,7 +217,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             <option value="journal">Journal</option>
           </select> */}
 
-          <select name="entryType" onChange={handleChange}>
+          <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>
                 {value}
@@ -229,6 +229,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           <label htmlFor="title">Title</label>
           <input
             type="text"
+            id="reference-title"
             name="title"
             value={form.title}
             onChange={handleChange}

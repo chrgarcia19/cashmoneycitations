@@ -17,6 +17,7 @@ interface BookData {
     citekey: string;
     image_url: string;
     source_title: string;
+    isbn: string;
     volume: string;
     edition: string;
     contributors: Contributor[];
@@ -56,6 +57,7 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
         source_title: bookForm.source_title,
+        isbn: bookForm.isbn,
         volume: bookForm.volume,
         edition: bookForm.edition,
         month_published: bookForm.month_published,
@@ -293,6 +295,19 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 />
                             </div>
                         </div>
+
+                        <label
+                            className="font-bold"
+                            htmlFor="isbn">
+                            International Standard Book Number (ISBN)
+                        </label>
+                        <input
+                            type="text"
+                            name="isbn"
+                            defaultValue={form.isbn}
+                            onChange={handleChange}
+                            required
+                        />  
     
                         <label
                             className="font-bold"

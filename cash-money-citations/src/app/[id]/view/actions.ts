@@ -9,37 +9,14 @@ require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import CSLBibModel from "@/models/CSLBibTex";
 import dbConnect from "@/utils/dbConnect";
+import CSLStyleModel from "@/models/CSLStyle";
+import CSLLocaleModel from "@/models/CSLLocale";
+
 
 export async function CreateCitation(referenceId: any, styleChoice: any) {
 
     await dbConnect();
-    // let type = "";
-        
-    // if (reference.type === 'journal'){
-    //     type = 'article-journal'
-    // }
-    // if (reference.type === 'website'){
-    //     type = reference.type
-    // }
-    // if (reference.type === 'book'){
-    //     type = reference.type
-    // }
-    // const cslData = {
-    //     id: reference._id,
-    //     type: type,
-    //     title: reference.title,
-    //     author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-    //     family: contributor.contributorFirstName,
-    //     given: contributor.contributorLastName,
-    //     })),
-    //     issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
-    //     publisher: reference.publisher,
-    //     DOI: reference.doi,
-    //     URL: reference.url,
-    //     ISBN: reference.isbn
-    // };
     
-    // NEED TO CONVERT FROM USING THE REFERENCE MODEL TO THE NEW CSLBIBMODEL
     let tempCslJson = await CSLBibModel.findById(referenceId)
     const cslJson = tempCslJson.cslJson
 
@@ -48,14 +25,19 @@ export async function CreateCitation(referenceId: any, styleChoice: any) {
 
     let templateName = styleChoice
 
+    // Retrieve CSL Style from database
+
+    const styleData = await CSLStyleModel.findOne({
+        name: templateName,
+    }).exec()
     // Retrieve CSL Style from root server
-    const stylePath = path.resolve(`./csl_styles/${templateName}`)
-    const styleData = fs.readFileSync(stylePath, 'utf8');
+    // const stylePath = path.resolve(`./csl_styles/${templateName}`)
+    // const styleData = fs.readFileSync(stylePath, 'utf8');
 
         
     const config = plugins.config.get('@csl')
 
-    config.templates.add(templateName, styleData)
+    config.templates.add(templateName, styleData?.cslData)
     
     const customCitation = citation.format('bibliography', {
         format: 'text',

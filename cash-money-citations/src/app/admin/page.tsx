@@ -7,6 +7,8 @@ import GetUsers from './components/GetUsers';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth';
 import importCSLFiles from '@/utils/initCslStylesDb';
+import importLocaleFiles from '@/utils/initLocaleDb';
+import ImportLocale from './components/ImportLocale';
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
@@ -17,11 +19,18 @@ export default async function AdminDashboard() {
 
         await importCSLFiles(cslDirectory);
     }
+    
+    async function handleLocaleSubmit(localeDirectory: any) {
+        'use server';
+
+        await importLocaleFiles(localeDirectory);
+    }
 
         return (
         <>
             <GetUsers currentUser={currentUserEmail}/>
             <ImportCSLStyles handleCslSubmit={handleCslSubmit}/>
+            <ImportLocale handleLocaleSubmit={handleLocaleSubmit}/>
             {/* <SessionInfo /> */}
             {/* <AdminDashboardClient /> */}
         </>

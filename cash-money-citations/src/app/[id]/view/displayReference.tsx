@@ -11,7 +11,7 @@ const { plugins } = require('@citation-js/core')
 // import { getStyles, getCslStyle } from "./actions";
 import { useState } from "react";
 import { CreateCitation } from "./actions";
-import { SelectionCSL } from "./CSLComponents";
+import { SelectionCSL, SelectionLocale } from "./CSLComponents";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -77,6 +77,7 @@ const ViewReference = () => {
     const id = searchParams.get('id');
     const router = useRouter();
     const [styleChoice, setStyleChoice] = useState('');
+    const [localeChoice, setLocaleChoice] = useState('');
     const [referenceId, setReferenceId] = useState(id);
     
     const handleDelete = async () => {
@@ -121,6 +122,7 @@ const ViewReference = () => {
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
                         <SelectionCSL onStyleChoiceChange={setStyleChoice} />
+                        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
                     </div> 
                 </div>  
             </> 

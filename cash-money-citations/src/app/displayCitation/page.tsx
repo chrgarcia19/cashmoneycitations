@@ -46,7 +46,6 @@ export default function citationDisplay({
         <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
         </button>
       </div>
-      <p>CSL obtained with the use of https://citationstyles.org/</p>
 
     </div>
   )

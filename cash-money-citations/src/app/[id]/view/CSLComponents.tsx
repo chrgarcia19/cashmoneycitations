@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 const fetcher = (url: string) =>
@@ -67,18 +67,17 @@ return (
 
 export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProps) {
     const [localeChoice, setLocaleChoice] = useState<string | null>(null);
-    
+
     const {
         data: localeData,
         error,
         isLoading,
     } = useSWR(`/api/csl/locales`, fetcher);
     
-    
     if (error) return <p>Failed to load</p>;
     if (isLoading) return <p>Loading...</p>;
     if (!localeData) return null;
-    
+
     const handleLocaleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newLocaleChoice = e.target.value;
         setLocaleChoice(newLocaleChoice);
@@ -93,8 +92,8 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
                 <input
                   type="radio"
                   name="localeChoice"
-                  value={locale.id}
-                  checked={localeChoice === locale.id}
+                  value={locale.name}
+                  checked={localeChoice === locale.name}
                   onChange={handleLocaleChoiceChange}
                 />
                 {locale.name}

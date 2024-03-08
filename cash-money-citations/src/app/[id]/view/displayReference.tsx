@@ -11,6 +11,7 @@ const { plugins } = require('@citation-js/core')
 // import { getStyles, getCslStyle } from "./actions";
 import { useState } from "react";
 import { CreateCitation } from "./actions";
+import { SelectionCSL } from "./CSLComponents";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -26,57 +27,6 @@ function Button({ color, onClick, children }: any) {
     >
       <span>{children}</span>
     </button>
-  );
-}
-
-interface SelectionCSLProps {
-  // Fix the typescript for onStyleChoiceChange was previosly string[]
-  onStyleChoiceChange: (styleChoices: any) => void;
-}
-
-// Maps over CSL Style selection
-function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
-  const [styleChoices, setStyleChoices] = useState<string[]>([]);
-
-  const {
-    data: cslStyles,
-    error,
-    isLoading,
-  } = useSWR(`/api/csl/styles`, fetcher);
-
-  
-  if (error) return <p>Failed to load</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (!cslStyles) return null;
-
-  const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const styleChoice = e.target.value;
-    if (e.target.checked) {
-      setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
-      onStyleChoiceChange([...styleChoices, styleChoice]);
-    } else {
-      const newChoices = styleChoices.filter(choice => choice !== styleChoice);
-      setStyleChoices(newChoices);
-      onStyleChoiceChange(newChoices);
-    }
-  };
-
-  return (
-      <span className="space-x-5">
-        {cslStyles.map((cslStyle: any) => (
-          <div key={cslStyle.id}>
-            <label>
-              <input
-              type="checkbox"
-              value={cslStyle.name}
-              checked={styleChoices.includes(cslStyle.name)}
-              onChange={handleStyleChoiceChange}
-              />
-              {cslStyle.name}
-            </label>
-          </div>
-        ))}
-      </span>
   );
 }
 

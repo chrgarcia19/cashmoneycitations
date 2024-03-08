@@ -128,10 +128,10 @@ const ViewReference = () => {
                               <option value=''>
                                 ----
                               </option>
-                              <option value="university-of-york-mla.csl">
+                              <option value="university-of-york-mla">
                                 MLA
                               </option>
-                              <option value='university-of-york-chicago.csl'>
+                              <option value='university-of-york-chicago'>
                                 Chicago
                               </option>
                             </select>

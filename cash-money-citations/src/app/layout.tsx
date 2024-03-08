@@ -21,6 +21,13 @@ export default async function RootLayout({
                 <div className="reference-wrapper">
                     <AuthProvider>{children}</AuthProvider>
                 </div>
+
+                
+                <footer>
+                    <p>
+                        Citation Styles created with help from the  <a href="https://citationstyles.org/ ">CSL (citation style language) project</a>  
+                    </p>
+                </footer>
             </body>
         </html>
     )

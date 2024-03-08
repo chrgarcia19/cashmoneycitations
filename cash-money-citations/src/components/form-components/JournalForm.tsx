@@ -71,7 +71,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/bookRef/${id}`);
+        const res = await fetch(`/api/journalRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -94,7 +94,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/bookRef/${id}`, {
+        const res = await fetch(`/api/journalRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -110,7 +110,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
 
         const { data } = await res.json();
 
-        mutate(`/api/bookRef/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/journalRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -129,7 +129,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     /* The POST method adds a new entry in the mongodb database. */
     const postData = async (form: JournalData) => {
         try {
-        const res = await fetch("/api/bookRef", {
+        const res = await fetch("/api/journalRef", {
             method: "POST",
             headers: {
             Accept: contentType,

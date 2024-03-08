@@ -9,9 +9,13 @@ const { plugins } = require('@citation-js/core')
 // const config = plugins.config.get('@bibtex')
 // const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
 // import { getStyles, getCslStyle } from "./actions";
-import CiteDisplay from "./citeDisplay";
 import { useState } from "react";
 import { CreateCitation } from "./actions";
+
+const fetcher = (url: string) =>
+fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data);
 
 // Styles buttons for Edit, Delete, & Export
 function Button({ color, onClick, children }: any) {
@@ -25,6 +29,49 @@ function Button({ color, onClick, children }: any) {
   );
 }
 
+interface SelectionCSLProps {
+  onStyleChoiceChange: (styleChoice: string) => void;
+}
+
+// Maps over CSL Style selection
+function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
+  const [styleChoice, setStyleChoice] = useState('');
+
+  const {
+    data: cslStyles,
+    error,
+    isLoading,
+  } = useSWR(`/api/csl/styles`, fetcher);
+
+  
+  if (error) return <p>Failed to load</p>;
+  if (isLoading) return <p>Loading...</p>;
+  if (!cslStyles) return null;
+
+  const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStyleChoice = e.target.value;
+    setStyleChoice(newStyleChoice);
+    onStyleChoiceChange(newStyleChoice);
+  };
+
+  return (
+      <span className="space-x-5">
+          <select
+              value={styleChoice}
+              onChange={handleStyleChoiceChange}    
+          >
+            <option value={"default"} disabled selected>
+              Select Citation Style
+            </option>
+              {cslStyles.map((cslStyle: any) => (
+                  <option key={cslStyle.id} value={cslStyle.id}>
+                      {cslStyle.name}
+                  </option>
+              ))}
+          </select>
+      </span>
+  );
+}
 
 // Displays reference details
 function ReferenceDetails({ reference }: any) {
@@ -67,10 +114,7 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
 }
 
 const ViewReference = () => {
-    const fetcher = (url: string) =>
-    fetch(url)
-        .then((res) => res.json())
-        .then((json) => json.data);
+
 
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
@@ -102,9 +146,9 @@ const ViewReference = () => {
       } = useSWR(id ? `/api/references/${id}` : null, fetcher);
 
       
-      if (error) return <p>Failed to load</p>;
-      if (isLoading) return <p>Loading...</p>;
-      if (!reference) return null;
+    if (error) return <p>Failed to load</p>;
+    if (isLoading) return <p>Loading...</p>;
+    if (!reference) return null;
       
 
     const handleEdit = () => {
@@ -119,23 +163,7 @@ const ViewReference = () => {
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-
-                        <span className="space-x-5">
-                            <select
-                              value={styleChoice}
-                              onChange={e => setStyleChoice(e.target.value)}
-                            >
-                              <option value=''>
-                                ----
-                              </option>
-                              <option value="university-of-york-mla">
-                                MLA
-                              </option>
-                              <option value='university-of-york-chicago'>
-                                Chicago
-                              </option>
-                            </select>
-                        </span>
+                        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
                     </div> 
                 </div>  
             </> 

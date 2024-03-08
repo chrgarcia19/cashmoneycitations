@@ -1,13 +1,10 @@
 'use client'
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { mutate } from "swr";
-import useSWR from "swr";
-import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 import WebForm from "./form-components/WebForm";
 import BookForm from "./form-components/BookForm";
+import JournalForm from "./form-components/JournalForm";
 
 interface FormData {
   type: string;
@@ -62,6 +59,25 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     publisher: "",
     city: "",
     state: "",
+    isbn: "",
+  };
+
+  const journalData = {
+    type: "journal",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    journal_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    publisher: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
   };
 
   /*Set initial state to website so the page is not blank*/
@@ -113,6 +129,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
             {form.type == "book" && (
               <BookForm formID={"add-book-reference"} bookForm={bookData} />
+            )}
+
+            {form.type == "journal" && (
+              <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
             )}
         </div>
       </div>

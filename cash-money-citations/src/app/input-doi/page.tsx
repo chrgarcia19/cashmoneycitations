@@ -40,10 +40,11 @@ function InputDOI() {
         let i = 0;
         let title = "";
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            firstName: "",
+            lastName: "",
+            middleName: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
@@ -51,20 +52,22 @@ function InputDOI() {
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: item.author[i].given,
-                    contributorLastName: item.author[i].family,
-                    contributorMiddleI: ""
+                    role: "Author",
+                    firstName: item.author[i].given,
+                    lastName: item.author[i].family,
+                    middleName: "",
+                    suffix: ""
                 };
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: "",
+                lastName: "",
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
@@ -74,29 +77,28 @@ function InputDOI() {
             title = item.title[0];
         }
         else {
-            title = "Unknown";
+            title = "";
         }
         
         let doiReference: any = {
             type: "journal",
-            citekey: "please edit this",
-            title: title,
+            citekey: "",
+            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
-            publisher: item.publisher,
-            year: item.created['date-parts'][0][0],
-            month: item.created['date-parts'][0][1],
-            address: "",
-            edition: "",
+            source_title: title,
+            journal_title: item.publisher,
             volume: item.volume,
-            isbn: "",
+            issue: "",
+            month_published: item.created['date-parts'][0][1],
+            day_published: item.created['date-parts'][0][2],
+            year_published: item.created['date-parts'][0][0],
+            start_page: item.page,
+            end_page: "",
             doi: item.DOI,
-            pages: item.page,
-            journal: "",
-            image_url: "",
         };
         
         try {
-            const res = await fetch("/api/references", {
+            const res = await fetch("/api/journalRef", {
               method: "POST",
               headers: {
                 Accept: contentType,

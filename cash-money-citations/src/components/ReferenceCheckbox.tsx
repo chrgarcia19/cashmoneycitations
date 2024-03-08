@@ -254,8 +254,8 @@ export const Checkbox = ({ references }: IProps) => {
                   )
                 })}
                 </td>
-                <td className="border border-slate-600 text-center">{reference.publisher}</td>
-                <td className="border border-slate-600 text-center">{reference.year_published}</td>
+                <td className="border border-slate-600 text-center">
+                    {reference.month_published} {reference.day_published}, {reference.year_published}</td>
                 </tr>
             ))}
         </>

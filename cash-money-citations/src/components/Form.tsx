@@ -74,7 +74,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     month_published: "",
     day_published: "",
     year_published: "",
-    publisher: "",
     start_page: "",
     end_page: "",
     doi: "",

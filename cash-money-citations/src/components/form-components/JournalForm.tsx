@@ -1,10 +1,10 @@
 "use client"
 
 import { Contributor } from "@/models/Contributor";
+import ContributorForm from "../ContributorForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
-import ContributorForm from "../ContributorForm";
 
 /*Creating an array of days for a select box*/
 const days = new Array<number>();
@@ -24,7 +24,6 @@ interface JournalData {
     month_published: string;
     day_published: string;
     year_published: string;
-    publisher: string;
     start_page: string;
     end_page: string;
     doi: string;
@@ -45,7 +44,7 @@ type Props = {
     forNewReference?: boolean;
 };
 
-const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
+const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const contentType = "application/json";
@@ -64,7 +63,6 @@ const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
         month_published: journalForm.month_published,
         day_published: journalForm.day_published,
         year_published: journalForm.year_published,
-        publisher: journalForm.publisher,
         start_page: journalForm.start_page,
         end_page: journalForm.end_page,
         doi: journalForm.doi,
@@ -170,10 +168,10 @@ const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
         if (!form.type) err.type = "Type is required";
         if (!form.citekey) err.citekey = "Citekey is required";
         if (!form.contributors) err.contributors = "Contributor info is required";
-        if (!form.publisher) err.publisher = "Publisher is required";
+        
         if (!form.year_published) err.year_published = "Year is required";
         if (!form.image_url) {
-            form.image_url = "https://st2.depositphotos.com/8301258/11704/v/450/depositphotos_117048908-stock-illustration-design-books-logo-vector.jpg";
+            form.image_url = "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi";
         }
         return err;
     };
@@ -322,20 +320,7 @@ const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
                             defaultValue={form.doi}
                             onChange={handleChange}
                             required
-                        />   
-    
-                        <label
-                            className="font-bold"
-                            htmlFor="publisher">
-                            Publisher
-                        </label>
-                        <input
-                            type="text"
-                            name="publisher"
-                            defaultValue={form.publisher}
-                            onChange={handleChange}
-                            required
-                        />     
+                        />      
                         
                         <label className="font-bold pt-1" htmlFor="date_published">
                             Date Published (Month, Day, Year)
@@ -415,7 +400,7 @@ const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
                 ))}
                 </div>
             </>
-        )
+        );
     }
 
     return (
@@ -437,10 +422,7 @@ const WebForm = ({formID, journalForm, forNewReference = true}: Props) => {
             formContent()
         )}
         </>
-    )
-
-    
-
+    ) 
 }
 
-export default WebForm;
+export default JournalForm;

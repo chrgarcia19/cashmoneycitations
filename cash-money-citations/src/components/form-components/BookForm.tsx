@@ -44,7 +44,7 @@ type Props = {
     forNewReference?: boolean;
 };
 
-const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
+const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const contentType = "application/json";
@@ -428,4 +428,4 @@ const WebForm = ({formID, bookForm, forNewReference = true}: Props) => {
 
 }
 
-export default WebForm;
+export default BookForm;

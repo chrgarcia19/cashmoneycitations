@@ -12,11 +12,14 @@ async function importCSLFiles(directoryPath) {
 
     if (count === 0) {
         // Read .csl files from directory
-        const cslFiles = fs.readdirSync(directoryPath);
+        // i.e. `./csl_styles`
+        const stylePath = path.resolve(directoryPath)
+
+        const cslFiles = fs.readdirSync(stylePath);
 
         for (const file of cslFiles) {
             if (path.extname(file) === '.csl') {
-                const filePath = path.join(directoryPath, file);
+                const filePath = path.join(stylePath, file);
                 const cslData = fs.readFileSync(filePath, 'utf8');
 
                 // Insert the .csl data into the MongoDB database
@@ -24,7 +27,7 @@ async function importCSLFiles(directoryPath) {
                 await csl.save();
             }
         }
-    }
+    } 
 }
 
 export default importCSLFiles;

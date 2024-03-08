@@ -7,7 +7,7 @@ import path from 'path';
 
 export default async function CiteDisplay(cslData: any, styleChoice: string) {
 
-    let templateName = "harvard-cite-them-right.csl"
+    let templateName = styleChoice
 
     // Retrieve CSL Style from root server
     const stylePath = path.resolve(`./csl_styles/${templateName}`)

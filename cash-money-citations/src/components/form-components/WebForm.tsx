@@ -272,7 +272,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.month_accessed}
                                         onChange={handleChange}>
-                                        <option value="" disabled selected>Pick a Month</option>
+                                        <option value="" disabled>Pick a Month</option>
                                         <option value="January">January</option>
                                         <option value="February">February</option>
                                         <option value="March">March</option>
@@ -298,7 +298,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.day_accessed}
                                         onChange={handleChange}>
-                                        <option disabled selected>Pick a day</option>
+                                        <option disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}
@@ -341,7 +341,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.month_published}
                                         onChange={handleChange}>
-                                        <option value="" disabled selected>Pick a Month</option>
+                                        <option value="" disabled>Pick a Month</option>
                                         <option value="January">January</option>
                                         <option value="February">February</option>
                                         <option value="March">March</option>
@@ -367,7 +367,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.day_published}
                                         onChange={handleChange}>
-                                        <option disabled selected>Pick a day</option>
+                                        <option disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}

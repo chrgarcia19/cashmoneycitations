@@ -53,44 +53,69 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   }, []);
 
   return (
-    <div className="App m-0 justify-center items-center">
-      <div className="flex justify-center items-center">
-        <h1 className="text-xl align-middle">Contributor Information (Type, First Name, Last Name, Middle Initial)</h1>
-      </div>
-      <form className="m-0 justify-center items-center w-full max-w-screen-lg">
-        {formFields.map((form, index) => (
-          <div key={index} className="display-block inline-flex ">
-            <select name="type" className="bg-white border-gray-300 rounded-lg w-2/3 pr-0.5 mr-0.5 h-8 border-t border-r border-l border-b" defaultValue={form.contributorType} onChange={(event) => handleFormChange(event, index)} required>
-              <option value="" disabled hidden>Contributor Type</option>
-              <option value="Author">Author</option>
-              <option value="Editor">Editor</option>
-              <option value="Translator">Translator</option>
-            </select>
-            <input
-              name='contributorFirstName'
-              placeholder='Contributor First Name'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorFirstName}
-              className="w-2/3 pr-0.5 mr-0.5"
-            />
-            <input
-              name='contributorLastName'
-              placeholder='Contributor Last Name'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorLastName}
-              className="w-2/3 pr-0.5 mr-0.5"
-            />
-            <input
-              name='contributorMiddleI'
-              placeholder='Contributor Middle Initial'
-              onChange={(event) => handleFormChange(event, index)}
-              value={form.contributorMiddleI}
-              className="w-2/12 pr-0.5 mr-0.5"
-            />
-            <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5" onClick={() => removeFields(index)}>Remove</button>
+     <div className="container mx-auto px-4 ">
+      <h1 className="text-3xl font-bold m-3">Add Reference</h1>
+      <form className="w-full">
+        <div className="flex flex-wrap -mx-2">
+          {/* Left column */}
+          <div className="w-full md:w-1/2 px-2 mb-4 md:mb-0">
+            {formFields.map((form, index) => (
+              <div key={index} className="flex flex-wrap mb-2">
+                <select 
+                  name="contributorType" 
+                  className="bg-white border-gray-300 rounded-md w-full p-2 mb-2 md:w-auto md:mr-2"
+                  defaultValue={form.contributorType} 
+                  onChange={(event) => handleFormChange(event, index)} 
+                  required
+                >
+                  <option value="" disabled hidden>Contributor Type</option>
+                  <option value="Author">Author</option>
+                  <option value="Editor">Editor</option>
+                  <option value="Translator">Translator</option>
+                  {/* Add more options as needed */}
+                </select>
+                <input
+                  name='contributorFirstName'
+                  placeholder='First Name'
+                  value={form.contributorFirstName}
+                  onChange={(event) => handleFormChange(event, index)}
+                  className="border border-gray-300 rounded-md w-full p-2 mb-2 md:w-auto md:mr-2"
+                />
+                <input
+                  name='contributorLastName'
+                  placeholder='Last Name'
+                  value={form.contributorLastName}
+                  onChange={(event) => handleFormChange(event, index)}
+                  className="border border-gray-300 rounded-md w-full p-2 mb-2 md:w-auto md:mr-2"
+                />
+                <input
+                  name='contributorMiddleI'
+                  placeholder='Middle Initial'
+                  value={form.contributorMiddleI}
+                  onChange={(event) => handleFormChange(event, index)}
+                  className="border border-gray-300 rounded-md w-full p-2 mb-2 md:w-1/5 md:mr-2"
+                />
+                <button 
+                  type="button" 
+                  className="bg-red-500 text-white rounded-md p-2 mb-2 md:w-auto"
+                  onClick={() => removeFields(index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <div className="flex justify-center p-3">
+              <button 
+                type="button" 
+                className="w-52 rounded-lg bg-green-500 text-white font-bold py-2"
+                onClick={addFields}
+              >
+                Add More..
+              </button>
+            </div>
           </div>
-        ))}
-        <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg" onClick={addFields}>Add More..</button>
+          {/* Right column if you have more fields */}
+        </div>
       </form>
     </div>
   );

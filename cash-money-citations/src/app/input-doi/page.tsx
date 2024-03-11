@@ -126,6 +126,7 @@ function InputDOI() {
             start_page: item.page,
             end_page: "",
             doi: item.DOI,
+            issn: item.issn,
         };
         
         try {

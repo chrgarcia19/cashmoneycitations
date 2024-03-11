@@ -16,6 +16,7 @@ export interface JournalReference extends mongoose.Document {
     start_page: string;
     end_page: string;
     doi: string;
+    issn: string;
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
@@ -75,6 +76,9 @@ const JournalSchema = new mongoose.Schema<JournalReference>({
         type: String,
     },
     doi: {
+        type: String,
+    },
+    issn: {
         type: String,
     },
 });

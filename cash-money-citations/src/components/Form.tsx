@@ -77,6 +77,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     start_page: "",
     end_page: "",
     doi: "",
+    issn: "",
   };
 
   /*Set initial state to website so the page is not blank*/

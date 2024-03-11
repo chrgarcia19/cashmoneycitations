@@ -27,6 +27,7 @@ interface JournalData {
     start_page: string;
     end_page: string;
     doi: string;
+    issn: string;
 }
 
 interface Error {
@@ -66,6 +67,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
         start_page: journalForm.start_page,
         end_page: journalForm.end_page,
         doi: journalForm.doi,
+        issn: journalForm.issn,
     });
 
     const id  = searchParams.get("id");
@@ -320,7 +322,19 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
                             defaultValue={form.doi}
                             onChange={handleChange}
                             required
-                        />      
+                        />   
+
+                        <label
+                            className="font-bold"
+                            htmlFor="issn">
+                            International Standard Serial Number (ISSN) [If Applicable]
+                        </label>
+                        <input
+                            type="text"
+                            name="issn"
+                            defaultValue={form.issn}
+                            onChange={handleChange}
+                        />     
                         
                         <label className="font-bold pt-1" htmlFor="date_published">
                             Date Published (Month, Day, Year)

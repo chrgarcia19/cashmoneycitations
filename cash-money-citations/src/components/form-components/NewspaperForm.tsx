@@ -12,21 +12,21 @@ for (let i = 1; i < 32; i++){
   days.push(i);
 }
 
-interface MagazineData {
+interface NewspaperData {
     type: string;
     citekey: string;
     image_url: string;
     source_title: string;
-    magazine_title: string;
-    volume: string;
-    issue: string;
+    newspaper_title: string;
+    edition: string;
+    section: string;
+    city: string;
     contributors: Contributor[];
     month_published: string;
     day_published: string;
     year_published: string;
     start_page: string;
     end_page: string;
-    doi: string;
     issn: string;
 }
 
@@ -41,11 +41,11 @@ interface Error {
 
 type Props = {
     formID: string;
-    magazineForm: MagazineData;
+    newspaperForm: NewspaperData;
     forNewReference?: boolean;
 };
 
-const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => {
+const MagazineForm = ({formID, newspaperForm, forNewReference = true}: Props) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const contentType = "application/json";
@@ -53,27 +53,27 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
     const [message, setMessage] = useState("");
     
     const [form, setForm] = useState({
-        type: "magazine",
-        citekey: magazineForm.citekey,
-        image_url: magazineForm.image_url,
-        contributors: magazineForm.contributors,
-        source_title: magazineForm.source_title,
-        magazine_title: magazineForm.magazine_title,
-        volume: magazineForm.volume,
-        issue: magazineForm.issue,
-        month_published: magazineForm.month_published,
-        day_published: magazineForm.day_published,
-        year_published: magazineForm.year_published,
-        start_page: magazineForm.start_page,
-        end_page: magazineForm.end_page,
-        doi: magazineForm.doi,
-        issn: magazineForm.issn,
+        type: "newspaper",
+        citekey: newspaperForm.citekey,
+        image_url: newspaperForm.image_url,
+        contributors: newspaperForm.contributors,
+        source_title: newspaperForm.source_title,
+        newspaper_title: newspaperForm.newspaper_title,
+        edition: newspaperForm.edition,
+        section: newspaperForm.section,
+        city: newspaperForm.city,
+        month_published: newspaperForm.month_published,
+        day_published: newspaperForm.day_published,
+        year_published: newspaperForm.year_published,
+        start_page: newspaperForm.start_page,
+        end_page: newspaperForm.end_page,
+        issn: newspaperForm.issn,
     });
 
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/magazineRef/${id}`);
+        const res = await fetch(`/api/newspaperRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -92,11 +92,11 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
     };
 
     /* The PUT method edits an existing entry in the mongodb database. */
-    const putData = async (form: MagazineData) => {
+    const putData = async (form: NewspaperData) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/magazineRef/${id}`, {
+        const res = await fetch(`/api/newspaperRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -112,7 +112,7 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
 
         const { data } = await res.json();
 
-        mutate(`/api/magazineRef/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/newspaperRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -129,9 +129,9 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
     };
 
     /* The POST method adds a new entry in the mongodb database. */
-    const postData = async (form: MagazineData) => {
+    const postData = async (form: NewspaperData) => {
         try {
-        const res = await fetch("/api/magazineRef", {
+        const res = await fetch("/api/newspaperRef", {
             method: "POST",
             headers: {
             Accept: contentType,
@@ -173,7 +173,7 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
         
         if (!form.year_published) err.year_published = "Year is required";
         if (!form.image_url) {
-            form.image_url = "https://mir-s3-cdn-cf.behance.net/project_modules/disp/7a8a8f1413617.5600e1a25b43a.jpg";
+            form.image_url = "https://cdn.pixabay.com/photo/2014/08/07/21/13/newspaper-412811_640.jpg";
         }
         return err;
     };
@@ -236,13 +236,13 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
 
                         <label
                             className="font-bold"
-                            htmlFor="magazine_title">
-                            Magazine Title
+                            htmlFor="newspaper_title">
+                            Newspaper Title
                         </label>
                         <input
                             type="text"
-                            name="magazine_title"
-                            defaultValue={form.magazine_title}
+                            name="newspaper_title"
+                            defaultValue={form.newspaper_title}
                             onChange={handleChange}
                             required
                         />
@@ -252,14 +252,14 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
                                 <div className="join join-vertical">
                                     <label
                                         className="font-bold me-2"
-                                        htmlFor="volume">
-                                        Volume
+                                        htmlFor="edition">
+                                        Edition
                                     </label>
                                     <input
                                         className="w-64"
                                         type="text"
-                                        name="volume"
-                                        defaultValue={form.volume}
+                                        name="edition"
+                                        defaultValue={form.edition}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -267,14 +267,14 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
                             <div className="join join-vertical">
                                 <label
                                     className="font-bold me-2"
-                                    htmlFor="issue">
-                                    Issue
+                                    htmlFor="section">
+                                    Section
                                 </label>
                                 <input
                                     className="w-64"
                                     type="text"
-                                    name="issue"
-                                    defaultValue={form.issue}
+                                    name="section"
+                                    defaultValue={form.section}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -312,16 +312,16 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
                         </div>
 
                         <label
-                            className="font-bold"
-                            htmlFor="doi">
-                            Digital Object Identifier (DOI) [If Applicable]
+                            className="font-bold me-2" 
+                            htmlFor="city">
+                            City
                         </label>
                         <input
                             type="text"
-                            name="doi"
-                            defaultValue={form.doi}
+                            name="city"
+                            defaultValue={form.city}
                             onChange={handleChange}
-                        />   
+                        />
 
                         <label
                             className="font-bold"

@@ -6,6 +6,7 @@ import WebForm from "@/components/form-components/WebForm";
 import BookForm from "@/components/form-components/BookForm";
 import JournalForm from "@/components/form-components/JournalForm";
 import MagazineForm from "@/components/form-components/MagazineForm";
+import NewspaperForm from "@/components/form-components/NewspaperForm";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -108,6 +109,26 @@ const EditReference = () => {
     }
 
     return <MagazineForm formID={"edit-magazine-form"} magazineForm={magazineForm} forNewReference={false} />
+  } else if (referenceForm.type == "newspaper"){
+    const newspaperForm = {
+      type: "newspaper",
+      citekey: reference.citekey,
+      image_url: reference.image_url,
+      contributors: reference.contributors,
+      source_title: reference.source_title,
+      newspaper_title: reference.newspaper_title,
+      edition: reference.edition,
+      section: reference.section,
+      city: reference.city,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      start_page: reference.start_page,
+      end_page: reference.end_page,
+      issn: reference.issn,
+    }
+
+    return <NewspaperForm formID={"edit-newspaper-form"} newspaperForm={newspaperForm} forNewReference={false} />
   }
 };
 

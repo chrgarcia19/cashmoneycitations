@@ -5,6 +5,7 @@ import useSWR from "swr";
 import WebForm from "@/components/form-components/WebForm";
 import BookForm from "@/components/form-components/BookForm";
 import JournalForm from "@/components/form-components/JournalForm";
+import MagazineForm from "@/components/form-components/MagazineForm";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -83,9 +84,30 @@ const EditReference = () => {
       start_page: reference.start_page,
       end_page: reference.end_page,
       doi: reference.doi,
+      issn: reference.issn,
     }
 
     return <JournalForm formID={"edit-journal-form"} journalForm={journalForm} forNewReference={false} />
+  } else if (referenceForm.type == "magazine"){
+    const magazineForm = {
+      type: "magazine",
+      citekey: reference.citekey,
+      image_url: reference.image_url,
+      contributors: reference.contributors,
+      source_title: reference.source_title,
+      magazine_title: reference.magazine_title,
+      volume: reference.volume,
+      issue: reference.issue,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      start_page: reference.start_page,
+      end_page: reference.end_page,
+      doi: reference.doi,
+      issn: reference.issn,
+    }
+
+    return <MagazineForm formID={"edit-magazine-form"} magazineForm={magazineForm} forNewReference={false} />
   }
 };
 

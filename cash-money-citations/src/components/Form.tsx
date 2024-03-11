@@ -5,6 +5,7 @@ import { Contributor } from "@/models/Contributor";
 import WebForm from "./form-components/WebForm";
 import BookForm from "./form-components/BookForm";
 import JournalForm from "./form-components/JournalForm";
+import MagazineForm from "./form-components/MagazineForm";
 
 interface FormData {
   type: string;
@@ -80,6 +81,24 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     issn: "",
   };
 
+  const magazineData = {
+    type: "magazine",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    magazine_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
+    issn: "",
+  };
+
   /*Set initial state to website so the page is not blank*/
   const [form, setForm] = useState({
     type: "website",
@@ -119,6 +138,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             <option value="website">Website</option>
             <option value="book">Book</option>
             <option value="journal">Journal</option>
+            <option value="magazine">Magazine</option>
           </select>
         </div>
         <br/>
@@ -133,6 +153,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
             {form.type == "journal" && (
               <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
+            )}
+
+            {form.type == "magazine" && (
+              <MagazineForm formID={"add-magazine-reference"} magazineForm={magazineData} />
             )}
         </div>
       </div>

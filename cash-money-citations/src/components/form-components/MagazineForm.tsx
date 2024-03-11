@@ -12,12 +12,12 @@ for (let i = 1; i < 32; i++){
   days.push(i);
 }
 
-interface JournalData {
+interface MagazineData {
     type: string;
     citekey: string;
     image_url: string;
     source_title: string;
-    journal_title: string;
+    magazine_title: string;
     volume: string;
     issue: string;
     contributors: Contributor[];
@@ -41,11 +41,11 @@ interface Error {
 
 type Props = {
     formID: string;
-    journalForm: JournalData;
+    magazineForm: MagazineData;
     forNewReference?: boolean;
 };
 
-const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
+const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const contentType = "application/json";
@@ -53,27 +53,27 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     const [message, setMessage] = useState("");
     
     const [form, setForm] = useState({
-        type: "journal",
-        citekey: journalForm.citekey,
-        image_url: journalForm.image_url,
-        contributors: journalForm.contributors,
-        source_title: journalForm.source_title,
-        journal_title: journalForm.journal_title,
-        volume: journalForm.volume,
-        issue: journalForm.issue,
-        month_published: journalForm.month_published,
-        day_published: journalForm.day_published,
-        year_published: journalForm.year_published,
-        start_page: journalForm.start_page,
-        end_page: journalForm.end_page,
-        doi: journalForm.doi,
-        issn: journalForm.issn,
+        type: "magazine",
+        citekey: magazineForm.citekey,
+        image_url: magazineForm.image_url,
+        contributors: magazineForm.contributors,
+        source_title: magazineForm.source_title,
+        magazine_title: magazineForm.magazine_title,
+        volume: magazineForm.volume,
+        issue: magazineForm.issue,
+        month_published: magazineForm.month_published,
+        day_published: magazineForm.day_published,
+        year_published: magazineForm.year_published,
+        start_page: magazineForm.start_page,
+        end_page: magazineForm.end_page,
+        doi: magazineForm.doi,
+        issn: magazineForm.issn,
     });
 
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/journalRef/${id}`);
+        const res = await fetch(`/api/magazineRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -92,11 +92,11 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     };
 
     /* The PUT method edits an existing entry in the mongodb database. */
-    const putData = async (form: JournalData) => {
+    const putData = async (form: MagazineData) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/journalRef/${id}`, {
+        const res = await fetch(`/api/magazineRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -112,7 +112,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
 
         const { data } = await res.json();
 
-        mutate(`/api/journalRef/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/magazineRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -129,9 +129,9 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     };
 
     /* The POST method adds a new entry in the mongodb database. */
-    const postData = async (form: JournalData) => {
+    const postData = async (form: MagazineData) => {
         try {
-        const res = await fetch("/api/journalRef", {
+        const res = await fetch("/api/magazineRef", {
             method: "POST",
             headers: {
             Accept: contentType,
@@ -236,13 +236,13 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
 
                         <label
                             className="font-bold"
-                            htmlFor="journal_title">
-                            Journal Title
+                            htmlFor="magazine_title">
+                            Magazine Title
                         </label>
                         <input
                             type="text"
-                            name="journal_title"
-                            defaultValue={form.journal_title}
+                            name="magazine_title"
+                            defaultValue={form.magazine_title}
                             onChange={handleChange}
                             required
                         />
@@ -314,7 +314,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
                         <label
                             className="font-bold"
                             htmlFor="doi">
-                            Digital Object Identifier (DOI)
+                            Digital Object Identifier (DOI) [If Applicable]
                         </label>
                         <input
                             type="text"
@@ -326,7 +326,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
                         <label
                             className="font-bold"
                             htmlFor="issn">
-                            International Standard Serial Number (ISSN) [If Applicable]
+                            International Standard Serial Number (ISSN) 
                         </label>
                         <input
                             type="text"
@@ -438,4 +438,4 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     ) 
 }
 
-export default JournalForm;
+export default MagazineForm;

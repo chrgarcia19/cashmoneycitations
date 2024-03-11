@@ -77,6 +77,6 @@ const WebSchema = new mongoose.Schema<WebReference>({
     publisher: {
         type: String,
     },
-});
+}, {timestamps: true});
 
 export default mongoose.models.WebReference || mongoose.model<WebReference>("WebReference", WebSchema, "references");

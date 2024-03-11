@@ -81,6 +81,6 @@ const MagazineSchema = new mongoose.Schema<MagazineReference>({
     issn: {
         type: String,
     },
-});
+}, {timestamps: true});
 
 export default mongoose.models.MagazineReference || mongoose.model<MagazineReference>("MagazineReference", MagazineSchema, "references");

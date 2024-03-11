@@ -77,6 +77,6 @@ const BookSchema = new mongoose.Schema<BookReference>({
     state: {
         type: String,
     },
-});
+}, {timestamps: true});
 
 export default mongoose.models.BookReference || mongoose.model<BookReference>("BookReference", BookSchema, "references");

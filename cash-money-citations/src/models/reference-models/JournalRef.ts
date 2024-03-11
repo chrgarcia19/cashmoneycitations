@@ -81,6 +81,6 @@ const JournalSchema = new mongoose.Schema<JournalReference>({
     issn: {
         type: String,
     },
-});
+}, {timestamps: true});
 
 export default mongoose.models.JournalReference || mongoose.model<JournalReference>("JournalReference", JournalSchema, "references");

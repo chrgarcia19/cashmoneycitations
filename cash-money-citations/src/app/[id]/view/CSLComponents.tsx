@@ -15,7 +15,7 @@ interface SelectionCSLProps {
 
 interface SelectionCSLLocaleProps {
     // Fix the typescript for onLocaleChoiceChange was previosly string[]
-    onLocaleChoiceChange: (styleChoices: any) => void;
+    onLocaleChoiceChange: (localeChoices: any) => void;
 }
   
 // Maps over CSL Style selection
@@ -77,7 +77,6 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     if (error) return <p>Failed to load</p>;
     if (isLoading) return <p>Loading...</p>;
     if (!localeData) return null;
-
     const handleLocaleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newLocaleChoice = e.target.value;
         setLocaleChoice(newLocaleChoice);
@@ -87,11 +86,10 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     return (
         <span className="space-x-5">
           {localeData.map((locale: any) => (
-            <div key={locale.id}>
+            <div key={locale._id}>
               <label>
                 <input
                   type="radio"
-                  name="localeChoice"
                   value={locale.name}
                   checked={localeChoice === locale.name}
                   onChange={handleLocaleChoiceChange}

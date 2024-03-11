@@ -14,7 +14,7 @@ interface SelectionCSLProps {
 }
 
 interface SelectionCSLLocaleProps {
-    // Fix the typescript for onStyleChoiceChange was previosly string[]
+    // Fix the typescript for onLocaleChoiceChange was previosly string[]
     onLocaleChoiceChange: (styleChoices: any) => void;
 }
   

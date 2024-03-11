@@ -76,7 +76,7 @@ const ViewReference = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
-    const [styleChoice, setStyleChoice] = useState('');
+    const [styleChoice, setStyleChoice] = useState(Array<string>(''));
     const [localeChoice, setLocaleChoice] = useState('');
     const [referenceId, setReferenceId] = useState(id);
     
@@ -94,8 +94,7 @@ const ViewReference = () => {
     async function exportCitation() {
       // Call to server action to create citations
         const citationData = await CreateCitation(referenceId, styleChoice)
-        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
-      }
+    }
 
     const {
         data: reference,

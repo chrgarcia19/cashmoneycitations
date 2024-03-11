@@ -13,7 +13,7 @@ import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
 
-export async function CreateCitation(referenceId: any, styleChoice: Array<string>) {
+export async function CreateCitation(referenceId: any, styleChoice: Array<string>, localeChoice: string) {
 
     await dbConnect();
     
@@ -26,20 +26,29 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
 
     // Retrieve CSL Style from database
     for (const style in styleChoice) {
-        const templateName = styleChoice[style]
+        const templateName = styleChoice[style];
+        const localeName = localeChoice;
 
+        // Find citation style where the name = the selected list
         const styleData = await CSLStyleModel.findOne({
             name: templateName,
         }).exec()
-            
+
+        // Find locale where name = inputted locale
+        const localeData = await CSLLocaleModel.findOne({
+            name: localeName,
+        }).exec()
+
         const config = plugins.config.get('@csl')
         
-        config.templates.add(templateName, styleData?.cslData)
-        
+        // Add citation style & locale to Citation.js config
+        config.templates.add(templateName, styleData?.cslData);
+        config.locales.add(localeName, localeData?.localeData);
+
         const customCitation = citation.format('bibliography', {
             format: 'text',
             template: templateName,
-            lang: 'en-us'
+            lang: localeName,
         });
 
         const newCustomCitation = await CitationModel.create({

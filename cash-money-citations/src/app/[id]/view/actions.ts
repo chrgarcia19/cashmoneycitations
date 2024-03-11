@@ -63,7 +63,6 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
             citationIdList: citationIdList
         });
 
-        console.log(newCustomCitation.language)
 
     }
 

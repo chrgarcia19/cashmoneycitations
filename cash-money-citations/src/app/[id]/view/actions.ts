@@ -17,9 +17,9 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
 
     await dbConnect();
     
-    let tempCslJson = await CSLBibModel.findById(referenceId)
-    const cslJson = tempCslJson.cslJson
-    const referenceTitle = tempCslJson.title
+    let referenceCslJson = await CSLBibModel.findById(referenceId)
+    const cslJson = referenceCslJson.cslJson
+    const referenceTitle = referenceCslJson.title
 
     // Create a Cite instance
     const citation = new Cite(cslJson);
@@ -42,11 +42,17 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
             lang: 'en-us'
         });
 
-        await CitationModel.create({
-            name: templateName + " " + referenceTitle,
+        const newCustomCitation = await CitationModel.create({
+            name: templateName + referenceTitle,
             CitationData: customCitation
-        })
-    
+        });
+
+        const citationIdList = referenceCslJson.citationIdList || [];
+        citationIdList.push(newCustomCitation.id);
+        await CSLBibModel.findByIdAndUpdate(referenceId, {
+            citationIdList: citationIdList
+        });
+
     }
 
 }

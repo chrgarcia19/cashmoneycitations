@@ -362,7 +362,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.day_published}
                                         onChange={handleChange}>
-                                        <option disabled>Pick a day</option>
+                                        <option value="" disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}

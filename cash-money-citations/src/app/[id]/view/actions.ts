@@ -51,9 +51,11 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
             lang: localeName,
         });
 
+        console.log(localeName)
         const newCustomCitation = await CitationModel.create({
             name: templateName + referenceTitle,
-            CitationData: customCitation
+            CitationData: customCitation,
+            language: localeName,
         });
 
         const citationIdList = referenceCslJson.citationIdList || [];
@@ -61,6 +63,8 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
         await CSLBibModel.findByIdAndUpdate(referenceId, {
             citationIdList: citationIdList
         });
+
+        console.log(newCustomCitation.language)
 
     }
 

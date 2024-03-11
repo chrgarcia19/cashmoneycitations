@@ -92,8 +92,8 @@ const ViewReference = () => {
     };
 
     async function exportCitation() {
-      // Call to server action to create citations
-        const citationData = await CreateCitation(referenceId, styleChoice, localeChoice);
+      // Call to server action to create citations & save in DB
+      await CreateCitation(referenceId, styleChoice, localeChoice);
     }
 
     const {

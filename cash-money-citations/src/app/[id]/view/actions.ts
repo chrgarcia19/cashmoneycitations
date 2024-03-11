@@ -21,10 +21,10 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
     const cslJson = referenceCslJson.cslJson
     const referenceTitle = referenceCslJson.title
 
-    // Create a Cite instance
+    // Create a Cite instance with the references' cslJson data
     const citation = new Cite(cslJson);
 
-    // Retrieve CSL Style from database
+    // Create a custom template and style for each specified style/locale
     for (const style in styleChoice) {
         const templateName = styleChoice[style];
         const localeName = localeChoice;
@@ -45,6 +45,7 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
         config.templates.add(templateName, styleData?.cslData);
         config.locales.add(localeName, localeData?.localeData);
 
+        // Create custom citation with user specified style & locale
         const customCitation = citation.format('bibliography', {
             format: 'text',
             template: templateName,
@@ -57,6 +58,7 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
             language: localeName,
         });
 
+        // Create/Update citation ID list
         const citationIdList = referenceCslJson.citationIdList || [];
         citationIdList.push(newCustomCitation.id);
         await CSLBibModel.findByIdAndUpdate(referenceId, {

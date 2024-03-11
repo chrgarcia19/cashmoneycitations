@@ -7,6 +7,7 @@ import BookForm from "./form-components/BookForm";
 import JournalForm from "./form-components/JournalForm";
 import MagazineForm from "./form-components/MagazineForm";
 import NewspaperForm from "./form-components/NewspaperForm";
+import DatabaseForm from "./form-components/DatabaseForm";
 
 interface FormData {
   type: string;
@@ -118,6 +119,26 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     issn: "",
   }
 
+  const databaseData = {
+    type: "database",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    library: "",
+    database: "",
+    database_url: "",
+    city: "",
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    service: "",
+    issn: "",
+  }
+
   /*Set initial state to website so the page is not blank*/
   const [form, setForm] = useState({
     type: "website",
@@ -159,6 +180,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             <option value="journal">Journal</option>
             <option value="magazine">Magazine</option>
             <option value="newspaper">Newspaper</option>
+            <option value="database">Database</option>
           </select>
         </div>
         <br/>
@@ -181,6 +203,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
             {form.type == "newspaper" && (
               <NewspaperForm formID={"add-newspaper-reference"} newspaperForm={newspaperData} />
+            )}
+
+            {form.type == "database" && (
+              <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
             )}
         </div>
       </div>

@@ -12,22 +12,24 @@ for (let i = 1; i < 32; i++){
   days.push(i);
 }
 
-interface NewspaperData {
+interface DatabaseData {
     type: string;
     citekey: string;
     image_url: string;
     source_title: string;
-    newspaper_title: string;
-    edition: string;
-    section: string;
-    city: string;
+    issn: string;
     contributors: Contributor[];
+    month_accessed: string;
+    day_accessed: string;
+    year_accessed: string;
     month_published: string;
     day_published: string;
     year_published: string;
-    start_page: string;
-    end_page: string;
-    issn: string;
+    library: string;
+    city: string;
+    database: string;
+    database_url: string;
+    service: string;
 }
 
 interface Error {
@@ -41,11 +43,11 @@ interface Error {
 
 type Props = {
     formID: string;
-    newspaperForm: NewspaperData;
+    databaseForm: DatabaseData;
     forNewReference?: boolean;
 };
 
-const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) => {
+const DatabaseForm = ({formID, databaseForm, forNewReference = true}: Props) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const contentType = "application/json";
@@ -53,27 +55,29 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
     const [message, setMessage] = useState("");
     
     const [form, setForm] = useState({
-        type: "newspaper",
-        citekey: newspaperForm.citekey,
-        image_url: newspaperForm.image_url,
-        contributors: newspaperForm.contributors,
-        source_title: newspaperForm.source_title,
-        newspaper_title: newspaperForm.newspaper_title,
-        edition: newspaperForm.edition,
-        section: newspaperForm.section,
-        city: newspaperForm.city,
-        month_published: newspaperForm.month_published,
-        day_published: newspaperForm.day_published,
-        year_published: newspaperForm.year_published,
-        start_page: newspaperForm.start_page,
-        end_page: newspaperForm.end_page,
-        issn: newspaperForm.issn,
+        type: "database",
+        citekey: databaseForm.citekey,
+        image_url: databaseForm.image_url,
+        contributors: databaseForm.contributors,
+        source_title: databaseForm.source_title,
+        library: databaseForm.library,
+        database: databaseForm.database,
+        database_url: databaseForm.database_url,
+        city: databaseForm.city,
+        month_accessed: databaseForm.month_accessed,
+        day_accessed: databaseForm.day_accessed,
+        year_accessed: databaseForm.year_accessed,
+        month_published: databaseForm.month_published,
+        day_published: databaseForm.day_published,
+        year_published: databaseForm.year_published,
+        service: databaseForm.service,
+        issn: databaseForm.issn,
     });
 
     const id  = searchParams.get("id");
 
     const fetcher = async (url: string) => {
-        const res = await fetch(`/api/newspaperRef/${id}`);
+        const res = await fetch(`/api/databaseRef/${id}`);
         if (!res.ok) {
         throw new Error("An error occurred while fetching the data.");
         }
@@ -92,11 +96,11 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
     };
 
     /* The PUT method edits an existing entry in the mongodb database. */
-    const putData = async (form: NewspaperData) => {
+    const putData = async (form: DatabaseData) => {
         const id  = searchParams.get("id");
 
         try {
-        const res = await fetch(`/api/newspaperRef/${id}`, {
+        const res = await fetch(`/api/databaseRef/${id}`, {
             method: "PUT",
             headers: {
             Accept: contentType,
@@ -112,7 +116,7 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
 
         const { data } = await res.json();
 
-        mutate(`/api/newspaperRef/${id}`, data, true); // Update the local data without a revalidation
+        mutate(`/api/databaseRef/${id}`, data, true); // Update the local data without a revalidation
         router.push("/");
         router.refresh();
         } catch (error) {
@@ -129,9 +133,9 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
     };
 
     /* The POST method adds a new entry in the mongodb database. */
-    const postData = async (form: NewspaperData) => {
+    const postData = async (form: DatabaseData) => {
         try {
-        const res = await fetch("/api/newspaperRef", {
+        const res = await fetch("/api/databaseRef", {
             method: "POST",
             headers: {
             Accept: contentType,
@@ -173,7 +177,7 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
         
         if (!form.year_published) err.year_published = "Year is required";
         if (!form.image_url) {
-            form.image_url = "https://cdn.pixabay.com/photo/2014/08/07/21/13/newspaper-412811_640.jpg";
+            form.image_url = "https://t4.ftcdn.net/jpg/05/24/88/11/360_F_524881142_oMGw28mD5GVEcwGaRUiVLGs1kQ3hZbLd.jpg";
         }
         return err;
     };
@@ -235,77 +239,55 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
                         />
 
                         <label
-                            className="font-bold"
-                            htmlFor="newspaper_title">
-                            Newspaper Title
+                            className="font-bold me-2"
+                            htmlFor="database">
+                            Database
                         </label>
                         <input
                             type="text"
-                            name="newspaper_title"
-                            defaultValue={form.newspaper_title}
+                            name="database"
+                            defaultValue={form.database}
                             onChange={handleChange}
-                            required
                         />
-    
-                        <div className="join w-auto pt-1">
-                            <div className="me-10">
-                                <div className="join join-vertical">
-                                    <label
-                                        className="font-bold me-2"
-                                        htmlFor="edition">
-                                        Edition
-                                    </label>
-                                    <input
-                                        className="w-64"
-                                        type="text"
-                                        name="edition"
-                                        defaultValue={form.edition}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="join join-vertical">
-                                <label
-                                    className="font-bold me-2"
-                                    htmlFor="section">
-                                    Section
-                                </label>
-                                <input
-                                    className="w-64"
-                                    type="text"
-                                    name="section"
-                                    defaultValue={form.section}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
+
+                        <label
+                            className="font-bold me-2"
+                            htmlFor="database_url">
+                            Database URL
+                        </label>
+                        <input
+                            type="url"
+                            name="database_url"
+                            defaultValue={form.database_url}
+                            onChange={handleChange}
+                        />
     
                         <div className="join w-auto pt-1">
                             <div className="join join-vertical me-10">
                                 <label
                                     className="font-bold me-2" 
-                                    htmlFor="start_page">
-                                    Start Page
+                                    htmlFor="service">
+                                    Library
                                 </label>
                                 <input
                                     className="w-64"
-                                    type="start_page"
-                                    name="start_page"
-                                    defaultValue={form.start_page}
+                                    type="text"
+                                    name="library"
+                                    defaultValue={form.library}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div className="join join-vertical">
                                 <label
                                     className="font-bold"
-                                    htmlFor="end_page">
-                                    End Page
+                                    htmlFor="service">
+                                    Service
                                 </label>
                                 <input
-                                className="w-64"
+                                    className="w-64"
                                     type="text"
-                                    name="end_page"
-                                    defaultValue={form.end_page}
+                                    name="service"
+                                    defaultValue={form.service}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -333,7 +315,74 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
                             name="issn"
                             defaultValue={form.issn}
                             onChange={handleChange}
-                        />     
+                        />   
+
+                        <label className="font-bold pt-1" htmlFor="date_accessed">
+                            Date Accessed (Month, Day, Year)
+                        </label>
+                        <div className="join w-auto">
+                            <div className="me-3">
+                                <div className="join join-vertical">
+                                    <div className="label">
+                                        <span className="label-text">Month</span>
+                                    </div>
+                                    <select
+                                        name="month_accessed"
+                                        className="select select-sm select-bordered w-40"
+                                        defaultValue={form.month_accessed}
+                                        onChange={handleChange}>
+                                        <option value="" disabled>Pick a Month</option>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                    </select> 
+                                </div>
+                            </div>
+                            <div className="me-3">
+                                <div className="join join-vertical">
+                                    <div className="label">
+                                        <span className="label-text">Day</span>
+                                    </div>
+                                    <select 
+                                        name="day_accessed"
+                                        className="select select-sm select-bordered w-40"
+                                        defaultValue={form.day_accessed}
+                                        onChange={handleChange}>
+                                        <option value="" disabled>Pick a day</option>
+                                        {days.map((day, i) => (
+                                            <option 
+                                                key={i}
+                                                defaultValue={form.day_accessed}>
+                                                {day}
+                                            </option>
+                                            ))} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="join join-vertical">
+                                <div className="label">
+                                    <span className="label-text">Year</span>
+                                </div>
+                                <input
+                                    className="h-8 w-52"
+                                    placeholder="Pick a Year"
+                                    type="text"
+                                    name="year_accessed"
+                                    defaultValue={form.year_accessed}
+                                    onChange={handleChange}
+                                    required 
+                                />
+                            </div>
+                        </div>   
                         
                         <label className="font-bold pt-1" htmlFor="date_published">
                             Date Published (Month, Day, Year)
@@ -375,7 +424,7 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
                                         className="select select-sm select-bordered w-40"
                                         defaultValue={form.day_published}
                                         onChange={handleChange}>
-                                        <option disabled>Pick a day</option>
+                                        <option value="" disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}
@@ -438,4 +487,4 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
     ) 
 }
 
-export default NewspaperForm;
+export default DatabaseForm;

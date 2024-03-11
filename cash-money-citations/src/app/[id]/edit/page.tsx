@@ -7,6 +7,7 @@ import BookForm from "@/components/form-components/BookForm";
 import JournalForm from "@/components/form-components/JournalForm";
 import MagazineForm from "@/components/form-components/MagazineForm";
 import NewspaperForm from "@/components/form-components/NewspaperForm";
+import DatabaseForm from "@/components/form-components/DatabaseForm";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -129,6 +130,28 @@ const EditReference = () => {
     }
 
     return <NewspaperForm formID={"edit-newspaper-form"} newspaperForm={newspaperForm} forNewReference={false} />
+  } else if (referenceForm.type == "database"){
+    const databaseForm = {
+      type: "database",
+      citekey: reference.citekey,
+      image_url: reference.image_url,
+      contributors: reference.contributors,
+      source_title: reference.source_title,
+      library: reference.library,
+      database: reference.database,
+      database_url: reference.database_url,
+      city: reference.city,
+      month_accessed: reference.month_accessed,
+      day_accessed: reference.day_accessed,
+      year_accessed: reference.year_accessed,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      service: reference.service,
+      issn: reference.issn,
+    }
+
+    return <DatabaseForm formID={"edit-database-form"} databaseForm={databaseForm} forNewReference={false} />
   }
 };
 

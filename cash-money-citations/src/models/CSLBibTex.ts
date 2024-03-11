@@ -127,6 +127,7 @@ const CSLBibSchema = new Schema({
     apiSource: String,
     subject: [String],
     referencesUsed: [referencesUsedSchema],
+    citationIdList: [String]
 
 });
 

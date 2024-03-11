@@ -22,9 +22,10 @@ async function importLocaleFiles(directoryPath) {
             if (path.extname(file) === '.xml') {
                 const filePath = path.join(stylePath, file);
                 const localeData = fs.readFileSync(filePath, 'utf8');
-
+                let fileName = path.basename(file, '.xml');
+                fileName = fileName.replace("locales-", "");
                 // Insert the .xml data into the MongoDB database
-                const locale = new CSLLocaleModel({ name: path.basename(file, '.xml'), localeData: localeData });
+                const locale = new CSLLocaleModel({ name: fileName, localeData: localeData });
                 await locale.save();
             }
         }

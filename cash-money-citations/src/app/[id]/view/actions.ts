@@ -54,6 +54,7 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
 
         const newCustomCitation = await CitationModel.create({
             name: templateName + referenceTitle,
+            style: templateName,
             CitationData: customCitation,
             language: localeName,
         });

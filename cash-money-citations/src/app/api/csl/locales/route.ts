@@ -20,3 +20,21 @@ export async function GET(request: NextRequest) {
   }
   
 }
+
+export async function DELETE(request: Request) {
+  await dbConnect();
+      
+  try {
+      
+      const req = await request.formData();
+      const name = req.get('name');
+
+      // Delete CSL Locale
+      const locale = await CSLLocaleModel.findOneAndDelete({name});
+      return NextResponse.json({ success: true, data: locale, message: "CSL Locale Deleted"}, {status: 201});
+  } catch (error) {
+      console.log({ error });
+      return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+}

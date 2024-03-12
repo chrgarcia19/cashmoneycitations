@@ -1,18 +1,17 @@
 import React from 'react';
 import dbConnect from '@/utils/dbConnect';
 import CSLStyleModel from '@/models/CSLStyle';
-import CSLLocale from '@/models/CSLLocale';
-import UserView from './UserView';
-import StyleView from './StyleView';
+import CSLLocaleModel from '@/models/CSLLocale';
+import { CslStyleView, CslLocaleView } from './StyleView';
 
-export default async function GetCslStyles() {
+export async function GetCslStyles() {
 
     await dbConnect();
 
     const result = await CSLStyleModel.find();
     const styles = result.map((doc) => {
-        const user = JSON.parse(JSON.stringify(doc));
-        return user;
+        const style = JSON.parse(JSON.stringify(doc));
+        return style;
     });
 
     
@@ -29,7 +28,43 @@ export default async function GetCslStyles() {
                 </thead>
                 <tbody>
                     {styles.map((style) => (
-                        <StyleView key={style._id} {...style}/>
+                        <CslStyleView key={style._id} {...style}/>
+                        ))}
+
+                </tbody>
+            </table>
+        </div>
+
+        </>
+    )
+}
+
+
+export default async function GetLocales() {
+
+    await dbConnect();
+
+    const result = await CSLLocaleModel.find();
+    const locales = result.map((doc) => {
+        const locale = JSON.parse(JSON.stringify(doc));
+        return locale;
+    });
+
+    
+
+    return (
+        <>
+        <div>
+            <table className='border-collapse border-spacing-2 border border-slate-400 divide-y divide-gray-200'>
+                <thead>
+                    <tr>
+                        <th>Locale Name</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {locales.map((locale) => (
+                        <CslLocaleView key={locale._id} {...locale}/>
                         ))}
 
                 </tbody>

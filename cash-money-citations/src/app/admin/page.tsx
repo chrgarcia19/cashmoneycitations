@@ -23,7 +23,8 @@ export default async function AdminDashboard() {
     async function handleLocaleSubmit(localeDirectory: any) {
         'use server';
 
-        await importLocaleFiles(localeDirectory);
+        const res = await importLocaleFiles(localeDirectory);
+        return res;
     }
 
         return (

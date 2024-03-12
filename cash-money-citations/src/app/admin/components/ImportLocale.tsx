@@ -36,7 +36,14 @@ function ImportLocale({handleLocaleSubmit}: any) {
               name: selectedFile.name,
               contents: fileContents
             };
-            handleLocaleSubmit(fileData);
+            handleLocaleSubmit(fileData)
+                .then((response: any) => {
+                    if (response.status === "error") {
+                        alert(response.message)
+                    }
+                })
+
+            
           };
           reader.readAsText(selectedFile);
         }

@@ -3,9 +3,8 @@
 import React, { useState } from 'react';
 
 function ImportCSLStyles({handleCslSubmit}: any) {
-    const [cslDirectory, setCslDirectory] = useState('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+    
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files ? e.target.files[0] : null;
         if (file) {
@@ -32,11 +31,16 @@ function ImportCSLStyles({handleCslSubmit}: any) {
         if (selectedFile) {
           const reader = new FileReader();
           reader.onload = function(event) {
-            handleCslSubmit(event.target?.result);
+            const fileContents = event.target?.result;
+            const fileData = {
+              name: selectedFile.name,
+              contents: fileContents
+            };
+            handleCslSubmit(fileData);
           };
           reader.readAsText(selectedFile);
         }
-      }
+    }
     
       return (
         <>

@@ -36,7 +36,12 @@ function ImportCSLStyles({handleCslSubmit}: any) {
               name: selectedFile.name,
               contents: fileContents
             };
-            handleCslSubmit(fileData);
+            handleCslSubmit(fileData)
+                .then((response: any) => {
+                    if (response.status === "error") {
+                        alert(response.message)
+                    }
+                })
           };
           reader.readAsText(selectedFile);
         }

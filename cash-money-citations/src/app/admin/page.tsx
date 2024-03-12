@@ -17,7 +17,8 @@ export default async function AdminDashboard() {
     async function handleCslSubmit(cslDirectory: any) {
         'use server';
 
-        await importCSLFiles(cslDirectory);
+        const res = await importCSLFiles(cslDirectory);
+        return res;
     }
     
     async function handleLocaleSubmit(localeDirectory: any) {

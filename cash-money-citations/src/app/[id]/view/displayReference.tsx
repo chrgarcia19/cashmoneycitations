@@ -94,6 +94,7 @@ const ViewReference = () => {
     async function exportCitation() {
       // Call to server action to create citations & save in DB
       await CreateCitation(referenceId, styleChoice, localeChoice);
+      router.push(`/displayCitation?citation=${referenceId}`)
     }
 
     const {

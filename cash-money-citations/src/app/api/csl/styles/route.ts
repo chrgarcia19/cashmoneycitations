@@ -20,3 +20,22 @@ export async function GET(request: NextRequest) {
   }
   
 }
+
+export async function DELETE(request: Request) {
+  await dbConnect();
+      
+  try {
+      
+      const req = await request.formData();
+    console.log(req)
+      const name = req.get('name');
+
+      // Delete CSL Style
+      const style = await CSLStyleModel.findOneAndDelete({name});
+      return NextResponse.json({ success: true, data: style, message: "CSL Style Deleted"}, {status: 201});
+  } catch (error) {
+      console.log({ error });
+      return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+}

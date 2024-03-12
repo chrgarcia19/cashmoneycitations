@@ -23,9 +23,12 @@ export default async function RootLayout({
                 </div>
 
                 
-                <footer>
+                <footer className="px-20 py-4 text-center text-sm text-gray-500 bg-gray-200">
                     <p>
-                        Citation Styles created with help from the  <a href="https://citationstyles.org/ ">CSL (citation style language) project</a>  
+                        Citation Styles created with help from the  <a href="https://citationstyles.org/" className="text-blue-500 hover:underline hover:text-blue-700">CSL (citation style language) project</a>
+                    </p>
+                    <p>
+                        © {new Date().getFullYear()} Cash Money Citations. All rights reserved.
                     </p>
                 </footer>
             </body>

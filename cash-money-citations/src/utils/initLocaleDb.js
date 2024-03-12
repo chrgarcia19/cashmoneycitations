@@ -1,6 +1,5 @@
 import dbConnect from "@/utils/dbConnect";
 import CSLLocaleModel from "@/models/CSLLocale";
-import { NextResponse } from "next/server";
 
 await dbConnect();
 

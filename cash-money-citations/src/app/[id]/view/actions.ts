@@ -7,75 +7,66 @@ const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
+import CSLBibModel from "@/models/CSLBibTex";
+import dbConnect from "@/utils/dbConnect";
+import CSLStyleModel from "@/models/CSLStyle";
+import CSLLocaleModel from "@/models/CSLLocale";
+import CitationModel from "@/models/Citation";
 
-export async function CreateCitation(reference: any, styleChoice: any) {
+export async function CreateCitation(referenceId: any, styleChoice: Array<string>, localeChoice: string) {
 
-    let type = "";
-        
-    if (reference.type === 'journal'){
-        type = 'article-journal'
-    }
-    if (reference.type === 'website'){
-        type = reference.type
-    }
-    if (reference.type === 'book'){
-        type = reference.type
-    }
-    const cslData = {
-        id: reference._id,
-        type: type,
-        title: reference.title,
-        author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-        family: contributor.contributorFirstName,
-        given: contributor.contributorLastName,
-        })),
-        issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
-        publisher: reference.publisher,
-        DOI: reference.doi,
-        URL: reference.url,
-        ISBN: reference.isbn
-    };
+    await dbConnect();
     
-    // Create a Cite instance
-    let cslJson = Cite.input(reference);
+    let referenceCslJson = await CSLBibModel.findById(referenceId)
+    const cslJson = referenceCslJson.cslJson
+    const referenceTitle = referenceCslJson.title
+
+    // Create a Cite instance with the references' cslJson data
     const citation = new Cite(cslJson);
 
-    let templateName = styleChoice
-    console.log(templateName)
+    // Create a custom template and style for each specified style/locale
+    for (const style in styleChoice) {
+        const templateName = styleChoice[style];
+        const localeName = localeChoice;
 
-    // Retrieve CSL Style from root server
-    const stylePath = path.resolve(`./csl_styles/${templateName}`)
-    const styleData = fs.readFileSync(stylePath, 'utf8');
+        // Find citation style where the name = the selected list
+        const styleData = await CSLStyleModel.findOne({
+            name: templateName,
+        }).exec()
 
+        // Find locale where name = inputted locale
+        const localeData = await CSLLocaleModel.findOne({
+            name: localeName,
+        }).exec()
+
+        const config = plugins.config.get('@csl')
         
-    const config = plugins.config.get('@csl')
+        // Add citation style & locale to Citation.js config
+        config.templates.add(templateName, styleData?.cslData);
+        config.locales.add(localeName, localeData?.localeData);
 
-    config.templates.add(templateName, styleData)
-    
-    const customCitation = citation.format('bibliography', {
-        format: 'html',
-        template: templateName,
-        lang: 'en-us'
-    });
+        // Create custom citation with user specified style & locale
+        const customCitation = citation.format('bibliography', {
+            format: 'text',
+            template: templateName,
+            lang: localeName,
+        });
 
-    const vanOutput = citation.format('bibliography', {
-        format: 'html',
-        template: 'vancouver',
-        lang: 'en-US'
-    });
-    //Generate apa citation
-    const apaOutput = citation.format('bibliography', {
-        format: 'html',
-        template: 'apa',
-        lang: 'en-US'
-    });
-    const bibtexOutput = citation.format('bibtex', {
-        format: 'html',
-        template: 'bibtex',
-        lang: 'en-US'
-    });
+        const newCustomCitation = await CitationModel.create({
+            name: templateName + referenceTitle,
+            style: templateName,
+            CitationData: customCitation,
+            language: localeName,
+        });
 
-    // Implement the logic to display or prepare the citation for download
-    const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: customCitation });
-    return citationData;
+        // Create/Update citation ID list
+        const citationIdList = referenceCslJson.citationIdList || [];
+        citationIdList.push(newCustomCitation.id);
+        await CSLBibModel.findByIdAndUpdate(referenceId, {
+            citationIdList: citationIdList
+        });
+
+
+    }
+
 }

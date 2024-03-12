@@ -1,4 +1,4 @@
-import ViewReference from "./temp"
+import ViewReference from "./displayReference"
 
 export default function DisplayReference() {
   return (

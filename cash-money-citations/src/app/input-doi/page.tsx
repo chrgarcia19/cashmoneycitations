@@ -2,6 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { CreateCslJsonDocument } from "@/components/citationActions";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);
@@ -95,25 +96,26 @@ function InputDOI() {
             image_url: "",
         };
         
-        try {
-            const res = await fetch("/api/references", {
-              method: "POST",
-              headers: {
-                Accept: contentType,
-                "Content-Type": contentType,
-              },
-              body: JSON.stringify(doiReference),
-            });
+        // try {
+        //     const res = await fetch("/api/references", {
+        //       method: "POST",
+        //       headers: {
+        //         Accept: contentType,
+        //         "Content-Type": contentType,
+        //       },
+        //       body: JSON.stringify(doiReference),
+        //     });
       
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
+        //     // Throw error with status code in case Fetch API req failed
+        //     if (!res.ok) {
+        //       throw new Error(res.status.toString());
+        //     }
+        //     router.push("/reference-table");
+        //     router.refresh();
+        //   } catch (error) {
+        //     console.log("Failed to add reference");
+        //   }
+        CreateCslJsonDocument(item);
 
     }
 

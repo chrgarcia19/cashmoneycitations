@@ -4,7 +4,7 @@ import Form from "../../components/Form";
 
 const NewReference = () => {
   const referenceForm = {
-    type: "",
+    entryType: '',
     citekey: "",
     title: "",
     contributors: new Array<Contributor>(),

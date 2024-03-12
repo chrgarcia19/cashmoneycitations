@@ -9,9 +9,14 @@ const { plugins } = require('@citation-js/core')
 // const config = plugins.config.get('@bibtex')
 // const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
 // import { getStyles, getCslStyle } from "./actions";
-import CiteDisplay from "./citeDisplay";
 import { useState } from "react";
 import { CreateCitation } from "./actions";
+import { SelectionCSL, SelectionLocale } from "./CSLComponents";
+
+const fetcher = (url: string) =>
+fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.data);
 
 // Styles buttons for Edit, Delete, & Export
 function Button({ color, onClick, children }: any) {
@@ -24,7 +29,6 @@ function Button({ color, onClick, children }: any) {
     </button>
   );
 }
-
 
 // Displays reference details
 function ReferenceDetails({ reference }: any) {
@@ -67,16 +71,15 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
 }
 
 const ViewReference = () => {
-    const fetcher = (url: string) =>
-    fetch(url)
-        .then((res) => res.json())
-        .then((json) => json.data);
+
 
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
-    const [styleChoice, setStyleChoice] = useState('university-of-york-mla.csl');
-
+    const [styleChoice, setStyleChoice] = useState(Array<string>(''));
+    const [localeChoice, setLocaleChoice] = useState('');
+    const [referenceId, setReferenceId] = useState(id);
+    
     const handleDelete = async () => {
         try {
           await fetch(`/api/references/${reference._id}`, {
@@ -89,10 +92,10 @@ const ViewReference = () => {
     };
 
     async function exportCitation() {
-      // Call to server action to create citations
-        const citationData = await CreateCitation(reference, styleChoice)
-        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
-      }
+      // Call to server action to create citations & save in DB
+      await CreateCitation(referenceId, styleChoice, localeChoice);
+      router.push(`/displayCitation?citation=${referenceId}`)
+    }
 
     const {
         data: reference,
@@ -101,9 +104,9 @@ const ViewReference = () => {
       } = useSWR(id ? `/api/references/${id}` : null, fetcher);
 
       
-      if (error) return <p>Failed to load</p>;
-      if (isLoading) return <p>Loading...</p>;
-      if (!reference) return null;
+    if (error) return <p>Failed to load</p>;
+    if (isLoading) return <p>Loading...</p>;
+    if (!reference) return null;
       
 
     const handleEdit = () => {
@@ -118,20 +121,8 @@ const ViewReference = () => {
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-
-                        <span className="space-x-5">
-                            <select
-                              value={styleChoice}
-                              onChange={e => setStyleChoice(e.target.value)}
-                            >
-                              <option value="university-of-york-mla.csl">
-                                MLA
-                              </option>
-                              <option value='university-of-york-chicago.csl'>
-                                Chicago
-                              </option>
-                            </select>
-                        </span>
+                        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
+                        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
                     </div> 
                 </div>  
             </> 

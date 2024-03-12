@@ -23,10 +23,10 @@ async function DisplayCitations({ referenceId }: any) {
           <tbody className="bg-white divide-y divide-gray-200">
             {citations?.map((citation, index) => (
               <tr key={citation.id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
-                <td className="px-6 py-4 text-center text-s">
+                <td className="px-6 py-4 text-center text-sm">
                   {citation.style}
                 </td>
-                <td className="px-6 py- text-center text-xs">
+                <td className="px-6 py- text-center text-sm">
                   {citation.CitationData}
                 </td>
                 <td className="px-6 py-4 text-center">

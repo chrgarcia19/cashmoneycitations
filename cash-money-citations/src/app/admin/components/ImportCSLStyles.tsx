@@ -7,7 +7,24 @@ function ImportCSLStyles({handleCslSubmit}: any) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setSelectedFile(e.target.files ? e.target.files[0] : null);
+        const file = e.target.files ? e.target.files[0] : null;
+        if (file) {
+          // Check the file extension for the file type
+          const extension = file.name.split('.').pop();
+          if (extension !== 'csl') {
+            alert('Invalid file type. Please select a .csl file.');
+            return;
+          }
+      
+          // Check the file size (5MB in this example)
+          const maxSizeInBytes = 5 * 1024 * 1024;
+          if (file.size > maxSizeInBytes) {
+            alert('File is too large. Please select a file smaller than 5MB.');
+            return;
+          }
+      
+          setSelectedFile(file);
+        }    
     }
 
     function handleSubmit(e: React.FormEvent) {

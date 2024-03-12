@@ -1,4 +1,5 @@
 import { GetCitations } from './actions';
+import CopyToClipboard from './CitationDisplay';
 
 async function DisplayCitations({ referenceId }: any) {
   const citationList = await GetCitations(referenceId.citation);
@@ -14,10 +15,8 @@ async function DisplayCitations({ referenceId }: any) {
           <div key={citation.id}>
             {citation.CitationData}
             <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
-            <div className='mt-3'>{citation.name}</div>
-            {/* <button onClick={() => copyToClipboard(citationData.van)}> */}
-            {/* <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
-            </button> */}
+            <div className='mt-3'>{citation.style}</div>
+            <CopyToClipboard citationData={citation.CitationData} />
             </div>
           </div>
         ))}

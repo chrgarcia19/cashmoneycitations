@@ -49,9 +49,15 @@ function ImportCSLStyles({handleCslSubmit}: any) {
     
       return (
         <>
-          <form onSubmit={handleSubmit}>
-            <input type="file" accept=".csl" onChange={handleFileChange} />
-            <button type="submit">Import CSL Styles</button>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className='flex items-center'>
+                <label htmlFor='file-upload' className="cursor-pointer">
+                    <span className="mr-2 text-blue-600 hover:text-blue-800">Upload a .csl file</span>
+                </label>
+                <input id="file-upload" type="file" accept=".csl" onChange={handleFileChange} className="hidden" />
+
+            </div>
+            <button type="submit" className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded">Import CSL Styles</button>
           </form>
         </>
       );

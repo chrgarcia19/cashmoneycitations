@@ -12,7 +12,7 @@ export default function UserView(user: any) {
         if (e.target.checked) {
             setUserEmail([...userEmail, email]);
         } else {
-            setUserEmail(userEmail.filter(uesrEmail => userEmail !== email));
+            setUserEmail(userEmail.filter(userEmail => userEmail !== email));
         }
     }
 

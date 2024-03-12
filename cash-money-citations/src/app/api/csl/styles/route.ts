@@ -27,7 +27,6 @@ export async function DELETE(request: Request) {
   try {
       
       const req = await request.formData();
-    console.log(req)
       const name = req.get('name');
 
       // Delete CSL Style

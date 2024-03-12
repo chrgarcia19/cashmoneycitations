@@ -9,6 +9,7 @@ import { authConfig } from '@/lib/auth';
 import importCSLFiles from '@/utils/initCslStylesDb';
 import importLocaleFiles from '@/utils/initLocaleDb';
 import ImportLocale from './components/ImportLocale';
+import ViewCslLocale from './components/ViewCslLocale';
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
@@ -39,7 +40,9 @@ export default async function AdminDashboard() {
         <span className=" space-x-4 mt-6">
             <ImportCSLStyles handleCslSubmit={handleCslSubmit}/>
             <ImportLocale handleLocaleSubmit={handleLocaleSubmit}/>
-
+        </span>
+        <span>
+            <ViewCslLocale/>
         </span>
         </>
     );

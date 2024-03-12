@@ -4,32 +4,16 @@ import CSLLocaleModel from "@/models/CSLLocale";
 const fs = require('fs');
 const path = require('path');
 
-async function importLocaleFiles(directoryPath) {
+async function importLocaleFiles(fileData) {
     await dbConnect();
 
-    // Check if there are any CSL Styles in the database
-    const count = await CSLLocaleModel.countDocuments();
+    // Remove "locales" & "xml" from filename
+    let fileName = fileData.name;
+    fileName = fileName.replace("locales-", "");
+    fileName = fileName.replace(".xml", "");
 
-    if (count === 0) {
-        // Read .csl files from directory
-        // i.e. `./locale`
-        const stylePath = path.resolve(directoryPath)
-
-        const localeFiles = fs.readdirSync(stylePath);
-
-        // Eventually change this to check for individual duplicates rather than quantity of DB
-        for (const file of localeFiles) {
-            if (path.extname(file) === '.xml') {
-                const filePath = path.join(stylePath, file);
-                const localeData = fs.readFileSync(filePath, 'utf8');
-                let fileName = path.basename(file, '.xml');
-                fileName = fileName.replace("locales-", "");
-                // Insert the .xml data into the MongoDB database
-                const locale = new CSLLocaleModel({ name: fileName, localeData: localeData });
-                await locale.save();
-            }
-        }
-    } 
+    const locale = new CSLLocaleModel({ name: fileName, localeData: fileData.contents})
+    await locale.save()    
 }
 
 export default importLocaleFiles;

@@ -44,6 +44,10 @@ export default async function AdminDashboard() {
 
         async function processDirectory(directory: string) {
             const files = await readdir(directory);
+
+            // Check directory name to see if style is dependent
+            const isDependent = path.basename(directory) === 'dependent';
+            // console.log(path.basename(directory))
             for (const file of files) {
               const filePath = path.join(directory, file);
               const stats = await stat(filePath);
@@ -54,7 +58,7 @@ export default async function AdminDashboard() {
                 const extension = path.extname(filePath);
                 if (extension === '.csl') {
                   const fileData = await readFile(filePath, 'utf8');
-                  await importCSLFiles({ name: file, contents: fileData });
+                  await importCSLFiles({ name: file, contents: fileData, isDependent });
                   await unlink(filePath);
                 }
               }

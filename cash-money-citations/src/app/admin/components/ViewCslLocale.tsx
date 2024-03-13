@@ -27,7 +27,7 @@ export async function GetCslStyles() {
                     </tr>
                 </thead>
                 <tbody>
-                    {styles.map((style) => (
+                    {styles.slice(0, 10).map((style) => (
                         <CslStyleView key={style._id} {...style}/>
                         ))}
 

@@ -10,6 +10,16 @@ import importCSLFiles from '@/utils/initCslStylesDb';
 import importLocaleFiles from '@/utils/initLocaleDb';
 import ImportLocale from './components/ImportLocale';
 import GetLocales, { GetCslStyles } from './components/ViewCslLocale';
+import AdmZip from 'adm-zip';
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
+import os from 'os';
+
+const readdir = util.promisify(fs.readdir);
+const readFile = util.promisify(fs.readFile);
+const unlink = util.promisify(fs.unlink);
+const rmdir = util.promisify(fs.rmdir);
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
@@ -17,9 +27,28 @@ export default async function AdminDashboard() {
 
     async function handleCslSubmit(cslDirectory: any) {
         'use server';
+        const file: File | null = cslDirectory.get('file') as unknown as File;
+        
+        if (!file) throw new Error("No file uploaded");
 
-        const res = await importCSLFiles(cslDirectory);
-        return res;
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+
+        const tmpFilePath = path.join(os.tmpdir(), file.name);
+        fs.writeFileSync(tmpFilePath, buffer);
+
+        const zip = new AdmZip(tmpFilePath);
+        const extractPath = './tmp'
+        zip.extractAllTo(extractPath, /*overwrite*/true);
+    
+        const files = await readdir(extractPath);
+        for (const file of files) {
+          const filePath = path.join(extractPath, file);
+          const fileData = await readFile(filePath, 'utf8');
+          await importLocaleFiles({ name: file, contents: fileData });
+          await unlink(filePath);
+        }
+        await rmdir(extractPath);
     }
     
     async function handleLocaleSubmit(localeDirectory: any) {

@@ -20,10 +20,13 @@ const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
 const rmdir = util.promisify(fs.rmdir);
+const stat = util.promisify(fs.stat);
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
     const currentUserEmail = session?.user?.email
+
+
 
     async function handleCslSubmit(cslDirectory: any) {
         'use server';
@@ -40,16 +43,28 @@ export default async function AdminDashboard() {
         const zip = new AdmZip(tmpFilePath);
         const extractPath = './tmp'
         zip.extractAllTo(extractPath, /*overwrite*/true);
-    
-        const files = await readdir(extractPath);
-        for (const file of files) {
-          const filePath = path.join(extractPath, file);
-          const fileData = await readFile(filePath, 'utf8');
-          await importLocaleFiles({ name: file, contents: fileData });
-          await unlink(filePath);
+
+        async function processDirectory(directory: string) {
+            const files = await readdir(directory);
+            for (const file of files) {
+              const filePath = path.join(directory, file);
+              const stats = await stat(filePath);
+          
+              if (stats.isDirectory()) {
+                await processDirectory(filePath);
+              } else {
+                const fileData = await readFile(filePath, 'utf8');
+                await importCSLFiles({ name: file, contents: fileData });
+                await unlink(filePath);
+              }
+            }
         }
+        
+        await processDirectory(extractPath);
         await rmdir(extractPath);
     }
+
+
     
     async function handleLocaleSubmit(localeDirectory: any) {
         'use server';

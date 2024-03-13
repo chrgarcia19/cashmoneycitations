@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
     const currentUserEmail = session?.user?.email
 
-    async function handleCslSubmit(cslDirectory: any) {
+    async function handleCslSubmit(cslDirectory: any, includeDependent: boolean) {
         'use server';
         const file: File | null = cslDirectory.get('file') as unknown as File;
         
@@ -47,7 +47,12 @@ export default async function AdminDashboard() {
 
             // Check directory name to see if style is dependent
             const isDependent = path.basename(directory) === 'dependent';
-            // console.log(path.basename(directory))
+
+            // If includeDependent is false and the directory is 'dependent', skip this directory
+            if (!includeDependent && isDependent) {
+              return;
+            }
+
             for (const file of files) {
               const filePath = path.join(directory, file);
               const stats = await stat(filePath);

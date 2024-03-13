@@ -26,8 +26,6 @@ export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
     const currentUserEmail = session?.user?.email
 
-
-
     async function handleCslSubmit(cslDirectory: any) {
         'use server';
         const file: File | null = cslDirectory.get('file') as unknown as File;
@@ -53,13 +51,17 @@ export default async function AdminDashboard() {
               if (stats.isDirectory()) {
                 await processDirectory(filePath);
               } else {
-                const fileData = await readFile(filePath, 'utf8');
-                await importCSLFiles({ name: file, contents: fileData });
-                await unlink(filePath);
+                const extension = path.extname(filePath);
+                if (extension === '.csl') {
+                  const fileData = await readFile(filePath, 'utf8');
+                  await importCSLFiles({ name: file, contents: fileData });
+                  await unlink(filePath);
+                }
               }
+
             }
         }
-        
+
         await processDirectory(extractPath);
         await rmdir(extractPath);
     }

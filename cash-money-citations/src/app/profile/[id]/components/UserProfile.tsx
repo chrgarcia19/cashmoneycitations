@@ -1,7 +1,7 @@
 'use client'
-import React, { useState } from "react";
+import React, { startTransition, useState } from "react";
 import useSWR from "swr";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const fetcher = (url: string) =>
@@ -18,17 +18,24 @@ const ChangeField = ({ label, type, name, onFormSubmit, value, handleTextInputCh
     </form>
 )
 
+const DeleteProfile = ({handleDeleteUser}: any) => (
+    <form method="DELETE" onSubmit={(e) => handleDeleteUser(e)}>
+        <button type="submit">Delete Profile</button>
+    </form>
+)
 
 
 const Profile = () => {
     const [newUsername, setNewUsername] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [isFetching, setIsFetching] = useState(false);
     const { data: session, update } = useSession();
     
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
-
+    const router = useRouter();
+    
     const { data, error, isLoading } = useSWR(id ? `/api/auth/getUser/${id}` : null, fetcher);
 
     if (error) return (
@@ -89,6 +96,27 @@ const Profile = () => {
         }
     }
 
+    async function handleDeleteUser(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        
+        // Add userEmail to the form data
+        if (userEmail) {
+            formData.append(`userEmail`, userEmail);
+        } else {
+            console.error("Email NOT Added : in handleDeleteUser Function")
+        }
+
+        await fetch('/api/auth/updateUser', { method: "DELETE", body: formData });
+        setIsFetching(false);
+        startTransition(() => {
+            router.refresh();
+
+        })
+    }
+
     function handleTextInputChange(e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) {
         setter(e.target.value);
     }
@@ -109,6 +137,8 @@ const Profile = () => {
 
             <ChangeField label="Password" type="password" name="newPassword" onFormSubmit={handleUpdateUser} value={newPassword} handleTextInputChange={(e: any) => handleTextInputChange(e, setNewPassword)}/>
             <p>Role: {data.role}</p>
+
+            <DeleteProfile handleDeleteUser={handleDeleteUser}/>
         </div>
     )
 }

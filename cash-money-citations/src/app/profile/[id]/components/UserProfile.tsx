@@ -3,6 +3,8 @@ import React, { startTransition, useState } from "react";
 import useSWR from "swr";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -112,6 +114,7 @@ const Profile = () => {
         await fetch('/api/auth/updateUser', { method: "DELETE", body: formData });
         setIsFetching(false);
         startTransition(() => {
+            signOut({ callbackUrl: '/login'})
             router.refresh();
 
         })

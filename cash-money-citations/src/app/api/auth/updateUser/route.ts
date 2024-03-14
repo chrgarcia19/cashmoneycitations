@@ -10,10 +10,11 @@ export async function PUT(request: Request) {
         const req = await request.formData();
 
         const email = req.get('userEmail');
+        const username = req.get('username');
         const role = req.get('userRoleSelect');
 
         // Update user
-        const update = { role: role }
+        const update = { role: role, username }
 
         const user = await User.findOneAndUpdate({email}, update);
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});

@@ -13,8 +13,12 @@ export async function PUT(request: Request) {
         const username = req.get('username');
         const role = req.get('userRoleSelect');
 
-        // Update user
-        const update = { role: role, username }
+        let update;
+        if (!role) {
+            update = { username: username}
+        } else {
+            update = { role: role, username: username }
+        }
 
         const user = await User.findOneAndUpdate({email}, update);
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});

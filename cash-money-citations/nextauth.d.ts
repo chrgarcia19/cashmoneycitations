@@ -5,9 +5,15 @@ export enum Role {
   user = "user",
   admin = "admin",
 }
+
+export enum AccountType {
+  oauth = "oauth",
+  credential = "credential"
+}
 // common interface for JWT and Session
 interface IUser extends DefaultUser {
   role?: Role;
+  accountType?: AccountType;
 }
 declare module "next-auth" {
   interface User extends IUser {}

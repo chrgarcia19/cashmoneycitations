@@ -29,13 +29,18 @@ export async function middleware(request: NextRequest) {
       return redirectOrRewrite(`/api/auth/signin`);
     }
 
+    if (pathname.startsWith('/admin') && token.role !== "admin") {
+      return redirectOrRewrite(`/error/401`, true);
+    }
+
+    if (pathname.startsWith('/profile') && token.accountType !== "credential") {
+      return redirectOrRewrite(`/error/401`, true);
+    }
+
     if (pathname.startsWith('/new') && token.role === null) {
       return redirectOrRewrite(`/error/401`, true);
     }
 
-    if (pathname.startsWith('/admin') && token.role !== "admin") {
-      return redirectOrRewrite(`/error/401`, true);
-    }
   }
 
   return res;

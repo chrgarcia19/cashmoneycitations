@@ -37,7 +37,9 @@
     ".next/types/**/*.ts",
     "src/app/api/auth/[...nextauth]/route.ts", 
     "src/components/LoginForm.tsx", 
-    "src/components/ReferenceTable.js"
+    "src/components/ReferenceTable.js",
+    "src/app/profile/[id]/components/UserProfile.tsx",
+    "src/lib/auth.ts"
   ],
   "exclude": [
     "node_modules"

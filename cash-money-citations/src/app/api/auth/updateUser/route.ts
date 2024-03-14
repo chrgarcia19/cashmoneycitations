@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from "../../../../utils/dbConnect";
 import User from "../../../../models/User";
+import bcrypt from 'bcryptjs';
 
 export async function PUT(request: Request) {
     await dbConnect();
@@ -11,9 +12,17 @@ export async function PUT(request: Request) {
         const currentEmail = req.get('userEmail');
         const newEmail = req.get('email');
         const username = req.get('username');
+        const newPassword = req.get('password');
         const role = req.get('userRoleSelect');
-
+        
         let updateFields: Record<string, any> = {};
+
+        if (newPassword) {       
+            // Hash the password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword.toString(), salt);
+            updateFields.password = hashedPassword;
+        }
 
         if (newEmail) {
             updateFields.email = newEmail;
@@ -26,7 +35,7 @@ export async function PUT(request: Request) {
         if (role) {
             updateFields.role = role;
         }
-        
+
 
         const user = await User.findOneAndUpdate({email: currentEmail}, updateFields, { new: true});
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});
@@ -47,7 +56,6 @@ export async function POST(request: Request) {
         const email = req.get('userEmail');
 
         // Update user
-
         const user = await User.findOneAndDelete({email});
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});
     } catch (error) {

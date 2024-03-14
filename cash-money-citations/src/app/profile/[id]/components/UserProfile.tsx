@@ -45,7 +45,7 @@ const Profile = () => {
     if (!data) return null;
 
     const userEmail = session?.user?.email;
-    
+
     async function handleUpdateUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
     
@@ -65,7 +65,6 @@ const Profile = () => {
         if (passwordChange) {
             formData.append('password', passwordChange);
         }
-
         if (userEmail) {
             formData.append('userEmail', userEmail)
         }
@@ -73,7 +72,7 @@ const Profile = () => {
         const res = await fetch('/api/auth/updateUser', { method: "PUT", body: formData });
         
         if (res.status != 201) {
-            console.log("SJFAKJSDH")
+            console.error("Error Updating User Profile")
         } else {
 
             const newSession = {

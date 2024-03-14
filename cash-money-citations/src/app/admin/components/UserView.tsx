@@ -46,7 +46,7 @@ export default function UserView(user: any) {
         userEmail.forEach((email) => {
             formData.append(`userEmail`, email);
         })
-        await fetch('/api/auth/updateUser', { method: "POST", body: formData });
+        await fetch('/api/auth/updateUser', { method: "DELETE", body: formData });
         setIsFetching(false);
         startTransition(() => {
             router.refresh();

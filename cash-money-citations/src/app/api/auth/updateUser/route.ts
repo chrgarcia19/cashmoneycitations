@@ -12,14 +12,23 @@ export async function PUT(request: Request) {
         const newEmail = req.get('email');
         const username = req.get('username');
         const role = req.get('userRoleSelect');
-        let update;
-        if (!role) {
-            update = { username: username}
-        } else {
-            update = { role: role, username: username }
+
+        let updateFields: Record<string, any> = {};
+
+        if (newEmail) {
+            updateFields.email = newEmail;
         }
 
-        const user = await User.findOneAndUpdate({email: currentEmail}, update);
+        if (username) {
+            updateFields.username = username;
+        }
+
+        if (role) {
+            updateFields.role = role;
+        }
+        
+
+        const user = await User.findOneAndUpdate({email: currentEmail}, updateFields, { new: true});
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});
     } catch (error) {
         console.log({ error });

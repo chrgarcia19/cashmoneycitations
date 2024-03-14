@@ -18,19 +18,18 @@ export async function PUT(request: Request) {
         let updateFields: Record<string, any> = {};
 
         if (newPassword) {       
-            // Hash the password
-            const salt = await bcrypt.genSalt(10);
-            const newHashedPassword = await bcrypt.hash(newPassword, salt);
-
             // Get current hashed password
             const currentPassword = await User.findOne({email: currentEmail}, 'password').exec();
             const currentHashedPassword = currentPassword.password;
             // Compare current with old password
-            const passwordMatch = await bcrypt.compare(newHashedPassword, currentHashedPassword);
-
+            const passwordMatch = await bcrypt.compareSync(newPassword, currentHashedPassword);
             if (passwordMatch){
                 return NextResponse.json({ success: false, message: "New password cannot match old password" }, { status: 400 });
-            } else {
+            } else {         
+                // Hash the new password
+                const salt = await bcrypt.genSalt(10);
+                const newHashedPassword = await bcrypt.hash(newPassword, salt);
+
                 updateFields.password = newHashedPassword;
             }
         }

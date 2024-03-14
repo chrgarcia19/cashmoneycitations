@@ -19,29 +19,36 @@ import os from 'os';
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
-const rmdir = util.promisify(fs.rmdir);
 const rm = util.promisify(fs.rm);
 const stat = util.promisify(fs.stat);
+
+
+async function ParseZipFile(zipFile: any) {
+  const file: File | null = zipFile.get('file') as unknown as File;
+        
+  if (!file) throw new Error("No file uploaded");
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  const tmpFilePath = path.join(os.tmpdir(), file.name);
+  fs.writeFileSync(tmpFilePath, buffer);
+
+  const zip = new AdmZip(tmpFilePath);
+  const extractPath = './tmp'
+  zip.extractAllTo(extractPath, /*overwrite*/true);
+
+  return extractPath;
+}
 
 export default async function AdminDashboard() {
     const session = await getServerSession(authConfig);
     const currentUserEmail = session?.user?.email
 
-    async function handleCslSubmit(cslDirectory: any, includeDependent: boolean) {
+    async function handleCslSubmit(zipFile: any, includeDependent: boolean) {
         'use server';
-        const file: File | null = cslDirectory.get('file') as unknown as File;
-        
-        if (!file) throw new Error("No file uploaded");
 
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        const tmpFilePath = path.join(os.tmpdir(), file.name);
-        fs.writeFileSync(tmpFilePath, buffer);
-
-        const zip = new AdmZip(tmpFilePath);
-        const extractPath = './tmp'
-        zip.extractAllTo(extractPath, /*overwrite*/true);
+        const extractPath = await ParseZipFile(zipFile);
 
         async function processDirectory(directory: string) {
             const files = await readdir(directory);

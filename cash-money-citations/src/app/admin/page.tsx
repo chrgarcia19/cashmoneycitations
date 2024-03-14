@@ -20,6 +20,7 @@ const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
 const rmdir = util.promisify(fs.rmdir);
+const rm = util.promisify(fs.rm);
 const stat = util.promisify(fs.stat);
 
 export default async function AdminDashboard() {
@@ -70,9 +71,13 @@ export default async function AdminDashboard() {
 
             }
         }
-
         await processDirectory(extractPath);
-        await rmdir(extractPath);
+
+        // Deletes entire directory after execution
+        await rm(extractPath, {
+          recursive: true,
+          force: true
+        });
     }
 
 

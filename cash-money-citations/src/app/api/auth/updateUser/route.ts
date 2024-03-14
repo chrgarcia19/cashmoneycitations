@@ -8,11 +8,10 @@ export async function PUT(request: Request) {
     try {
         
         const req = await request.formData();
-
-        const email = req.get('userEmail');
+        const currentEmail = req.get('userEmail');
+        const newEmail = req.get('email');
         const username = req.get('username');
         const role = req.get('userRoleSelect');
-
         let update;
         if (!role) {
             update = { username: username}
@@ -20,7 +19,7 @@ export async function PUT(request: Request) {
             update = { role: role, username: username }
         }
 
-        const user = await User.findOneAndUpdate({email}, update);
+        const user = await User.findOneAndUpdate({email: currentEmail}, update);
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});
     } catch (error) {
         console.log({ error });

@@ -89,11 +89,38 @@ export default async function AdminDashboard() {
 
 
     
-    async function handleLocaleSubmit(localeDirectory: any) {
+    async function handleLocaleSubmit(zipFile: any) {
         'use server';
+        const extractPath = await ParseZipFile(zipFile);
+        console.log(extractPath)
+        async function processDirectory(directory: string) {
+            const files = await readdir(directory);
 
-        const res = await importLocaleFiles(localeDirectory);
-        return res;
+            for (const file of files) {
+              const filePath = path.join(directory, file);
+              const stats = await stat(filePath);
+          
+              if (stats.isDirectory()) {
+                await processDirectory(filePath);
+              } else {
+                const extension = path.extname(filePath);
+                if (extension === '.xml') {
+                  const fileData = await readFile(filePath, 'utf8');
+                  await importLocaleFiles({ name: file, contents: fileData });
+                  await unlink(filePath);
+                }
+              }
+
+            }
+        }
+        await processDirectory(extractPath);
+
+        // Deletes entire directory after execution
+        await rm(extractPath, {
+          recursive: true,
+          force: true
+        });
+
     }
 
         return (

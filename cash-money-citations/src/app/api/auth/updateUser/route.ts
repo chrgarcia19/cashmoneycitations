@@ -10,9 +10,9 @@ export async function PUT(request: Request) {
         
         const req = await request.formData();
         const currentEmail = req.get('userEmail');
-        const newEmail = req.get('email');
-        const username = req.get('username');
-        const newPassword = req.get('password');
+        const newEmail = req.get('newEmail');
+        const username = req.get('newUsername');
+        const newPassword = req.get('newPassword')?.toString();
         const role = req.get('userRoleSelect');
         
         let updateFields: Record<string, any> = {};
@@ -20,8 +20,19 @@ export async function PUT(request: Request) {
         if (newPassword) {       
             // Hash the password
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(newPassword.toString(), salt);
-            updateFields.password = hashedPassword;
+            const newHashedPassword = await bcrypt.hash(newPassword, salt);
+
+            // Get current hashed password
+            const currentPassword = await User.findOne({email: currentEmail}, 'password').exec();
+            const currentHashedPassword = currentPassword.password;
+            // Compare current with old password
+            const passwordMatch = await bcrypt.compare(newHashedPassword, currentHashedPassword);
+
+            if (passwordMatch){
+                return NextResponse.json({ success: false, message: "New password cannot match old password" }, { status: 400 });
+            } else {
+                updateFields.password = newHashedPassword;
+            }
         }
 
         if (newEmail) {

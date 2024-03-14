@@ -52,10 +52,10 @@ function ImportCSLStyles({handleCslSubmit}: any) {
         <>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className='flex items-center'>
-                <label htmlFor='file-upload' className="cursor-pointer">
+                <label htmlFor='csl-file-upload' className="cursor-pointer">
                     <span className="mr-2 text-blue-600 hover:text-blue-800">Upload a .csl file</span>
                 </label>
-                <input id="file-upload" type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
+                <input id="csl-file-upload" type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
                 <label>Include Dependent Styles?</label>
                 <input id='choose-dependent' type='checkbox' onChange={handleIncludeDependentChange}></input>
             </div>

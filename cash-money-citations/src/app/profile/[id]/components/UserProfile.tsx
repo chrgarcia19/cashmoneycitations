@@ -45,8 +45,7 @@ const Profile = () => {
     if (!data) return null;
 
     const userEmail = session?.user?.email;
-    console.log("UserProfile UserEmail: " + userEmail)
-    console.log(session)
+    
     async function handleUpdateUser(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
     
@@ -82,7 +81,7 @@ const Profile = () => {
                 user: {
                     ...session?.user,
                     username: usernameChange,
-                    email: emailChange,
+                    email: emailChange ? emailChange : session?.user?.email,
                     password: passwordChange
                 },
             };

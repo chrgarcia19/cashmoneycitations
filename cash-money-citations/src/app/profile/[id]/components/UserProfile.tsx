@@ -57,13 +57,13 @@ const Profile = () => {
 
         // Only add fields that were changed
         if (usernameChange) {
-            formData.append('username', usernameChange);
+            formData.append('newUsername', usernameChange);
         }
         if (emailChange) {
-            formData.append('email', emailChange);
+            formData.append('newEmail', emailChange);
         }
         if (passwordChange) {
-            formData.append('password', passwordChange);
+            formData.append('newPassword', passwordChange);
         }
         if (userEmail) {
             formData.append('userEmail', userEmail)

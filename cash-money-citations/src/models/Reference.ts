@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Contributor } from "./Contributor";
+import { Tag } from "./Tag";
 
 export interface References extends mongoose.Document {
     type: string;
@@ -17,6 +18,7 @@ export interface References extends mongoose.Document {
     pages: string;
     journal: string;
     image_url: string;
+    tags: Tag[];
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
@@ -33,6 +35,12 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
   contributorMiddleI: {
     type: String
   }
+});
+
+const TagSchema = new mongoose.Schema<Tag>({
+  name: {
+    type: String
+  },
 });
 
 //Schema to correspond the model to what is happening in MongoDB
@@ -85,6 +93,7 @@ const ReferenceSchema = new mongoose.Schema<References>({
   image_url: {
     type: String,
   },
+  tags: [TagSchema],
 });
 
 export default mongoose.models.Reference || mongoose.model<References>("Reference", ReferenceSchema);

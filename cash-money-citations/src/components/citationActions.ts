@@ -44,7 +44,7 @@ function translateForeignModel(result: any) {
     };
     let contributors = new Array<Contributor>();
 
-    //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+    // If item.author is populated, move forward on that, otherwise, handle the error appropriately
     if (result[0].author) {
         for (i; i<result[0].author.length; i++) {
             newContributor = {
@@ -98,7 +98,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
 
-        // DIVIDE THIS FUNCTION UP ASAP
         const toBibTex = new Cite(JSON.stringify(result))
 
         const bibtexOutput = toBibTex.format('biblatex', {
@@ -117,8 +116,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         console.error(error)
     }
 }
-// LAST WORKING ON GETTING DOI INPUT TO WORK CORRECTLY
-// RECIEVING AN ERROR WHERE THE CITE.INPUT IS UNABLE TO CONVERT THE TITLE ARRAY TO A STRING.
 
 // Creates citeKey based off of first author last name and year
 async function InitializeCiteKey(_id: string, contributorLastName: string, year: Date) {

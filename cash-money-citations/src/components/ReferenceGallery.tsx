@@ -22,7 +22,7 @@ export default async function ReferenceGallery() {
   return (
     <>  
       <div className='reference-wrapper'>
-        <div className="absolute w-full h-screen bg-zinc-700">
+        <div className="background">
           <div className='reference-wrapper'>
             {references.map((reference) => (
               <div key={reference._id}>

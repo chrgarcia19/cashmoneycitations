@@ -18,7 +18,7 @@ export default async function GetUsers(currentUser: any) {
 
     return (
         <>
-        <div>
+        <div className='content-center pt-4'>
             <table className='border-collapse border-spacing-2 border border-slate-400 divide-y divide-gray-200'>
                 <thead>
                     <tr>

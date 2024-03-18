@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
 
 export interface Tag extends mongoose.Document {
-    name: string;
+    tagName: string;
+    referenceID: string[];
 }
 
 const TagSchema = new mongoose.Schema<Tag>({
-    name: {
+    tagName: {
       type: String
+    },
+    referenceID: {
+      type: [String],
     },
 }, {timestamps: true});
 

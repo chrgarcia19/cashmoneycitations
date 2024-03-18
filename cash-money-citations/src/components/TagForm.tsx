@@ -19,8 +19,10 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
     const router = useRouter();
     const contentType = "application/json";
 
+    const [tagName, setTagName] = useState("");
+
     const [form, setForm] = useState({
-        tagName: tagForm.name,
+        tagName: "",
     });
 
     /* The PUT method edits an existing entry in the mongodb database. */
@@ -85,7 +87,6 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         ...form,
         [name]: value,
         });
-        console.log(form);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +98,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         } else {
             setErrors( { errs });
         }*/
-        console.log(form.tagName);
+        console.log(tagName);
     };
 
     return (
@@ -105,27 +106,33 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
             <div>Welcome to the Tag Center!</div>
             <br />
             <div className="">
-                <form id="createTag" onSubmit={handleSubmit}>
-                    <label className="font-bold" htmlFor="create_tag">
-                        Create Tag
-                    </label>
-                    <div className="join join-horizontal">
-                        <input
-                            type="text"
-                            name="create_tag"
-                            defaultValue={form.tagName}
-                            onChange={handleChange}
-                            required
-                        /> 
-                        <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
-                            Submit
-                        </button>
-                    </div>
-                    
-                        
+            <div className="card w-96 bg-base-100 shadow-xl">
+            <figure className="px-10 pt-10">
+              <div>{tagName}</div>
+            </figure>
+            <div className="card-body items-center text-center">
+              <h2 className="card-title">Create Tag</h2>
+              <div className="card-actions">
+              <form id="createTag" onSubmit={handleSubmit}>
+                <div className="join join-horizontal">
+                    <input
+                        type="text"
+                        name="create_tag"
+                        defaultValue={tagName}
+                        onChange={(e) => setTagName(e.target.value)}
+                        required
+                    /> 
+                    <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
+                        Submit
+                    </button>
+                </div>    
                 </form>
+              </div>
             </div>
-            <div className="badge badge-lg bg-blue-400">default</div>
+          </div>
+                
+            </div>
+            
         </>
         
     )

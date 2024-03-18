@@ -38,7 +38,7 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
 });
 
 const TagSchema = new mongoose.Schema<Tag>({
-  name: {
+  tagName: {
     type: String
   },
 });

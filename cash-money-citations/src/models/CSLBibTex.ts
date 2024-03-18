@@ -32,6 +32,17 @@ const referencesUsedSchema = new mongoose.Schema({
   journalTitle: String
 })
 
+const dateSchema = new mongoose.Schema({
+  month: Number,
+  day: Number,
+  year: Number
+})
+
+const pageSchema = new mongoose.Schema({
+  start_page: Number,
+  end_page: Number
+})
+
 // 3/6/24 Need to decide which fields are optional and which are required
 // Each entry type has its own required fields
 const CSLBibSchema = new Schema({
@@ -92,35 +103,32 @@ const CSLBibSchema = new Schema({
     address: String,
     annote: String,
     contributors: [ContributorSchema],
-    booktitle: String,
+    website_title: String,
     chapter: String,
     edition: String,
     editor: String,
     howpublished: String,
-    institution: String,
-    journal: String,
-    month: Date,
+    institution: String, 
+    journal: String, //Journal Title
+    date: dateSchema, //Date Published
+    urldate: dateSchema, //Date Accessed
     note: String,
     number: Number,
     organization: String,
-    pages: String,
+    pages: pageSchema,
+    page_total: Number,
     publisher: String,
     school: String,
     series: String,
     title: [String],
     type: String,
     volume: String,
-    year: Date,
     doi: String,
     issn: [String],
     issnType: [Object],
     isbn: String,
     url: String,
     cslJson: Object,
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    },
     image_url: String,
     issue: String,
     abstract: String,
@@ -129,6 +137,6 @@ const CSLBibSchema = new Schema({
     referencesUsed: [referencesUsedSchema],
     citationIdList: [String]
 
-});
+}, {timestamps: true});
 
 export default mongoose.models.CSLBibModel || mongoose.model("CSLBibModel", CSLBibSchema); 

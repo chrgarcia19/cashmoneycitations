@@ -19,7 +19,7 @@ export default async function NavBar() {
       >
       </img>
     </Link>
-    <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Cash Money Citations</span>
+    <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">Cash Money Citations</span>
     <div className="flex-1">
     </div>
     <div className="nav">

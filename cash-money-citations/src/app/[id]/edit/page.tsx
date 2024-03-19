@@ -1,6 +1,5 @@
 'use client'
 
-import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import WebForm from "@/components/form-components/WebForm";
 import BookForm from "@/components/form-components/BookForm";
@@ -14,9 +13,15 @@ const fetcher = (url: string) =>
     .then((res) => res.json())
     .then((json) => json.data);
 
-const EditReference = () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+export default function EditReference( {
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+){
+  const id = searchParams.id;
   const {
     data: reference,
     error,
@@ -156,3 +161,4 @@ const EditReference = () => {
 };
 
 export default EditReference;
+

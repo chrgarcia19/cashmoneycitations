@@ -2,6 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { CreateCslJsonDocument } from "@/components/citationActions";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);
@@ -79,7 +80,7 @@ function InputDOI() {
         };
         let contributors = new Array<Contributor>();
 
-        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+        // If item.author is populated, move forward on that, otherwise, handle the error appropriately
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
@@ -103,14 +104,14 @@ function InputDOI() {
             contributors.push(newContributor);
         }
 
-        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
+        // If item.title is populated, move forward on that, otherwise, handle the error appropriately
         if (item.title) {
             title = item.title[0];
         }
         else {
             title = "";
         }
-        
+
         let doiReference: any = {
             type: "journal",
             citekey: "",
@@ -148,6 +149,8 @@ function InputDOI() {
           } catch (error) {
             console.log("Failed to add reference");
           }
+
+        CreateCslJsonDocument(item);
 
     }
 

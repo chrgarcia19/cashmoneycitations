@@ -249,7 +249,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     const target = e.target;
     const value = target.value;
     const name = target.name;
-
     setForm({
       ...form,
       [name]: value,
@@ -342,37 +341,27 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         </form>
         <br/>
 
-
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="reference-title"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-            {form.entryType.type == "website" && (
+            {form.entryType == "webpage" && (
               <WebForm formID={"add-web-reference"} webForm={webData}  />
             )}
 
-            {form.entryType.type == "book" && (
+            {form.entryType == "book" && (
               <BookForm formID={"add-book-reference"} bookForm={bookData} />
             )}
 
-            {form.entryType.type == "journal" && (
+            {form.entryType == "article-journal" && (
               <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
             )}
 
-            {form.entryType.type == "magazine" && (
+            {form.entryType == "article-magazine" && (
               <MagazineForm formID={"add-magazine-reference"} magazineForm={magazineData} />
             )}
 
-            {form.entryType.type == "newspaper" && (
+            {form.entryType == "article-newspaper" && (
               <NewspaperForm formID={"add-newspaper-reference"} newspaperForm={newspaperData} />
             )}
 
-            {form.entryType.type == "database" && (
+            {form.entryType == "dataset" && (
               <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
             )}
         </div>

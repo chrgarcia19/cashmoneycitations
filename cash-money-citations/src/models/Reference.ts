@@ -1,35 +1,38 @@
 import mongoose from "mongoose";
 import { Contributor } from "./Contributor";
-import { StringLiteral } from "typescript";
 
 export interface References extends mongoose.Document {
     type: string;
     citekey: string;
-    source_title: string;
+    title: string;
     contributors: Contributor[];
-    month_published: string;
-    day_published: string;
-    year_published: string;
     publisher: string;
+    year: string;
+    month: string;
+    address: string;
+    edition: string;
+    volume: string;
+    isbn: string;
+    doi: string;
+    pages: string;
+    journal: string;
     image_url: string;
 }
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
-  role: {
-    type: String,
+  // Define Contributor schema fields
+  contributorType: {
+    type: String
   },
-  firstName: {
-    type: String,
+  contributorFirstName: {
+    type: String
   },
-  middleName: {
-    type: String,
+  contributorLastName: {
+    type: String
   },
-  lastName: {
-    type: String,
-  },
-  suffix: {
-    type: String,
-  },
+  contributorMiddleI: {
+    type: String
+  }
 });
 
 //Schema to correspond the model to what is happening in MongoDB
@@ -42,24 +45,42 @@ const ReferenceSchema = new mongoose.Schema<References>({
     type: String,
     // required: [true, "Please provide the citekey for this reference."],
   },
-  source_title: {
+  title: {
     type: String,
     // required: [true, "Please provide the title."],
   },
   contributors: [ContributorSchema],
-  month_published: {
-    type: String,
-  },
-  day_published: {
-    type: String,
-  },
-  year_published: {
-    type: String,
-    // required: [true, "Please provide the year."],
-  },
   publisher: {
     type: String,
     // required: [true, "Please provide the publisher."],
+  },
+  year: {
+    type: String,
+    // required: [true, "Please provide the year."],
+  },
+  month: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  edition: {
+    type: String,
+  },
+  volume: {
+    type: String,
+  },
+  isbn: {
+    type: String,
+  },
+  doi: {
+    type: String,
+  },
+  pages: {
+    type: String,
+  },
+  journal: {
+    type: String,
   },
   image_url: {
     type: String,

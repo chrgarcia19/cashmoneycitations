@@ -1,7 +1,6 @@
 export interface Contributor {
-    role: string;
-    firstName: string;
-    middleName: string;
-    lastName: string;
-    suffix: string;
+    contributorType: string;
+    contributorFirstName: string;
+    contributorLastName: string;
+    contributorMiddleI: string;
 }

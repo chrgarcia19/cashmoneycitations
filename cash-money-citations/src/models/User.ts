@@ -47,6 +47,6 @@ const UserSchema = new mongoose.Schema<Users>({
         provider: String,
         providerAccountId: String,
     }],
-}, {timestamps: true});
+});
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

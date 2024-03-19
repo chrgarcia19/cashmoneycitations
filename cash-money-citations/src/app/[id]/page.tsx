@@ -69,9 +69,9 @@
 //       id: reference._id,
 //       type: type,
 //       title: reference.title,
-//       author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-//         family: contributor.contributorFirstName,
-//         given: contributor.contributorLastName,
+//       author: reference.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
+//         family: contributor.firstName,
+//         given: contributor.lastName,
 //       })),
 //       issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
 //       publisher: reference.publisher,

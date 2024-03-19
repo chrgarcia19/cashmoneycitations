@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import ContributorForm from "../ContributorForm";
+import { HandleInitialReference } from "../citationActions";
+import { EditReference } from "../editReferenceActions";
 
 /*Creating an array of days for a select box*/
 const days = new Array<number>();
@@ -16,7 +18,7 @@ interface BookData {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     isbn: string;
     volume: string;
     edition: string;
@@ -32,7 +34,7 @@ interface BookData {
 interface Error {
     type?: string;
     citekey?: string;
-    book_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year_published?: string;
@@ -56,7 +58,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         citekey: bookForm.citekey,
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
-        source_title: bookForm.source_title,
+        title: bookForm.title,
         isbn: bookForm.isbn,
         volume: bookForm.volume,
         edition: bookForm.edition,
@@ -68,56 +70,6 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         state: bookForm.state,
     });
 
-    const id  = searchParams.get("id");
-
-    const fetcher = async (url: string) => {
-        const res = await fetch(`/api/bookRef/${id}`);
-        if (!res.ok) {
-        throw new Error("An error occurred while fetching the data.");
-        }
-        return res.json();
-    };
-
-    const useData = (url: string) => {
-        const { data, error, mutate } = useSWR(url, fetcher);
-
-        return {
-        data,
-        error,
-        isLoading: !data && !error,
-        mutate,
-        };
-    };
-
-    /* The PUT method edits an existing entry in the mongodb database. */
-    const putData = async (form: BookData) => {
-        const id  = searchParams.get("id");
-
-        try {
-        const res = await fetch(`/api/bookRef/${id}`, {
-            method: "PUT",
-            headers: {
-            Accept: contentType,
-            "Content-Type": contentType,
-            },
-            body: JSON.stringify(form),
-        });
-
-        // Throw error with status code in case Fetch API req failed
-        if (!res.ok) {
-            throw new Error(res.status.toString());
-        }
-
-        const { data } = await res.json();
-
-        mutate(`/api/bookRef/${id}`, data, true); // Update the local data without a revalidation
-        router.push("/");
-        router.refresh();
-        } catch (error) {
-        setMessage("Failed to update reference");
-        }
-    };
-
     //Handling contributor stuff
     const updateFormData = (newData: Array<any>) => {
         setForm({
@@ -126,28 +78,6 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         });
     };
 
-    /* The POST method adds a new entry in the mongodb database. */
-    const postData = async (form: BookData) => {
-        try {
-        const res = await fetch("/api/bookRef", {
-            method: "POST",
-            headers: {
-            Accept: contentType,
-            "Content-Type": contentType,
-            },
-            body: JSON.stringify(form),
-        });
-
-        // Throw error with status code in case Fetch API req failed
-        if (!res.ok) {
-            throw new Error(res.status.toString());
-        }
-        router.push("/");
-        router.refresh();
-        } catch (error) {
-        setMessage("Failed to add reference");
-        }
-    };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -165,27 +95,24 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
     const formValidate = () => {
         let err: Error = {};
-        if (!form.type) err.type = "Type is required";
-        if (!form.citekey) err.citekey = "Citekey is required";
+        //if (!form.type) err.type = "Type is required";
+        if (!form.title) err.title = "Title is required";
         if (!form.contributors) err.contributors = "Contributor info is required";
         if (!form.publisher) err.publisher = "Publisher is required";
         if (!form.year_published) err.year_published = "Year is required";
-        if (!form.image_url) {
-            form.image_url = "https://st2.depositphotos.com/8301258/11704/v/450/depositphotos_117048908-stock-illustration-design-books-logo-vector.jpg";
-        }
         return err;
-    };
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      };
+    
+      const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const errs = formValidate();
-
-        if (Object.keys(errs).length === 0) {
-            forNewReference ? postData(form) : putData(form);
+        const id = searchParams.get('id')
+        if (Object.keys(errs).length === 1) {
+          forNewReference ? HandleInitialReference(form) : EditReference(form, id);
         } else {
-            setErrors({ errs });
+          setErrors({ errs });
         }
-    };
+      };
 
     const formContent = () => {
         return (
@@ -214,8 +141,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                         </label>
                         <input
                             type="url"
+                            value={form.image_url}
                             name="image_url"
-                            defaultValue={form.image_url}
                             onChange={handleChange}
                         />
     
@@ -226,8 +153,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                         </label>
                         <input
                             type="text"
+                            value={form.title}
                             name="source_title"
-                            defaultValue={form.source_title}
                             onChange={handleChange}
                             required
                         />
@@ -243,8 +170,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     <input
                                         className="w-64"
                                         type="text"
+                                        value={form.volume}
                                         name="volume"
-                                        defaultValue={form.volume}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -258,8 +185,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 <input
                                     className="w-64"
                                     type="text"
+                                    value={form.edition}
                                     name="edition"
-                                    defaultValue={form.edition}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -275,8 +202,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 <input
                                     className="w-64"
                                     type="text"
+                                    value={form.city}
                                     name="city"
-                                    defaultValue={form.city}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -289,8 +216,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                 <input
                                 className="w-64"
                                     type="text"
+                                    value={form.state}
                                     name="state"
-                                    defaultValue={form.state}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -304,7 +231,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                         <input
                             type="text"
                             name="isbn"
-                            defaultValue={form.isbn}
+                            value={form.isbn}
                             onChange={handleChange}
                             required
                         />  
@@ -316,8 +243,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                         </label>
                         <input
                             type="text"
+                            value={form.publisher}
                             name="publisher"
-                            defaultValue={form.publisher}
                             onChange={handleChange}
                             required
                         />     
@@ -366,7 +293,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}
-                                                defaultValue={form.day_published}>
+                                                value={form.day_published}
+                                                >
                                                 {day}
                                             </option>
                                             ))} 
@@ -381,8 +309,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     className="h-8 w-52"
                                     placeholder="Pick a Year"
                                     type="text"
+                                    value={form.year_published}
                                     name="year_published"
-                                    defaultValue={form.year_published}
                                     onChange={handleChange}
                                     required 
                                 />

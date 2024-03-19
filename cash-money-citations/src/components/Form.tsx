@@ -7,7 +7,13 @@ import { HandleInitialReference } from "./citationActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
 import { EditReference } from "./editReferenceActions";
-
+import WebForm from "./form-components/WebForm";
+import BookForm from "./form-components/BookForm";
+import JournalForm from "./form-components/JournalForm";
+import MagazineForm from "./form-components/MagazineForm";
+import NewspaperForm from "./form-components/NewspaperForm";
+import DatabaseForm from "./form-components/DatabaseForm";
+    
 enum EntryType {
   Article = 'article',
   Book = 'book',
@@ -94,6 +100,127 @@ type Props = {
 };
 
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
+  const webData = {
+    type: "website",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    website_title: "",
+    website_url: "",
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    publisher: "",
+  };
+
+  const bookData = {
+    type: "book",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    volume: "",
+    edition: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    publisher: "",
+    city: "",
+    state: "",
+    isbn: "",
+  };
+
+  const journalData = {
+    type: "journal",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    journal_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
+    issn: "",
+  };
+
+  const magazineData = {
+    type: "magazine",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    magazine_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
+    issn: "",
+  };
+
+  const newspaperData = {
+    type: "newspaper",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    newspaper_title: "",
+    edition: "",
+    section: "",
+    city: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    issn: "",
+  }
+
+  const databaseData = {
+    type: "database",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    library: "",
+    database: "",
+    database_url: "",
+    city: "",
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    service: "",
+    issn: "",
+  }
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
+
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
@@ -123,21 +250,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     setForm({
       ...form,
       contributors: newData,
-    });
-  };
-
-
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name;
-
-    setForm({
-      ...form,
-      [name]: value,
     });
   };
 
@@ -208,23 +320,16 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       <br/>
       <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
         <form id={formId} onSubmit={handleSubmit}>
-
-          {/* <label htmlFor="type">Type</label>
-          <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
-            <option value="" disabled hidden>Choose here</option>
-            <option value="website">Website</option>
-            <option value="book">Book</option>
-            <option value="journal">Journal</option>
-          </select> */}
-
           <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
+              <option value="" disabled hidden>Choose here</option>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>
                 {value}
               </option>
             ))}
           </select>
-
+        </div>
+        <br/>
 
           <label htmlFor="title">Title</label>
           <input
@@ -294,47 +399,29 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             onChange={handleChange}
           />
 
-          <label htmlFor="doi">DOI</label>
-          <input
-            type="text"
-            name="doi"
-            value={form.doi}
-            onChange={handleChange}
-          />
+            {form.type == "website" && (
+              <WebForm formID={"add-web-reference"} webForm={webData}  />
+            )}
+        
+            {form.type == "book" && (
+              <BookForm formID={"add-book-reference"} bookForm={bookData} />
+            )}
 
-          <label htmlFor="pages">Pages</label>
-          <input
-            type="text"
-            name="pages"
-            value={form.pages}
-            onChange={handleChange}
-          />
+            {form.type == "journal" && (
+              <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
+            )}
 
-          <label htmlFor="journal">Journal</label>
-          <input
-            type="text"
-            name="journal"
-            value={form.journal}
-            onChange={handleChange}
-          />
+            {form.type == "magazine" && (
+              <MagazineForm formID={"add-magazine-reference"} magazineForm={magazineData} />
+            )}
 
-          <label htmlFor="image_url">Image URL</label>
-          <input
-            type="url"
-            name="image_url"
-            value={form.image_url}
-            onChange={handleChange}
-          />
+            {form.type == "newspaper" && (
+              <NewspaperForm formID={"add-newspaper-reference"} newspaperForm={newspaperData} />
+            )}
 
-          <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
-            Submit
-          </button>
-        </form>
-        <p>{message}</p>
-        <div>
-          {Object.keys(errors).map((err, index) => (
-            <li key={index}>{err}</li>
-          ))}
+            {form.type == "database" && (
+              <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
+            )}
         </div>
       </div>
     </>

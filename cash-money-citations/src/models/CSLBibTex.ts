@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { Contributor } from "./Contributor";
 
 function generateCiteKey() {
@@ -38,10 +38,6 @@ const dateSchema = new mongoose.Schema({
   year: Number
 })
 
-const pageSchema = new mongoose.Schema({
-  start_page: Number,
-  end_page: Number
-})
 
 // 3/6/24 Need to decide which fields are optional and which are required
 // Each entry type has its own required fields
@@ -115,7 +111,7 @@ const CSLBibSchema = new Schema({
     note: String,
     number: Number,
     organization: String,
-    pages: pageSchema,
+    pages: String,
     page_total: Number,
     publisher: String,
     school: String,

@@ -48,7 +48,7 @@ function InputDOI() {
         };
         let contributors = new Array<Contributor>();
 
-        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+        // If item.author is populated, move forward on that, otherwise, handle the error appropriately
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
@@ -70,14 +70,14 @@ function InputDOI() {
             contributors.push(newContributor);
         }
 
-        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
+        // If item.title is populated, move forward on that, otherwise, handle the error appropriately
         if (item.title) {
             title = item.title[0];
         }
         else {
             title = "Unknown";
         }
-        
+
         let doiReference: any = {
             type: "journal",
             citekey: "please edit this",
@@ -96,25 +96,7 @@ function InputDOI() {
             image_url: "",
         };
         
-        // try {
-        //     const res = await fetch("/api/references", {
-        //       method: "POST",
-        //       headers: {
-        //         Accept: contentType,
-        //         "Content-Type": contentType,
-        //       },
-        //       body: JSON.stringify(doiReference),
-        //     });
-      
-        //     // Throw error with status code in case Fetch API req failed
-        //     if (!res.ok) {
-        //       throw new Error(res.status.toString());
-        //     }
-        //     router.push("/reference-table");
-        //     router.refresh();
-        //   } catch (error) {
-        //     console.log("Failed to add reference");
-        //   }
+
         CreateCslJsonDocument(item);
 
     }

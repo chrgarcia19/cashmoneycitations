@@ -37,10 +37,11 @@ function toCslJson(ReferenceData: any) {
 function translateForeignModel(result: any) {
     let i = 0;
     let newContributor: Contributor = {
-        contributorType: "",
-        contributorFirstName: "",
-        contributorLastName: "",
-        contributorMiddleI: ""
+        role: "",
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        suffix: ""
     };
     let contributors = new Array<Contributor>();
 
@@ -48,20 +49,22 @@ function translateForeignModel(result: any) {
     if (result[0].author) {
         for (i; i<result[0].author.length; i++) {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: result[0].author[i].given,
-                contributorLastName: result[0].author[i].family,
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: result[0].author[i].given,
+                lastName: result[0].author[i].family,
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
     }
     else {
         newContributor = {
-            contributorType: "Author",
-            contributorFirstName: "Unknown",
-            contributorLastName: "Unknown",
-            contributorMiddleI: ""
+            role: "Author",
+            firstName: "Unknown",
+            lastName: "Unknown",
+            middleName: "",
+            suffix: ""
         };
         contributors.push(newContributor);
     }
@@ -118,10 +121,10 @@ export async function CreateCslJsonDocument(automaticInput: any) {
 }
 
 // Creates citeKey based off of first author last name and year
-async function InitializeCiteKey(_id: string, contributorLastName: string, year: Date) {
+async function InitializeCiteKey(_id: string, lastName: string, year: Date) {
     try{
         const fullYear = year.getUTCFullYear();
-        const newCiteKey = (contributorLastName + fullYear)
+        const newCiteKey = (lastName + fullYear)
         await CSLBibModel.findByIdAndUpdate(_id, { citekey: newCiteKey })
     } catch(error) {
         console.error(error)
@@ -175,9 +178,9 @@ export async function HandleInitialReference(form: any) {
             citekey: bibResponse.citekey,
             type: bibResponse.entryType,
             title: bibResponse.title,
-            author: bibResponse.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-            family: contributor.contributorLastName,
-            given: contributor.contributorFirstName,
+            author: bibResponse.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
+            family: contributor.lastName,
+            given: contributor.firstName,
             })),
             issued: { "date-parts": [[parseInt(bibResponse.year, 10), bibResponse.month ? parseInt(bibResponse.month, 10) : 0]] },
             publisher: bibResponse.publisher,
@@ -187,8 +190,8 @@ export async function HandleInitialReference(form: any) {
         };
 
         // const {_id, contributors, year} = bibResponse
-        // const contributorLastName = contributors[0].contributorLastName;
-        // await InitializeCiteKey(_id, contributorLastName, year)
+        // const lastName = contributors[0].lastName;
+        // await InitializeCiteKey(_id, lastName, year)
 
         await HandleInitialFormat(bibJsonData)
 

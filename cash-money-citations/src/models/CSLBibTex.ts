@@ -7,16 +7,19 @@ function generateCiteKey() {
 
 const ContributorSchema = new mongoose.Schema<Contributor>({
     // Define Contributor schema fields
-    contributorType: {
+    role: {
       type: String
     },
-    contributorFirstName: {
+    firstName: {
       type: String
     },
-    contributorLastName: {
+    lastName: {
       type: String
     },
-    contributorMiddleI: {
+    middleName: {
+      type: String
+    },
+    suffix: {
       type: String
     }
 });

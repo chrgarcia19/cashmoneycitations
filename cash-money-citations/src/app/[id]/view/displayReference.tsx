@@ -45,7 +45,7 @@ function ReferenceDetails({ reference }: any) {
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Contributors:</label>
           {reference.contributors.map((contributor: any) => (
-          <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></div>
+          <div key={contributor._id}>{contributor.firstName} {contributor.middleNameI} {contributor.lastName}<br></br></div>
       ))}
       </span>
       <span className="block h-auto rounded-lg">

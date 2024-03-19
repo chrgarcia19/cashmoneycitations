@@ -7,6 +7,12 @@ import { HandleInitialReference } from "./citationActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
 import { EditReference } from "./editReferenceActions";
+import WebForm from "./form-components/WebForm";
+import BookForm from "./form-components/BookForm";
+import JournalForm from "./form-components/JournalForm";
+import MagazineForm from "./form-components/MagazineForm";
+import NewspaperForm from "./form-components/NewspaperForm";
+import DatabaseForm from "./form-components/DatabaseForm";
 
 enum EntryType {
   Article = 'article',
@@ -100,6 +106,115 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const router = useRouter();
   const contentType = "application/json";
 
+  const webData = {
+    type: "website",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    website_title: "",
+    website_url: "",
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    publisher: "",
+  };
+
+  const bookData = {
+    type: "book",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    volume: "",
+    edition: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    publisher: "",
+    city: "",
+    state: "",
+    isbn: "",
+  };
+
+  const journalData = {
+    type: "journal",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    journal_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
+    issn: "",
+  };
+
+  const magazineData = {
+    type: "magazine",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    magazine_title: "",
+    volume: "",
+    issue: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    doi: "",
+    issn: "",
+  };
+
+  const newspaperData = {
+    type: "newspaper",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    newspaper_title: "",
+    edition: "",
+    section: "",
+    city: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    start_page: "",
+    end_page: "",
+    issn: "",
+  }
+
+  const databaseData = {
+    type: "database",
+    citekey: "",
+    image_url: "",
+    contributors: new Array<Contributor>(),
+    source_title: "",
+    library: "",
+    database: "",
+    database_url: "",
+    city: "",
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    service: "",
+    issn: "",
+  }
+
+  /*Set initial state to website so the page is not blank*/
   const [form, setForm] = useState({
     entryType: referenceForm.entryType,
     //type: referenceForm.type,
@@ -224,6 +339,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               </option>
             ))}
           </select>
+        </form>
+        <br/>
 
 
           <label htmlFor="title">Title</label>
@@ -235,108 +352,30 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             onChange={handleChange}
             required
           />
+            {form.entryType.type == "website" && (
+              <WebForm formID={"add-web-reference"} webForm={webData}  />
+            )}
 
-          <label htmlFor="publisher">Publisher</label>
-          <input
-            type="text"
-            name="publisher"
-            value={form.publisher}
-            onChange={handleChange}
-            required
-          />
+            {form.entryType.type == "book" && (
+              <BookForm formID={"add-book-reference"} bookForm={bookData} />
+            )}
 
-          <label htmlFor="year">Year</label>
-          <input
-            type="text"
-            name="year"
-            value={form.year}
-            onChange={handleChange}
-            required
-          />
+            {form.entryType.type == "journal" && (
+              <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
+            )}
 
-          <label htmlFor="month">Month</label>
-          <input
-            type="text"
-            name="month"
-            value={form.month}
-            onChange={handleChange}
-          />
+            {form.entryType.type == "magazine" && (
+              <MagazineForm formID={"add-magazine-reference"} magazineForm={magazineData} />
+            )}
 
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-          />
+            {form.entryType.type == "newspaper" && (
+              <NewspaperForm formID={"add-newspaper-reference"} newspaperForm={newspaperData} />
+            )}
 
-          <label htmlFor="edtion">Edition</label>
-          <input
-            type="text"
-            name="edition"
-            value={form.edition}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="volume">Volume</label>
-          <input
-            type="text"
-            name="volume"
-            value={form.volume}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="isbn">ISBN</label>
-          <input
-            type="text"
-            name="isbn"
-            value={form.isbn}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="doi">DOI</label>
-          <input
-            type="text"
-            name="doi"
-            value={form.doi}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="pages">Pages</label>
-          <input
-            type="text"
-            name="pages"
-            value={form.pages}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="journal">Journal</label>
-          <input
-            type="text"
-            name="journal"
-            value={form.journal}
-            onChange={handleChange}
-          />
-
-          <label htmlFor="image_url">Image URL</label>
-          <input
-            type="url"
-            name="image_url"
-            value={form.image_url}
-            onChange={handleChange}
-          />
-
-          <button type="submit" className="btn bg-green-500 hover:bg-green-900 text-white">
-            Submit
-          </button>
-        </form>
-        <p>{message}</p>
-        <div>
-          {Object.keys(errors).map((err, index) => (
-            <li key={index}>{err}</li>
-          ))}
+            {form.entryType.type == "database" && (
+              <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
+            )}
         </div>
-      </div>
     </>
   );
 };

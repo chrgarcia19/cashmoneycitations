@@ -139,8 +139,6 @@ function InputISBN() {
             year = item.volumeInfo.publishedDate;
         }
 
-        
-
         //Handling image info
         let imageLink = "";
         if (item.volumeInfo.imageLinks.thumbnail) {
@@ -159,7 +157,7 @@ function InputISBN() {
             publisher = "Unknown";
         }
         
-        let doiReference: any = {
+        let isbnReference: any = {
             type: "book",
             citekey: "",
             title: item.volumeInfo.title,
@@ -184,7 +182,7 @@ function InputISBN() {
                 Accept: contentType,
                 "Content-Type": contentType,
               },
-              body: JSON.stringify(doiReference),
+              body: JSON.stringify(isbnReference),
             });
       
             // Throw error with status code in case Fetch API req failed

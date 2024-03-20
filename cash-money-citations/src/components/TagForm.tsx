@@ -3,9 +3,12 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { mutate } from "swr";
+import ClickableTag from "./ClickableTag";
+import DisplayTags from "@/app/tag-center/displayTag";
 
 interface TagData {
     tagName: string;
+    tagColor: string;
 }
 
 type Props = {
@@ -21,6 +24,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
 
     const [form, setForm] = useState({
         tagName: tagForm.tagName,
+        tagColor: tagForm.tagColor,
     });
 
     /* The PUT method edits an existing entry in the mongodb database. */
@@ -68,7 +72,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
       if (!res.ok) {
         throw new Error(res.status.toString());
       }
-      router.push("/");
+      router.push("/view-tag");
       router.refresh();
     } catch (error) {
     }
@@ -87,47 +91,54 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         });
     };
 
+    function random(min: number, max: number) {
+      return Math.floor(Math.random() * (max-min)) + min;
+  }
+
+    function assignTagColor(){
+      const options = {
+        colors: ['red', 'orange', 'amber', 'yellow',
+            'lime', 'green', 'emerald', 'teal', 'cyan',
+            'sky', 'blue', 'indigo', 'violet', 'purple',
+            'fuchsia', 'pink', 'rose'],
+        range: [2,7], // Between 100 and 400,
+        prefix: 'bg', // Can be 'bg', 'text', etc.
+      };
+
+      const colorRange = {
+        min: options.range[0],
+        max: options.range[1],
+      };
+      const number = random(colorRange.min, colorRange.max) * 100;
+      const indexColor = random(0, options.colors.length - 1);
+      return `${options.prefix}-${options.colors[indexColor]}-${number}`;
+    }
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        form.tagColor = assignTagColor();
+
         forNewTag ? postData(form) : putData(form);
-        /*if (Object.keys(errs).length === 0) {
-            forNewUser ? postData(form) : putData(form);
-        } else {
-            setErrors( { errs });
-        }*/
-        console.log(form.tagName);
     };
 
     return (
-        <>
-            <div>Welcome to the Tag Center!</div>
-            <br />
-            <div className="">
-            <div className="card w-96 bg-base-100 shadow-xl">
-            <div className="card-body items-center text-center">
-              <h2 className="card-title">Create Tag</h2>
-              <div className="card-actions">
-              <form id={formID} onSubmit={handleSubmit}>
-                <div className="join join-horizontal">
-                    <input
-                        type="text"
-                        name="tagName"
-                        onChange={handleChange}
-                        value={form.tagName}
-                        required
-                    /> 
-                    <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
-                        Submit
-                    </button>
-                </div>    
-                </form>
-              </div>
-            </div>
-          </div>
-                
-            </div>
-            
-        </>
+      <>    
+        <form id={formID} onSubmit={handleSubmit}>
+          <div className="join join-horizontal">
+            <input
+                type="text"
+                name="tagName"
+                onChange={handleChange}
+                value={form.tagName}
+                required
+            /> 
+            <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
+                Submit
+            </button>
+          </div>    
+        </form>  
+      </>
         
     )
 

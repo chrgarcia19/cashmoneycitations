@@ -1,14 +1,9 @@
-import TagForm from "@/components/TagForm";
+import DisplayTags from "./displayTag";
 
 export default function TagCenter() {
-
-    const tagData = {
-        tagName: ""
-    };
-
     return (
         <>
-            <TagForm formID={"add-new-tag"} tagForm={tagData} />
+            <DisplayTags />
         </>
     )
 }

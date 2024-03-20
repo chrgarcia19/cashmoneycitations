@@ -111,6 +111,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         const id = searchParams.get('id')
         if (Object.keys(errs).length === 0) {
           forNewReference ? HandleManualReference(form) : EditReference(form, id);
+          router.push("/reference-table");
+          router.refresh();
         } else {
           setErrors({ errs });
         }
@@ -254,21 +256,21 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     <select
                                         name="month_published"
                                         className="select select-sm select-bordered w-40"
-                                        defaultValue={form.date}
+                                        defaultValue={form.month_published}
                                         onChange={handleChange}>
                                         <option value="" disabled>Pick a Month</option>
-                                        <option value="0">January</option>
-                                        <option value="1">February</option>
-                                        <option value="2">March</option>
-                                        <option value="3">April</option>
-                                        <option value="4">May</option>
-                                        <option value="5">June</option>
-                                        <option value="6">July</option>
-                                        <option value="7">August</option>
-                                        <option value="8">September</option>
-                                        <option value="9">October</option>
-                                        <option value="10">November</option>
-                                        <option value="11">December</option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
                                     </select> 
                                 </div>
                             </div>
@@ -280,13 +282,13 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     <select 
                                         name="day_published"
                                         className="select select-sm select-bordered w-40"
-                                        defaultValue={form.date}
+                                        defaultValue={form.day_published}
                                         onChange={handleChange}>
                                         <option value="" disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}
-                                                value={form.date}
+                                                value={form.day_published}
                                                 >
                                                 {day}
                                             </option>
@@ -302,7 +304,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     className="h-8 w-52"
                                     placeholder="Pick a Year"
                                     type="text"
-                                    value={form.date}
+                                    value={form.year_published}
                                     name="year_published"
                                     onChange={handleChange}
                                     required 

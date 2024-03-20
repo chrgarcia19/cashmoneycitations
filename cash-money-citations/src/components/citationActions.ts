@@ -6,6 +6,7 @@ require('@citation-js/core')
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
+import { RedirectType, redirect } from "next/navigation";
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -69,6 +70,7 @@ function translateForeignModel(result: any) {
 
     const CSLBibTexData: { [key: string]: any } = {
         year: result[0].created['date-parts'][0][0],
+        day: result[0].created['date-parts'][0][2],
         month: result[0].created['date-parts'][0][1],
         contributors: contributors,
     };
@@ -173,7 +175,7 @@ export async function HandleManualReference(form: any) {
             ISBN: bibResponse.isbn
         };
 
-        await HandleInitialFormat(bibJsonData)
+        await HandleInitialFormat(bibJsonData);
 
       } catch (error) {
         console.error(error)

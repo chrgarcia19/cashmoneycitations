@@ -153,6 +153,8 @@ function InputDOI() {
         //     console.log("Failed to add reference");
         //   }
         CreateCslJsonDocument(item);
+        router.push("/reference-table");
+        router.refresh();
 
     }
 

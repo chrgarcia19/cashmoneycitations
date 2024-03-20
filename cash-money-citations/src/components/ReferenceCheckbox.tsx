@@ -94,11 +94,11 @@ export const Checkbox = ({ references }: IProps) => {
                 await fetch(`/api/references/${refIDs[i]}`, {
                     method: "Delete"
                 });
-                router.push('/reference-table');
-                router.refresh();
             } catch (error) {
             }
         }
+        router.push('/reference-table');
+        router.refresh();
     }
 
     const {

@@ -285,7 +285,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         <h1 className="text-2xl align-middle">Add Reference</h1>
       </div>
       <br/>
-      <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
         <form id={formId} onSubmit={handleSubmit}>
           <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
             {Object.values(EntryType).map((value) => (

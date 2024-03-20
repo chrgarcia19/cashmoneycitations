@@ -23,6 +23,7 @@ interface BookData {
     volume: string;
     edition: string;
     contributors: Contributor[];
+    date: Object;
     month_published: string;
     day_published: string;
     year_published: string;
@@ -54,10 +55,11 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     const [message, setMessage] = useState("");
     
     const [form, setForm] = useState({
-        type: "book",
+        entryType: "book",
         citekey: bookForm.citekey,
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
+        date: bookForm.date,
         title: bookForm.title,
         isbn: bookForm.isbn,
         volume: bookForm.volume,
@@ -107,7 +109,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         e.preventDefault();
         const errs = formValidate();
         const id = searchParams.get('id')
-        if (Object.keys(errs).length === 1) {
+        if (Object.keys(errs).length === 0) {
           forNewReference ? HandleInitialReference(form) : EditReference(form, id);
         } else {
           setErrors({ errs });
@@ -148,13 +150,14 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     
                         <label
                             className="font-bold"
-                            htmlFor="source_title">
+                            htmlFor="title">
                             Book Title
                         </label>
                         <input
                             type="text"
+                            id="reference-title"
+                            name="title"
                             value={form.title}
-                            name="source_title"
                             onChange={handleChange}
                             required
                         />

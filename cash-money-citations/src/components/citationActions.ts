@@ -6,9 +6,6 @@ require('@citation-js/core')
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
-require('@citation-js/plugin-bibtex')
-const { plugins } = require('@citation-js/core')
-const contentType = "application/json"
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -28,6 +25,7 @@ const typeMap: {[key: string]: string } = {
   
 // Takes reference data & converts to CSL-JSON
 function toCslJson(ReferenceData: any) {
+    // Requires any of the following formats: DOI, Bib(La)Tex, WikiData, CSL|https://citation.js.org/api/0.3/tutorial-input_formats.html
     const cslJson = Cite.input(ReferenceData);
     return cslJson;
 }
@@ -119,17 +117,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
     }
 }
 
-// Creates citeKey based off of first author last name and year
-async function InitializeCiteKey(_id: string, lastName: string, year: Date) {
-    try{
-        const fullYear = year.getUTCFullYear();
-        const newCiteKey = (lastName + fullYear)
-        await CSLBibModel.findByIdAndUpdate(_id, { citekey: newCiteKey })
-    } catch(error) {
-        console.error(error)
-    }
-}
-
 async function InitializeCslJson(_id: string, cslJson: object) {
     try {
         await CSLBibModel.findByIdAndUpdate(_id, { cslJson: cslJson })
@@ -139,15 +126,6 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 }
 
 async function HandleInitialFormat(bibResponse: any) {
-
-    // Used for configuring format for BibTex & BibLaTex
-    const config = plugins.config.get('@bibtex')
-    //config.parse.sentenceCase = 'always';
-    // plugins.input.forceType = "@else/list+object"
-    // config.types.bibtex.target['conference'] = 'conference'
-    // config.parse.strict = true
-
-    //console.log(config.constants.required)
     // Converts our mimic CSLBib-JSON schema thing to BibLaTex
     const toBibTex = new Cite(JSON.stringify(bibResponse))
 
@@ -169,18 +147,21 @@ async function formatDate(form: any) {
     form.date = formattedDate;
 }
 
-export async function HandleInitialReference(form: any) {
+async function formatLocation(form: any) {
+    form.address = (form.city + ", "+ form.state)
+}
+
+export async function HandleManualReference(form: any) {
 
     await dbConnect();
     // Create reference entry
     try {
         await formatDate(form);
-
+        await formatLocation(form);
         const bibResponse = await CSLBibModel.create(form)
 
         const bibJsonData = {
             id: bibResponse._id,
-            citekey: bibResponse.citekey,
             type: bibResponse.type,
             title: bibResponse.title,
             author: bibResponse.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
@@ -193,10 +174,6 @@ export async function HandleInitialReference(form: any) {
             URL: bibResponse.url,
             ISBN: bibResponse.isbn
         };
-
-        // const {_id, contributors, year} = bibResponse
-        // const lastName = contributors[0].lastName;
-        // await InitializeCiteKey(_id, lastName, year)
 
         await HandleInitialFormat(bibJsonData)
 

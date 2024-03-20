@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
-import { HandleInitialReference } from "./citationActions";
+import { HandleManualReference } from "./citationActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
 import { EditReference } from "./editReferenceActions";
@@ -299,7 +299,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     const errs = formValidate();
     const id = searchParams.get('id')
     if (Object.keys(errs).length === 0) {
-      forNewReference ? HandleInitialReference(form) : EditReference(form, id);
+      forNewReference ? HandleManualReference(form) : EditReference(form, id);
     } else {
       setErrors({ errs });
     }

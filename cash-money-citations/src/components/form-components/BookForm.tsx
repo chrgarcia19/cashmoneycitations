@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import ContributorForm from "../ContributorForm";
-import { HandleInitialReference } from "../citationActions";
+import { HandleManualReference } from "../citationActions";
 import { EditReference } from "../editReferenceActions";
 
 /*Creating an array of days for a select box*/
@@ -57,7 +57,6 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     
     const [form, setForm] = useState({
         type: "book",
-        citekey: bookForm.citekey,
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
         date: bookForm.date,
@@ -111,7 +110,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         const errs = formValidate();
         const id = searchParams.get('id')
         if (Object.keys(errs).length === 0) {
-          forNewReference ? HandleInitialReference(form) : EditReference(form, id);
+          forNewReference ? HandleManualReference(form) : EditReference(form, id);
         } else {
           setErrors({ errs });
         }
@@ -126,16 +125,6 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     
                     <form id={formID} onSubmit={handleSubmit} className="pb-5">
     
-                        <label className="font-bold" htmlFor="citekey">
-                            Citekey
-                        </label>
-                        <input
-                            type="text"
-                            name="citekey"
-                            defaultValue={form.citekey}
-                            onChange={handleChange}
-                            required
-                        /> 
     
                         <label 
                             className="font-bold" 

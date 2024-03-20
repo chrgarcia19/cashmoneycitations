@@ -93,7 +93,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
 
         const mergedData = translateForeignModel(result);
 
-        //console.log(mergedData)
 
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
@@ -111,7 +110,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         // Adds the CSL-JSON to the existing database collection
         InitializeCslJson(CSLBibTexDocument.id, cslJson);
 
-        //await CSLBibModel.create(result);
     } catch(error) {
         console.error(error)
     }
@@ -164,7 +162,7 @@ export async function HandleManualReference(form: any) {
             id: bibResponse._id,
             type: bibResponse.type,
             title: bibResponse.title,
-            author: bibResponse.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
+            author: bibResponse.contributors.map((contributor: { role: any; firstName: any; lastName: any; }) => ({
             family: contributor.lastName,
             given: contributor.firstName,
             })),

@@ -3,7 +3,7 @@ import TagForm from "@/components/TagForm";
 export default function TagCenter() {
 
     const tagData = {
-        name: ""
+        tagName: ""
     };
 
     return (

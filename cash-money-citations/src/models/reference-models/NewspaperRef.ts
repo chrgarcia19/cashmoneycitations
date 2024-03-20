@@ -5,7 +5,7 @@ export interface NewspaperReference extends mongoose.Document {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     newspaper_title: string;
     edition: string;
     section: string;
@@ -47,7 +47,7 @@ const NewspaperSchema = new mongoose.Schema<NewspaperReference>({
     image_url: {
         type: String,
     },
-    source_title: {
+    title: {
         type: String,
     },
     newspaper_title: {

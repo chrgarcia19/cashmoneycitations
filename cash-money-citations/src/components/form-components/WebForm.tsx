@@ -17,7 +17,7 @@ interface WebData {
     citekey: string;
     image_url: string;
     contributors: Contributor[];
-    source_title: string;
+    title: string;
     website_title: string;
     website_url: string;
     month_accessed: string;
@@ -32,7 +32,7 @@ interface WebData {
 interface Error {
     type?: string;
     citekey?: string;
-    source_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year?: string;
@@ -56,7 +56,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
         citekey: webForm.citekey,
         image_url: webForm.image_url,
         contributors: webForm.contributors,
-        source_title: webForm.source_title,
+        title: webForm.title,
         website_title: webForm.website_title,
         website_url: webForm.website_url,
         month_accessed: webForm.month_accessed,
@@ -167,7 +167,7 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
         let err: Error = {};
         if (!form.type) err.type = "Type is required";
         if (!form.citekey) err.citekey = "Citekey is required";
-        if (!form.source_title) err.source_title = "Article title is required";
+        if (!form.title) err.title = "Article title is required";
         if (!form.contributors) err.contributors = "Contributor info is required";
         if (!form.publisher) err.publisher = "Publisher is required";
         if (!form.year_published) err.year = "Year is required";
@@ -227,8 +227,8 @@ const WebForm = ({formID, webForm, forNewReference = true}: Props) => {
                         </label>
                             <input
                             type="text"
-                            name="source_title"
-                            defaultValue={form.source_title}
+                            name="title"
+                            defaultValue={form.title}
                             onChange={handleChange}
                             required 
                             />

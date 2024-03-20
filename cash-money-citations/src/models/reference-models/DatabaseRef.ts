@@ -5,7 +5,7 @@ export interface DatabaseReference extends mongoose.Document {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     issn: string;
     contributors: Contributor[];
     month_accessed: string;
@@ -50,7 +50,7 @@ const DatabaseSchema = new mongoose.Schema<DatabaseReference>({
         type: String,
     },
     contributors: [ContributorSchema],
-    source_title: {
+    title: {
         type: String,
     },
     issn: {

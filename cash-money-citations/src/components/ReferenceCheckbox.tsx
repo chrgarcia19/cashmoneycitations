@@ -236,7 +236,7 @@ export const Checkbox = ({ references }: IProps) => {
                 <input 
                     type="checkbox"
                     className="checkbox"
-                    name={`${reference.source_title}`}
+                    name={`${reference.title}`}
                     id={`ref-${index}`}
                     checked={isChecked[index]}
                     onChange={() => checkHandler(index)}
@@ -246,7 +246,7 @@ export const Checkbox = ({ references }: IProps) => {
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
-                <td className="border border-slate-600 text-center">{reference.source_title}</td>   
+                <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          
                 {reference.contributors.map((contributor: any) => {
                   return(

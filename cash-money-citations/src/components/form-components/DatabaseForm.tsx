@@ -16,7 +16,7 @@ interface DatabaseData {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     issn: string;
     contributors: Contributor[];
     month_accessed: string;
@@ -35,7 +35,7 @@ interface DatabaseData {
 interface Error {
     type?: string;
     citekey?: string;
-    source_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year_published?: string;
@@ -59,7 +59,7 @@ const DatabaseForm = ({formID, databaseForm, forNewReference = true}: Props) => 
         citekey: databaseForm.citekey,
         image_url: databaseForm.image_url,
         contributors: databaseForm.contributors,
-        source_title: databaseForm.source_title,
+        title: databaseForm.title,
         library: databaseForm.library,
         database: databaseForm.database,
         database_url: databaseForm.database_url,
@@ -227,13 +227,13 @@ const DatabaseForm = ({formID, databaseForm, forNewReference = true}: Props) => 
     
                         <label
                             className="font-bold"
-                            htmlFor="source_title">
+                            htmlFor="title">
                             Article Title
                         </label>
                         <input
                             type="text"
-                            name="source_title"
-                            defaultValue={form.source_title}
+                            name="title"
+                            defaultValue={form.title}
                             onChange={handleChange}
                             required
                         />

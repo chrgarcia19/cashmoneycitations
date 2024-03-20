@@ -5,7 +5,7 @@ export interface MagazineReference extends mongoose.Document {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     magazine_title: string;
     volume: string;
     issue: string;
@@ -47,7 +47,7 @@ const MagazineSchema = new mongoose.Schema<MagazineReference>({
     image_url: {
         type: String,
     },
-    source_title: {
+    title: {
         type: String,
     },
     magazine_title: {

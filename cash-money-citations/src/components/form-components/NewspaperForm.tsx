@@ -16,7 +16,7 @@ interface NewspaperData {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     newspaper_title: string;
     edition: string;
     section: string;
@@ -33,7 +33,7 @@ interface NewspaperData {
 interface Error {
     type?: string;
     citekey?: string;
-    source_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year_published?: string;
@@ -57,7 +57,7 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
         citekey: newspaperForm.citekey,
         image_url: newspaperForm.image_url,
         contributors: newspaperForm.contributors,
-        source_title: newspaperForm.source_title,
+        title: newspaperForm.title,
         newspaper_title: newspaperForm.newspaper_title,
         edition: newspaperForm.edition,
         section: newspaperForm.section,
@@ -223,13 +223,13 @@ const NewspaperForm = ({formID, newspaperForm, forNewReference = true}: Props) =
     
                         <label
                             className="font-bold"
-                            htmlFor="source_title">
+                            htmlFor="title">
                             Article Title
                         </label>
                         <input
                             type="text"
-                            name="source_title"
-                            defaultValue={form.source_title}
+                            name="title"
+                            defaultValue={form.title}
                             onChange={handleChange}
                             required
                         />

@@ -5,7 +5,7 @@ export interface JournalReference extends mongoose.Document {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     journal_title: string;
     volume: string;
     issue: string;
@@ -47,7 +47,7 @@ const JournalSchema = new mongoose.Schema<JournalReference>({
     image_url: {
         type: String,
     },
-    source_title: {
+    title: {
         type: String,
     },
     journal_title: {

@@ -5,7 +5,7 @@ export interface BookReference extends mongoose.Document {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     isbn: string;
     volume: string;
     edition: string;
@@ -47,7 +47,7 @@ const BookSchema = new mongoose.Schema<BookReference>({
         type: String,
     },
     contributors: [ContributorSchema],
-    source_title: {
+    title: {
         type: String,
     },
     isbn: {

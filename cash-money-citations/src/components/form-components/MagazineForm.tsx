@@ -16,7 +16,7 @@ interface MagazineData {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     magazine_title: string;
     volume: string;
     issue: string;
@@ -33,7 +33,7 @@ interface MagazineData {
 interface Error {
     type?: string;
     citekey?: string;
-    source_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year_published?: string;
@@ -57,7 +57,7 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
         citekey: magazineForm.citekey,
         image_url: magazineForm.image_url,
         contributors: magazineForm.contributors,
-        source_title: magazineForm.source_title,
+        title: magazineForm.title,
         magazine_title: magazineForm.magazine_title,
         volume: magazineForm.volume,
         issue: magazineForm.issue,
@@ -223,13 +223,13 @@ const MagazineForm = ({formID, magazineForm, forNewReference = true}: Props) => 
     
                         <label
                             className="font-bold"
-                            htmlFor="source_title">
+                            htmlFor="title">
                             Article Title
                         </label>
                         <input
                             type="text"
-                            name="source_title"
-                            defaultValue={form.source_title}
+                            name="title"
+                            defaultValue={form.title}
                             onChange={handleChange}
                             required
                         />

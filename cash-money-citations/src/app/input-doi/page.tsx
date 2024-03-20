@@ -117,7 +117,7 @@ function InputDOI() {
             citekey: "",
             image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
-            source_title: title,
+            title: title,
             journal_title: item.publisher,
             volume: item.volume,
             issue: "",

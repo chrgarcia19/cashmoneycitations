@@ -16,7 +16,7 @@ interface JournalData {
     type: string;
     citekey: string;
     image_url: string;
-    source_title: string;
+    title: string;
     journal_title: string;
     volume: string;
     issue: string;
@@ -33,7 +33,7 @@ interface JournalData {
 interface Error {
     type?: string;
     citekey?: string;
-    source_title?: string;
+    title?: string;
     contributors?: string;
     publisher?: string;
     year_published?: string;
@@ -57,7 +57,7 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
         citekey: journalForm.citekey,
         image_url: journalForm.image_url,
         contributors: journalForm.contributors,
-        source_title: journalForm.source_title,
+        title: journalForm.title,
         journal_title: journalForm.journal_title,
         volume: journalForm.volume,
         issue: journalForm.issue,
@@ -223,13 +223,13 @@ const JournalForm = ({formID, journalForm, forNewReference = true}: Props) => {
     
                         <label
                             className="font-bold"
-                            htmlFor="source_title">
+                            htmlFor="title">
                             Article Title
                         </label>
                         <input
                             type="text"
-                            name="source_title"
-                            defaultValue={form.source_title}
+                            name="title"
+                            defaultValue={form.title}
                             onChange={handleChange}
                             required
                         />

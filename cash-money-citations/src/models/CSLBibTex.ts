@@ -103,6 +103,10 @@ const CSLBibSchema = new Schema({
     journal: String, //Journal Title
     date: Date, //Date Published
     urldate: Date, //Date Accessed
+    eventdate: Date,
+    origdate: Date,
+    month: String,
+    year: String,
     note: String,
     number: Number,
     organization: String,

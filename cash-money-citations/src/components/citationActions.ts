@@ -172,17 +172,16 @@ export async function HandleInitialReference(form: any) {
     try {
 
         const bibResponse = await CSLBibModel.create(form)
-
         const bibJsonData = {
             id: bibResponse._id,
             citekey: bibResponse.citekey,
-            type: bibResponse.entryType,
+            type: bibResponse.type,
             title: bibResponse.title,
             author: bibResponse.contributors.map((contributor: { firstName: any; lastName: any; }) => ({
             family: contributor.lastName,
             given: contributor.firstName,
             })),
-            issued: { "date-parts": [[parseInt(bibResponse.year, 10), bibResponse.month ? parseInt(bibResponse.month, 10) : 0]] },
+            date: { "date-parts": [[parseInt(bibResponse.year, 10), bibResponse.month ? parseInt(bibResponse.month, 10) : 0]] },
             publisher: bibResponse.publisher,
             DOI: bibResponse.doi,
             URL: bibResponse.url,

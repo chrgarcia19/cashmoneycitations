@@ -5,7 +5,7 @@ import { StringLiteral } from "typescript";
 export interface References extends mongoose.Document {
     type: string;
     citekey: string;
-    source_title: string;
+    title: string;
     contributors: Contributor[];
     month_published: string;
     day_published: string;
@@ -42,7 +42,7 @@ const ReferenceSchema = new mongoose.Schema<References>({
     type: String,
     // required: [true, "Please provide the citekey for this reference."],
   },
-  source_title: {
+  title: {
     type: String,
     // required: [true, "Please provide the title."],
   },

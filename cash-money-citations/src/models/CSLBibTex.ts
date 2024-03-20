@@ -35,16 +35,6 @@ const referencesUsedSchema = new mongoose.Schema({
   journalTitle: String
 })
 
-const dateSchema = new mongoose.Schema({
-  month: Number,
-  day: Number,
-  year: Number
-})
-
-const pageSchema = new mongoose.Schema({
-  start_page: Number,
-  end_page: Number
-})
 
 const CSLBibSchema = new Schema({
     entryType: {
@@ -111,8 +101,8 @@ const CSLBibSchema = new Schema({
     howpublished: String,
     institution: String, 
     journal: String, //Journal Title
-    date: dateSchema, //Date Published
-    urldate: dateSchema, //Date Accessed
+    date: Date, //Date Published
+    urldate: Date, //Date Accessed
     note: String,
     number: Number,
     organization: String,

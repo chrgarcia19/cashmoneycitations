@@ -40,6 +40,22 @@ stateDiagram-v2
    toBib(La)Tex --> parsed_to_CSLJSON
    parsed_to_CSLJSON --> update_database_reference
 ```
+
+### Important BibLaTex Commands
+- const { plugins } = require('@citation-js/core')
+- const config = plugins.config.get('@bibtex')
+- config.parse.sentenceCase = 'always';
+- plugins.input.forceType = "@else/list+object"
+- config.types.bibtex.target['conference'] = 'conference'
+- config.parse.strict = true
+
+#### Input Types
+https://citation.js.org/api/0.3/tutorial-input_formats.html
+
+#### Schema feilds
+
+Differing dates are requried for the different input types (DOI, Manual, ISBN, etc)
+
 #### BibLaTex Feilds
 ``` TypeScript
 {
@@ -194,6 +210,9 @@ stateDiagram-v2
   pmcid: [ 'field', 'literal' ]
 }
 ```
+### Zotero References
 
+##### Zotero Schema
+https://github.com/zotero/zotero-schema/blob/master/schema.json
 
 This project uses styles, locales, and more from the Citation Style Language Project. Found here -> [https://citationstyles.org/]

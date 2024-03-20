@@ -3,8 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { mutate } from "swr";
-import ClickableTag from "./ClickableTag";
-import DisplayTags from "@/app/tag-center/displayTag";
 
 interface TagData {
     tagName: string;
@@ -72,7 +70,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
       if (!res.ok) {
         throw new Error(res.status.toString());
       }
-      router.push("/view-tag");
+      router.push("/tag-center");
       router.refresh();
     } catch (error) {
     }

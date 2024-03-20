@@ -2,6 +2,8 @@ import dbConnect from "@/utils/dbConnect";
 import Tag from "../../models/Tag";
 import Link from "next/link";
 import TagForm from "@/components/TagForm";
+import { ApplyTagsToRef } from "./applyTagsToRef";
+import Reference from "@/models/Reference";
 
 async function getTags() {
     await dbConnect();
@@ -15,8 +17,21 @@ async function getTags() {
     return tags;
 }
 
+async function getReferences() {
+    await dbConnect();
+  
+    const result = await Reference.find({});
+    const references = result.map((doc) => {
+      const reference = JSON.parse(JSON.stringify(doc));
+      return reference;
+    });
+  
+    return references;
+}
+
 export default async function DisplayTags(){
     const tags = await getTags();
+    const references = await getReferences();
 
     const tagData = {
         tagName: "",
@@ -37,12 +52,15 @@ export default async function DisplayTags(){
                             </Link>
                         </span>
                     ))}
+                    <br />
                     <div className="card-actions">
                     <h2 className="card-title">Create Tag</h2>
                         <TagForm formID={"add-new-tag"} tagForm={tagData} />
                     </div>
                 </div>
             </div>
+            <ApplyTagsToRef tags={tags} references={references} />
+            
         </>
     );
 }

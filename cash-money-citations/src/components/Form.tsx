@@ -255,34 +255,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-  const putData = async (form: FormData) => {
-    const id  = searchParams.get("id");
-
-    try {
-      const res = await fetch(`/api/references/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      const { data } = await res.json();
-
-      mutate(`/api/references/${id}`, data, true); // Update the local data without a revalidation
-      router.refresh();
-    } catch (error) {
-      setMessage("Failed to update reference");
-    }
-  };
-
-
   /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
   const formValidate = () => {
     let err: Error = {};
@@ -305,14 +277,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     }
   };
 
-  // let formTitle: String;
-  // if (form.type) {
-  //   formTitle = "Edit Reference"
-  // }
-  // else {
-  //   formTitle = "Add Reference"
-  // }
-
   return (
     <>
     <div className="bg-gray-100 w-2/5 rounded-xl">
@@ -322,15 +286,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       <br/>
       <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
         <form id={formId} onSubmit={handleSubmit}>
-
-          {/* <label htmlFor="type">Type</label>
-          <select name="type" className="bg-white border-gray-300 rounded-lg w-full h-8 border-t border-r border-l border-b" defaultValue={form.type} onChange={handleChange} required>
-            <option value="" disabled hidden>Choose here</option>
-            <option value="website">Website</option>
-            <option value="book">Book</option>
-            <option value="journal">Journal</option>
-          </select> */}
-
           <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>

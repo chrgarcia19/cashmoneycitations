@@ -131,6 +131,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     title: "",
     volume: "",
     edition: "",
+    date: "",
     month_published: "",
     day_published: "",
     year_published: "",

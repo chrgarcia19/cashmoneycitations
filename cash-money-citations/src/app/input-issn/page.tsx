@@ -11,7 +11,11 @@ function InputISSN() {
     const contentType = "application/json";
     const errorItem: any = [
         {
-            ISSN: "Please enter a complete ISSN",
+            DOI: "",
+            ISSN: [
+                "Enter a complete ISSN",
+                "Enter a complete ISSN",
+            ],
             title: "Unknown"
         }
     ]
@@ -51,14 +55,20 @@ function InputISSN() {
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setTableShown(false);
-        const res = await fetch(`https://api.crossref.org/works?filter=issn:${searchVal}&rows=100`);
-        const result = await res.json();
-        if (result.message.items){
-            setData(result.message.items);
+        try {
+            const res = await fetch(`https://api.crossref.org/works?filter=issn:${searchVal}&rows=100`);
+            const result = await res.json();
+            if (result.message.items){
+                setData(result.message.items);
+            }
+            else {
+                setData(errorItem);
+            }
         }
-        else {
-            setData(errorItem)
+        catch {
+            setData(errorItem);
         }
+        
         setTableShown(true);
     }
 

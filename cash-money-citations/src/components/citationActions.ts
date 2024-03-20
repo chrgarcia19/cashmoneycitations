@@ -8,7 +8,6 @@ import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
-
 const contentType = "application/json"
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
@@ -165,13 +164,20 @@ async function HandleInitialFormat(bibResponse: any) {
     InitializeCslJson(bibResponse.id, cslJson);
 }
 
+async function formatDate(form: any) {
+    let formattedDate = new Date(form.year_published, form.month_published, form.day_published);
+    form.date = formattedDate;
+}
+
 export async function HandleInitialReference(form: any) {
 
     await dbConnect();
     // Create reference entry
     try {
+        await formatDate(form);
 
         const bibResponse = await CSLBibModel.create(form)
+
         const bibJsonData = {
             id: bibResponse._id,
             citekey: bibResponse.citekey,
@@ -181,7 +187,7 @@ export async function HandleInitialReference(form: any) {
             family: contributor.lastName,
             given: contributor.firstName,
             })),
-            date: { "date-parts": [[parseInt(bibResponse.year, 10), bibResponse.month ? parseInt(bibResponse.month, 10) : 0]] },
+            date: bibResponse.date,
             publisher: bibResponse.publisher,
             DOI: bibResponse.doi,
             URL: bibResponse.url,

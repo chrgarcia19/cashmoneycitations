@@ -1,6 +1,7 @@
 "use client"
 
 import { Contributor } from "@/models/Contributor";
+// import { DateTemplate } from "@/models/CSLBibTex";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
@@ -23,7 +24,7 @@ interface BookData {
     volume: string;
     edition: string;
     contributors: Contributor[];
-    date: Object;
+    date: string;
     month_published: string;
     day_published: string;
     year_published: string;
@@ -55,7 +56,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     const [message, setMessage] = useState("");
     
     const [form, setForm] = useState({
-        entryType: "book",
+        type: "book",
         citekey: bookForm.citekey,
         image_url: bookForm.image_url,
         contributors: bookForm.contributors,
@@ -101,7 +102,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         if (!form.title) err.title = "Title is required";
         if (!form.contributors) err.contributors = "Contributor info is required";
         if (!form.publisher) err.publisher = "Publisher is required";
-        if (!form.year_published) err.year_published = "Year is required";
+        // if (!form.year_published) err.year_published = "Year is required";
         return err;
       };
     
@@ -264,21 +265,21 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     <select
                                         name="month_published"
                                         className="select select-sm select-bordered w-40"
-                                        defaultValue={form.month_published}
+                                        defaultValue={form.date}
                                         onChange={handleChange}>
                                         <option value="" disabled>Pick a Month</option>
-                                        <option value="January">January</option>
-                                        <option value="February">February</option>
-                                        <option value="March">March</option>
-                                        <option value="April">April</option>
-                                        <option value="May">May</option>
-                                        <option value="June">June</option>
-                                        <option value="July">July</option>
-                                        <option value="August">August</option>
-                                        <option value="September">September</option>
-                                        <option value="October">October</option>
-                                        <option value="November">November</option>
-                                        <option value="December">December</option>
+                                        <option value="0">January</option>
+                                        <option value="1">February</option>
+                                        <option value="2">March</option>
+                                        <option value="3">April</option>
+                                        <option value="4">May</option>
+                                        <option value="5">June</option>
+                                        <option value="6">July</option>
+                                        <option value="7">August</option>
+                                        <option value="8">September</option>
+                                        <option value="9">October</option>
+                                        <option value="10">November</option>
+                                        <option value="11">December</option>
                                     </select> 
                                 </div>
                             </div>
@@ -290,13 +291,13 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     <select 
                                         name="day_published"
                                         className="select select-sm select-bordered w-40"
-                                        defaultValue={form.day_published}
+                                        defaultValue={form.date}
                                         onChange={handleChange}>
                                         <option value="" disabled>Pick a day</option>
                                         {days.map((day, i) => (
                                             <option 
                                                 key={i}
-                                                value={form.day_published}
+                                                value={form.date}
                                                 >
                                                 {day}
                                             </option>
@@ -312,7 +313,7 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
                                     className="h-8 w-52"
                                     placeholder="Pick a Year"
                                     type="text"
-                                    value={form.year_published}
+                                    value={form.date}
                                     name="year_published"
                                     onChange={handleChange}
                                     required 

@@ -1,16 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
-import {getReferences} from './actions';
+import {getUserReferences} from './actions';
+import { authConfig } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 export default async function ReferenceGallery() {
-  const references = await getReferences();
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
+
+  const references = await getUserReferences(userId);
 
   return (
     <>  
       <div className='reference-wrapper'>
         <div className="absolute w-full h-screen bg-zinc-700">
           <div className='reference-wrapper'>
-            {references.map((reference) => (
+            {references?.map((reference) => (
               <div key={reference._id}>
                   <div className="card">
                     <img src={reference.image_url} alt="Image of a Reference Cover" />

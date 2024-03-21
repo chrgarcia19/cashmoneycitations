@@ -33,7 +33,7 @@ export function EditReference( {
   if (!reference) return null;
 
   const referenceForm = {
-    type: reference.entryType,
+    type: reference.type,
   };
 
   if (referenceForm.type == "website"){

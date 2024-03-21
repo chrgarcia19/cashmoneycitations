@@ -7,6 +7,7 @@ import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
 import { RedirectType, redirect } from "next/navigation";
+import User from "@/models/User";
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -151,14 +152,31 @@ async function formatLocation(form: any) {
     form.address = (form.city + ", "+ form.state)
 }
 
-export async function HandleManualReference(form: any) {
+async function AddRef2User(userId: string, referenceId: string) {
+    await dbConnect();
+
+    try {
+        const user = await User.findById(userId);
+        if (user) {
+            user.ownedReferences = [...user.ownedReferences, referenceId];
+            await user.save();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export async function HandleManualReference(form: any, userId: any) {
 
     await dbConnect();
     // Create reference entry
     try {
         await formatDate(form);
         await formatLocation(form);
+
         const bibResponse = await CSLBibModel.create(form)
+
+        await AddRef2User(userId, bibResponse._id);
 
         const bibJsonData = {
             id: bibResponse._id,

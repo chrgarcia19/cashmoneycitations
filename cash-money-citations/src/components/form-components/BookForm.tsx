@@ -8,7 +8,7 @@ import useSWR, { mutate } from "swr";
 import ContributorForm from "../ContributorForm";
 import { HandleManualReference } from "../citationActions";
 import { EditReference } from "../editReferenceActions";
-
+import { useSession } from "next-auth/react";
 /*Creating an array of days for a select box*/
 const days = new Array<number>();
 for (let i = 1; i < 32; i++){
@@ -54,7 +54,8 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
     const contentType = "application/json";
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState("");
-    
+    const { data: session } = useSession();
+
     const [form, setForm] = useState({
         type: "book",
         image_url: bookForm.image_url,
@@ -109,8 +110,10 @@ const BookForm = ({formID, bookForm, forNewReference = true}: Props) => {
         e.preventDefault();
         const errs = formValidate();
         const id = searchParams.get('id')
+        const userId = session?.user?.id;
+
         if (Object.keys(errs).length === 0) {
-          forNewReference ? HandleManualReference(form) : EditReference(form, id);
+          forNewReference ? HandleManualReference(form, userId) : EditReference(form, id);
           router.push("/reference-table");
           router.refresh();
         } else {

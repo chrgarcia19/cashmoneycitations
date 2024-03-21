@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createUser } from "./actions";
+import { createUser } from "./componentActions/actions";
 import { EmailInUseError } from "./EmailInUseError";
 
 interface RegistrationData {

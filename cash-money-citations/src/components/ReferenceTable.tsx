@@ -1,5 +1,5 @@
 import ReferenceCheckbox from "./ReferenceCheckbox";
-import {getReferences} from "./actions";
+import {getReferences} from "./componentActions/actions";
 
 async function ReferenceTable(){
     const references = await getReferences();

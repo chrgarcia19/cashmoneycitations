@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import {getUserReferences} from './actions';
+import {getUserReferences} from './componentActions/actions';
 import { authConfig } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 

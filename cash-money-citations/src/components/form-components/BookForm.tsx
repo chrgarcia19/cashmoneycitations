@@ -6,8 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
 import ContributorForm from "../ContributorForm";
-import { HandleManualReference } from "../citationActions";
-import { EditReference } from "../editReferenceActions";
+import { HandleManualReference } from "../componentActions/citationActions";
+import { EditReference } from "../componentActions/editReferenceActions";
 import { useSession } from "next-auth/react";
 /*Creating an array of days for a select box*/
 const days = new Array<number>();

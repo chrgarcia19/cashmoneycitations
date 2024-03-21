@@ -10,7 +10,8 @@ export interface Users extends mongoose.Document {
     accounts: [{
         provider: string,
         providerAccountId: string,
-    }]
+    }],
+    ownedReferences: [string]
 }
 
 /* UserSchema will correspond to a collection in your MongoDB database. */
@@ -47,6 +48,7 @@ const UserSchema = new mongoose.Schema<Users>({
         provider: String,
         providerAccountId: String,
     }],
+    ownedReferences: [String]
 }, {timestamps: true});
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

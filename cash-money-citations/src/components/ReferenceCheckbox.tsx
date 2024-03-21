@@ -1,6 +1,6 @@
 "use client"
 
-import { References } from "@/models/Reference";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -110,7 +110,7 @@ export const Checkbox = ({ references }: IProps) => {
       if (error) return <p>Failed to load</p>;
       if (isLoading) return <p>Loading...</p>;
 
-    const [refData, setRefData] = useState<References[]>([]);
+    const [refData, setRefData] = useState<CSLBibInterface[]>([]);
 
     useEffect(() => {
         setRefData(references);
@@ -133,7 +133,7 @@ export const Checkbox = ({ references }: IProps) => {
     }
 
     function getSelectedRef(checked: Array<boolean>){
-        let refs = new Array<References>();
+        let refs = new Array<CSLBibInterface>();
         for (let i = 0; i < checked.length; i++){
             if (checked[i]){
                 refs.push(refData[i]);
@@ -176,7 +176,7 @@ export const Checkbox = ({ references }: IProps) => {
         setIsChecked(checkState)
     }
 
-    const singleMenu = (reference: References) => {
+    const singleMenu = (reference: CSLBibInterface) => {
         return (
             <div className="btm-nav">
                 <Link className="bg-green-300 text-green-800 hover:active" style={{display: 'grid'}} href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>
@@ -206,7 +206,7 @@ export const Checkbox = ({ references }: IProps) => {
         )
     }
 
-    const multiMenu = (refIDs: string[], refs: References[]) => {
+    const multiMenu = (refIDs: string[], refs: CSLBibInterface[]) => {
         return (
             <div className="btm-nav">
                 <button className="bg-red-300 text-red-800 hover:active"

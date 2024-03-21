@@ -1,5 +1,15 @@
 import mongoose, { Schema } from 'mongoose';
 import { Contributor } from "./Contributor";
+import User from './User';
+import { getServerSession } from 'next-auth';
+import { authConfig } from '@/lib/auth';
+
+
+async function getUserId() {
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
+  return userId;
+}
 
 function generateCiteKey() {
   return String(Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
@@ -195,5 +205,20 @@ const CSLBibSchema = new Schema({
     citationIdList: [String]
 
 }, {timestamps: true});
+
+CSLBibSchema.pre('save', async function (next) {
+  const reference = this as CSLBibInterface;
+  const userId = await getUserId();
+
+  // Retrieve the owner of the reference
+  const owner = await User.findById(userId).select('ownedReferences');
+
+  // If the owner doesn't exist or the reference is not in the owner's list of ownedReferences, invalidate the document
+  if (!owner || !owner.ownedReferences.includes(reference._id)) {
+    this.invalidate('owner', 'Owner not found or does not own this reference');
+  }
+
+  next();
+});
 
 export default mongoose.models.CSLBibModel || mongoose.model("CSLBibModel", CSLBibSchema); 

@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import CSLBibModel from "@/models/CSLBibTex"
 // For API's use THIS TO GET PARAMS req: NextRequest, { params }: { params: { id: string } }
 

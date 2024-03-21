@@ -1,9 +1,14 @@
 import ReferenceCheckbox from "./ReferenceCheckbox";
-import {getReferences} from "./componentActions/actions";
+import {getUserReferences} from "./componentActions/actions";
+import { authConfig } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 async function ReferenceTable(){
-    const references = await getReferences();
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
 
+  const references = await getUserReferences(userId);
+  
     return(
         <>
         <div className='mt-20 mb-20 pr-10 pl-10'>

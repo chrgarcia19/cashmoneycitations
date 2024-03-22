@@ -2,8 +2,10 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 
 function InputDOI() {
+    const { data: session } = useSession();
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
@@ -139,6 +141,9 @@ function InputDOI() {
             image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
         };
         
+        //Checking for login info
+        console.log(session?.user?.id);
+
         try {
             const res = await fetch("/api/references", {
               method: "POST",

@@ -2,8 +2,10 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 
 function InputISBN() {
+    const { data: session } = useSession();
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
@@ -175,6 +177,9 @@ function InputISBN() {
             image_url: imageLink,
         };
         
+        //Checking for login info
+        console.log(session?.user?.id);
+
         try {
             const res = await fetch("/api/references", {
               method: "POST",

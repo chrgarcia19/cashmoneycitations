@@ -2,8 +2,10 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 
 function InputISSN() {
+    const { data: session } = useSession();
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
@@ -148,6 +150,9 @@ function InputISSN() {
             journal: "",
             image_url: "https://pbs.twimg.com/profile_images/592645671863328768/uv0v0EV8_400x400.jpg",
         };
+
+        //Checking for login info
+        console.log(session?.user?.id);
         
         try {
             const res = await fetch("/api/references", {

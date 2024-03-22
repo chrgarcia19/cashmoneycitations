@@ -20,13 +20,18 @@ async function AddCite2User(userId: string, citationList: Array<String>) {
     await dbConnect();
 
     try {
+        // Add citations to User owned list
         const user = await User.findById(userId);
         if (user) {
             for (const cite in citationList) {
                 user.ownedCitations = [...user.ownedCitations, citationList[cite]];
+                let citeInstance = await CitationModel.findById(citationList[cite]);
+                citeInstance.isOwnedBy = [...citeInstance.isOwnedBy, userId];
+                await citeInstance.save();
             }
             await user.save();
         }
+
     } catch(e) {
         console.error(e);
     }

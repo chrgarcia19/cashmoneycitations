@@ -43,7 +43,7 @@ export const authConfig: NextAuthOptions = ({
     }),
     GithubProvider({
       async profile(profile) {
-        return Promise.resolve({ id: profile.id, image: profile.avatar_url, role: profile.role ?? "user" });
+        return Promise.resolve({ id: profile.id, email: profile.email, image: profile.avatar_url, role: profile.role ?? "user" });
       },
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
@@ -51,7 +51,7 @@ export const authConfig: NextAuthOptions = ({
 
     GoogleProvider({
       async profile(profile) {
-        return Promise.resolve({ id: profile.sub, image: profile.picture, name: profile.name, role: profile.role ?? "user" });
+        return Promise.resolve({ id: profile.sub, email: profile.email, image: profile.picture, name: profile.name, role: profile.role ?? "user" });
       },
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
@@ -72,7 +72,8 @@ export const authConfig: NextAuthOptions = ({
             username: profile?.name, 
             email: profile?.email, 
             image: profile?.image, 
-            accounts: [{ provider: account?.provider, providerAccountId: account?.id }] 
+            accounts: [{ provider: account?.provider, providerAccountId: account?.id }],
+            ownedReferences: [],
           })
   
         }
@@ -80,15 +81,18 @@ export const authConfig: NextAuthOptions = ({
       return Promise.resolve(true)
     },
     async jwt({token, trigger, user, session }) {
+      const oauthDbId = await User.findOne({
+        email: token.email, 
+      })
+
+      token.id = oauthDbId.id;
       if (trigger === "update" && session) {
         return { ...token, ...session?.user };
       }
-
       if (user) {
         token.role = user.role;
         token.id = user.id;
         token.image = user.image;
-
       }
       return token;
     },
@@ -97,7 +101,6 @@ export const authConfig: NextAuthOptions = ({
         session.user.role = token.role;
         session.user.id = token.id;
         session.user.image = token.image;
-
       }
       return session;
     }

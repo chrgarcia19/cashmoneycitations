@@ -86,6 +86,8 @@ export const authConfig: NextAuthOptions = ({
       })
 
       token.id = oauthDbId.id;
+      token.sub = oauthDbId.id;
+      
       if (trigger === "update" && session) {
         return { ...token, ...session?.user };
       }

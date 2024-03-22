@@ -88,7 +88,7 @@ function translateForeignModel(result: any) {
 }
 
 // Creates CSL-JSON for auto input -> DOI, ISBN, ISSN, etc.
-export async function CreateCslJsonDocument(automaticInput: any) {
+export async function CreateCslJsonDocument(automaticInput: any, userId: string | undefined) {
     try {
         await dbConnect();
         const input = automaticInput
@@ -99,6 +99,8 @@ export async function CreateCslJsonDocument(automaticInput: any) {
 
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
+
+        await AddRef2User(userId, CSLBibTexDocument._id);
 
         const toBibTex = new Cite(JSON.stringify(result))
 

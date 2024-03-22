@@ -36,6 +36,15 @@ export default async function DisplayTags(){
     const tagData = {
         tagName: "",
         tagColor: "",
+    }
+
+    const tagData2 = {
+        tagName: new Array<string>(),
+        tagID: new Array<string>(),
+    };
+
+    const refData = {
+        refID: new Array<string>(),
     };
 
 

@@ -37,10 +37,14 @@ export const Checkbox = ({ references }: IProps) => {
         }
     };
 
-    async function exportCitation() {
+    async function exportSingleCitation(refId: string) {
         // Call to server action to create citations & save in DB
-        //await CreateCitation(referenceId, styleChoice, localeChoice);
-        router.push(`/displayCitation?citation=${id}`)
+        router.push(`/displayCitation?citation=${refId}`)
+    }
+
+    async function exportMultipleCitation(refIds: string[]) {
+        // Call to server action to create citations & save in DB
+        router.push(`/displayCitation?citation=${refIds}`)
     }
 
     const handleDeleteMany = async (refIDs: string[]) => {
@@ -148,7 +152,7 @@ export const Checkbox = ({ references }: IProps) => {
                     <span className="btm-nav-label">Delete</span>
                 </button>
                 <button className="bg-orange-300 text-orange-800 hover:active"
-                onClick={() => exportCitation()}>
+                onClick={() => exportSingleCitation(reference._id)}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.93" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.33,0.02h29.41v20.6H20.36v80.7h82.1V84.79h20.36v37.14H0V0.02H8.33L8.33,0.02z M122.88,0H53.3l23.74,23.18l-33.51,33.5 l21.22,21.22L98.26,44.4l24.62,24.11V0L122.88,0z"/></svg>
                     <span className="btm-nav-label">Export</span>
                 </button>
@@ -170,7 +174,7 @@ export const Checkbox = ({ references }: IProps) => {
                     <span className="btm-nav-label">Delete All Selected</span>
                 </button>
                 <button className="bg-orange-300 text-orange-800 hover:active"
-                    >
+                onClick={() => exportMultipleCitation(refIDs)}    >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.93" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.33,0.02h29.41v20.6H20.36v80.7h82.1V84.79h20.36v37.14H0V0.02H8.33L8.33,0.02z M122.88,0H53.3l23.74,23.18l-33.51,33.5 l21.22,21.22L98.26,44.4l24.62,24.11V0L122.88,0z"/></svg>
                     <span className="btm-nav-label">Export All Selected</span>
                 </button>
@@ -218,4 +222,3 @@ export const Checkbox = ({ references }: IProps) => {
 }
 
 export default Checkbox;
-

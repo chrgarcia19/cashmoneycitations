@@ -3,16 +3,17 @@
 import { useState } from "react";
 import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
-import { HandleManualReference } from "./citationActions";
+import { HandleManualReference } from "./componentActions/citationActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { mutate } from "swr";
-import { EditReference } from "./editReferenceActions";
+import { EditReference } from "./componentActions/editReferenceActions";
 import WebForm from "./form-components/WebForm";
 import BookForm from "./form-components/BookForm";
 import JournalForm from "./form-components/JournalForm";
 import MagazineForm from "./form-components/MagazineForm";
 import NewspaperForm from "./form-components/NewspaperForm";
 import DatabaseForm from "./form-components/DatabaseForm";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 enum EntryType {
   Article = 'article',
@@ -103,6 +104,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
   const router = useRouter();
   const contentType = "application/json";
 

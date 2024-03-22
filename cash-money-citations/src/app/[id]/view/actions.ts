@@ -12,6 +12,25 @@ import dbConnect from "@/utils/dbConnect";
 import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
+import User from "@/models/User";
+import { authConfig } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+
+async function AddCite2User(userId: string, citationList: Array<String>) {
+    await dbConnect();
+
+    try {
+        const user = await User.findById(userId);
+        if (user) {
+            for (const cite in citationList) {
+                user.ownedCitations = [...user.ownedCitations, citationList[cite]];
+            }
+            await user.save();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
 
 export async function CreateCitation(referenceId: any, styleChoice: Array<string>, localeChoice: string) {
 
@@ -66,6 +85,10 @@ export async function CreateCitation(referenceId: any, styleChoice: Array<string
             citationIdList: citationIdList
         });
 
+        const session = await getServerSession(authConfig);
+        const userId = session?.user?.id ?? '';
+        // Add citation to ownedCitations in User model
+        await AddCite2User(userId, citationIdList);
 
     }
 

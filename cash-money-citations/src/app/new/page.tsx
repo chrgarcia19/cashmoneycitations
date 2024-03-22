@@ -5,20 +5,60 @@ import Form from "../../components/Form";
 const NewReference = () => {
   const referenceForm = {
     entryType: '',
-    citekey: "",
-    title: "",
-    contributors: new Array<Contributor>(),
-    publisher: "",
-    year: "",
-    month: "",
     address: "",
+    annote: "",
+    contributors: new Array<Contributor>(),
+    website_title: "",
+    chapter: "",
     edition: "",
-    volume: "",
-    isbn: "",
-    doi: "",
-    pages: "",
+    editor: "",
+    howpublished: "",
+    institution: "",
     journal: "",
+    /*The next three fields are later
+    converted into a date object*/
+    month_published: "",
+    day_published: "",
+    year_published: "",
+    /*The next three fields are later
+    converted into a date object*/
+    month_accessed: "",
+    day_accessed: "",
+    year_accessed: "",
+    /*The next three fields are later
+    converted into a date object*/
+    month_event: "",
+    day_event: "",
+    year_event: "",
+    /*The next three fields are later
+    converted into a date object*/
+    month_orig: "",
+    day_orig: "",
+    year_orig: "",
+    month: "",
+    year: "",
+    note: "",
+    number: 0,
+    organization: "",
+    pages: "",
+    publisher: "",
+    school: "",
+    series: "",
+    volumes: "",
+    short_title: "",
+    title: new Array<String>(),
+    type: "",
+    volume: 0,
+    doi: "",
+    issn: new Array<String>(),
+    isbn: "",
+    url: "",
+    rights: "",
+    runningTime: "",
+    format: "",
     image_url: "",
+    issue: "",
+    apiSource: "",
   };
   return <Suspense><Form formId="add-reference-form" referenceForm={referenceForm} /></Suspense>;
   

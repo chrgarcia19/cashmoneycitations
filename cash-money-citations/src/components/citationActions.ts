@@ -156,7 +156,7 @@ export async function HandleManualReference(form: any) {
     await dbConnect();
     // Create reference entry
     try {
-        await formatDate(form);
+        const test = await formatDate(form);
         await formatLocation(form);
         const bibResponse = await CSLBibModel.create(form)
 
@@ -174,6 +174,9 @@ export async function HandleManualReference(form: any) {
             URL: bibResponse.url,
             ISBN: bibResponse.isbn
         };
+
+        console.log(test);
+        console.log(bibResponse.date);
 
         await HandleInitialFormat(bibJsonData);
 

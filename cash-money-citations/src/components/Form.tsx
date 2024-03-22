@@ -68,20 +68,60 @@ interface FormData {
     type: string,
     enum: EntryType
   }
-  //type: string;
-  title: string;
-  contributors: Contributor[];
-  publisher: string;
-  year: number;
-  month: string;
   address: string;
+  annote: string;
+  contributors: Contributor[];
+  website_title: string;
+  chapter: string;
   edition: string;
-  volume: string;
-  isbn: string;
-  doi: string;
-  pages: string;
+  editor: string;
+  howpublished: string;
+  institution: string;
   journal: string;
+  /*The next three fields are later
+  converted into a date object*/
+  month_published: string;
+  day_published: string;
+  year_published: string;
+  /*The next three fields are later
+  converted into a date object*/
+  month_accessed: string;
+  day_accessed: string;
+  year_accessed: string;
+  /*The next three fields are later
+  converted into a date object*/
+  month_event: string;
+  day_event: string;
+  year_event: string;
+  /*The next three fields are later
+  converted into a date object*/
+  month_orig: string;
+  day_orig: string;
+  year_orig: string;
+  month: string;
+  year: string;
+  note: string;
+  number: number;
+  organization: string;
+  pages: string;
+  publisher: string;
+  school: string;
+  series: string;
+  volumes: number;
+  short_title: string;
+  title: [string];
+  type: string;
+  volume: number;
+  doi: string;
+  issn: [string];
+  isbn: string;
+  url: string;
+  rights: string;
+  runningTime: string;
+  format: string;
   image_url: string;
+  issue: string;
+  apiSource: string;
 }
 
 interface Error {
@@ -293,8 +333,14 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               </option>
             ))}
           </select>
+          {/*<div className="flex items-center justify-center pt-10">
+              <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+            </div>*/}
+          
         </form>
         <br/>
+
+
 
             {form.entryType == "webpage" && (
               <WebForm formID={"add-web-reference"} webForm={webData}  />

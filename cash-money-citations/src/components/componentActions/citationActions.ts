@@ -154,7 +154,7 @@ async function formatLocation(form: any) {
     form.address = (form.city + ", "+ form.state)
 }
 
-async function AddRef2User(userId: string, referenceId: string) {
+async function AddRef2User(userId: string | undefined, referenceId: string) {
     await dbConnect();
 
     try {

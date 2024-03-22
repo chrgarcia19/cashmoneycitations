@@ -2,7 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { CreateCslJsonDocument } from "@/components/citationActions";
+import { CreateCslJsonDocument } from "@/components/componentActions/citationActions";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);

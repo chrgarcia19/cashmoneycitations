@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useState } from 'react';
+import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
+import { CreateCitation } from '../[id]/view/actions';
 
-export default function CopyToClipboard(citationData : any){
+export function CopyToClipboard(citationData : any){
 
   const copyToClipboard = (text : string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -18,3 +20,24 @@ export default function CopyToClipboard(citationData : any){
     </button> 
   )
 };
+
+export function CitationChoice(referenceId: any) {
+  const [styleChoice, setStyleChoice] = useState(Array<string>(''));
+  const [localeChoice, setLocaleChoice] = useState('');
+
+  async function exportCitation() {
+    // Call to server action to create citations & save in DB
+    await CreateCitation(referenceId.referenceId.citation, styleChoice, localeChoice);
+  }
+
+  return (
+    <>
+      <span>
+        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
+        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
+        <button onClick={() => exportCitation()}>Make Citation</button>
+      </span>
+
+    </>
+  )
+}

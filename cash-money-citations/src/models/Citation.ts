@@ -5,6 +5,7 @@ const CitationSchema = new Schema ({
     style: String,
     CitationData: Object,
     language: String,
+    isOwnedBy: [String],
 })
 
 export default mongoose.models.CitationModel || mongoose.model("CitationModel", CitationSchema); 

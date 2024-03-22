@@ -2,13 +2,15 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { CreateCslJsonDocument } from "@/components/citationActions";
+import { CreateCslJsonDocument } from "@/components/componentActions/citationActions";
+import { useSession } from "next-auth/react";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();
+    const session = useSession();
     const contentType = "application/json";
     const errorItem: any = [
         {
@@ -143,16 +145,8 @@ function InputDOI() {
             console.error(e)
         }
       
-        //     // Throw error with status code in case Fetch API req failed
-        //     if (!res.ok) {
-        //       throw new Error(res.status.toString());
-        //     }
-        //     router.push("/reference-table");
-        //     router.refresh();
-        //   } catch (error) {
-        //     console.log("Failed to add reference");
-        //   }
-        CreateCslJsonDocument(item);
+        const userId = session.data?.user?.id;
+        CreateCslJsonDocument(item, userId);
         router.push("/reference-table");
         router.refresh();
 

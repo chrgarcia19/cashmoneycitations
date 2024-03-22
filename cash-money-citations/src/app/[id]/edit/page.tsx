@@ -7,6 +7,7 @@ import JournalForm from "@/components/form-components/JournalForm";
 import MagazineForm from "@/components/form-components/MagazineForm";
 import NewspaperForm from "@/components/form-components/NewspaperForm";
 import DatabaseForm from "@/components/form-components/DatabaseForm";
+import { Contributor } from "@/models/Contributor";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -76,7 +77,7 @@ export function EditReference( {
     volumes: "",
     short_title: "",
     title: new Array<String>(),
-    type: "",
+    type: reference.type,
     volume: 0,
     doi: "",
     issn: new Array<String>(),

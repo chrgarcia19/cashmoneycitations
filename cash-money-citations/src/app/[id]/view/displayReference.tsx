@@ -71,8 +71,6 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
 }
 
 const ViewReference = () => {
-
-
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
@@ -93,7 +91,7 @@ const ViewReference = () => {
 
     async function exportCitation() {
       // Call to server action to create citations & save in DB
-      await CreateCitation(referenceId, styleChoice, localeChoice);
+      // await CreateCitation(referenceId, styleChoice, localeChoice);
       router.push(`/displayCitation?citation=${referenceId}`)
     }
 

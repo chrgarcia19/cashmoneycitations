@@ -1,17 +1,9 @@
 "use client"
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
-const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
-const { plugins } = require('@citation-js/core')
-// const config = plugins.config.get('@bibtex')
-// const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
-// import { getStyles, getCslStyle } from "./actions";
 import { useState } from "react";
-import { CreateCitation } from "./actions";
-import { SelectionCSL, SelectionLocale } from "./CSLComponents";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -74,8 +66,6 @@ const ViewReference = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
-    const [styleChoice, setStyleChoice] = useState(Array<string>(''));
-    const [localeChoice, setLocaleChoice] = useState('');
     const [referenceId, setReferenceId] = useState(id);
     
     const handleDelete = async () => {
@@ -91,7 +81,6 @@ const ViewReference = () => {
 
     async function exportCitation() {
       // Call to server action to create citations & save in DB
-      // await CreateCitation(referenceId, styleChoice, localeChoice);
       router.push(`/displayCitation?citation=${referenceId}`)
     }
 
@@ -119,8 +108,6 @@ const ViewReference = () => {
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-                        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
-                        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
                     </div> 
                 </div>  
             </> 

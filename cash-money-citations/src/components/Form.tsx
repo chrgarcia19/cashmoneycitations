@@ -134,8 +134,7 @@ type Props = {
 };
 
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
-  const [errors, setErrors] = useState({});
-  const searchParams = useSearchParams();
+  const [selectedEntryType, setSelectedEntryType] = useState('');
 
   const webData = {
     type: "website",
@@ -282,7 +281,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         <h1 className="text-2xl align-middle">Add Reference</h1>
       </div>
       <br/>
-          <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
+          <select id="reference-select-entrytype" name="entryType" onChange={(e) => setSelectedEntryType(e.target.value)}>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>
                 {value}
@@ -290,31 +289,28 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             ))}
           </select>
           
-        <br/>
-
-
-
-            {form.entryType == "webpage" && (
+      <br/>
+            {selectedEntryType == "webpage" && (
               <WebForm formID={"add-web-reference"} webForm={webData}  />
             )}
 
-            {form.entryType == "book" && (
+            {selectedEntryType == "book" && (
               <BookForm formID={"add-book-reference"} bookForm={bookData} />
             )}
 
-            {form.entryType == "article-journal" && (
+            {selectedEntryType == "article-journal" && (
               <JournalForm formID={"add-journal-reference"} journalForm={journalData} />
             )}
 
-            {form.entryType == "article-magazine" && (
+            {selectedEntryType == "article-magazine" && (
               <MagazineForm formID={"add-magazine-reference"} magazineForm={magazineData} />
             )}
 
-            {form.entryType == "article-newspaper" && (
+            {selectedEntryType == "article-newspaper" && (
               <NewspaperForm formID={"add-newspaper-reference"} newspaperForm={newspaperData} />
             )}
 
-            {form.entryType == "dataset" && (
+            {selectedEntryType == "dataset" && (
               <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
             )}
         </div>

@@ -13,6 +13,8 @@ import JournalForm from "./form-components/JournalForm";
 import MagazineForm from "./form-components/MagazineForm";
 import NewspaperForm from "./form-components/NewspaperForm";
 import DatabaseForm from "./form-components/DatabaseForm";
+import FormField from "./FormField";
+import DatePicker from "./DatePicker";
 
 enum EntryType {
   Article = 'article',
@@ -334,15 +336,15 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
             ))}
           </select>
           {/*<div className="flex items-center justify-center pt-10">
-              <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
+            <ContributorForm updateFormData={updateFormData} contributors={form.contributors}/>
             </div>*/}
-          
+          <FormField labelText={"Image URL (Optional)"} fieldName={"image_url"} fieldValue={form.image_url} fieldType={"url"} fieldPlaceholder={"Image URL"} handleChange={handleChange} />
+          <FormField labelText={"Title"} fieldName={"title"} fieldValue={form.title} fieldType={"text"} fieldPlaceholder={"Title"} handleChange={handleChange} />
+          <FormField labelText={"Publisher"} fieldName={"publisher"} fieldValue={form.publisher} fieldType={"text"} fieldPlaceholder={"Publisher"} handleChange={handleChange} />
+            <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month, "", form.year]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
         </form>
-        <br/>
-
-
-
-            {form.entryType == "webpage" && (
+    
+            {/*{form.entryType == "webpage" && (
               <WebForm formID={"add-web-reference"} webForm={webData}  />
             )}
 
@@ -364,7 +366,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
             {form.entryType == "dataset" && (
               <DatabaseForm formID={"add-database-reference"} databaseForm={databaseData} />
-            )}
+            )}*/}
         </div>
     </>
   );

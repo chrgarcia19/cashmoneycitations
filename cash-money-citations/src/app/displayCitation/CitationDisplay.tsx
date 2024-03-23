@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
+import { DeleteCitation } from './actions';
 
 export function CopyToClipboard(citationData : any){
 
@@ -20,6 +21,16 @@ export function CopyToClipboard(citationData : any){
     </button> 
   )
 };
+
+export function DeleteCitationDisplay(citeId: any) {
+  return (
+    <>
+      <button onClick={() => DeleteCitation(citeId.citationId)}>
+        Delete
+      </button>
+    </>
+  )
+}
 
 export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState(Array<string>(''));

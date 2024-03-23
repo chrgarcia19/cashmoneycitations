@@ -1,5 +1,5 @@
 import { GetCitations } from './actions';
-import { CopyToClipboard, CitationChoice } from './CitationDisplay';
+import { CopyToClipboard, CitationChoice, DeleteCitationDisplay } from './CitationDisplay';
 
 async function DisplayCitations({ referenceId }: any) {
   const citationList = await GetCitations(referenceId.citation);
@@ -31,7 +31,7 @@ async function DisplayCitations({ referenceId }: any) {
                 </td>
                 <td className="px-6 py-4 text-center">
                   <CopyToClipboard citationData={citation.CitationData} />
-
+                  <DeleteCitationDisplay citationId={citation._id} />
                 </td>
               </tr>
             ))}

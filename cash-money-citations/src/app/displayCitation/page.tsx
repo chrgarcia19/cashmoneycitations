@@ -1,34 +1,5 @@
 import { CitationChoice, DeleteCitationDisplay, CitationList } from './CitationDisplay';
 
-// async function DisplayCitations({ referenceId }: any) {
-//   const citationList = await GetCitations(referenceId.citation);
-//   const citations = citationList?.map((doc) => {
-//     const citation = JSON.parse(JSON.stringify(doc));
-//     return citation;
-//   })
-
-//   return (
-//     <>
-      // <div className='px-20'>
-      //   <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-      //     <thead className='bg-gray-50'>
-      //       <tr>
-      //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation Style</th>
-      //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation</th>
-      //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copy</th>
-      //       </tr>
-            
-      //     </thead>
-
-      //   </table>
-      // </div>
-      
-//     </>
-//   )
-
-// }
-
-
 export default function citationDisplay({
   params,
   searchParams,

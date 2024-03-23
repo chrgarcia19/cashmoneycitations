@@ -15,6 +15,7 @@ import DatabaseForm from "./form-components/DatabaseForm";
 import FormField from "./FormField";
 import DatePicker from "./DatePicker";
 import ContributorForm from "./ContributorForm";
+import { useSession } from "next-auth/react";
 
 
 export enum EntryType {
@@ -144,8 +145,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session } = useSession();
   const contentType = "application/json";
-  
+
   const webData = {
     type: "website",
     citekey: "",
@@ -338,8 +340,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     e.preventDefault();
     const errs = formValidate();
     const id = searchParams.get('id')
+    const userId = session?.user?.id;
+
     if (Object.keys(errs).length === 0) {
-      forNewReference ? HandleManualReference(form) : EditReference(form, id);
+      forNewReference ? HandleManualReference(form, userId) : EditReference(form, id);
     } else {
       setErrors({ errs });
     }
@@ -355,8 +359,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
       <form id={formId} onSubmit={handleSubmit}>
           <select id="reference-select-entrytype" 
             name="entryType" 
-            defaultValue={form.entryType}
-            onChange={handleChange}>
+            defaultValue={selectedEntryType}
+            onChange={(e) => setSelectedEntryType(e.target.value)}>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>
                 {value}
@@ -365,59 +369,59 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           </select>
 
           {/*Image URL Field for References*/}
-          {form.entryType && (
+          {selectedEntryType && (
             <FormField labelText={"Image URL (Optional)"} fieldName={"image_url"} fieldValue={form.image_url} fieldType={"url"} fieldPlaceholder={"Image URL"} handleChange={handleChange} />
           )}
 
           {/*Title field*/}
-          {form.entryType && (
+          {selectedEntryType && (
             <FormField labelText={"Title"} fieldName={"title"} fieldValue={form.title} fieldType={"text"} fieldPlaceholder={"Title"} handleChange={handleChange} />
           )}
 
           {/*Contributors Field*/}
-          {form.entryType && (
+          {selectedEntryType && (
             <div className="flex items-center justify-center pt-10">
               <ContributorForm updateFormData={updateFormData} contributors={form.contributors}/>
             </div>
           )}
 
           {/*Series Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"Series"} fieldName={"series"} fieldValue={form.series} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
           )}
 
           {/*Pages Field*/}
-          {(form.entryType == "book" || form.entryType == "article-journal") && (
+          {(selectedEntryType == "book" || selectedEntryType == "article-journal") && (
             <FormField labelText={"Number of Pages"} fieldName={"pages"} fieldValue={form.pages} fieldType={"text"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
           )}
 
           {/*Volume Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"Volume"} fieldName={"volume"} fieldValue={form.volume} fieldType={"text"} fieldPlaceholder={"Volume"} handleChange={handleChange} />
           )}
 
           {/*Number of Volumes Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"Number of Volumes"} fieldName={"volumes"} fieldValue={form.volumes} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
           )}
 
           {/*Edition Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"Edition"} fieldName={"edition"} fieldValue={form.edition} fieldType={"text"} fieldPlaceholder={"Edition"} handleChange={handleChange} />
           )}
 
           {/*Publisher Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"Publisher"} fieldName={"publisher"} fieldValue={form.publisher} fieldType={"text"} fieldPlaceholder={"Publisher"} handleChange={handleChange} />
           )}
 
           {/*Date Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month_published, form.day_published, form.year_published]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
           )}
 
           {/*ISBN Field*/}
-          {(form.entryType == "book") && (
+          {(selectedEntryType == "book") && (
             <FormField labelText={"International Standard Book Number (ISBN)"} fieldName={"isbn"} fieldValue={form.isbn} fieldType={"text"} fieldPlaceholder={"ISBN"} handleChange={handleChange} />
           )}
   

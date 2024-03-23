@@ -1,7 +1,5 @@
 'use server'
 
-import path from "path";
-
 const fs = require('fs');
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
@@ -12,9 +10,7 @@ import dbConnect from "@/utils/dbConnect";
 import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
-import User from "@/models/User";
-import { authConfig } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+
 
 
 export async function CreateCitation(referenceId: any, styleChoice: Array<string>, localeChoice: string) {

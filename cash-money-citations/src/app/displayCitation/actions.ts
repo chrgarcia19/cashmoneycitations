@@ -7,13 +7,23 @@ import User from "@/models/User";
 import { authConfig } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 
-export async function GetCitations(referenceId: any) {
+async function getUserIdServer() {
     await dbConnect();
 
     const session = await getServerSession(authConfig);
     const userId = session?.user?.id ?? '';
     
-    const user = await User.findById(userId);
+    return await User.findById(userId);
+}
+
+export async function DeleteCitation(referenceId: string, citationId: string) {
+    const user = await getUserIdServer();
+
+
+}
+
+export async function GetCitations(referenceId: any) {
+    const user = await getUserIdServer();
 
 
     const citationList = [];

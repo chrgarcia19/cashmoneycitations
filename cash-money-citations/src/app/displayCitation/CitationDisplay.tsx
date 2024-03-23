@@ -3,7 +3,42 @@
 import { useEffect, useState } from 'react';
 import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
-import { DeleteCitation } from './actions';
+import { DeleteCitation, GetCitations } from './actions';
+
+
+export function CitationList({ referenceId }: any) {
+  const [citations, setCitations] = useState<any[]>([]);
+  // Fetch initial citation state
+  useEffect(() => {
+    fetchCitations();
+  }, []);
+
+  const fetchCitations = async () => {
+    // Fetch citations from server and update state
+    const fetchedCitations = await GetCitations(referenceId);
+    setCitations(fetchedCitations);
+  }
+
+  const handleDelete = async (citationId: any) => {
+    // Delete citation from server
+    await DeleteCitation(citationId);
+
+    // Remove citation from state
+    const updatedCitations = citations.filter(citation => citation._id !== citationId);
+    setCitations(updatedCitations);
+  }
+
+  return (
+    <div>
+      {citations.map(citation => (
+        <div key={citation._id}>
+          <p>{citation.CitationData}</p>
+          <button onClick={() => handleDelete(citation._id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function CopyToClipboard(citationData : any){
 

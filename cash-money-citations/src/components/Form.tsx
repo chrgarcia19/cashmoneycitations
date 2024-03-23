@@ -335,13 +335,14 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               </option>
             ))}
           </select>
-          {/*<div className="flex items-center justify-center pt-10">
+          <div className="flex items-center justify-center pt-10">
             <ContributorForm updateFormData={updateFormData} contributors={form.contributors}/>
-            </div>*/}
+          </div>
           <FormField labelText={"Image URL (Optional)"} fieldName={"image_url"} fieldValue={form.image_url} fieldType={"url"} fieldPlaceholder={"Image URL"} handleChange={handleChange} />
           <FormField labelText={"Title"} fieldName={"title"} fieldValue={form.title} fieldType={"text"} fieldPlaceholder={"Title"} handleChange={handleChange} />
           <FormField labelText={"Publisher"} fieldName={"publisher"} fieldValue={form.publisher} fieldType={"text"} fieldPlaceholder={"Publisher"} handleChange={handleChange} />
-            <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month, "", form.year]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
+          <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month, "", form.year]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
+          <DatePicker masterLabelText={"Date Accessed (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month, "", form.year]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
         </form>
     
             {/*{form.entryType == "webpage" && (

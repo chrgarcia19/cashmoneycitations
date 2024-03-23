@@ -29,14 +29,22 @@ export function CitationList({ referenceId }: any) {
   }
 
   return (
-    <div>
-      {citations.map(citation => (
-        <div key={citation._id}>
-          <p>{citation.CitationData}</p>
-          <button onClick={() => handleDelete(citation._id)}>Delete</button>
-        </div>
-      ))}
-    </div>
+    <>
+        {citations?.map((citation, index) => (
+          <tr key={citation.id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
+            <td className="px-6 py-4 text-center text-sm">
+              {citation.style}
+            </td>
+            <td className="px-6 py- text-center text-sm">
+              {citation.CitationData}
+            </td>
+            <td className="px-6 py-4 text-center">
+              <CopyToClipboard citationData={citation.CitationData} />
+              <DeleteCitationDisplay citationId={citation._id} />
+            </td>
+          </tr>
+        ))}
+    </>
   );
 }
 

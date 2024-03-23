@@ -9,7 +9,6 @@ const dbPassword = encodeURIComponent(process.env.DB_PASSWORD);
 
 const dbUrl = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=${dbAuth}&directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1`;
 
-
 const connection = {};
 
 async function connectDb() {

@@ -125,20 +125,20 @@ export default async function AdminDashboard() {
 
         return (
         <>
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white rounded-lg p-6">
 
             <GetUsers currentUser={currentUserEmail}/>
             {/* <SessionInfo /> */}
             {/* <AdminDashboardClient /> */}
         </div>
-        <span className=" space-x-4 mt-6">
+        {/* <span className=" space-x-4 mt-6">
             <ImportCSLStyles handleCslSubmit={handleCslSubmit}/>
             <ImportLocale handleLocaleSubmit={handleLocaleSubmit}/>
         </span>
         <span>
             <GetCslStyles/>
             <GetLocales />
-        </span>
+        </span> */}
         </>
     );
 };

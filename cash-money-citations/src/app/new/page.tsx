@@ -1,10 +1,14 @@
 import { Suspense } from 'react';
 import { Contributor } from "@/models/Contributor";
 import Form from "../../components/Form";
+import { EntryType } from '../../components/Form';
 
 const NewReference = () => {
   const referenceForm = {
-    entryType: '',
+    entryType: {
+      type: '',
+      enum: EntryType,
+    },
     address: "",
     annote: "",
     contributors: new Array<Contributor>(),
@@ -46,11 +50,11 @@ const NewReference = () => {
     series: "",
     volumes: "",
     short_title: "",
-    title: new Array<String>(),
+    title: [''] as [string],
     type: "",
     volume: 0,
     doi: "",
-    issn: new Array<String>(),
+    issn: [''] as [string],
     isbn: "",
     url: "",
     rights: "",

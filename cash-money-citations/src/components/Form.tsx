@@ -1,11 +1,9 @@
 'use client'
 
 import { useState } from "react";
-import ContributorForm from "./ContributorForm";
 import { Contributor } from "@/models/Contributor";
 import { HandleManualReference } from "./componentActions/citationActions";
-import { useRouter, useSearchParams } from "next/navigation";
-import { mutate } from "swr";
+import { useSearchParams } from "next/navigation";
 import { EditReference } from "./componentActions/editReferenceActions";
 import WebForm from "./form-components/WebForm";
 import BookForm from "./form-components/BookForm";
@@ -13,9 +11,8 @@ import JournalForm from "./form-components/JournalForm";
 import MagazineForm from "./form-components/MagazineForm";
 import NewspaperForm from "./form-components/NewspaperForm";
 import DatabaseForm from "./form-components/DatabaseForm";
-import { useSession, signIn, signOut } from "next-auth/react"
 
-enum EntryType {
+export enum EntryType {
   Article = 'article',
   Book = 'book',
   Chapter = 'chapter',
@@ -64,11 +61,7 @@ enum EntryType {
 }
 
 
-interface FormData {
-  entryType: {
-    type: string,
-    enum: EntryType
-  }
+interface ReferenceFormData {
   address: string;
   annote: string;
   contributors: Contributor[];
@@ -108,7 +101,7 @@ interface FormData {
   publisher: string;
   school: string;
   series: string;
-  volumes: number;
+  volumes: string;
   short_title: string;
   title: [string];
   type: string;
@@ -136,17 +129,13 @@ interface Error {
 
 type Props = {
   formId: string;
-  referenceForm: FormData;
+  referenceForm: ReferenceFormData;
   forNewReference?: boolean;
 };
 
 const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
-  const router = useRouter();
-  const contentType = "application/json";
 
   const webData = {
     type: "website",
@@ -259,8 +248,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   /*Set initial state to website so the page is not blank*/
   const [form, setForm] = useState({
-    entryType: referenceForm.entryType,
-    //type: referenceForm.type,
     title: referenceForm.title,
     contributors: referenceForm.contributors,
     publisher: referenceForm.publisher,
@@ -276,16 +263,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     image_url: referenceForm.image_url,
   });
 
-  //Handling contributor stuff
-  const updateFormData = (newData: Array<any>) => {
-    setForm({
-      ...form,
-      contributors: newData,
-    });
-  };
-
-
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
@@ -298,28 +275,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     });
   };
 
-  /* Makes sure reference info is filled for reference name, type, contributors, and image url*/
-  const formValidate = () => {
-    let err: Error = {};
-    //if (!form.type) err.type = "Type is required";
-    if (!form.title) err.title = "Title is required";
-    if (!form.contributors) err.contributors = "Contributor info is required";
-    if (!form.publisher) err.publisher = "Publisher is required";
-    if (!form.year) err.year = "Year is required";
-    return err;
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const errs = formValidate();
-    const id = searchParams.get('id')
-    if (Object.keys(errs).length === 0) {
-      forNewReference ? HandleManualReference(form) : EditReference(form, id);
-    } else {
-      setErrors({ errs });
-    }
-  };
-
   return (
     <>
     <div className="bg-gray-100 w-2/5 rounded-xl">
@@ -327,7 +282,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         <h1 className="text-2xl align-middle">Add Reference</h1>
       </div>
       <br/>
-        <form id={formId} onSubmit={handleSubmit}>
           <select id="reference-select-entrytype" name="entryType" onChange={handleChange}>
             {Object.values(EntryType).map((value) => (
               <option key={value} value={value}>
@@ -335,11 +289,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               </option>
             ))}
           </select>
-          {/*<div className="flex items-center justify-center pt-10">
-              <ContributorForm updateFormData ={ updateFormData } contributors = {form.contributors}/>
-            </div>*/}
           
-        </form>
         <br/>
 
 

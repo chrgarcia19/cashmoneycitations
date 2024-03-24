@@ -217,7 +217,15 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
     form.type = selectedEntryType;
     if (Object.keys(errs).length === 0) {
-      forNewReference ? HandleManualReference(form, userId) : EditReference(form, id);
+      if (forNewReference){
+        HandleManualReference(form, userId);
+        router.push("reference-table");
+        router.refresh();
+      } else {
+        EditReference(form, id);
+        router.push("reference-table");
+        router.refresh();
+      }
     } else {
       setErrors({ errs });
     }

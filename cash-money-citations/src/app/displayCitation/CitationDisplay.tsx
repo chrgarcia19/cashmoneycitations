@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
+import { useRouter } from 'next/navigation';
 
 
 export function CitationList({ referenceId }: any) {
   const [citations, setCitations] = useState<any[]>([]);
+  const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
     fetchCitations();
@@ -26,6 +28,8 @@ export function CitationList({ referenceId }: any) {
     // Remove citation from state
     const updatedCitations = citations.filter(citation => citation._id !== citationId);
     setCitations(updatedCitations);
+    //router.push(`/displayCitation?citation=${referenceId}`);
+    router.refresh();
   }
 
   return (
@@ -78,9 +82,12 @@ export function DeleteCitationDisplay(citeId: any) {
 export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState(Array<string>(''));
   const [localeChoice, setLocaleChoice] = useState('');
+  const router = useRouter();
   async function exportCitation() {
     // Call to server action to create citations & save in DB
     await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
+    //router.push(`/displayCitation?citation=${referenceId}`);
+    router.refresh();
   }
 
   return (

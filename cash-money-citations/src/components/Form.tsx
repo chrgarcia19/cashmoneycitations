@@ -204,7 +204,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     let err: Error = {};
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
-    if (!form.publisher) err.publisher = "Publisher is required";
+    //if (!form.publisher) err.publisher = "Publisher is required";
     if (!form.year_published) err.year = "Year is required";
     return err;
   };
@@ -215,12 +215,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     const id = searchParams.get('id')
     const userId = session?.user?.id;
 
+    form.type = selectedEntryType;
     if (Object.keys(errs).length === 0) {
       forNewReference ? HandleManualReference(form, userId) : EditReference(form, id);
     } else {
       setErrors({ errs });
     }
-    console.log(form)
   };
 
   return (

@@ -11,12 +11,9 @@ import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
 
-
-
 export async function CreateCitation(referenceId: any, styleChoice: string, localeChoice: string) {
 
     await dbConnect();
-    
     let referenceCslJson = await CSLBibModel.findById(referenceId)
     const cslJson = referenceCslJson.cslJson
     const referenceTitle = referenceCslJson.title
@@ -51,7 +48,7 @@ export async function CreateCitation(referenceId: any, styleChoice: string, loca
         lang: localeName,
     });
 
-    const newCustomCitation = await CitationModel.create({
+    let newCustomCitation = await CitationModel.create({
         name: templateName + referenceTitle,
         style: templateName,
         CitationData: customCitation,
@@ -65,7 +62,8 @@ export async function CreateCitation(referenceId: any, styleChoice: string, loca
         citationIdList: citationIdList
     });
 
-
+    newCustomCitation = newCustomCitation.toObject();
+    newCustomCitation._id = newCustomCitation._id.toString();
     
-
+    return newCustomCitation;
 }

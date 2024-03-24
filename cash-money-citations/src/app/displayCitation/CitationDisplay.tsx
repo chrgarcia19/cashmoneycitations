@@ -22,13 +22,13 @@ export function CitationList({ referenceId, citations, setCitations }: any) {
     await DeleteCitation(citationId);
 
     // Remove citation from state
-    const updatedCitations = citations.filter(citation => citation._id !== citationId);
+    const updatedCitations = citations.filter((citation: any) => citation._id !== citationId);
     setCitations(updatedCitations);
   }
 
   return (
     <>
-        {citations?.map((citation, index) => (
+        {citations?.map((citation: any, index: any) => (
           <tr key={citation._id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
             <td className="px-6 py-4 text-center text-sm">
               {citation.style}
@@ -99,9 +99,9 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
     }
   }
 
-  function downloadCitations() { // New function to download the citations
+  function downloadCitations() { // Downloads Citations
     const element = document.createElement('a');
-    const file = new Blob([citations.join('\n')], {type: 'text/plain'});
+    const file = new Blob([citations.map((citation: any) => citation.CitationData).join('\n')], {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
     element.download = 'citations.txt';
     document.body.appendChild(element);

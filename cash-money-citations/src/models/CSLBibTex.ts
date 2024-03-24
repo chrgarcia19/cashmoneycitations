@@ -58,8 +58,8 @@ interface ReferencesUsed {
 
 export interface CSLBibInterface extends mongoose.Document {
   entryType: "article" | "article-journal" | "article-magazine" | "article-newspaper" | "bill" | "book" | "broadcast" | "chapter" | "classic" | "collection" | "dataset" | "document" | "entry" | "entry-dictionary" | "entry-encyclopedia" | "event" | "figure" | "graphic" | "hearing";
-    address: String,
-    annote: String,
+    address: String, 
+    annote: String, //annotation provided by a user
     contributors: Contributor[],
     website_title: String,
     chapter: String,
@@ -70,10 +70,7 @@ export interface CSLBibInterface extends mongoose.Document {
     journal: String, //Journal Title
     date: Date; // Date published
     urldate: Date; // Date accessed
-    eventdate: Date;
-    origdate: Date;
-    month: string;
-    year: string;
+    eventdate: Date; //Date event occurred (ex: conference)
     note: string;
     number: number;
     organization: string;
@@ -177,7 +174,7 @@ const CSLBibSchema = new Schema({
     month: String,
     year: String,
     note: String,
-    number: Number,
+    number: Number, //Issue Number for Journal
     organization: String,
     pages: String,
     publisher: String,
@@ -192,7 +189,7 @@ const CSLBibSchema = new Schema({
     issn: [String],
     issnType: [Object],
     isbn: String,
-    url: String,
+    url: String, //Website URL
     rights: String,
     runningTime: String,
     format: String,

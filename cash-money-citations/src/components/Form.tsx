@@ -3,15 +3,8 @@
 import { useState } from "react";
 import { Contributor } from "@/models/Contributor";
 import { useRouter, useSearchParams } from "next/navigation";
-import { mutate } from "swr";
 import { HandleManualReference } from "./componentActions/citationActions";
 import { EditReference } from "./componentActions/editReferenceActions";
-import WebForm from "./form-components/WebForm";
-import BookForm from "./form-components/BookForm";
-import JournalForm from "./form-components/JournalForm";
-import MagazineForm from "./form-components/MagazineForm";
-import NewspaperForm from "./form-components/NewspaperForm";
-import DatabaseForm from "./form-components/DatabaseForm";
 import FormField from "./FormField";
 import DatePicker from "./DatePicker";
 import ContributorForm from "./ContributorForm";
@@ -93,13 +86,6 @@ interface ReferenceFormData {
   month_event: string;
   day_event: string;
   year_event: string;
-  /*The next three fields are later
-  converted into a date object*/
-  month_orig: string;
-  day_orig: string;
-  year_orig: string;
-  month: string;
-  year: string;
   note: string;
   number: number;
   organization: string;
@@ -148,113 +134,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const { data: session } = useSession();
   const contentType = "application/json";
 
-  const webData = {
-    type: "website",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    website_title: "",
-    website_url: "",
-    month_accessed: "",
-    day_accessed: "",
-    year_accessed: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    publisher: "",
-  };
-
-  const bookData = {
-    type: "book",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    volume: "",
-    edition: "",
-    date: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    publisher: "",
-    city: "",
-    state: "",
-    isbn: "",
-  };
-
-  const journalData = {
-    type: "journal",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    journal_title: "",
-    volume: "",
-    issue: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    start_page: "",
-    end_page: "",
-    doi: "",
-    issn: "",
-  };
-
-  const magazineData = {
-    type: "magazine",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    magazine_title: "",
-    volume: "",
-    issue: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    start_page: "",
-    end_page: "",
-    doi: "",
-    issn: "",
-  };
-
-  const newspaperData = {
-    type: "newspaper",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    newspaper_title: "",
-    edition: "",
-    section: "",
-    city: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    start_page: "",
-    end_page: "",
-    issn: "",
-  }
-
-  const databaseData = {
-    type: "database",
-    citekey: "",
-    image_url: "",
-    contributors: new Array<Contributor>(),
-    title: "",
-    library: "",
-    database: "",
-    database_url: "",
-    city: "",
-    month_accessed: "",
-    day_accessed: "",
-    year_accessed: "",
-    month_published: "",
-    day_published: "",
-    year_published: "",
-    service: "",
-    issn: "",
+  /*Set the selectedEntryType so the form is not blank*/
+  if (!selectedEntryType){
+    setSelectedEntryType('article');
   }
 
   /*Set initial state to website so the page is not blank*/
@@ -277,11 +159,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     year_accessed: referenceForm.year_accessed,
     month_event: referenceForm.month_event,
     day_event: referenceForm.day_event,
-    month_orig: referenceForm.month_orig,
-    day_orig: referenceForm.day_orig,
-    year_orig: referenceForm.year_orig,
-    month: referenceForm.month,
-    year: referenceForm.year,
+    year_event: referenceForm.year_event,
     note: referenceForm.note,
     number: referenceForm.number,
     organization: referenceForm.organization,
@@ -332,7 +210,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
     if (!form.publisher) err.publisher = "Publisher is required";
-    if (!form.year) err.year = "Year is required";
+    if (!form.year_published) err.year = "Year is required";
     return err;
   };
 
@@ -437,6 +315,17 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           <FormField labelText={"Editor"} fieldName={"editor"} fieldValue={form.editor} fieldType={"text"} fieldPlaceholder={"Editor"} handleChange={handleChange} />
           <FormField labelText={"Publisher Type"} fieldName={"howpublished"} fieldValue={form.howpublished} fieldType={"text"} fieldPlaceholder={"Publisher Type"} handleChange={handleChange} />
           <FormField labelText={"Institution"} fieldName={"institution"} fieldValue={form.institution} fieldType={"text"} fieldPlaceholder={"Institution"} handleChange={handleChange} />
+          <DatePicker masterLabelText={"Date Event Occurred (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month", "day", "year"]} fieldValue={[form.month_event, form.day_event, form.year_event]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
+          <FormField labelText={"Note"} fieldName={"note"} fieldValue={form.note} fieldType={"text"} fieldPlaceholder={"Note"} handleChange={handleChange} />
+          <FormField labelText={"Issue Number"} fieldName={"number"} fieldValue={form.number} fieldType={"text"} fieldPlaceholder={"Issue Number"} handleChange={handleChange} />
+          <FormField labelText={"Organization"} fieldName={"organization"} fieldValue={form.organization} fieldType={"text"} fieldPlaceholder={"Organization"} handleChange={handleChange} />
+          <FormField labelText={"School"} fieldName={"school"} fieldValue={form.school} fieldType={"text"} fieldPlaceholder={"School"} handleChange={handleChange} />
+          <FormField labelText={"Type"} fieldName={"type"} fieldValue={form.type} fieldType={"text"} fieldPlaceholder={"Type"} handleChange={handleChange} />
+          <FormField labelText={"International Standard Serial Number (ISSN)"} fieldName={"issn"} fieldValue={form.issn} fieldType={"text"} fieldPlaceholder={"ISSN"} handleChange={handleChange} />
+          <FormField labelText={"URL"} fieldName={"url"} fieldValue={form.url} fieldType={"url"} fieldPlaceholder={"URL"} handleChange={handleChange} />
+          <FormField labelText={"Running Time"} fieldName={"running_time"} fieldValue={form.running_time} fieldType={"text"} fieldPlaceholder={"Running Time"} handleChange={handleChange} />
+          <FormField labelText={"Format"} fieldName={"format"} fieldValue={form.format} fieldType={"text"} fieldPlaceholder={"Format"} handleChange={handleChange} />
+
 
 
 

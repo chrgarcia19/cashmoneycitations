@@ -6,7 +6,7 @@ import { EntryType } from '../../components/Form';
 const NewReference = () => {
   const referenceForm = {
     entryType: {
-      type: '',
+      type: 'article',
       enum: EntryType,
     },
     address: "",

@@ -20,7 +20,7 @@ interface SelectionCSLLocaleProps {
   
 // Maps over CSL Style selection
 export function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
-const [styleChoices, setStyleChoices] = useState<string[]>([]);
+const [styleChoice, setStyleChoice] = useState('');
 
 const {
     data: cslStyles,
@@ -35,33 +35,30 @@ if (!cslStyles) return null;
 
 const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const styleChoice = e.target.value;
-    if (e.target.checked) {
-    setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
-    onStyleChoiceChange([...styleChoices, styleChoice]);
-    } else {
-    const newChoices = styleChoices.filter(choice => choice !== styleChoice);
-    setStyleChoices(newChoices);
-    onStyleChoiceChange(newChoices);
-    }
+    setStyleChoice(styleChoice);
+
+    // CODE BELOW IS FOR CHECKBOX FUNCTIONALITY
+    // if (e.target.checked) {
+    // setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
+    // onStyleChoiceChange([...styleChoices, styleChoice]);
+    // } else {
+    // const newChoices = styleChoices.filter(choice => choice !== styleChoice);
+    // setStyleChoices(newChoices);
+    // onStyleChoiceChange(newChoices);
+    // }
 };
 
 return (
     <span className="space-x-5">
-        {cslStyles.map((cslStyle: any) => (
-        <div key={cslStyle.id}>
-            <label>
-            <input
-            type="checkbox"
-            value={cslStyle.name}
-            checked={styleChoices.includes(cslStyle.name)}
-            onChange={handleStyleChoiceChange}
-            />
+      <select onChange={(e) => setStyleChoice(e.target.value)}>
+        {cslStyles.slice(0, 10).map((cslStyle: any) => (
+          <option key={cslStyle.id} value={cslStyle.name}>
             {cslStyle.name}
-            </label>
-        </div>
+          </option>
         ))}
+      </select>
     </span>
-);
+  );
 }
 
 
@@ -85,7 +82,7 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     
     return (
         <span className="space-x-5">
-          {localeData.map((locale: any) => (
+          {localeData.slice(0, 10).map((locale: any) => (
             <div key={locale._id}>
               <label>
                 <input

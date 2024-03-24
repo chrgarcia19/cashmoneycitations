@@ -80,6 +80,7 @@ export function DeleteCitationDisplay(citeId: any) {
 export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState(Array<string>(''));
   const [localeChoice, setLocaleChoice] = useState('');
+
   async function exportCitation() {
     // Call to server action to create citations & save in DB
     await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
@@ -87,6 +88,12 @@ export function CitationChoice(referenceId: any) {
 
   return (
     <>
+      <div className='flex flex-row items-start w-screen'>
+        <div className='px-20'>
+
+
+        </div>
+      </div>
       <span>
         <SelectionCSL onStyleChoiceChange={setStyleChoice} />
         <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>

@@ -65,7 +65,6 @@ export async function getSpecificReferenceById(id: string | string[] | undefined
 }
 
 async function initializeUserStyleList(userId: string) {
-    console.log(userId)
     // Create a new UserStyleList document that references the user
     const userStyleList = new UserStyleList({
       userId: userId,

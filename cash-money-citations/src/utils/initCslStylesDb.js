@@ -54,7 +54,7 @@ async function importCSLFiles(fileData) {
             return { status: "error", message: 'CSL Style already exists' };
         } else {
             const { title, titleShort } = await parseTitle(fileData);
-            const csl = new CSLStyleModel({ name: fileName, title: title, shortTitle: titleShort, cslData: fileData.contents, isDependent: fileData.isDependent })
+            const csl = new CSLStyleModel({ name: fileName, title: title, titleShort: titleShort, cslData: fileData.contents, isDependent: fileData.isDependent })
             await csl.save()
             return { status: "success", message: 'CSL Style added' };
         }

@@ -79,8 +79,14 @@ export function DeleteCitationDisplay(citeId: any) {
 export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
+  const [error, setError] = useState('');
 
   async function exportCitation() {
+    if (!styleChoice || !localeChoice) {
+      setError('Please select both a citation style and a language.');
+      return;
+    }
+
     // Call to server action to create citations & save in DB
     await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
   }
@@ -98,6 +104,7 @@ export function CitationChoice(referenceId: any) {
         </div>
         <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation'>Make Citation</button>
       </div>
+      {error && <p className='text-red-500'>{error}</p>}
     </>
   )
 }

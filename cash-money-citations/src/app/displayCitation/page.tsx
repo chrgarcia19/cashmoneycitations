@@ -1,3 +1,5 @@
+'use client'
+import { useState } from 'react';
 import { CitationChoice, DeleteCitationDisplay, CitationList } from './CitationDisplay';
 
 export default function citationDisplay({
@@ -8,13 +10,14 @@ export default function citationDisplay({
   searchParams: { [key: string]: string | string | undefined }
 }){
   const referenceId = searchParams.citation;
-  
+  const [citations, setCitations] = useState([]);
+
   return (
     <div className='flex flex-row items-start w-screen'>
       {/* <CitationChoice referenceId={searchParams} /> */}
 
       <div className='px-20'>
-        <CitationChoice referenceId={referenceId} />
+        <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} />
         <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
           <thead className='bg-gray-50'>
             <tr>
@@ -25,7 +28,7 @@ export default function citationDisplay({
             
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            <CitationList referenceId={referenceId} />
+            <CitationList referenceId={referenceId} citations={citations} setCitations={setCitations}/>
           </tbody>
 
         </table>

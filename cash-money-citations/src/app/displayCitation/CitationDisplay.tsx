@@ -5,8 +5,7 @@ import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
 
-export function CitationList({ referenceId }: any) {
-  const [citations, setCitations] = useState<any[]>([]);
+export function CitationList({ referenceId, citations, setCitations }: any) {
   // Fetch initial citation state
   useEffect(() => {
     fetchCitations();
@@ -76,7 +75,7 @@ export function DeleteCitationDisplay(citeId: any) {
   )
 }
 
-export function CitationChoice(referenceId: any) {
+export function CitationChoice({ referenceId, citations, setCitations}: any) {
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
   const [error, setError] = useState('');
@@ -91,13 +90,22 @@ export function CitationChoice(referenceId: any) {
     setIsLoading(true);
     try {
       // Call to server action to create citations & save in DB
-      await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
+      await CreateCitation(referenceId, styleChoice, localeChoice);
       window.location.reload(); // Refresh the page
     } catch (error) {
       setError('An error occurred while creating the citation.');
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function downloadCitations() { // New function to download the citations
+    const element = document.createElement('a');
+    const file = new Blob([citations.join('\n')], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = 'citations.txt';
+    document.body.appendChild(element);
+    element.click();
   }
 
   return (
@@ -113,6 +121,9 @@ export function CitationChoice(referenceId: any) {
         </div>
         <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Make Citation'}
+        </button>
+        <button onClick={downloadCitations} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
+        Download Citations
         </button>
       </div>
       {error && <p className='text-red-500'>{error}</p>}

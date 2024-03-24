@@ -28,6 +28,7 @@ export default function citationDisplay({
           </tbody>
 
         </table>
+            <CitationChoice referenceId={referenceId} />
       </div>
     </div>
   )

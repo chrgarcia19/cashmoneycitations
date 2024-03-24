@@ -78,10 +78,9 @@ export function DeleteCitationDisplay(citeId: any) {
 export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState(Array<string>(''));
   const [localeChoice, setLocaleChoice] = useState('');
-
   async function exportCitation() {
     // Call to server action to create citations & save in DB
-    await CreateCitation(referenceId.referenceId.citation, styleChoice, localeChoice);
+    await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
   }
 
   return (

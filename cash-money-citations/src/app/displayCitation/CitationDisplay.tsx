@@ -5,7 +5,6 @@ import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
 
-
 export function CitationList({ referenceId }: any) {
   const [citations, setCitations] = useState<any[]>([]);
   // Fetch initial citation state
@@ -88,18 +87,17 @@ export function CitationChoice(referenceId: any) {
 
   return (
     <>
-      <div className='flex flex-row items-start w-screen'>
-        <div className='px-20'>
-
-
+      <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
+        <div className='flex flex-col'>
+          <label htmlFor='styleChoice' className='mb-2 font-bold text-lg'>Citation Style</label>
+          <SelectionCSL onStyleChoiceChange={setStyleChoice}/>
         </div>
+        <div className='flex flex-col'>
+          <label htmlFor='localeChoice' className='mb-2 font-bold text-lg'>Language</label>
+          <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
+        </div>
+        <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation'>Make Citation</button>
       </div>
-      <span>
-        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
-        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
-        <button onClick={() => exportCitation()}>Make Citation</button>
-      </span>
-
     </>
   )
 }

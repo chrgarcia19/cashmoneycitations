@@ -48,15 +48,13 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 };
 
 return (
-    <span className="space-x-5">
-      <select onChange={handleStyleChoiceChange}>
-        {cslStyles.map((cslStyle: any) => (
-          <option key={cslStyle.id} value={cslStyle.name}>
-            {cslStyle.title}
-          </option>
-        ))}
-      </select>
-    </span>
+    <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' onChange={handleStyleChoiceChange}>
+      {cslStyles.map((cslStyle: any) => (
+        <option key={cslStyle.id} value={cslStyle.name}>
+          {cslStyle.title}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -90,15 +88,12 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     };
     
     return (
-        <span className="space-x-5">
-          <select value={localeChoice} onChange={handleLocaleChoiceChange}>
-            {localeData.map((locale: any) => (
-              <option key={locale.id} value={locale.name}>
-                {locale.name}
-              </option>
-            ))}
-
-          </select>
-        </span>
+      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={localeChoice} onChange={handleLocaleChoiceChange}>
+        {localeData.map((locale: any) => (
+          <option key={locale.id} value={locale.name}>
+            {locale.name}
+          </option>
+        ))}
+      </select>
     );
 }

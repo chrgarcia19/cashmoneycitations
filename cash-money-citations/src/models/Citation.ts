@@ -6,7 +6,6 @@ const CitationSchema = new Schema ({
     style: String,
     CitationData: Object,
     language: String,
-    isOwnedBy: [String],
 })
 
 CitationSchema.pre('findOneAndDelete', async function(next) {

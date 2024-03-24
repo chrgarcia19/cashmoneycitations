@@ -10,6 +10,37 @@ fetch(url)
     .then((res) => res.json())
     .then((json) => json.data);
 
+    function monthConversion(month_num: string) {
+      switch(month_num){
+          case "0":
+              return "January";
+          case "1":
+              return "February";
+          case "2":
+              return "March"; 
+          case "3":
+              return "April";
+          case "4":
+              return "May";
+          case "5":
+              return "June";
+          case "6":
+              return "July";
+          case "7":
+              return "August";
+          case "8":
+              return "September";
+          case "9":
+              return "October";
+          case "10":
+              return "November";
+          case "11":
+              return "December";   
+          default:
+              return (month_num + 1);     
+      }
+  }
+
 // Styles buttons for Edit, Delete, & Export
 function Button({ color, onClick, children }: any) {
   return (
@@ -46,7 +77,7 @@ function ReferenceDetails({ reference }: any) {
       </span>
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>
-          {reference.month} {reference.year}
+          {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}
       </span>
     </>
   )

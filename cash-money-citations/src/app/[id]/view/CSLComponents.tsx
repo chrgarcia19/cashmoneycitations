@@ -50,7 +50,7 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 return (
     <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={styleChoice} onChange={handleStyleChoiceChange}>
       {cslStyles.map((cslStyle: any) => (
-        <option key={cslStyle.id} value={cslStyle.name}>
+        <option key={cslStyle._id} value={cslStyle.name}>
           {cslStyle.title}
         </option>
       ))}
@@ -90,7 +90,7 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     return (
       <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={localeChoice} onChange={handleLocaleChoiceChange}>
         {localeData.map((locale: any) => (
-          <option key={locale.id} value={locale.name}>
+          <option key={locale._id} value={locale.name}>
             {locale.name}
           </option>
         ))}

@@ -5,20 +5,15 @@ import { EntryType } from '../../components/Form';
 
 const NewReference = () => {
   const referenceForm = {
-    entryType: {
-      type: 'article',
-      enum: EntryType,
-    },
-    address: "",
+    location: "",
     annote: "",
     contributors: new Array<Contributor>(),
-    website_title: "",
     chapter: "",
     edition: "",
     editor: "",
     howpublished: "",
     institution: "",
-    journal: "",
+    indextitle: "",
     /*The next three fields are later
     converted into a date object*/
     month_published: "",
@@ -42,7 +37,7 @@ const NewReference = () => {
     month: "",
     year: "",
     note: "",
-    number: "",
+    number: 0,
     organization: "",
     pages: "",
     publisher: "",
@@ -52,12 +47,11 @@ const NewReference = () => {
     short_title: "",
     title: [''] as [string],
     type: "",
-    volume: "",
+    volume: 0,
     doi: "",
     issn: [''] as [string],
     isbn: "",
     url: "",
-    rights: "",
     running_time: "",
     format: "",
     image_url: "",

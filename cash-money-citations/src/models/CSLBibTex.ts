@@ -58,16 +58,15 @@ interface ReferencesUsed {
 
 export interface CSLBibInterface extends mongoose.Document {
   entryType: "article" | "article-journal" | "article-magazine" | "article-newspaper" | "bill" | "book" | "broadcast" | "chapter" | "classic" | "collection" | "dataset" | "document" | "entry" | "entry-dictionary" | "entry-encyclopedia" | "event" | "figure" | "graphic" | "hearing";
-    address: String, 
+    location: String, 
     annote: String, //annotation provided by a user
     contributors: Contributor[],
-    website_title: String,
     chapter: String,
     edition: String,
     editor: String,
     howpublished: String,
     institution: String, 
-    journal: String, //Journal Title
+    indextitle: String, // Title of a website, journal, etc.
     date: Date; // Date published
     urldate: Date; // Date accessed
     eventdate: Date; //Date event occurred (ex: conference)
@@ -88,7 +87,6 @@ export interface CSLBibInterface extends mongoose.Document {
     issnType: object[];
     isbn: string;
     url: string;
-    rights: string;
     runningTime: string;
     format: string;
     cslJson: object;
@@ -157,16 +155,15 @@ const CSLBibSchema = new Schema({
         type: String,
         default: generateCiteKey,
     },
-    address: String,
+    location: String,
     annote: String,
     contributors: [ContributorSchema],
-    website_title: String,
     chapter: String,
     edition: String,
     editor: String,
     howpublished: String,
     institution: String, 
-    journal: String, //Journal Title
+    indextitle: String, //Journal Title
     date: Date, //Date Published
     urldate: Date, //Date Accessed
     eventdate: Date,
@@ -190,7 +187,6 @@ const CSLBibSchema = new Schema({
     issnType: [Object],
     isbn: String,
     url: String, //Website URL
-    rights: String,
     runningTime: String,
     format: String,
     cslJson: Object,

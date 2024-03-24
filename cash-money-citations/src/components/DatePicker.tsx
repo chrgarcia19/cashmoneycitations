@@ -80,7 +80,7 @@ const DatePicker = (props: Props) => {
                         className="h-8 w-52"
                         placeholder={props.fieldPlaceholder}
                         type={props.fieldType}
-                        value={props.fieldValue[2]}
+                        defaultValue={props.fieldValue[2]}
                         name={props.fieldName[2]}
                         onChange={props.handleChange}
                         required 

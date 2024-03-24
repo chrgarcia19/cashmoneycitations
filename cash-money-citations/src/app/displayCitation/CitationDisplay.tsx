@@ -78,7 +78,7 @@ export function DeleteCitationDisplay(citeId: any) {
 }
 
 export function CitationChoice(referenceId: any) {
-  const [styleChoice, setStyleChoice] = useState(Array<string>(''));
+  const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
 
   async function exportCitation() {

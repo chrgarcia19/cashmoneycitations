@@ -33,27 +33,18 @@ if (error) return <p>Failed to load</p>;
 if (isLoading) return <p>Loading...</p>;
 if (!cslStyles) return null;
 
-const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const styleChoice = e.target.value;
     setStyleChoice(styleChoice);
-
-    // CODE BELOW IS FOR CHECKBOX FUNCTIONALITY
-    // if (e.target.checked) {
-    // setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
-    // onStyleChoiceChange([...styleChoices, styleChoice]);
-    // } else {
-    // const newChoices = styleChoices.filter(choice => choice !== styleChoice);
-    // setStyleChoices(newChoices);
-    // onStyleChoiceChange(newChoices);
-    // }
+    onStyleChoiceChange(styleChoice);
 };
 
 return (
     <span className="space-x-5">
-      <select onChange={(e) => setStyleChoice(e.target.value)}>
-        {cslStyles.slice(0, 10).map((cslStyle: any) => (
+      <select onChange={handleStyleChoiceChange}>
+        {cslStyles.map((cslStyle: any) => (
           <option key={cslStyle.id} value={cslStyle.name}>
-            {cslStyle.name}
+            {cslStyle.title}
           </option>
         ))}
       </select>

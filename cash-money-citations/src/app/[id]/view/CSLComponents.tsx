@@ -28,6 +28,14 @@ const {
     isLoading,
 } = useSWR(`/api/csl/styles`, fetcher);
 
+  // Update styleChoise when styleChoice changes
+  useEffect(() => {
+      if (cslStyles && cslStyles.length > 0) {
+          const firstStyle = cslStyles[0].name;
+          setStyleChoice(firstStyle);
+          onStyleChoiceChange(firstStyle);
+      }
+  }, [styleChoice, onStyleChoiceChange]);
 
 if (error) return <p>Failed to load</p>;
 if (isLoading) return <p>Loading...</p>;
@@ -42,7 +50,6 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 return (
     <span className="space-x-5">
       <select onChange={handleStyleChoiceChange}>
-        <option value="" disabled>Citation Style</option>
         {cslStyles.map((cslStyle: any) => (
           <option key={cslStyle.id} value={cslStyle.name}>
             {cslStyle.title}

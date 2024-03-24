@@ -14,6 +14,7 @@ export default function citationDisplay({
       {/* <CitationChoice referenceId={searchParams} /> */}
 
       <div className='px-20'>
+        <CitationChoice referenceId={referenceId} />
         <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
           <thead className='bg-gray-50'>
             <tr>
@@ -28,7 +29,6 @@ export default function citationDisplay({
           </tbody>
 
         </table>
-            <CitationChoice referenceId={referenceId} />
       </div>
     </div>
   )

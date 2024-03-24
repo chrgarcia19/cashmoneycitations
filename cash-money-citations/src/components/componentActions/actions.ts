@@ -5,6 +5,7 @@ import User from "@/models/User";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from "next/cache";
 import CSLBibModel from "@/models/CSLBibTex";
+import UserStyleList from '@/models/UserStyleList'; 
 
 interface RegistrationData {
   username: string;
@@ -63,6 +64,27 @@ export async function getSpecificReferenceById(id: string | string[] | undefined
   }
 }
 
+async function initializeUserStyleList(userId: string) {
+    console.log(userId)
+    // Create a new UserStyleList document that references the user
+    const userStyleList = new UserStyleList({
+      userId: userId,
+      styleList: [],
+      defaultStyles: [
+          "Modern Language Association 7th edition",
+          "Modern Language Association 8th edition",
+          "Modern Language Association 9th edition",
+          "American Psychological Association 7th edition",
+          "Chicago Manual of Style 17th edition (author-date)",
+          "Chicago Manual of Style 17th edition (full note)",
+          "Chicago Manual of Style 17th edition (note)",
+          "ACM SIGGRAPH",
+          "IEEE",
+      ]
+  });
+  await userStyleList.save();
+}
+
 export async function createUser(form: RegistrationData) {
   await dbConnect();
   try {
@@ -101,6 +123,8 @@ export async function createUser(form: RegistrationData) {
 
       // Save the user to the database
       await user.save();
+      await initializeUserStyleList(user._id);
+
       
       revalidatePath('/');
   } catch (error) {

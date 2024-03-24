@@ -80,6 +80,7 @@ export function CitationChoice(referenceId: any) {
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   async function exportCitation() {
     if (!styleChoice || !localeChoice) {
@@ -87,8 +88,16 @@ export function CitationChoice(referenceId: any) {
       return;
     }
 
-    // Call to server action to create citations & save in DB
-    await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
+    setIsLoading(true);
+    try {
+      // Call to server action to create citations & save in DB
+      await CreateCitation(referenceId.referenceId, styleChoice, localeChoice);
+      window.location.reload(); // Refresh the page
+    } catch (error) {
+      setError('An error occurred while creating the citation.');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -102,7 +111,9 @@ export function CitationChoice(referenceId: any) {
           <label htmlFor='localeChoice' className='mb-2 font-bold text-lg'>Language</label>
           <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
         </div>
-        <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation'>Make Citation</button>
+        <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Make Citation'}
+        </button>
       </div>
       {error && <p className='text-red-500'>{error}</p>}
     </>

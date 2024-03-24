@@ -94,13 +94,13 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
     </button>
     <button
       className={`linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
-      onClick={onEdit}
+      onClick={onDelete}
     >
       <span>Delete</span>
     </button>
     <button
       className={`linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
-      onClick={onEdit}
+      onClick={onExport}
     >
       <span>Export</span>
     </button>
@@ -127,7 +127,8 @@ const ViewReference = () => {
 
     async function exportCitation() {
       // Call to server action to create citations & save in DB
-      router.push(`/displayCitation?citation=${referenceId}`)
+      router.push(`/displayCitation?citation=${referenceId}`);
+      router.refresh();
     }
 
     const {

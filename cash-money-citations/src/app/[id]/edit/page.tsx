@@ -91,7 +91,7 @@ export function EditReference( {
     apiSource: "",
   };
 
-  if (referenceForm.type == "website"){
+  if (referenceForm.type == "webpage"){
 
     const webForm = {
       type: reference.type,
@@ -120,6 +120,7 @@ export function EditReference( {
       title: reference.title,
       volume: reference.volume,
       edition: reference.edition,
+      date: reference.date,
       month_published: reference.month_published,
       day_published: reference.day_published,
       year_published: reference.year_published,
@@ -130,9 +131,9 @@ export function EditReference( {
     }
 
     return <BookForm formID={"edit-book-form"} bookForm={bookForm} forNewReference={false} />
-  } else if (referenceForm.type == "journal"){
+  } else if (referenceForm.type == "article-journal"){
     const journalForm = {
-      type: "journal",
+      type: "article-journal",
       citekey: reference.citekey,
       image_url: reference.image_url,
       contributors: reference.contributors,
@@ -150,9 +151,9 @@ export function EditReference( {
     }
 
     return <JournalForm formID={"edit-journal-form"} journalForm={journalForm} forNewReference={false} />
-  } else if (referenceForm.type == "magazine"){
+  } else if (referenceForm.type == "article-magazine"){
     const magazineForm = {
-      type: "magazine",
+      type: "article-magazine",
       citekey: reference.citekey,
       image_url: reference.image_url,
       contributors: reference.contributors,
@@ -170,9 +171,9 @@ export function EditReference( {
     }
 
     return <MagazineForm formID={"edit-magazine-form"} magazineForm={magazineForm} forNewReference={false} />
-  } else if (referenceForm.type == "newspaper"){
+  } else if (referenceForm.type == "article-newspaper"){
     const newspaperForm = {
-      type: "newspaper",
+      type: "article-newspaper",
       citekey: reference.citekey,
       image_url: reference.image_url,
       contributors: reference.contributors,

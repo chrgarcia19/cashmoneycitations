@@ -3,6 +3,7 @@ import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 
 function InputISBN() {
     const { data: session } = useSession();
@@ -74,10 +75,11 @@ function InputISBN() {
         let i = 0;
         let authorArray = [];
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            firstName: "",
+            lastName: "",
+            middleName: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
@@ -108,20 +110,22 @@ function InputISBN() {
 
                 //Acquire data from if/else statements, throw it into the contributor field
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: firstName,
-                    contributorLastName: lastName,
-                    contributorMiddleI: middleI
+                    role: "Author",
+                    firstName: firstName,
+                    lastName: lastName,
+                    middleName: middleI,
+                    suffix: ""
                 };
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: "Unknown",
+                lastName: "Unknown",
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
@@ -129,12 +133,15 @@ function InputISBN() {
         let year = "";
         let month = "";
         let day = "";
+        let monthInt = 0;
 
         //Splitting the publishedDate into month, year, day if appropriate
         if (item.volumeInfo.publishedDate.includes("-")){
             publishedArray = item.volumeInfo.publishedDate.split("-");
             year = publishedArray[0];
-            month = publishedArray[1];
+            monthInt = parseInt(publishedArray[1]);
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
             day = publishedArray[2];
         }
         else {
@@ -158,47 +165,23 @@ function InputISBN() {
         else {
             publisher = "Unknown";
         }
+        console.log(day + month + year);
         
         let isbnReference: any = {
             type: "book",
-            citekey: "",
             title: item.volumeInfo.title,
             contributors: contributors,
             publisher: publisher,
-            year: year,
-            month: monthConversion(parseInt(month)),
-            address: "",
-            edition: "",
-            volume: "",
+            year_published: year,
+            day_published: day,
+            month_published: month,
             isbn: searchVal,
-            doi: "",
-            pages: "",
-            journal: "",
             image_url: imageLink,
         };
         
-        //Checking for login info
-        console.log(session?.user?.id);
-
-        try {
-            const res = await fetch("/api/references", {
-              method: "POST",
-              headers: {
-                Accept: contentType,
-                "Content-Type": contentType,
-              },
-              body: JSON.stringify(isbnReference),
-            });
-      
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
+        HandleManualReference(isbnReference, session?.user?.id)
+        router.push("/reference-table");
+        router.refresh();
     }
 
     return (

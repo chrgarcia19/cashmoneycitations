@@ -3,6 +3,7 @@ import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
+import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
 
 function InputISSN() {
     const { data: session } = useSession();
@@ -21,39 +22,7 @@ function InputISSN() {
             title: "Unknown"
         }
     ]
-
-    function monthConversion(month_num: number) {
-        switch(month_num){
-            case 1:
-                return "January";
-            case 2:
-                return "February";
-            case 3:
-                return "March"; 
-            case 4:
-                return "April";
-            case 5:
-                return "May";
-            case 6:
-                return "June";
-            case 7:
-                return "July";
-            case 8:
-                return "August";
-            case 9:
-                return "September";
-            case 10:
-                return "October";
-            case 11:
-                return "November";
-            case 12:
-                return "December";   
-            default:
-                return month_num;     
-        }
-    }
         
-
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setTableShown(false);
@@ -81,12 +50,12 @@ function InputISSN() {
 
     const addToDB = async (item: any) => {
         let i = 0;
-        let title = "";
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            firstName: "",
+            lastName: "",
+            middleName: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
@@ -94,86 +63,78 @@ function InputISSN() {
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: item.author[i].given,
-                    contributorLastName: item.author[i].family,
-                    contributorMiddleI: ""
+                    role: "Author",
+                    firstName: item.author[i].given,
+                    lastName: item.author[i].family,
+                    middleName: "",
+                    suffix: ""
                 };
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: "",
+                lastName: "",
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
 
-        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.title) {
-            title = item.title[0];
+        let day = "";
+        let month = "";
+        let year = "";
+        let monthInt = 0;
+        if (item.published['date-parts'][0].length === 3) {
+            monthInt = parseInt(item.published['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = item.published['date-parts'][0][2].toString();
+            year = item.published['date-parts'][0][0].toString();
         }
-        else {
-            title = "Unknown";
+        else if (item.published['date-parts'][0].length === 2) {
+            monthInt = parseInt(item.published['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = "1";
+            year = item.published['date-parts'][0][0].toString();
+        }
+        else if (item.published['date-parts'][0].length === 1) {
+            day = "1";
+            month = "0";
+            year = item.published['date-parts'][0][0].toString();
+        }
+        else { 
+            month = "1";
+            day = "1";
+            year = "2000";
         }
 
-        let eIssn = "";
-        let pIssn = "";
-        
-        //Handling print, electronic ISSNs and separating them
-        if (item['issn-type'][0].type === "print"){
-            pIssn = item['issn-type'][0].value;
-            eIssn = item['issn-type'][1].value;
-        }
-        else {
-            pIssn = item['issn-type'][1].value;
-            eIssn = item['issn-type'][0].value;
-        }
-        
         let issnReference: any = {
-            type: "journal",
-            citekey: "please edit this",
-            title: title,
+            type: "article-journal",
+            title: item.title,
+            image_url: "https://pbs.twimg.com/profile_images/592645671863328768/uv0v0EV8_400x400.jpg",
             contributors: contributors,
             publisher: item.publisher,
-            year: item.created['date-parts'][0][0],
-            month: monthConversion(item.created['date-parts'][0][1]),
-            address: "",
-            edition: "",
             volume: item.volume,
-            isbn: "",
+            month_published: month,
+            day_published: day,
+            year_published: year,
             doi: item.DOI,
+            issn: item.issn,
+            issnType: item['issn-type'],
             pages: item.page,
-            journal: "",
-            image_url: "https://pbs.twimg.com/profile_images/592645671863328768/uv0v0EV8_400x400.jpg",
+            indextitle: "",
+            urldate: new Date(),
+            abstract: item.abstract,
+            apiSource: item.source
         };
 
-        //Checking for login info
-        console.log(session?.user?.id);
-        
-        try {
-            const res = await fetch("/api/references", {
-              method: "POST",
-              headers: {
-                Accept: contentType,
-                "Content-Type": contentType,
-              },
-              body: JSON.stringify(issnReference),
-            });
-      
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
-
+        HandleManualReference(issnReference, session?.user?.id)
+        router.push("/reference-table");
+        router.refresh();
     }
 
     return (

@@ -2,7 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { CreateCslJsonDocument } from "@/components/componentActions/citationActions";
+import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
 
 function InputDOI() {
@@ -18,38 +18,6 @@ function InputDOI() {
             title: "Unknown"
         }
     ]
-
-    function monthConversion(month_num: number) {
-        switch(month_num){
-            case 1:
-                return "January";
-            case 2:
-                return "February";
-            case 3:
-                return "March"; 
-            case 4:
-                return "April";
-            case 5:
-                return "May";
-            case 6:
-                return "June";
-            case 7:
-                return "July";
-            case 8:
-                return "August";
-            case 9:
-                return "September";
-            case 10:
-                return "October";
-            case 11:
-                return "November";
-            case 12:
-                return "December";   
-            default:
-                return month_num;     
-        }
-    }
-        
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -72,7 +40,6 @@ function InputDOI() {
 
     const addToDB = async (item: any) => {
         let i = 0;
-        let title = "";
         let newContributor: Contributor = {
             role: "",
             firstName: "",
@@ -106,53 +73,58 @@ function InputDOI() {
             contributors.push(newContributor);
         }
 
-        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.title) {
-            title = item.title[0];
+        let day = "";
+        let month = "";
+        let year = "";
+        let monthInt = 0;
+        if (item['published-online']['date-parts'][0].length === 3) {
+            monthInt = parseInt(item['published-online']['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = item['published-online']['date-parts'][0][2].toString();
+            year = item['published-online']['date-parts'][0][0].toString();
         }
-        else {
-            title = "";
+        else if (item['published-online']['date-parts'][0].length === 2) {
+            monthInt = parseInt(item.created['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = "1";
+            year = item['published-online']['date-parts'][0][0].toString();
+        }
+        else if (item['published-online']['date-parts'][0].length === 1) {
+            day = "1";
+            month = "0";
+            year = item['published-online']['date-parts'][0][0].toString();
+        }
+        else { 
+            month = "1";
+            day = "1";
+            year = "2000";
         }
 
-        let eIssn = "";
-        let pIssn = "";
-
-        //Handling print, electronic ISSNs and separating them
-        if (item['issn-type'][0].type === "print"){
-            pIssn = item['issn-type'][0].value;
-            eIssn = item['issn-type'][1].value;
-        }
-        else {
-            pIssn = item['issn-type'][1].value;
-            eIssn = item['issn-type'][0].value;
-
-        }
-        
         let doiReference: any = {
-            type: "journal",
-            citekey: "",
+            type: "article-journal",
+            title: item.title,
             image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
             publisher: item.publisher,
-            year: item.created['date-parts'][0][0],
-            month: monthConversion(item.created['date-parts'][0][1]),
-            address: "",
-            edition: "",
             volume: item.volume,
-            issue: "",
-            month_published: monthConversion(item.created['date-parts'][0][1]),
-            day_published: item.created['date-parts'][0][2],
-            year_published: item.created['date-parts'][0][0],
-            start_page: item.page,
-            end_page: "",
+            month_published: month,
+            day_published: day,
+            year_published: year,
             doi: item.DOI,
+            issn: item.issn,
+            issnType: item['issn-type'],
             pages: item.page,
-            journal: "",
+            indextitle: "",
+            urldate: new Date(),
+            abstract: item.abstract,
+            apiSource: item.source
         };
 
+        HandleManualReference(doiReference, session?.user?.id)
         router.push("/reference-table");
         router.refresh();
-
     }
 
     return (

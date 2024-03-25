@@ -1,22 +1,14 @@
-import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import ReferenceCheckbox from "./ReferenceCheckbox";
-
-async function getReferences() {
-    await dbConnect();
-  
-    const result = await Reference.find({});
-    const references = result.map((doc) => {
-      const reference = JSON.parse(JSON.stringify(doc));
-      return reference;
-    });
-  
-    return references;
-}
+import {getUserReferences} from "./componentActions/actions";
+import { authConfig } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 async function ReferenceTable(){
-    const references = await getReferences();
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
 
+  const references = await getUserReferences(userId);
+  
     return(
         <>
         <div className="background">
@@ -28,8 +20,7 @@ async function ReferenceTable(){
                 <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Type</th>
                 <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Title</th>
                 <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Contributors</th>
-                <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Publisher</th>
-                <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Year</th>
+                <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Date Published</th>
               </tr>
             </thead>
             <tbody>
@@ -37,9 +28,9 @@ async function ReferenceTable(){
             </tbody>
           </table>
           </div>
-          </div>
-        </>
-      )
+        </div>
+      </>
+    )
 }
 
 export default ReferenceTable;

@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
   
   try {
     
-    const reference = await Tag.find(); /* find all the data in our database */
-    return NextResponse.json({ success: true, data: reference, message: id }, { status: 200});
+    const tag = await Tag.find(); /* find all the data in our database */
+    return NextResponse.json({ success: true, data: tag, message: id }, { status: 200});
   } catch (error) {
     return NextResponse.json({ success: false , data: id}, { status: 400});
   }
@@ -30,10 +30,10 @@ export async function PUT(request: NextRequest) {
   const req = await request.json();
   
   try {
-    const reference = await Tag.create(
+    const tag = await Tag.create(
       req,
     ); /* create a new model in the database */
-    return NextResponse.json({ success: true, data: reference }, { status: 201});
+    return NextResponse.json({ success: true, data: tag }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
   const req = await request.json();
 
   try {
-    const reference = await Tag.create(
+    const tag = await Tag.create(
       req,
     ); /* create a new model in the database */
-    return NextResponse.json({ success: true, data: reference }, { status: 201});
+    return NextResponse.json({ success: true, data: tag }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });
   }

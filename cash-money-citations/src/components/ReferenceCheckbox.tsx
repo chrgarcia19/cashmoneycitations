@@ -15,15 +15,8 @@ interface IProps {
     references: any;
 }
 
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data);
-
 export const Checkbox = ({ references }: IProps) => {
-    const searchParams = useSearchParams();
     const router = useRouter();
-    const id = searchParams.get('id');
 
     const handleDelete = async (refID: string) => {
         try {
@@ -100,15 +93,6 @@ export const Checkbox = ({ references }: IProps) => {
             }
         }
     }
-
-    const {
-        error,
-        isLoading,
-      } = useSWR(id ? `/api/references/${id}` : null, fetcher);
-
-      
-      if (error) return <p>Failed to load</p>;
-      if (isLoading) return <p>Loading...</p>;
 
     const [refData, setRefData] = useState<References[]>([]);
 

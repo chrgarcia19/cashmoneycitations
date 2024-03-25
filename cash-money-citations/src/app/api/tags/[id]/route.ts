@@ -14,12 +14,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
   try {
 
-    const reference = await Tag.findById(id);
+    const tag = await Tag.findById(id);
 
-    if (!reference) {
+    if (!tag) {
       return NextResponse.json({ success: false }, { status: 400 });
     }
-    return NextResponse.json({ success: true, data: reference, status: 200 });
+    return NextResponse.json({ success: true, data: tag, status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, status: 400 , data: id});
   }
@@ -51,10 +51,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
   try {
 
-    const reference = await Tag.findByIdAndUpdate(id, req, {
+    const tag = await Tag.findByIdAndUpdate(id, req, {
       new: true,
       runValidators: true,})
-    return NextResponse.json({ success: true, data: reference }, { status: 201});
+    return NextResponse.json({ success: true, data: tag }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });
   }

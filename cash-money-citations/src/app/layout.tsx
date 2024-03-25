@@ -17,6 +17,7 @@ export default async function RootLayout({
 }) {
     return (
         <html lang="en" data-theme="light">
+            <body>
                 <NavBar />
                 <SideBar />
                 <div className="content">

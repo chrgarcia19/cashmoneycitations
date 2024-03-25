@@ -1,30 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
-import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
-
-
-async function getReferences() {
-  await dbConnect();
-
-  const result = await Reference.find({});
-  const references = result.map((doc) => {
-    const reference = JSON.parse(JSON.stringify(doc));
-    return reference;
-  });
-
-  return references;
-}
+import {getUserReferences} from './componentActions/actions';
+import { authConfig } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
 export default async function ReferenceGallery() {
-  const references = await getReferences();
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
+
+  const references = await getUserReferences(userId);
 
   return (
     <>  
       <div className='reference-wrapper'>
         <div className="background">
           <div className='reference-wrapper'>
-            {references.map((reference) => (
+            {references?.map((reference) => (
               <div key={reference._id}>
                   <div className="card">
                     <img src={reference.image_url} alt="Image of a Reference Cover" />
@@ -36,7 +27,7 @@ export default async function ReferenceGallery() {
                       {/* Extra Reference Info: Year and Publisher */}
                       <div className="likes info">
                         <p className="label">Year</p>
-                        {reference.year}
+                        {reference.year_published}
                       </div>
                       <div className="dislikes info">
                         <p className="label">Publisher</p>

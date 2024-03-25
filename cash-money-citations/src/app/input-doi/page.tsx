@@ -2,6 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { CreateCslJsonDocument } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
 
 function InputDOI() {
@@ -73,10 +74,11 @@ function InputDOI() {
         let i = 0;
         let title = "";
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            firstName: "",
+            lastName: "",
+            middleName: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
@@ -84,20 +86,22 @@ function InputDOI() {
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: item.author[i].given,
-                    contributorLastName: item.author[i].family,
-                    contributorMiddleI: ""
+                    role: "Author",
+                    firstName: item.author[i].given,
+                    lastName: item.author[i].family,
+                    middleName: "",
+                    suffix: ""
                 };
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: "",
+                lastName: "",
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
@@ -107,7 +111,7 @@ function InputDOI() {
             title = item.title[0];
         }
         else {
-            title = "Unknown";
+            title = "";
         }
 
         let eIssn = "";
@@ -121,12 +125,13 @@ function InputDOI() {
         else {
             pIssn = item['issn-type'][1].value;
             eIssn = item['issn-type'][0].value;
+
         }
         
         let doiReference: any = {
             type: "journal",
-            citekey: "please edit this",
-            title: title,
+            citekey: "",
+            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
             publisher: item.publisher,
             year: item.created['date-parts'][0][0],
@@ -134,35 +139,19 @@ function InputDOI() {
             address: "",
             edition: "",
             volume: item.volume,
-            isbn: "",
+            issue: "",
+            month_published: monthConversion(item.created['date-parts'][0][1]),
+            day_published: item.created['date-parts'][0][2],
+            year_published: item.created['date-parts'][0][0],
+            start_page: item.page,
+            end_page: "",
             doi: item.DOI,
             pages: item.page,
             journal: "",
-            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
         };
-        
-        //Checking for login info
-        console.log(session?.user?.id);
 
-        try {
-            const res = await fetch("/api/references", {
-              method: "POST",
-              headers: {
-                Accept: contentType,
-                "Content-Type": contentType,
-              },
-              body: JSON.stringify(doiReference),
-            });
-      
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
+        router.push("/reference-table");
+        router.refresh();
 
     }
 

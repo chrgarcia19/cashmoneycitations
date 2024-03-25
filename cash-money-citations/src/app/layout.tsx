@@ -18,13 +18,21 @@ export default async function RootLayout({
     return (
         <html lang="en" data-theme="light">
             <body>
-                <Suspense>
-                    <NavBar />
-                    <SideBar />
-                    <div className="content">
-                        <AuthProvider>{children}</AuthProvider>
-                    </div>
-                </Suspense>
+                <NavBar />
+                <SideBar />
+                <div className="content">
+                    <AuthProvider>{children}</AuthProvider>
+                </div>
+
+                
+                <footer className="px-20 py-4 text-center text-sm text-gray-500 bg-gray-200">
+                    <p>
+                        Citation Styles created with help from the  <a href="https://citationstyles.org/" className="text-blue-500 hover:underline hover:text-blue-700">CSL (citation style language) project</a>
+                    </p>
+                    <p>
+                        © {new Date().getFullYear()} Cash Money Citations. All rights reserved.
+                    </p>
+                </footer>
             </body>
         </html>
     )

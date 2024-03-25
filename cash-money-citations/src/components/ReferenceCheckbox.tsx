@@ -1,6 +1,6 @@
 "use client"
 
-import { References } from "@/models/Reference";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
 const config = plugins.config.get('@bibtex')
 import { Contributor } from "@/models/Contributor";
+import { CreateCitation } from "@/app/[id]/view/actions";
 
 interface IProps {
     references: any;
@@ -19,6 +20,37 @@ const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())
     .then((json) => json.data);
+
+function monthConversion(month_num: string) {
+    switch(month_num){
+        case "0":
+            return "January";
+        case "1":
+            return "February";
+        case "2":
+            return "March"; 
+        case "3":
+            return "April";
+        case "4":
+            return "May";
+        case "5":
+            return "June";
+        case "6":
+            return "July";
+        case "7":
+            return "August";
+        case "8":
+            return "September";
+        case "9":
+            return "October";
+        case "10":
+            return "November";
+        case "11":
+            return "December";   
+        default:
+            return (month_num + 1);     
+    }
+}
 
 export const Checkbox = ({ references }: IProps) => {
     const searchParams = useSearchParams();
@@ -36,56 +68,14 @@ export const Checkbox = ({ references }: IProps) => {
         }
     };
 
-    const exportCitation = async (reference: any) => {
-        // Map your MongoDB data to CSL format
-        let refType = "";
-        if (reference.type === 'journal'){
-            refType = 'article-journal'
-        }
-        if (reference.type === 'website'){
-            refType = reference.type
-        }
-        if (reference.type === 'book'){
-            refType = reference.type
-        }
-        const cslData = {
-            id: reference._id,
-            type: refType,
-            title: reference.title,
-            author: reference.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-                family: contributor.contributorFirstName,
-                given: contributor.contributorLastName,
-            })),
-            issued: { "date-parts": [[parseInt(reference.year, 10), reference.month ? parseInt(reference.month, 10) : 0]] },
-            publisher: reference.publisher,
-            DOI: reference.doi,
-            URL: reference.url,
-            ISBN: reference.isbn
-        };
-        
-        // Create a Cite instance
-        const citation = new Cite(cslData);
-        //Generate Vancouver citation
-        const vanOutput = citation.format('bibliography', {
-            format: 'text',
-            template: 'vancouver',
-            lang: 'en-US'
-        });
-        //Generate apa citation
-        const apaOutput = citation.format('bibliography', {
-            format: 'text',
-            template: 'apa',
-            lang: 'en-US'
-        });
-        const bibtexOutput = citation.format('bibtex', {
-            format: 'text',
-            template: 'bibtex',
-            lang: 'en-US'
-        })
-        // Implement the logic to display or prepare the citation for download
-        // alert(`Vancouver Citation: \n${vanOutput}\nAPA Citation: \n${apaOutput}`);
-        const citationData = JSON.stringify({ van: vanOutput, apa: apaOutput, bibtex: bibtexOutput });
-        router.push(`/displayCitation?citation=${encodeURIComponent(citationData)}`);
+    async function exportSingleCitation(refId: string) {
+        // Call to server action to create citations & save in DB
+        router.push(`/displayCitation?citation=${refId}`)
+    }
+
+    async function exportMultipleCitation(refIds: string[]) {
+        // Call to server action to create citations & save in DB
+        router.push(`/displayCitation?citation=${refIds}`)
     }
 
     const handleDeleteMany = async (refIDs: string[]) => {
@@ -94,11 +84,11 @@ export const Checkbox = ({ references }: IProps) => {
                 await fetch(`/api/references/${refIDs[i]}`, {
                     method: "Delete"
                 });
-                router.push('/reference-table');
-                router.refresh();
             } catch (error) {
             }
         }
+        router.push('/reference-table');
+        router.refresh();
     }
 
     const {
@@ -110,7 +100,7 @@ export const Checkbox = ({ references }: IProps) => {
       if (error) return <p>Failed to load</p>;
       if (isLoading) return <p>Loading...</p>;
 
-    const [refData, setRefData] = useState<References[]>([]);
+    const [refData, setRefData] = useState<CSLBibInterface[]>([]);
 
     useEffect(() => {
         setRefData(references);
@@ -133,7 +123,7 @@ export const Checkbox = ({ references }: IProps) => {
     }
 
     function getSelectedRef(checked: Array<boolean>){
-        let refs = new Array<References>();
+        let refs = new Array<CSLBibInterface>();
         for (let i = 0; i < checked.length; i++){
             if (checked[i]){
                 refs.push(refData[i]);
@@ -176,7 +166,7 @@ export const Checkbox = ({ references }: IProps) => {
         setIsChecked(checkState)
     }
 
-    const singleMenu = (reference: References) => {
+    const singleMenu = (reference: CSLBibInterface) => {
         return (
             <div className="flex justify-center items-center">
                 <div className="btm-bar">
@@ -194,7 +184,7 @@ export const Checkbox = ({ references }: IProps) => {
                         <span className="btm-nav-label">Delete</span>
                     </button>
                     <button className="bg-orange-300 text-orange-800 hover:active"
-                    onClick={() => exportCitation(reference)}>
+                    onClick={() => exportSingleCitation(reference._id)}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.93" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.33,0.02h29.41v20.6H20.36v80.7h82.1V84.79h20.36v37.14H0V0.02H8.33L8.33,0.02z M122.88,0H53.3l23.74,23.18l-33.51,33.5 l21.22,21.22L98.26,44.4l24.62,24.11V0L122.88,0z"/></svg>
                         <span className="btm-nav-label">Export</span>
                     </button>
@@ -208,7 +198,7 @@ export const Checkbox = ({ references }: IProps) => {
         )
     }
 
-    const multiMenu = (refIDs: string[], refs: References[]) => {
+    const multiMenu = (refIDs: string[], refs: CSLBibInterface[]) => {
         return (
             <div className="btm-bar">
                 <button className="bg-red-300 text-red-800 hover:active"
@@ -217,7 +207,7 @@ export const Checkbox = ({ references }: IProps) => {
                     <span className="btm-nav-label">Delete All Selected</span>
                 </button>
                 <button className="bg-orange-300 text-orange-800 hover:active"
-                    >
+                onClick={() => exportMultipleCitation(refIDs)}    >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.93" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.33,0.02h29.41v20.6H20.36v80.7h82.1V84.79h20.36v37.14H0V0.02H8.33L8.33,0.02z M122.88,0H53.3l23.74,23.18l-33.51,33.5 l21.22,21.22L98.26,44.4l24.62,24.11V0L122.88,0z"/></svg>
                     <span className="btm-nav-label">Export All Selected</span>
                 </button>
@@ -252,12 +242,12 @@ export const Checkbox = ({ references }: IProps) => {
                 <td className="border border-slate-600 text-center">          
                 {reference.contributors.map((contributor: any) => {
                   return(
-                    <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}</div>
+                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div>
                   )
                 })}
                 </td>
-                <td className="border border-slate-600 text-center">{reference.publisher}</td>
-                <td className="border border-slate-600 text-center">{reference.year}</td>
+                <td className="border border-slate-600 text-center">
+                    {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}</td>
                 </tr>
             ))}
         </>
@@ -265,4 +255,3 @@ export const Checkbox = ({ references }: IProps) => {
 }
 
 export default Checkbox;
-

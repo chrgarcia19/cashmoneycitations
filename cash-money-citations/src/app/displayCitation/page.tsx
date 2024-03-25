@@ -1,52 +1,35 @@
-"use client"
+import { CitationChoice, DeleteCitationDisplay, CitationList } from './CitationDisplay';
 
-import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-const citationDisplay = () => {
-  const searchParams = useSearchParams();
-  const [citationData, setCitationData] = useState({ van: '', apa: '', bibtex: '' });
-  useEffect(() => {
-    const citation = searchParams.get('citation');
-    if (citation) {
-      const parsedData = JSON.parse(decodeURIComponent(citation));
-      setCitationData(parsedData);
-    }
-  }, [searchParams]);
-
-  const copyToClipboard = (text : string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Copied to clipboard!');
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-    });
-  };
-
+export default function citationDisplay({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string | undefined }
+}){
+  const referenceId = searchParams.citation;
+  
   return (
     <div className='flex flex-row items-start w-screen'>
-     <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
-        <p className='mt-3'>Vancouver Citation: {citationData.van}</p>
-        <button onClick={() => copyToClipboard(citationData.van)}>
-        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
-        </button>
-      </div>
-      <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
-        <p className='mt-3'>APA Citation: {citationData.apa}</p>
-        <button onClick={() => copyToClipboard(citationData.apa)}>
-        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
-        </button>
-      </div>
-      <div className='flex flex-row bg-green-200 rounded-lg p-4 m-4'>
-        <p className='mt-3'>BibTex: {citationData.bibtex}</p>
-        <button onClick={() => copyToClipboard(citationData.bibtex)}>
-        <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
-        </button>
-      </div>
+      {/* <CitationChoice referenceId={searchParams} /> */}
 
+      <div className='px-20'>
+        <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+          <thead className='bg-gray-50'>
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation Style</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copy</th>
+            </tr>
+            
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            <CitationList referenceId={referenceId} />
+          </tbody>
 
+        </table>
+            <CitationChoice referenceId={referenceId} />
+      </div>
     </div>
   )
 };
-
-export default citationDisplay;

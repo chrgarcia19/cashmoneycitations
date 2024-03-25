@@ -1,17 +1,22 @@
 'use client'
 
-import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
-import Form from "../../../components/Form";
+import Form from "@/components/Form";
 
 const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())
     .then((json) => json.data);
 
-const EditReference = () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+export default function EditReference( {
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+){
+  const id = searchParams.id;
   const {
     data: reference,
     error,
@@ -23,24 +28,50 @@ const EditReference = () => {
   if (!reference) return null;
 
   const referenceForm = {
-    type: reference.type,
-    citekey: reference.citekey,
-    title: reference.title,
+    location: reference.location,
+    annote: reference.annote,
     contributors: reference.contributors,
-    publisher: reference.publisher,
-    year: reference.year,
-    month: reference.month,
-    address: reference.address,
+    indextitle: reference.indextitle,
+    chapter: reference.chapter,
     edition: reference.edition,
-    volume: reference.volume,
-    isbn: reference.isbn,
-    doi: reference.doi,
+    editor: reference.editor,
+    howpublished: reference.howpublished,
+    institution: reference.institution,
+    month_published: reference.month_published,
+    day_published: reference.day_published,
+    year_published: reference.year_published,
+    month_accessed: reference.month_accessed,
+    day_accessed: reference.day_accessed,
+    year_accessed: reference.year_accessed,
+    month_event: reference.month_event,
+    day_event: reference.day_event,
+    year_event: reference.year_event,
+    note: reference.note,
+    number: reference.number,
+    organization: reference.organization,
     pages: reference.pages,
-    journal: reference.journal,
+    publisher: reference.publisher,
+    school: reference.school,
+    series: reference.series,
+    volumes: reference.volumes,
+    short_title: reference.short_title,
+    title: reference.title,
+    type: reference.type,
+    volume: reference.volume,
+    doi: reference.doi,
+    issn: reference.issn,
+    isbn: reference.isbn,
+    url: reference.url,
+    running_time: reference.running_time,
+    format: reference.format,
     image_url: reference.image_url,
+    issue: reference.issue,
+    api_source: reference.api_source,
   };
 
-  return <Form formId="edit-reference-form" referenceForm={referenceForm} forNewReference={false} />;
+  return (
+    <Form formId={"edit-reference-form"} referenceForm={referenceForm} forNewReference={false}/>
+  )
 };
 
-export default EditReference;
+//export default EditReference;

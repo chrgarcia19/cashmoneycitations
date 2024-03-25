@@ -31,12 +31,12 @@ export async function applyTagsToReference(reference: References, tags: any[]){
         tagID: reference.tagID,
     };
 
+    console.log(JSON.stringify(tags));
+
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
       referenceForm.tagID.push(tags[i]._id);
     }
-    
-    console.log(JSON.stringify(referenceForm));
     /*Send the new data to the API to be modified*/
     try {
         const res = await fetch(`/api/references/${reference._id}`, {

@@ -169,11 +169,11 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
       const refs = getSelectedRefs(refChecked);
       const tags = getSelectedTags(tagChecked);
       /*Add Tag IDs to References first*/
-      for (let i = 0; i < tags.length; i++){
+      for (let i = 0; i < refs.length; i++){
         await applyTagsToReference(refs[i], tags);
       }
       /*Add Reference IDs to Tags*/
-      for (let i = 0; i < refs.length; i++){
+      for (let i = 0; i < tags.length; i++){
         await applyReferencesToTag(tags[i], refs);
       }
       router.push("/tag-center");

@@ -232,7 +232,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-        <div className="center-content pt-5 pb-5">
+        <div className="center-content">
           <div className="bg-gray-100 w-2/5 rounded-xl pb-5">
             <div className="flex justify-center items-center">
               {forNewReference && (

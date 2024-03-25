@@ -226,22 +226,25 @@ li {
 
 .content {
   margin-left: 256px;
+  margin-bottom: 72px;
   margin-top: 96px;
   justify-content: center;
   align-items: center;
 }
 
-.content-center{
+.center-content{
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /*CSS for the reference table view bottom bar
 taken and modified from DaisyUI*/
 .btm-bar {
   position: fixed;
-  bottom: 0px;
+  bottom: 72px;
   left: 256px;
   right: 0px;
   display: flex;

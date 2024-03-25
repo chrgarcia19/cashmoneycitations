@@ -16,7 +16,9 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     return (
+        
         <html lang="en" data-theme="light">
+            <body>
                 <NavBar />
                 <SideBar />
                 <div className="content">

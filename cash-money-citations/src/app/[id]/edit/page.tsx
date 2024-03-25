@@ -8,7 +8,7 @@ const fetcher = (url: string) =>
     .then((res) => res.json())
     .then((json) => json.data);
 
-export function EditReference( {
+export default function EditReference( {
   params,
   searchParams,
 }: {
@@ -74,4 +74,4 @@ export function EditReference( {
   )
 };
 
-export default EditReference;
+//export default EditReference;

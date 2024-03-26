@@ -3,7 +3,7 @@ import Tag from "../../models/Tag";
 import Link from "next/link";
 import TagForm from "@/components/TagForm";
 import { ApplyTagsToRef } from "./applyTagsToRef";
-import Reference from "@/models/Reference";
+import CSLBibTex from "@/models/CSLBibTex";
 
 async function getTags() {
     await dbConnect();
@@ -20,7 +20,7 @@ async function getTags() {
 async function getReferences() {
     await dbConnect();
   
-    const result = await Reference.find({});
+    const result = await CSLBibTex.find({});
     const references = result.map((doc) => {
       const reference = JSON.parse(JSON.stringify(doc));
       return reference;

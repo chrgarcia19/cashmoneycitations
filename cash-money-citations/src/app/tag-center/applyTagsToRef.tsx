@@ -1,6 +1,6 @@
 'use client'
 
-import { References } from "@/models/Reference";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { useEffect, useState } from "react";
 import applyReferencesToTag, { applyTagsToReference } from "./tagActions";
@@ -13,7 +13,7 @@ interface IProps {
 
 export const ApplyTagsToRef = ({ tags, references }: IProps) => {
     const router = useRouter();
-    const [refData, setRefData] = useState<References[]>([]);
+    const [refData, setRefData] = useState<CSLBibInterface[]>([]);
 
     useEffect(() => {
         setRefData(references);
@@ -91,7 +91,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {references.map((reference: References, index: any) => (
+                    {references.map((reference: CSLBibInterface, index: any) => (
                         <tr className="bg-sky-100 hover:bg-zinc-400" key={reference._id}>
                             <td className="border border-slate-600">
                             <input 
@@ -114,7 +114,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
     }
 
     function getSelectedRefs(checked: Array<boolean>){
-        let refs = new Array<References>();
+        let refs = new Array<CSLBibInterface>();
         for (let i = 0; i < checked.length; i++){
             if (checked[i]){
                 refs.push(refData[i]);

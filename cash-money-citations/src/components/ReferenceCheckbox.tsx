@@ -2,15 +2,12 @@
 
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
 const config = plugins.config.get('@bibtex')
-import { Contributor } from "@/models/Contributor";
-import { CreateCitation } from "@/app/[id]/view/actions";
 
 interface IProps {
     references: any;

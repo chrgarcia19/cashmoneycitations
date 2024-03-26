@@ -1,39 +1,57 @@
 'use client'
 
-import { References } from "@/models/Reference";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
-import { useRouter, useSearchParams } from "next/navigation";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data);
-
-export async function applyTagsToReference(reference: References, tags: any[]){
+export async function applyTagsToReference(reference: CSLBibInterface, tags: any[]){
     /*Create the form*/
     const referenceForm = {
-        type: reference.type,
-        citekey: reference.citekey,
-        title: reference.title,
-        contributors: reference.contributors,
-        publisher: reference.publisher,
-        year: reference.year,
-        month: reference.month,
-        address: reference.address,
-        edition: reference.edition,
-        volume: reference.volume,
-        isbn: reference.isbn,
-        doi: reference.doi,
-        pages: reference.pages,
-        journal: reference.journal,
-        image_url: reference.image_url,
-        tagID: reference.tagID,
+      location: reference.location,
+      annote: reference.annote,
+      contributors: reference.contributors,
+      indextitle: reference.indextitle,
+      chapter: reference.chapter,
+      edition: reference.edition,
+      editor: reference.editor,
+      howpublished: reference.howpublished,
+      institution: reference.institution,
+      month_published: reference.month_published,
+      day_published: reference.day_published,
+      year_published: reference.year_published,
+      month_accessed: reference.month_accessed,
+      day_accessed: reference.day_accessed,
+      year_accessed: reference.year_accessed,
+      month_event: reference.month_event,
+      day_event: reference.day_event,
+      year_event: reference.year_event,
+      note: reference.note,
+      number: reference.number,
+      organization: reference.organization,
+      pages: reference.pages,
+      publisher: reference.publisher,
+      school: reference.school,
+      series: reference.series,
+      volumes: reference.volumes,
+      short_title: reference.shorttitle,
+      title: reference.title,
+      type: reference.type,
+      volume: reference.volume,
+      doi: reference.doi,
+      issn: reference.issn,
+      isbn: reference.isbn,
+      url: reference.url,
+      running_time: reference.runningTime,
+      format: reference.format,
+      image_url: reference.image_url,
+      issue: reference.issue,
+      api_source: reference.apiSource,
+      tagID: reference.tagID,
     };
 
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
-      referenceForm.tagID.push(tags[i]._id);
+      reference.tagID.push(tags[i]._id);
     }
     /*Send the new data to the API to be modified*/
     try {

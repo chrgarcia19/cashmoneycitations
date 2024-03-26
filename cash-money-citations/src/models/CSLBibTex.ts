@@ -113,6 +113,7 @@ export interface CSLBibInterface extends mongoose.Document {
     referencesUsed: ReferencesUsed[];
     citationIdList: string[];
     isOwnedBy: string[];
+    tagID: string[];
 }
 
 const CSLBibSchema = new Schema({
@@ -227,6 +228,7 @@ const CSLBibSchema = new Schema({
     referencesUsed: [referencesUsedSchema],
     citationIdList: [String],
     isOwnedBy: [String],
+    tagID: [String],
 
 }, {timestamps: true});
 

@@ -3,6 +3,7 @@
 const fs = require('fs');
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
+require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import CSLBibModel from "@/models/CSLBibTex";
@@ -83,5 +84,38 @@ export async function GetBibLaTexFile(referenceId: string) {
     });
 
     return customCitation;
+}
 
+export async function GetBibTexFile(referenceId: string) {
+    let referenceData = await CSLBibModel.findById(referenceId)
+
+    const cslJson = referenceData.cslJson
+
+    const citation = new Cite(cslJson);
+
+    // Create custom citation with user specified style & locale
+    const customCitation = citation.format('bibtex', {
+        format: 'text',
+        template: "bibtex",
+        lang: "en-US",
+    });
+
+    return customCitation;
+}
+
+export async function GetJSONFile(referenceId: string) {
+    let referenceData = await CSLBibModel.findById(referenceId)
+
+    const cslJson = referenceData.cslJson
+
+    const citation = new Cite(cslJson);
+    
+    // Create custom citation with user specified style & locale
+    const customCitation = citation.format('data', {
+        format: 'text',
+        template: "data",
+        lang: "en-US",
+    });
+
+    return customCitation;
 }

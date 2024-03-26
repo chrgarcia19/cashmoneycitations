@@ -61,13 +61,12 @@ function InputISBN() {
         setTableShown(false);
         if (searchVal.length !== 10) {
             isbn = convertISBN13ToISBN10(searchVal);
-            console.log(isbn);
-            setSearchVal(isbn);
+            setStaticSearchVal(isbn);
             const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=1`);
             const result = await res.json();
             if (result.items) {
                 setData(result.items);
-                setSearchVal(isbn);
+                setStaticSearchVal(isbn);
             }
             else {
                 setData(errorItem);
@@ -75,10 +74,13 @@ function InputISBN() {
             setTableShown(true);
         }
         else {
+            isbn = searchVal;
+            setStaticSearchVal(isbn);
             const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${searchVal}&maxResults=1`);
             const result = await res.json();
             if (result.items) {
                 setData(result.items);
+                setStaticSearchVal(isbn);
             }
             else {
                 setData(errorItem);
@@ -160,12 +162,14 @@ function InputISBN() {
         if (item.volumeInfo.publishedDate.includes("-")){
             publishedArray = item.volumeInfo.publishedDate.split("-");
             year = publishedArray[0];
-            monthInt = parseInt(publishedArray[1].replace("0", ""));
+            monthInt = parseInt(publishedArray[1]);
             monthInt = monthInt - 1;
             month = monthInt.toString();
             day = publishedArray[2].replace("0", "");
         }
         else {
+            month = "0";
+            day = "1"
             year = item.volumeInfo.publishedDate;
         }
 
@@ -196,7 +200,7 @@ function InputISBN() {
             year_published: year,
             day_published: day,
             month_published: month,
-            isbn: searchVal,
+            isbn: staticSearchVal,
             image_url: imageLink,
         };
         
@@ -231,8 +235,8 @@ function InputISBN() {
                 </thead>
                 <tbody>
                     {data.map(item => (
-                        <tr key={searchVal} className="border-b hover:bg-gray-100">
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{searchVal}</td>
+                        <tr key={staticSearchVal} className="border-b hover:bg-gray-100">
+                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{staticSearchVal}</td>
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.volumeInfo.title}</td>
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
                                 <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>

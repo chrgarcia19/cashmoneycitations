@@ -5,7 +5,7 @@ require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
-import { GetBibLaTexFile } from "./actions";
+import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -139,10 +139,20 @@ export function ExportReferenceData({ referenceId }: any){
     let formattedReference;
     let fileExtension;
     switch (downloadFormat) {
-      case 'csl-json':
+      case 'json':
+        const getJSON = async() => {
+          const json = await GetJSONFile(referenceId);
+          return json;
+        }
+        formattedReference = await getJSON();
         fileExtension = 'json';
         break;
       case 'bibtex':
+        const getBibTex = async() => {
+          const bibtex = await GetBibTexFile(referenceId);
+          return bibtex;
+        }
+        formattedReference = await getBibTex();
         fileExtension = 'bib';
       case 'biblatex':
         // Format the reference as BibTex or BibLaTex
@@ -180,7 +190,7 @@ export function ExportReferenceData({ referenceId }: any){
       <form onSubmit={downloadReference} className='flex items-center space-x-2'>
         <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
           <option value='txt'>TXT</option>
-          <option value='csl-json'>CSL-JSON</option>
+          <option value='json'>JSON</option>
           <option value='bibtex'>BibTex</option>
           <option value='biblatex'>BibLaTex</option>
           <option value='csv'>CSV</option>

@@ -3,7 +3,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
+import { GetBibLaTexFile } from "./actions";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -57,7 +59,7 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
     <div>
       <Button color="green" onClick={onEdit}>Edit</Button>
       <Button color="red" onClick={onDelete}>Delete</Button>
-      <Button color="orange" onClick={onExport}>Export</Button>
+      <Button color="orange" onClick={onExport}>Bibliography</Button>
     </div>
   )
 }
@@ -108,12 +110,87 @@ const ViewReference = () => {
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
+                        <ExportReferenceData referenceId={reference._id}/>
                     </div> 
                 </div>  
             </> 
         </div>
     )
     
+}
+
+export function ExportReferenceData({ referenceId }: any){
+  const [reference, setReference] = useState(Object);
+  const [downloadFormat, setDownloadFormat] = useState('txt');
+  
+  // Fetch initial citation state
+  useEffect(() => {
+    fetchReference();
+  }, []);
+
+  const fetchReference = async () => {
+    const referenceData = await getSpecificReferenceById(referenceId);  
+    setReference(referenceData);
+  }
+
+  const downloadReference = async(event: any) => {
+    event.preventDefault(); // Prevent the form from refreshing the page
+
+    let formattedReference;
+    let fileExtension;
+    switch (downloadFormat) {
+      case 'csl-json':
+        fileExtension = 'json';
+        break;
+      case 'bibtex':
+        fileExtension = 'bib';
+      case 'biblatex':
+        // Format the reference as BibTex or BibLaTex
+        const getBibLaTex = async() => {
+          const bibLaTex = await GetBibLaTexFile(referenceId);
+          return bibLaTex;
+        }
+        formattedReference = await getBibLaTex();
+        fileExtension = 'bib';
+
+        break;
+      case 'csv':
+        // Format the reference as CSV
+        formattedReference = Object.values(reference).join(',');
+        fileExtension = 'csv';
+
+        break;
+      case 'txt':
+        formattedReference = Object.values(reference).join('\n');
+        fileExtension = 'txt';
+
+        break;
+    }
+
+    const element = document.createElement('a');
+    const file = new Blob([formattedReference], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = `reference.${fileExtension}`;
+    document.body.appendChild(element);
+    element.click();
+  }
+
+  return (
+    <>
+      <form onSubmit={downloadReference} className='flex items-center space-x-2'>
+        <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
+          <option value='txt'>TXT</option>
+          <option value='csl-json'>CSL-JSON</option>
+          <option value='bibtex'>BibTex</option>
+          <option value='biblatex'>BibLaTex</option>
+          <option value='csv'>CSV</option>
+        </select>
+        <button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
+          Download Reference
+        </button>
+      </form>
+    </>
+  );
 }
 
 export default ViewReference;

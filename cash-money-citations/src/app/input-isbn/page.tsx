@@ -22,7 +22,7 @@ function InputISBN() {
 
     function convertISBN13ToISBN10(isbn13: string): string {
         if (isbn13.includes(" ")) {
-            for (let i = 0; isbn13.split(" ").length - 1; i++) {
+            for (let i = 0; i >= isbn13.split(" ").length - 1; i++) {
                 isbn13 = isbn13.replace(/\s/g, "")
             }
         }

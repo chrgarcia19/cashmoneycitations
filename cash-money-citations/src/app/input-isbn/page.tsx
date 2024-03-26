@@ -155,12 +155,14 @@ function InputISBN() {
         let year = "";
         let month = "";
         let day = "";
-
+        let monthInt = 0;
         //Splitting the publishedDate into month, year, day if appropriate
         if (item.volumeInfo.publishedDate.includes("-")){
             publishedArray = item.volumeInfo.publishedDate.split("-");
             year = publishedArray[0];
-            month = publishedArray[1].replace("0", "");
+            monthInt = parseInt(publishedArray[1].replace("0", ""));
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
             day = publishedArray[2].replace("0", "");
         }
         else {

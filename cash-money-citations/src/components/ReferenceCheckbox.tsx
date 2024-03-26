@@ -23,29 +23,29 @@ const fetcher = (url: string) =>
 
 function monthConversion(month_num: string) {
     switch(month_num){
-        case "1":
+        case "0":
             return "January";
-        case "2":
+        case "1":
             return "February";
-        case "3":
+        case "2":
             return "March"; 
-        case "4":
+        case "3":
             return "April";
-        case "5":
+        case "4":
             return "May";
-        case "6":
+        case "5":
             return "June";
-        case "7":
+        case "6":
             return "July";
-        case "8":
+        case "7":
             return "August";
-        case "9":
+        case "8":
             return "September";
-        case "10":
+        case "9":
             return "October";
-        case "11":
+        case "10":
             return "November";
-        case "12":
+        case "11":
             return "December";   
         default:
             return (month_num + 1);     

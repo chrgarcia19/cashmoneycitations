@@ -86,13 +86,18 @@ function InputISSN() {
         let day = "";
         let month = "";
         let year = "";
+        let monthInt = 0;
         if (item.published['date-parts'][0].length === 3) {
-            month = item.published['date-parts'][0][1].toString().replace("0", "");
+            monthInt = parseInt(item.created['date-parts'][0][1].toString().replace("0", ""));
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
             day = item.published['date-parts'][0][2].toString();
             year = item.published['date-parts'][0][0].toString();
         }
         else if (item.published['date-parts'][0].length === 2) {
-            month = item.published['date-parts'][0][1].toString().replace("0", "");
+            monthInt = parseInt(item.created['date-parts'][0][1].toString().replace("0", ""));
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
             day = "1";
             year = item.published['date-parts'][0][0].toString();
         }

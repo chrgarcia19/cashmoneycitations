@@ -51,7 +51,7 @@ export async function CreateCitation(referenceId: any, styleChoice: string, loca
 
     let newCustomCitation = await CitationModel.create({
         name: templateName + referenceTitle,
-        style: templateName,
+        style: styleData.title,
         CitationData: customCitation,
         language: localeName,
     });
@@ -109,7 +109,7 @@ export async function GetJSONFile(referenceId: string) {
     const cslJson = referenceData.cslJson
 
     const citation = new Cite(cslJson);
-    
+
     // Create custom citation with user specified style & locale
     const customCitation = citation.format('data', {
         format: 'text',

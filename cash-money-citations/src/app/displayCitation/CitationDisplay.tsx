@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
 import { CreateCitation } from '../[id]/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
+import { getSpecificReferenceById, getUserReferences } from '@/components/componentActions/actions';
 
 export function CitationList({ referenceId, citations, setCitations }: any) {
   // Fetch initial citation state
@@ -80,6 +82,7 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
   const [localeChoice, setLocaleChoice] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [downloadFormat, setDownloadFormat] = useState('txt');
 
   async function exportCitation() {
     if (!styleChoice || !localeChoice) {
@@ -99,11 +102,13 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
     }
   }
 
-  function downloadCitations() { // Downloads Citations
+  function downloadCitations(event: any) { // Downloads Citations
+    event.preventDefault(); // Prevent the form from refreshing the page
+  
     const element = document.createElement('a');
     const file = new Blob([citations.map((citation: any) => citation.CitationData).join('\n')], {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
-    element.download = 'citations.txt';
+    element.download = `citations.${downloadFormat}`;
     document.body.appendChild(element);
     element.click();
   }
@@ -122,11 +127,37 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
         <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Make Citation'}
         </button>
-        <button onClick={downloadCitations} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
-        Download Citations
+        <form onSubmit={downloadCitations} className='flex items-center space-x-2'>
+        <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
+          <option value='txt'>TXT</option>
+          <option value='csv'>CSV</option>
+        </select>
+        <button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
+          Download Citations
         </button>
+        </form>
       </div>
       {error && <p className='text-red-500'>{error}</p>}
     </>
   )
+}
+
+export function ExportReferenceData({ referenceId }: any){
+
+  const [reference, setReference] = useState(Object);
+  const [downloadFormat, setDownloadFormat] = useState('txt');
+  
+  // Fetch initial citation state
+  useEffect(() => {
+    fetchReference();
+  }, []);
+
+  const fetchReference = async () => {
+    const referenceData = await getSpecificReferenceById(referenceId);
+    setReference(referenceData);
+  }
+
+
+
+
 }

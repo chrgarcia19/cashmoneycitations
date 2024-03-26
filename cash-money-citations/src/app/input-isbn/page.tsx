@@ -11,7 +11,7 @@ function InputISBN() {
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();
-    const contentType = "application/json";
+    const [staticSearchVal, setStaticSearchVal] = useState<string>("");
     const errorItem: any = [
         {
             volumeInfo: {
@@ -20,50 +20,72 @@ function InputISBN() {
         }
     ]
 
-    function monthConversion(month_num: number) {
-        switch(month_num){
-            case 1:
-                return "January";
-            case 2:
-                return "February";
-            case 3:
-                return "March"; 
-            case 4:
-                return "April";
-            case 5:
-                return "May";
-            case 6:
-                return "June";
-            case 7:
-                return "July";
-            case 8:
-                return "August";
-            case 9:
-                return "September";
-            case 10:
-                return "October";
-            case 11:
-                return "November";
-            case 12:
-                return "December";   
-            default:
-                return month_num;     
+    function convertISBN13ToISBN10(isbn13: string): string {
+        if (isbn13.includes(" ")) {
+            for (let i = 0; isbn13.split(" ").length - 1; i++) {
+                isbn13 = isbn13.replace(/\s/g, "")
+            }
         }
+        let isbn9Digits = "";
+        if (isbn13.includes("-")) {
+            isbn9Digits = isbn13.slice(4, 13);
+        }
+        else {
+            isbn9Digits = isbn13.slice(3, 12);
+        }
+
+        if (isbn13.length === 10) {
+            return isbn13;
+        }
+        else {
+            // Calculate the check digit for ISBN-10
+            let sum = 0;
+            for (let i = 0; i < 9; i++) {
+                sum += parseInt(isbn9Digits[i]) * (10 - i);
+            }
+            let checkDigit = ((11 - (sum % 11)) % 11).toString();
+            if (checkDigit === "10") {
+                checkDigit = "X";
+            }
+            const isbn10 = `${isbn9Digits}${checkDigit}`;
+            return isbn10;
+        }
+        
     }
         
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setStaticSearchVal("");
+        let isbn = "";
         setTableShown(false);
-        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${searchVal}&maxResults=1`);
-        const result = await res.json();
-        if (result.items){
-            setData(result.items);
+        if (searchVal.length !== 10) {
+            isbn = convertISBN13ToISBN10(searchVal);
+            console.log(isbn);
+            setSearchVal(isbn);
+            const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=1`);
+            const result = await res.json();
+            if (result.items) {
+                setData(result.items);
+                setSearchVal(isbn);
+            }
+            else {
+                setData(errorItem);
+            }
+            setTableShown(true);
         }
         else {
-            setData(errorItem)
+            const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${searchVal}&maxResults=1`);
+            const result = await res.json();
+            if (result.items) {
+                setData(result.items);
+            }
+            else {
+                setData(errorItem);
+            }
+            setTableShown(true);
         }
-        setTableShown(true);
+        
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

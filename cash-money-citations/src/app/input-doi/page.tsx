@@ -2,12 +2,15 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { CreateCslJsonDocument } from "@/components/componentActions/citationActions";
+import { useSession } from "next-auth/react";
 
 function InputDOI() {
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();
+    const session = useSession();
     const contentType = "application/json";
     const errorItem: any = [
         {
@@ -15,6 +18,37 @@ function InputDOI() {
             title: "Unknown"
         }
     ]
+
+    function monthConversion(month_num: number) {
+        switch(month_num){
+            case 1:
+                return "January";
+            case 2:
+                return "February";
+            case 3:
+                return "March"; 
+            case 4:
+                return "April";
+            case 5:
+                return "May";
+            case 6:
+                return "June";
+            case 7:
+                return "July";
+            case 8:
+                return "August";
+            case 9:
+                return "September";
+            case 10:
+                return "October";
+            case 11:
+                return "November";
+            case 12:
+                return "December";   
+            default:
+                return month_num;     
+        }
+    }
         
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
@@ -40,10 +74,11 @@ function InputDOI() {
         let i = 0;
         let title = "";
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            firstName: "",
+            lastName: "",
+            middleName: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
@@ -51,20 +86,22 @@ function InputDOI() {
         if (item.author) {
             for (i; i<item.author.length; i++) {
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: item.author[i].given,
-                    contributorLastName: item.author[i].family,
-                    contributorMiddleI: ""
+                    role: "Author",
+                    firstName: item.author[i].given,
+                    lastName: item.author[i].family,
+                    middleName: "",
+                    suffix: ""
                 };
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: "",
+                lastName: "",
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
@@ -74,29 +111,29 @@ function InputDOI() {
             title = item.title[0];
         }
         else {
-            title = "Unknown";
+            title = "";
         }
         
         let doiReference: any = {
             type: "journal",
-            citekey: "please edit this",
-            title: title,
+            citekey: "",
+            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
-            publisher: item.publisher,
-            year: item.created['date-parts'][0][0],
-            month: item.created['date-parts'][0][1],
-            address: "",
-            edition: "",
+            title: title,
+            journal_title: item.publisher,
             volume: item.volume,
-            isbn: "",
+            issue: "",
+            month_published: monthConversion(item.created['date-parts'][0][1]),
+            day_published: item.created['date-parts'][0][2],
+            year_published: item.created['date-parts'][0][0],
+            start_page: item.page,
+            end_page: "",
             doi: item.DOI,
-            pages: item.page,
-            journal: "",
-            image_url: "",
+            issn: item.issn,
         };
         
         try {
-            const res = await fetch("/api/references", {
+            const res = await fetch("/api/journalRef", {
               method: "POST",
               headers: {
                 Accept: contentType,
@@ -104,16 +141,14 @@ function InputDOI() {
               },
               body: JSON.stringify(doiReference),
             });
+        } catch(e) {
+            console.error(e)
+        }
       
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
+        const userId = session.data?.user?.id;
+        CreateCslJsonDocument(item, userId);
+        router.push("/reference-table");
+        router.refresh();
 
     }
 

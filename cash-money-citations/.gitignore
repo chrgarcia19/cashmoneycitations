@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+# csl styles & locales
+tmp/
+
 # next.js
 /.next/
 /out/

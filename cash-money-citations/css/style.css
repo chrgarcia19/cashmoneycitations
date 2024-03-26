@@ -7,6 +7,19 @@
   box-sizing: border-box;
 }
 
+/* For the dark background */
+.background {
+  background-color: rgb(203 213 225 / 1);
+  height: auto;
+  width: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .background {
+    background-color: rgb(63 63 70 / 1);
+  }
+}
+
 /* Nav Area */
 .top-bar {
   width: 100%;
@@ -209,4 +222,112 @@ li {
 .copy-icon:hover {
   transform: scale(1.1);
    opacity: 1;
+}
+
+.content {
+  margin-left: 256px;
+  margin-bottom: 72px;
+  margin-top: 96px;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/*CSS for the reference table view bottom bar
+taken and modified from DaisyUI*/
+.btm-bar {
+  position: fixed;
+  bottom: 72px;
+  left: 256px;
+  right: 0px;
+  display: flex;
+  width: 87%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom);
+  height: 4rem/* 64px */;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+  color: currentColor;
+}
+.btm-bar > * {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-basis: 100%;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem/* 4px */;
+  border-color: currentColor;
+}
+@media (hover: hover) {
+  .btm-bar > *.disabled:hover,
+    .btm-bar > *[disabled]:hover {
+      pointer-events: none;
+      --tw-border-opacity: 0;
+      background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity)));
+      --tw-bg-opacity: 0.1;
+      color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+      --tw-text-opacity: 0.2;
+  }
+}
+@media (hover: hover) {
+  .btm-bar > *.disabled:hover,
+    .btm-bar > *[disabled]:hover {
+      pointer-events: none;
+      --tw-border-opacity: 0;
+      background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity)));
+      --tw-bg-opacity: 0.1;
+      color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+      --tw-text-opacity: 0.2;
+  }
+}
+.btm-bar > *:not(.active) {
+  padding-top: 0.125rem/* 2px */;
+}
+.btm-bar > *:hover {
+  border-top-width: 2px;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+}
+.btm-bar > *.disabled,
+  .btm-bar > *[disabled] {
+  pointer-events: none;
+  --tw-border-opacity: 0;
+  background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity)));
+  --tw-bg-opacity: 0.1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+  --tw-text-opacity: 0.2;
+}
+.btm-bar > *.disabled,
+  .btm-bar > *[disabled] {
+  pointer-events: none;
+  --tw-border-opacity: 0;
+  background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity)));
+  --tw-bg-opacity: 0.1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+  --tw-text-opacity: 0.2;
+}
+.btm-bar > * .label {
+  font-size: 1rem/* 16px */;
+  line-height: 1.5rem/* 24px */;
+} 
+
+/*CSS from DaisyUI for pinning the table rows*/
+.table :where(.table-pin-row thead tr) {
+  position: sticky;
+  top: 95px;
+  z-index: 50;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
 }

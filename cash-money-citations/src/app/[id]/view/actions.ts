@@ -67,3 +67,21 @@ export async function CreateCitation(referenceId: any, styleChoice: string, loca
     
     return newCustomCitation;
 }
+
+export async function GetBibLaTexFile(referenceId: string) {
+    let referenceData = await CSLBibModel.findById(referenceId)
+
+    const cslJson = referenceData.cslJson
+
+    const citation = new Cite(cslJson);
+
+    // Create custom citation with user specified style & locale
+    const customCitation = citation.format('biblatex', {
+        format: 'text',
+        template: "biblatex",
+        lang: "en-US",
+    });
+
+    return customCitation;
+
+}

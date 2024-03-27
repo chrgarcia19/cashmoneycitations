@@ -84,36 +84,36 @@ export interface CSLBibInterface extends mongoose.Document {
     month_event: String,
     day_event: String,
     year_event: String,
-    eventdate: Date; //Date event occurred (ex: conference)
-    note: string;
-    number: number;
-    organization: string;
-    pages: string;
-    publisher: string;
-    school: string;
-    series: string;
-    volumes: number;
-    shorttitle: string;
-    title: string[];
-    type: string;
-    volume: string;
-    doi: string;
-    issn: string[];
-    issnType: object[];
-    isbn: string;
-    url: string;
-    runningTime: string;
-    format: string;
-    cslJson: object;
-    image_url: string;
-    issue: string;
-    abstract: string;
-    apiSource: string;
-    subject: string[];
-    referencesUsed: ReferencesUsed[];
-    citationIdList: string[];
-    isOwnedBy: string[];
-    tagID: string[];
+    eventdate: Date, //Date event occurred (ex: conference)
+    note: string,
+    number: number,
+    organization: string,
+    pages: string,
+    publisher: string,
+    school: string,
+    series: string,
+    volumes: number,
+    shorttitle: string,
+    title: string[],
+    type: string,
+    volume: string,
+    doi: string,
+    issn: string[],
+    issnType: object[],
+    isbn: string,
+    url: string,
+    runningTime: string,
+    format: string,
+    cslJson: object,
+    image_url: string,
+    issue: string,
+    abstract: string,
+    apiSource: string,
+    subject: string[],
+    referencesUsed: ReferencesUsed[],
+    citationIdList: string[],
+    isOwnedBy: string[],
+    tagID: string[],
 }
 
 const CSLBibSchema = new Schema({

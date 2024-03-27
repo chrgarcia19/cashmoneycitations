@@ -53,6 +53,7 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: any
     for (let i = 0; i < tags.length; i++){
       reference.tagID.push(tags[i]._id);
     }
+
     /*Send the new data to the API to be modified*/
     try {
         const res = await fetch(`/api/references/${reference._id}`, {
@@ -77,7 +78,7 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: any
       }
 }
 
-const applyReferencesToTag = async (tag: Tag, references: any[]) =>{
+export async function applyReferencesToTag (tag: Tag, references: any[]) {
   /*Create the form*/
   const tagForm = {
       tagName: tag.tagName,

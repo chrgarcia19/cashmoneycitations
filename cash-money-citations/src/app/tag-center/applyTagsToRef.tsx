@@ -135,9 +135,10 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
         return tags;
     }
 
-    function testAdd(refChecked: Array<boolean>, tagChecked: Array<boolean>){
+    function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>){
       const refs = getSelectedRefs(refChecked);
       const tags = getSelectedTags(tagChecked);
+
       /*Add Tag IDs to References first*/
       for (let i = 0; i < refs.length; i++){
         applyTagsToReference(refs[i], tags);
@@ -155,7 +156,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
             <div className="card w-screen h-auto bg-base-100 shadow-xl">
                     <div className="card-body">
                         <h2 className="card-title">Apply Tags to References</h2>
-                        <form onSubmit={() => testAdd(isCheckedRef, isCheckedTag)}>
+                        <form onSubmit={() => handleSubmit(isCheckedRef, isCheckedTag)}>
                             {tagTable()}
                             {refTable()}
                             <div className="card-actions justify-end">

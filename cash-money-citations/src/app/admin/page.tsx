@@ -123,20 +123,22 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="bg-white rounded-lg p-6">
-          <GetUsers currentUser={currentUserEmail} />
-          {/* <SessionInfo /> */}
-          {/* <AdminDashboardClient /> */}
-        </div>
+      <div className="center-content">
         <div className="flex flex-col">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10 mx-auto max-w-4xl">
-            <ImportCSLStyles handleCslSubmit={handleCslSubmit} />
-            <ImportLocale handleLocaleSubmit={handleLocaleSubmit} />
+          <div className="bg-white rounded-lg p-6">
+            <GetUsers currentUser={currentUserEmail} />
+            {/* <SessionInfo /> */}
+            {/* <AdminDashboardClient /> */}
           </div>
-          <div className="flex flex-row justify-evenly m-5">
-            <GetCslStyles />
-            <GetLocales />
+          <div className="flex flex-col">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10 mx-auto max-w-4xl">
+              <ImportCSLStyles handleCslSubmit={handleCslSubmit} />
+              <ImportLocale handleLocaleSubmit={handleLocaleSubmit} />
+            </div>
+            <div className="flex flex-row justify-evenly m-5">
+              <GetCslStyles />
+              <GetLocales />
+            </div>
           </div>
         </div>
       </div>

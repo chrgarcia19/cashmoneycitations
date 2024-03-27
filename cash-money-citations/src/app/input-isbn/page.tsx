@@ -58,7 +58,9 @@ function InputISBN() {
         e.preventDefault();
         setStaticSearchVal("");
         let isbn = "";
+        let finalSearchTerm = "";
         setTableShown(false);
+        finalSearchTerm = searchVal;
         if (searchVal.length !== 10) {
             isbn = convertISBN13ToISBN10(searchVal);
             setStaticSearchVal(isbn);
@@ -66,7 +68,7 @@ function InputISBN() {
             const result = await res.json();
             if (result.items) {
                 setData(result.items);
-                setStaticSearchVal(isbn);
+                setStaticSearchVal(finalSearchTerm);
             }
             else {
                 setData(errorItem);

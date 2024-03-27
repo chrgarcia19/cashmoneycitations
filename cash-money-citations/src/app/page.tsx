@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function HomePage() {
   return(
     <>
-      <div className="w-full h-screen bg-zinc-700">
+      <div className="background">
         <div className='h-screen flex items-center justify-center pb-20'>
         <div className="card w-96 bg-slate-200 shadow-xl">
             <figure className="px-10 pt-10">

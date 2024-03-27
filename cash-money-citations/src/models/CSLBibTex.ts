@@ -3,6 +3,7 @@ import { Contributor } from "./Contributor";
 import User from './User';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth';
+import { Tag } from './Tag';
 
 
 async function getUserId() {
@@ -32,6 +33,11 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     suffix: {
       type: String
     }
+});
+
+const TagSchema = new mongoose.Schema<Tag>({
+  tagName: String,
+  tagColor: String,
 });
 
 const referencesUsedSchema = new mongoose.Schema({
@@ -67,37 +73,53 @@ export interface CSLBibInterface extends mongoose.Document {
     howpublished: String,
     institution: String, 
     indextitle: String, // Title of a website, journal, etc.
-    date: Date; // Date published
-    urldate: Date; // Date accessed
-    eventdate: Date; //Date event occurred (ex: conference)
-    note: string;
-    number: number;
-    organization: string;
-    pages: string;
-    publisher: string;
-    school: string;
-    series: string;
-    volumes: number;
-    shorttitle: string;
-    title: string[];
-    type: string;
-    volume: string;
-    doi: string;
-    issn: string[];
-    issnType: object[];
-    isbn: string;
-    url: string;
-    runningTime: string;
-    format: string;
-    cslJson: object;
-    image_url: string;
-    issue: string;
-    abstract: string;
-    apiSource: string;
-    subject: string[];
-    referencesUsed: ReferencesUsed[];
-    citationIdList: string[];
-    isOwnedBy: string[];
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_published: String,
+    day_published: String,
+    year_published: String,
+    date: Date, //Date Published
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_accessed: String,
+    day_accessed: String,
+    year_accessed: String,
+    urldate: Date, //Date Accessed
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_event: String,
+    day_event: String,
+    year_event: String,
+    eventdate: Date, //Date event occurred (ex: conference)
+    note: string,
+    number: number,
+    organization: string,
+    pages: string,
+    publisher: string,
+    school: string,
+    series: string,
+    volumes: number,
+    shorttitle: string,
+    title: string[],
+    type: string,
+    volume: string,
+    doi: string,
+    issn: string[],
+    issnType: object[],
+    isbn: string,
+    url: string,
+    runningTime: string,
+    format: string,
+    cslJson: object,
+    image_url: string,
+    issue: string,
+    abstract: string,
+    apiSource: string,
+    subject: string[],
+    referencesUsed: ReferencesUsed[],
+    citationIdList: string[],
+    isOwnedBy: string[],
+    tags: Tag[],
 }
 
 const CSLBibSchema = new Schema({
@@ -164,10 +186,24 @@ const CSLBibSchema = new Schema({
     howpublished: String,
     institution: String, 
     indextitle: String, //Journal Title
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_published: String,
+    day_published: String,
+    year_published: String,
     date: Date, //Date Published
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_accessed: String,
+    day_accessed: String,
+    year_accessed: String,
     urldate: Date, //Date Accessed
+    /*The next 3 fields are for 
+    displaying/editing data for a date*/
+    month_event: String,
+    day_event: String,
+    year_event: String,
     eventdate: Date,
-    origdate: Date,
     month: String,
     year: String,
     note: String,
@@ -198,6 +234,7 @@ const CSLBibSchema = new Schema({
     referencesUsed: [referencesUsedSchema],
     citationIdList: [String],
     isOwnedBy: [String],
+    tags: [TagSchema],
 
 }, {timestamps: true});
 

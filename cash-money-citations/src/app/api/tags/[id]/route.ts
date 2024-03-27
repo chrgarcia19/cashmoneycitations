@@ -1,31 +1,25 @@
 import { NextResponse, NextRequest } from "next/server";
 import dbConnect from "@/utils/dbConnect";
-import CSLBibModel from "@/models/CSLBibTex"
-import User from "@/models/User";
-import { authConfig } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+import Tag from "@/models/Tag";
 
 // For API's use THIS TO GET PARAMS req: NextRequest, { params }: { params: { id: string } }
+
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
 
   await dbConnect();
 
-  const session = await getServerSession(authConfig);
-  const userId = session?.user?.id ?? '';
+
+
   const id = params.id;
 
   try {
-    // Verifies that user owns reference
-    const userOwnedRefs = await User.findById(userId).select("ownedReferences");
-    const reference = await CSLBibModel.find({
-      // Find references where _id matches userOwnedRefs
-      _id: { $in: userOwnedRefs.ownedReferences ? id : null}
-    });
 
-    if (!reference) {
+    const tag = await Tag.findById(id);
+
+    if (!tag) {
       return NextResponse.json({ success: false }, { status: 400 });
     }
-    return NextResponse.json({ success: true, data: reference[0], status: 200 });
+    return NextResponse.json({ success: true, data: tag, status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, status: 400 , data: id});
   }
@@ -37,10 +31,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const id = params.id;
 
   try {
-    const deletedReference = await CSLBibModel.deleteOne({ _id: id });
+    const deletedTag = await Tag.deleteOne({ _id: id });
 
-    if (!deletedReference) {
-      return NextResponse.json({ success: false, message: "Reference not deleted!"}, { status: 400 });
+    if (!deletedTag) {
+      return NextResponse.json({ success: false, message: "Tag not deleted!"}, { status: 400 });
     }
     return NextResponse.json({ success: true, data: {} }, { status: 200 });
   } catch (error) {
@@ -57,10 +51,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
   try {
 
-    const reference = await CSLBibModel.findByIdAndUpdate(id, req, {
+    const tag = await Tag.findByIdAndUpdate(id, req, {
       new: true,
       runValidators: true,})
-    return NextResponse.json({ success: true, data: reference }, { status: 201});
+    return NextResponse.json({ success: true, data: tag }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });
   }

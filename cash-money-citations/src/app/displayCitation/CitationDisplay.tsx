@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
-import { CreateCitation } from '../[id]/view/actions';
-import { DeleteCitation, GetCitations } from './actions';
 import { getSpecificReferenceById, getUserReferences } from '@/components/componentActions/actions';
+import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
+import { CreateCitation } from '../[id]/references/view/actions';
+import { DeleteCitation, GetCitations } from './actions';
+import { useRouter } from 'next/navigation';
+
 
 export function CitationList({ referenceId, citations, setCitations }: any) {
+  const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
     fetchCitations();
@@ -26,6 +28,8 @@ export function CitationList({ referenceId, citations, setCitations }: any) {
     // Remove citation from state
     const updatedCitations = citations.filter((citation: any) => citation._id !== citationId);
     setCitations(updatedCitations);
+    //router.push(`/displayCitation?citation=${referenceId}`);
+    router.refresh();
   }
 
   return (
@@ -115,6 +119,7 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
 
   return (
     <>
+    <div className='center-content'>
       <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
         <div className='flex flex-col'>
           <label htmlFor='styleChoice' className='mb-2 font-bold text-lg'>Citation Style</label>
@@ -138,6 +143,7 @@ export function CitationChoice({ referenceId, citations, setCitations}: any) {
         </form>
       </div>
       {error && <p className='text-red-500'>{error}</p>}
+      </div>
     </>
   )
 }

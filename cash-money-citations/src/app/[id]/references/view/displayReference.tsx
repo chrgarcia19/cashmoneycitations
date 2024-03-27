@@ -4,6 +4,7 @@ import useSWR from "swr";
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 import { useState } from "react";
+import { Tag } from "@/models/Tag";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -60,6 +61,14 @@ function ReferenceDetails({ reference }: any) {
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Reference Type:</label>
           {reference.type}
+      </span>
+      <span className="block h-auto rounded-lg">
+          <label className="font-bold">Tags:</label>
+          {reference.tags.map((tag: Tag) => (
+            <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
+              {tag.tagName}
+            </div>  
+          ))}
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Title:</label>

@@ -221,10 +221,11 @@ export const Checkbox = ({ references }: IProps) => {
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
                 <td className="border border-slate-600 text-center">
-                    <div className={`badge badge-lg bg-teal-200 me-2`}>
-                        
-                    </div>
-                    
+                    {reference.tags.map((tag: Tag) => (
+                        <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
+                            {tag.tagName}
+                        </div>
+                    ))}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   

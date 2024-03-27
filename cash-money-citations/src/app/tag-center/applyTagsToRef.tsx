@@ -149,7 +149,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
         for (let i = 0; i < tags.length; i++){
             applyReferencesToTag(tags[i], refs);
         }
-        router.push("/tag-center");
+        router.push("/");
         router.refresh();
     }
 

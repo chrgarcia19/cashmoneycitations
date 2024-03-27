@@ -88,7 +88,7 @@ export async function applyReferencesToTag (tag: Tag, references: any[]) {
 
   /*Put the proper data in the tag object*/
   for (let i = 0; i < references.length; i++){
-    tagForm.referenceID.push(references[i]._id);
+    tag.referenceID.push(references[i]._id);
   }
   
   /*Send the new data to the API to be modified*/

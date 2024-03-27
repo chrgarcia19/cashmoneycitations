@@ -1,22 +1,45 @@
 "use client"
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
-const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
-const { plugins } = require('@citation-js/core')
-// const config = plugins.config.get('@bibtex')
-// const CSL = require("../../../../citeproc-js/citeproc_commonjs.js");
-// import { getStyles, getCslStyle } from "./actions";
 import { useState } from "react";
-import { CreateCitation } from "./actions";
-import { SelectionCSL, SelectionLocale } from "./CSLComponents";
 
 const fetcher = (url: string) =>
 fetch(url)
     .then((res) => res.json())
     .then((json) => json.data);
+
+    function monthConversion(month_num: string) {
+      switch(month_num){
+          case "0":
+              return "January";
+          case "1":
+              return "February";
+          case "2":
+              return "March"; 
+          case "3":
+              return "April";
+          case "4":
+              return "May";
+          case "5":
+              return "June";
+          case "6":
+              return "July";
+          case "7":
+              return "August";
+          case "8":
+              return "September";
+          case "9":
+              return "October";
+          case "10":
+              return "November";
+          case "11":
+              return "December";   
+          default:
+              return (month_num + 1);     
+      }
+  }
 
 // Styles buttons for Edit, Delete, & Export
 function Button({ color, onClick, children }: any) {
@@ -45,7 +68,7 @@ function ReferenceDetails({ reference }: any) {
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Contributors:</label>
           {reference.contributors.map((contributor: any) => (
-          <div key={contributor._id}>{contributor.contributorFirstName} {contributor.contributorMiddleI} {contributor.contributorLastName}<br></br></div>
+          <div key={contributor._id}>{contributor.firstName} {contributor.middleNameI} {contributor.lastName}<br></br></div>
       ))}
       </span>
       <span className="block h-auto rounded-lg">
@@ -54,7 +77,7 @@ function ReferenceDetails({ reference }: any) {
       </span>
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>
-          {reference.month} {reference.year}
+          {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}
       </span>
     </>
   )
@@ -63,21 +86,32 @@ function ReferenceDetails({ reference }: any) {
 function ReferenceActions({ onEdit, onDelete, onExport }: any) {
   return (
     <div>
-      <Button color="green" onClick={onEdit}>Edit</Button>
-      <Button color="red" onClick={onDelete}>Delete</Button>
-      <Button color="orange" onClick={onExport}>Export</Button>
+      <button
+      className={`linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+      onClick={onEdit}
+    >
+      <span>Edit</span>
+    </button>
+    <button
+      className={`linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+      onClick={onDelete}
+    >
+      <span>Delete</span>
+    </button>
+    <button
+      className={`linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
+      onClick={onExport}
+    >
+      <span>Export</span>
+    </button>
     </div>
   )
 }
 
 const ViewReference = () => {
-
-
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
-    const [styleChoice, setStyleChoice] = useState(Array<string>(''));
-    const [localeChoice, setLocaleChoice] = useState('');
     const [referenceId, setReferenceId] = useState(id);
     
     const handleDelete = async () => {
@@ -93,8 +127,8 @@ const ViewReference = () => {
 
     async function exportCitation() {
       // Call to server action to create citations & save in DB
-      await CreateCitation(referenceId, styleChoice, localeChoice);
-      router.push(`/displayCitation?citation=${referenceId}`)
+      router.push(`/displayCitation?citation=${referenceId}`);
+      router.refresh();
     }
 
     const {
@@ -121,8 +155,6 @@ const ViewReference = () => {
                     <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
                         <ReferenceDetails reference={reference}/>
                         <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-                        <SelectionCSL onStyleChoiceChange={setStyleChoice} />
-                        <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
                     </div> 
                 </div>  
             </> 

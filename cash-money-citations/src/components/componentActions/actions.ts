@@ -1,7 +1,6 @@
 'use server';
 
 import dbConnect from "@/utils/dbConnect";
-import Reference from "@/models/Reference";
 import User from "@/models/User";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from "next/cache";
@@ -25,6 +24,30 @@ export async function getReferences() {
     });
   
     return references;
+}
+
+export async function getUserReferences(userId: string) {
+  await dbConnect();
+
+  try {
+    // Retrieve list of users references
+    const userOwnedRefs = await User.findById(userId).select('ownedReferences');
+
+    const result = await CSLBibModel.find({
+      // Find references where _id matches userOwnedRefs
+      _id: { $in: userOwnedRefs.ownedReferences }
+    });
+    const references = result.map((doc) => {
+      const reference = JSON.parse(JSON.stringify(doc));
+      return reference;
+    });
+  
+    return references;
+  } catch(e) {
+    console.error(e);
+  }
+
+
 }
 
 export async function getSpecificReferenceById(id: string | string[] | undefined) {

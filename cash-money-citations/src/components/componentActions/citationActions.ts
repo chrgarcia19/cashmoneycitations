@@ -6,10 +6,8 @@ require('@citation-js/core')
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
-require('@citation-js/plugin-bibtex')
-const { plugins } = require('@citation-js/core')
-
-const contentType = "application/json"
+import { RedirectType, redirect } from "next/navigation";
+import User from "@/models/User";
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -29,6 +27,7 @@ const typeMap: {[key: string]: string } = {
   
 // Takes reference data & converts to CSL-JSON
 function toCslJson(ReferenceData: any) {
+    // Requires any of the following formats: DOI, Bib(La)Tex, WikiData, CSL|https://citation.js.org/api/0.3/tutorial-input_formats.html
     const cslJson = Cite.input(ReferenceData);
     return cslJson;
 }
@@ -37,31 +36,34 @@ function toCslJson(ReferenceData: any) {
 function translateForeignModel(result: any) {
     let i = 0;
     let newContributor: Contributor = {
-        contributorType: "",
-        contributorFirstName: "",
-        contributorLastName: "",
-        contributorMiddleI: ""
+        role: "",
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        suffix: ""
     };
     let contributors = new Array<Contributor>();
 
-    //If item.author is populated, move forward on that, otherwise, handle the error appropriately
+    // If item.author is populated, move forward on that, otherwise, handle the error appropriately
     if (result[0].author) {
         for (i; i<result[0].author.length; i++) {
             newContributor = {
-                contributorType: "Author",
-                contributorFirstName: result[0].author[i].given,
-                contributorLastName: result[0].author[i].family,
-                contributorMiddleI: ""
+                role: "Author",
+                firstName: result[0].author[i].given,
+                lastName: result[0].author[i].family,
+                middleName: "",
+                suffix: ""
             };
             contributors.push(newContributor);
         }
     }
     else {
         newContributor = {
-            contributorType: "Author",
-            contributorFirstName: "Unknown",
-            contributorLastName: "Unknown",
-            contributorMiddleI: ""
+            role: "Author",
+            firstName: "Unknown",
+            lastName: "Unknown",
+            middleName: "",
+            suffix: ""
         };
         contributors.push(newContributor);
     }
@@ -69,6 +71,7 @@ function translateForeignModel(result: any) {
 
     const CSLBibTexData: { [key: string]: any } = {
         year: result[0].created['date-parts'][0][0],
+        day: result[0].created['date-parts'][0][2],
         month: result[0].created['date-parts'][0][1],
         contributors: contributors,
     };
@@ -85,7 +88,7 @@ function translateForeignModel(result: any) {
 }
 
 // Creates CSL-JSON for auto input -> DOI, ISBN, ISSN, etc.
-export async function CreateCslJsonDocument(automaticInput: any) {
+export async function CreateCslJsonDocument(automaticInput: any, userId: string | undefined) {
     try {
         await dbConnect();
         const input = automaticInput
@@ -93,12 +96,12 @@ export async function CreateCslJsonDocument(automaticInput: any) {
 
         const mergedData = translateForeignModel(result);
 
-        //console.log(mergedData)
 
         const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save()
 
-        // DIVIDE THIS FUNCTION UP ASAP
+        await AddRef2User(userId, CSLBibTexDocument._id);
+
         const toBibTex = new Cite(JSON.stringify(result))
 
         const bibtexOutput = toBibTex.format('biblatex', {
@@ -112,20 +115,6 @@ export async function CreateCslJsonDocument(automaticInput: any) {
         // Adds the CSL-JSON to the existing database collection
         InitializeCslJson(CSLBibTexDocument.id, cslJson);
 
-        //await CSLBibModel.create(result);
-    } catch(error) {
-        console.error(error)
-    }
-}
-// LAST WORKING ON GETTING DOI INPUT TO WORK CORRECTLY
-// RECIEVING AN ERROR WHERE THE CITE.INPUT IS UNABLE TO CONVERT THE TITLE ARRAY TO A STRING.
-
-// Creates citeKey based off of first author last name and year
-async function InitializeCiteKey(_id: string, contributorLastName: string, year: Date) {
-    try{
-        const fullYear = year.getUTCFullYear();
-        const newCiteKey = (contributorLastName + fullYear)
-        await CSLBibModel.findByIdAndUpdate(_id, { citekey: newCiteKey })
     } catch(error) {
         console.error(error)
     }
@@ -140,15 +129,6 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 }
 
 async function HandleInitialFormat(bibResponse: any) {
-
-    // Used for configuring format for BibTex & BibLaTex
-    const config = plugins.config.get('@bibtex')
-    //config.parse.sentenceCase = 'always';
-    // plugins.input.forceType = "@else/list+object"
-    // config.types.bibtex.target['conference'] = 'conference'
-    // config.parse.strict = true
-
-    //console.log(config.constants.required)
     // Converts our mimic CSLBib-JSON schema thing to BibLaTex
     const toBibTex = new Cite(JSON.stringify(bibResponse))
 
@@ -165,35 +145,57 @@ async function HandleInitialFormat(bibResponse: any) {
     InitializeCslJson(bibResponse.id, cslJson);
 }
 
-export async function HandleInitialReference(form: any) {
+async function formatDate(form: any) {
+    let formattedDate = new Date(form.year_published, form.month_published, form.day_published);
+    form.date = formattedDate;
+}
+
+async function formatLocation(form: any) {
+    form.address = (form.city + ", "+ form.state)
+}
+
+async function AddRef2User(userId: string | undefined, referenceId: string) {
+    await dbConnect();
+
+    try {
+        const user = await User.findById(userId);
+        if (user) {
+            user.ownedReferences = [...user.ownedReferences, referenceId];
+            await user.save();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export async function HandleManualReference(form: any, userId: any) {
 
     await dbConnect();
     // Create reference entry
     try {
+        await formatDate(form);
+        await formatLocation(form);
 
         const bibResponse = await CSLBibModel.create(form)
 
+        await AddRef2User(userId, bibResponse._id);
+
         const bibJsonData = {
             id: bibResponse._id,
-            citekey: bibResponse.citekey,
-            type: bibResponse.entryType,
+            type: bibResponse.type,
             title: bibResponse.title,
-            author: bibResponse.contributors.map((contributor: { contributorFirstName: any; contributorLastName: any; }) => ({
-            family: contributor.contributorLastName,
-            given: contributor.contributorFirstName,
+            author: bibResponse.contributors.map((contributor: { role: any; firstName: any; lastName: any; }) => ({
+            family: contributor.lastName,
+            given: contributor.firstName,
             })),
-            issued: { "date-parts": [[parseInt(bibResponse.year, 10), bibResponse.month ? parseInt(bibResponse.month, 10) : 0]] },
+            date: bibResponse.date,
             publisher: bibResponse.publisher,
             DOI: bibResponse.doi,
             URL: bibResponse.url,
             ISBN: bibResponse.isbn
         };
 
-        // const {_id, contributors, year} = bibResponse
-        // const contributorLastName = contributors[0].contributorLastName;
-        // await InitializeCiteKey(_id, contributorLastName, year)
-
-        await HandleInitialFormat(bibJsonData)
+        await HandleInitialFormat(bibJsonData);
 
       } catch (error) {
         console.error(error)

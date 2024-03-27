@@ -3,6 +3,8 @@ import { BsTable } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
+import { FaBook } from "react-icons/fa";
+import { FaBarcode } from "react-icons/fa";
 import { getServerAuthSession } from "@/lib/auth";
 
 export default async function SideBar(){
@@ -44,6 +46,22 @@ export default async function SideBar(){
                         className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
                         <SiDoi />
                         <span className="ms-3">DOI Input</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
+                        href="/input-isbn"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <FaBook />
+                        <span className="ms-3">ISBN Input</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
+                        href="/input-issn"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <FaBarcode />
+                        <span className="ms-3">ISSN Input</span>
                      </Link>
                   </li>
                </ul>

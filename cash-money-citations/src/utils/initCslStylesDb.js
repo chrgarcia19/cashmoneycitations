@@ -10,6 +10,27 @@ async function cslStyleExists(cslStyleName) {
     return cslStyle !== null;
 }
 
+async function parseTitle(fileData) {
+    const titleRegex = /<title>(.*?)<\/title>/;
+    const titleShortRegex = /<title-short>(.*?)<\/title-short>/;
+
+    const titleMatch = fileData.contents.match(titleRegex);
+    const titleShortMatch = fileData.contents.match(titleShortRegex);
+
+    let title = null;
+    let titleShort = null;
+
+    if (titleMatch && titleMatch[1]) {
+        title = titleMatch[1].trim();
+    }
+
+    if (titleShortMatch && titleShortMatch[1]) {
+        titleShort = titleShortMatch[1].trim();
+    }
+
+    return { title, titleShort };
+}
+
 async function importCSLFiles(fileData) {
 
     async function validateFileType(fileData) {
@@ -32,7 +53,8 @@ async function importCSLFiles(fileData) {
         if (await cslStyleExists(fileName)) {
             return { status: "error", message: 'CSL Style already exists' };
         } else {
-            const csl = new CSLStyleModel({ name: fileName, cslData: fileData.contents, isDependent: fileData.isDependent })
+            const { title, titleShort } = await parseTitle(fileData);
+            const csl = new CSLStyleModel({ name: fileName, title: title, titleShort: titleShort, cslData: fileData.contents, isDependent: fileData.isDependent })
             await csl.save()
             return { status: "success", message: 'CSL Style added' };
         }

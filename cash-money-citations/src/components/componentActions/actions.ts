@@ -5,6 +5,8 @@ import User from "@/models/User";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from "next/cache";
 import CSLBibModel from "@/models/CSLBibTex";
+import UserStyleList from '@/models/UserStyleList'; 
+import mongoose from "mongoose";
 
 interface RegistrationData {
   username: string;
@@ -50,9 +52,32 @@ export async function getUserReferences(userId: string) {
 
 }
 
+function toObjectRecursive(doc: any) {
+  if (doc instanceof mongoose.Document || doc instanceof mongoose.Types.DocumentArray) {
+    doc = doc.toObject({ getters: true, virtuals: true });
+    for (let key in doc) {
+      doc[key] = toObjectRecursive(doc[key]);
+    }
+  } else if (doc instanceof mongoose.Types.ObjectId) {
+    doc = doc.toString();
+  } else if (Array.isArray(doc)) {
+    for (let i = 0; i < doc.length; i++) {
+      doc[i] = toObjectRecursive(doc[i]);
+    }
+  } else if (typeof doc === 'object' && doc !== null) {
+    for (let key in doc) {
+      doc[key] = toObjectRecursive(doc[key]);
+    }
+  }
+  return doc;
+}
+
 export async function getSpecificReferenceById(id: string | string[] | undefined) {
   try {
-    const result = await CSLBibModel.findById(id);
+    let result = await CSLBibModel.findById(id);
+
+    result = toObjectRecursive(result);
+
     if (result) {
       return result;
     } else {
@@ -61,6 +86,26 @@ export async function getSpecificReferenceById(id: string | string[] | undefined
   } catch(error) {
     console.error(error)
   }
+}
+
+async function initializeUserStyleList(userId: string) {
+    // Create a new UserStyleList document that references the user
+    const userStyleList = new UserStyleList({
+      userId: userId,
+      styleList: [],
+      defaultStyles: [
+          "Modern Language Association 7th edition",
+          "Modern Language Association 8th edition",
+          "Modern Language Association 9th edition",
+          "American Psychological Association 7th edition",
+          "Chicago Manual of Style 17th edition (author-date)",
+          "Chicago Manual of Style 17th edition (full note)",
+          "Chicago Manual of Style 17th edition (note)",
+          "ACM SIGGRAPH",
+          "IEEE",
+      ]
+  });
+  await userStyleList.save();
 }
 
 export async function createUser(form: RegistrationData) {
@@ -101,6 +146,8 @@ export async function createUser(form: RegistrationData) {
 
       // Save the user to the database
       await user.save();
+      await initializeUserStyleList(user._id);
+
       
       revalidatePath('/');
   } catch (error) {

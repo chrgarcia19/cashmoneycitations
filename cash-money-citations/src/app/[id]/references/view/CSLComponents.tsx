@@ -20,7 +20,7 @@ interface SelectionCSLLocaleProps {
   
 // Maps over CSL Style selection
 export function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
-const [styleChoices, setStyleChoices] = useState<string[]>([]);
+const [styleChoice, setStyleChoice] = useState('');
 
 const {
     data: cslStyles,
@@ -28,45 +28,39 @@ const {
     isLoading,
 } = useSWR(`/api/csl/styles`, fetcher);
 
+  // Update styleChoise when styleChoice changes
+  useEffect(() => {
+      if (cslStyles && cslStyles.length > 0) {
+          const firstStyle = cslStyles[0].name;
+          setStyleChoice(firstStyle);
+          onStyleChoiceChange(firstStyle);
+      }
+  }, [cslStyles, onStyleChoiceChange]);
 
 if (error) return <p>Failed to load</p>;
 if (isLoading) return <p>Loading...</p>;
 if (!cslStyles) return null;
 
-const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const styleChoice = e.target.value;
-    if (e.target.checked) {
-    setStyleChoices(prevChoices => [...prevChoices, styleChoice]);
-    onStyleChoiceChange([...styleChoices, styleChoice]);
-    } else {
-    const newChoices = styleChoices.filter(choice => choice !== styleChoice);
-    setStyleChoices(newChoices);
-    onStyleChoiceChange(newChoices);
-    }
+    setStyleChoice(styleChoice);
+    onStyleChoiceChange(styleChoice);
 };
 
 return (
-    <span className="space-x-5">
-        {cslStyles.map((cslStyle: any) => (
-        <div key={cslStyle.id}>
-            <label>
-            <input
-            type="checkbox"
-            value={cslStyle.name}
-            checked={styleChoices.includes(cslStyle.name)}
-            onChange={handleStyleChoiceChange}
-            />
-            {cslStyle.name}
-            </label>
-        </div>
-        ))}
-    </span>
-);
+    <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={styleChoice} onChange={handleStyleChoiceChange}>
+      {cslStyles.map((cslStyle: any) => (
+        <option key={cslStyle._id} value={cslStyle.name}>
+          {cslStyle.title}
+        </option>
+      ))}
+    </select>
+  );
 }
 
 
 export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProps) {
-    const [localeChoice, setLocaleChoice] = useState<string | null>(null);
+    const [localeChoice, setLocaleChoice] = useState('en-US');
 
     const {
         data: localeData,
@@ -74,30 +68,32 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
         isLoading,
     } = useSWR(`/api/csl/locales`, fetcher);
     
+    // Update localeChoice when localeData changes
+    useEffect(() => {
+        if (localeData && localeData.length > 0) {
+            const firstLocale = localeData[0].name;
+            setLocaleChoice(firstLocale);
+            onLocaleChoiceChange(firstLocale);
+        }
+    }, [localeData, onLocaleChoiceChange]);
+
     if (error) return <p>Failed to load</p>;
     if (isLoading) return <p>Loading...</p>;
     if (!localeData) return null;
-    const handleLocaleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleLocaleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newLocaleChoice = e.target.value;
         setLocaleChoice(newLocaleChoice);
         onLocaleChoiceChange(newLocaleChoice);
     };
     
     return (
-        <span className="space-x-5">
-          {localeData.map((locale: any) => (
-            <div key={locale._id}>
-              <label>
-                <input
-                  type="radio"
-                  value={locale.name}
-                  checked={localeChoice === locale.name}
-                  onChange={handleLocaleChoiceChange}
-                />
-                {locale.name}
-              </label>
-            </div>
-          ))}
-        </span>
+      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' defaultValue={localeChoice} onChange={handleLocaleChoiceChange}>
+        {localeData.map((locale: any) => (
+          <option key={locale._id} value={locale.name}>
+            {locale.name}
+          </option>
+        ))}
+      </select>
     );
 }

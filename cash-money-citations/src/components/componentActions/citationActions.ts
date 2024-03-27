@@ -148,6 +148,7 @@ async function HandleInitialFormat(bibResponse: any) {
 async function formatDate(form: any) {
     let formattedDate = new Date(form.year_published, form.month_published, form.day_published);
     form.date = formattedDate;
+
 }
 
 async function formatLocation(form: any) {
@@ -175,7 +176,6 @@ export async function HandleManualReference(form: any, userId: any) {
     try {
         await formatDate(form);
         await formatLocation(form);
-
         const bibResponse = await CSLBibModel.create(form)
 
         await AddRef2User(userId, bibResponse._id);
@@ -192,7 +192,43 @@ export async function HandleManualReference(form: any, userId: any) {
             publisher: bibResponse.publisher,
             DOI: bibResponse.doi,
             URL: bibResponse.url,
-            ISBN: bibResponse.isbn
+            ISBN: bibResponse.isbn,
+            location: bibResponse.location,
+            annote: bibResponse.annote,
+            contributors: bibResponse.contributors,
+            indextitle: bibResponse.indextitle,
+            chapter: bibResponse.chapter,
+            edition: bibResponse.edition,
+            editor: bibResponse.editor,
+            howpublished: bibResponse.howpublished,
+            institution: bibResponse.institution,
+            month_published: bibResponse.month_published,
+            day_published: bibResponse.day_published,
+            year_published: bibResponse.year_published,
+            month_accessed: bibResponse.month_accessed,
+            day_accessed: bibResponse.day_accessed,
+            year_accessed: bibResponse.year_accessed,
+            month_event: bibResponse.month_event,
+            day_event: bibResponse.day_event,
+            year_event: bibResponse.year_event,
+            note: bibResponse.note,
+            number: bibResponse.number,
+            organization: bibResponse.organization,
+            pages: bibResponse.pages,
+            school: bibResponse.school,
+            series: bibResponse.series,
+            volumes: bibResponse.volumes,
+            short_title: bibResponse.short_title,
+            volume: bibResponse.volume,
+            doi: bibResponse.doi,
+            issn: bibResponse.issn,
+            isbn: bibResponse.isbn,
+            url: bibResponse.url,
+            running_time: bibResponse.running_time,
+            format: bibResponse.format,
+            image_url: bibResponse.image_url,
+            issue: bibResponse.issue,
+            api_source: bibResponse.api_source,
         };
 
         await HandleInitialFormat(bibJsonData);

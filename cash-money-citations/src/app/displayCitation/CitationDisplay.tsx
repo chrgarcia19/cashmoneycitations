@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { SelectionCSL, SelectionLocale } from '../[id]/view/CSLComponents';
-import { CreateCitation } from '../[id]/view/actions';
+import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
+import { CreateCitation } from '../[id]/references/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
 import { useRouter } from 'next/navigation';
 

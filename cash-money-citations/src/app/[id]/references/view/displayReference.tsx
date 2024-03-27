@@ -158,7 +158,7 @@ const ViewReference = () => {
       
 
     const handleEdit = () => {
-      router.push(`/${reference._id}/edit?id=${encodeURIComponent(reference._id)}`);
+      router.push(`/${reference._id}/references/edit?id=${encodeURIComponent(reference._id)}`);
     };
 
 

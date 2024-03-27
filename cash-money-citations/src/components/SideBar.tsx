@@ -3,6 +3,7 @@ import { BsTable } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
+import { IoPricetags } from "react-icons/io5";
 import { getServerAuthSession } from "@/lib/auth";
 
 export default async function SideBar(){
@@ -36,6 +37,14 @@ export default async function SideBar(){
                         className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
                         <BsTable />
                         <span className="ms-3">Table View</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
+                        href="/tag-center"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <IoPricetags />
+                        <span className="ms-3">Tag Center</span>
                      </Link>
                   </li>
                   <li>

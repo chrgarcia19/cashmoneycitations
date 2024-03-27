@@ -153,20 +153,26 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
     return(
         <>
-            <div className="card w-screen h-auto bg-base-100 shadow-xl">
+            <div className="card w-3/4 h-auto bg-base-100 shadow-xl">
                     <div className="card-body">
-                        <h2 className="card-title">Apply Tags to References</h2>
-                        <form onSubmit={() => handleSubmit(isCheckedRef, isCheckedTag)}>
-                            {tagTable()}
-                            {refTable()}
-                            <div className="card-actions justify-end">
-                                <button 
-                                    className="btn btn-primary"
-                                    type="submit"
-                                    >
-                                    Add to Reference</button>
-                            </div>
-                        </form>
+                        <div className="flex items-center justify-center">
+                            <h2 className="card-title">Apply Tags to References</h2>
+                        </div>
+                        <div className="flex items-center justify-center">
+                            <form id="assign_tag" onSubmit={() => handleSubmit(isCheckedRef, isCheckedTag)}>
+                                <div className="join join-horizontal">
+                                    {tagTable()}
+                                    {refTable()}
+                                </div>
+                                <div className="card-actions justify-end">
+                                    <button 
+                                        className="btn btn-primary"
+                                        type="submit"
+                                        >
+                                        Add to Reference</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </>

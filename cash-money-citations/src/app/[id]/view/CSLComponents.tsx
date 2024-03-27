@@ -60,7 +60,7 @@ return (
 
 
 export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProps) {
-    const [localeChoice, setLocaleChoice] = useState('');
+    const [localeChoice, setLocaleChoice] = useState('en-US');
 
     const {
         data: localeData,
@@ -88,7 +88,7 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     };
     
     return (
-      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={localeChoice} onChange={handleLocaleChoiceChange}>
+      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' defaultValue={localeChoice} onChange={handleLocaleChoiceChange}>
         {localeData.map((locale: any) => (
           <option key={locale._id} value={locale.name}>
             {locale.name}

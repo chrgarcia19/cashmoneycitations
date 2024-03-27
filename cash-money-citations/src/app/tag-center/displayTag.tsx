@@ -46,7 +46,7 @@ export default async function DisplayTags(){
                         <div className="card-body items-center text-center">
                             {tags.map((tag) => (
                                 <span key={tag._id}>
-                                    <Link href={{ pathname: `/${tag._id}/edit`, query: { id: tag._id}}}>
+                                    <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
                                         <div className={`badge badge-lg bg-teal-200 me-2`}>
                                             {tag.tagName}
                                         </div>

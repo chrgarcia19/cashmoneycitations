@@ -163,17 +163,15 @@ const ViewReference = () => {
 
 
     return(
-        <div className='w-full h-screen bg-zinc-700'>
-            <>
-                <div className="flex justify-center items-center pt-10">
-                    <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
-                        <ReferenceDetails reference={reference}/>
-                        <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-                        <ExportReferenceData referenceId={reference._id}/>
-                    </div> 
-                </div>  
-            </> 
-        </div>
+            
+          <div className="flex justify-center items-center pt-10">
+              <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
+                  <ReferenceDetails reference={reference}/>
+                  <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
+                  <ExportReferenceData referenceId={reference._id}/>
+              </div> 
+          </div>  
+            
     )
     
 }

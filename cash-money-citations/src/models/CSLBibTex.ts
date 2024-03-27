@@ -3,6 +3,7 @@ import { Contributor } from "./Contributor";
 import User from './User';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth';
+import { Tag } from './Tag';
 
 
 async function getUserId() {
@@ -32,6 +33,11 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     suffix: {
       type: String
     }
+});
+
+const TagSchema = new mongoose.Schema<Tag>({
+  tagName: String,
+  tagColor: String,
 });
 
 const referencesUsedSchema = new mongoose.Schema({
@@ -84,35 +90,36 @@ export interface CSLBibInterface extends mongoose.Document {
     month_event: String,
     day_event: String,
     year_event: String,
-    eventdate: Date; //Date event occurred (ex: conference)
-    note: string;
-    number: number;
-    organization: string;
-    pages: string;
-    publisher: string;
-    school: string;
-    series: string;
-    volumes: number;
-    shorttitle: string;
-    title: string[];
-    type: string;
-    volume: string;
-    doi: string;
-    issn: string[];
-    issnType: object[];
-    isbn: string;
-    url: string;
-    runningTime: string;
-    format: string;
-    cslJson: object;
-    image_url: string;
-    issue: string;
-    abstract: string;
-    apiSource: string;
-    subject: string[];
-    referencesUsed: ReferencesUsed[];
-    citationIdList: string[];
-    isOwnedBy: string[];
+    eventdate: Date, //Date event occurred (ex: conference)
+    note: string,
+    number: number,
+    organization: string,
+    pages: string,
+    publisher: string,
+    school: string,
+    series: string,
+    volumes: number,
+    shorttitle: string,
+    title: string[],
+    type: string,
+    volume: string,
+    doi: string,
+    issn: string[],
+    issnType: object[],
+    isbn: string,
+    url: string,
+    runningTime: string,
+    format: string,
+    cslJson: object,
+    image_url: string,
+    issue: string,
+    abstract: string,
+    apiSource: string,
+    subject: string[],
+    referencesUsed: ReferencesUsed[],
+    citationIdList: string[],
+    isOwnedBy: string[],
+    tags: Tag[],
 }
 
 const CSLBibSchema = new Schema({
@@ -227,6 +234,7 @@ const CSLBibSchema = new Schema({
     referencesUsed: [referencesUsedSchema],
     citationIdList: [String],
     isOwnedBy: [String],
+    tags: [TagSchema],
 
 }, {timestamps: true});
 

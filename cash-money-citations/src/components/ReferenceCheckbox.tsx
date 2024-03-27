@@ -1,25 +1,18 @@
 "use client"
 
 import { CSLBibInterface } from "@/models/CSLBibTex";
+import { Tag } from "@/models/Tag";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
 const config = plugins.config.get('@bibtex')
-import { Contributor } from "@/models/Contributor";
-import { CreateCitation } from "@/app/[id]/view/actions";
 
 interface IProps {
     references: any;
 }
-
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data);
 
 function monthConversion(month_num: string) {
     switch(month_num){
@@ -53,9 +46,7 @@ function monthConversion(month_num: string) {
 }
 
 export const Checkbox = ({ references }: IProps) => {
-    const searchParams = useSearchParams();
     const router = useRouter();
-    const id = searchParams.get('id');
 
     const handleDelete = async (refID: string) => {
         try {
@@ -90,15 +81,6 @@ export const Checkbox = ({ references }: IProps) => {
         router.push('/reference-table');
         router.refresh();
     }
-
-    const {
-        error,
-        isLoading,
-      } = useSWR(id ? `/api/references/${id}` : null, fetcher);
-
-      
-      if (error) return <p>Failed to load</p>;
-      if (isLoading) return <p>Loading...</p>;
 
     const [refData, setRefData] = useState<CSLBibInterface[]>([]);
 
@@ -166,15 +148,16 @@ export const Checkbox = ({ references }: IProps) => {
         setIsChecked(checkState)
     }
 
+
     const singleMenu = (reference: CSLBibInterface) => {
         return (
             <div className="flex justify-center items-center">
                 <div className="btm-bar">
-                    <Link className="bg-green-300 text-green-800 hover:active" style={{display: 'grid'}} href={{ pathname: `/${reference._id}/edit`, query: { id: reference._id} } }>
+                    <Link className="bg-green-300 text-green-800 hover:active" style={{display: 'grid'}} href={{ pathname: `/${reference._id}/references/edit`, query: { id: reference._id} } }>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 121.51" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M28.66,1.64H58.88L44.46,16.71H28.66a13.52,13.52,0,0,0-9.59,4l0,0a13.52,13.52,0,0,0-4,9.59v76.14H91.21a13.5,13.5,0,0,0,9.59-4l0,0a13.5,13.5,0,0,0,4-9.59V77.3l15.07-15.74V92.85a28.6,28.6,0,0,1-8.41,20.22l0,.05a28.58,28.58,0,0,1-20.2,8.39H11.5a11.47,11.47,0,0,1-8.1-3.37l0,0A11.52,11.52,0,0,1,0,110V30.3A28.58,28.58,0,0,1,8.41,10.09L8.46,10a28.58,28.58,0,0,1,20.2-8.4ZM73,76.47l-29.42,6,4.25-31.31L73,76.47ZM57.13,41.68,96.3.91A2.74,2.74,0,0,1,99.69.38l22.48,21.76a2.39,2.39,0,0,1-.19,3.57L82.28,67,57.13,41.68Z"/></svg>
                         <span className="btm-nav-label">Edit</span>  
                     </Link>
-                    <Link className="bg-cyan-300 text-cyan-800 hover:active" href={{ pathname: `/${reference._id}/view`, query: { id: reference._id} } }>
+                    <Link className="bg-cyan-300 text-cyan-800 hover:active" href={{ pathname: `/${reference._id}/references/view`, query: { id: reference._id} } }>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 122.88 83.78" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M95.73,10.81c10.53,7.09,19.6,17.37,26.48,29.86l0.67,1.22l-0.67,1.21c-6.88,12.49-15.96,22.77-26.48,29.86 C85.46,79.88,73.8,83.78,61.44,83.78c-12.36,0-24.02-3.9-34.28-10.81C16.62,65.87,7.55,55.59,0.67,43.1L0,41.89l0.67-1.22 c6.88-12.49,15.95-22.77,26.48-29.86C37.42,3.9,49.08,0,61.44,0C73.8,0,85.45,3.9,95.73,10.81L95.73,10.81z M60.79,22.17l4.08,0.39 c-1.45,2.18-2.31,4.82-2.31,7.67c0,7.48,5.86,13.54,13.1,13.54c2.32,0,4.5-0.62,6.39-1.72c0.03,0.47,0.05,0.94,0.05,1.42 c0,11.77-9.54,21.31-21.31,21.31c-11.77,0-21.31-9.54-21.31-21.31C39.48,31.71,49.02,22.17,60.79,22.17L60.79,22.17L60.79,22.17z M109,41.89c-5.5-9.66-12.61-17.6-20.79-23.11c-8.05-5.42-17.15-8.48-26.77-8.48c-9.61,0-18.71,3.06-26.76,8.48 c-8.18,5.51-15.29,13.45-20.8,23.11c5.5,9.66,12.62,17.6,20.8,23.1c8.05,5.42,17.15,8.48,26.76,8.48c9.62,0,18.71-3.06,26.77-8.48 C96.39,59.49,103.5,51.55,109,41.89L109,41.89z"/></svg>
                         <span className="btm-nav-label">View</span>
                     </Link>
@@ -236,6 +219,13 @@ export const Checkbox = ({ references }: IProps) => {
                 {countSelected(isChecked) == 1 && isChecked[index] ? singleMenu(reference) : ""}
                 {countSelected(isChecked) > 1 ? multiMenu(getSelectedID(isChecked), getSelectedRef(isChecked)) : ""}
                 {countSelected(isChecked) == 0 ? "" : ""}
+                </td>
+                <td className="border border-slate-600 text-center">
+                    {reference.tags.map((tag: Tag) => (
+                        <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
+                            {tag.tagName}
+                        </div>
+                    ))}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   

@@ -3,7 +3,7 @@
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { useEffect, useState } from "react";
-import applyReferencesToTag, { applyTagsToReference } from "./tagActions";
+import {  applyReferencesToTag, applyTagsToReference } from "./tagActions";
 import { useRouter } from "next/navigation";
 
 interface IProps {
@@ -135,20 +135,22 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
         return tags;
     }
 
-    function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>){
-      const refs = getSelectedRefs(refChecked);
-      const tags = getSelectedTags(tagChecked);
+    function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>, e: React.FormEvent<HTMLFormElement>){
+        e.preventDefault();
 
-      /*Add Tag IDs to References first*/
-      for (let i = 0; i < refs.length; i++){
-        applyTagsToReference(refs[i], tags);
-      }
-      /*Add Reference IDs to Tags*/
-      for (let i = 0; i < tags.length; i++){
-        applyReferencesToTag(tags[i], refs);
-      }
-      router.push("/tag-center");
-      router.refresh();
+        const refs = getSelectedRefs(refChecked);
+        const tags = getSelectedTags(tagChecked);
+
+        /*Add Tag IDs to References first*/
+        for (let i = 0; i < refs.length; i++){
+            applyTagsToReference(refs[i], tags);
+        }
+        /*Add Reference IDs to Tags*/
+        for (let i = 0; i < tags.length; i++){
+            applyReferencesToTag(tags[i], refs);
+        }
+        router.push("/tag-center");
+        router.refresh();
     }
 
     return(
@@ -159,7 +161,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                             <h2 className="card-title">Apply Tags to References</h2>
                         </div>
                         <div className="flex items-center justify-center">
-                            <form id="assign_tag" onSubmit={() => handleSubmit(isCheckedRef, isCheckedTag)}>
+                            <form id="assign_tag" onSubmit={(e) => handleSubmit(isCheckedRef, isCheckedTag, e)}>
                                 <div className="join join-horizontal">
                                     {tagTable()}
                                     {refTable()}

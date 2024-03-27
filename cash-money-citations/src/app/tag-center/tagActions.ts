@@ -4,7 +4,7 @@ import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { mutate } from "swr";
 
-export async function applyTagsToReference(reference: CSLBibInterface, tags: any[]){
+export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag[]){
     /*Create the form*/
     const referenceForm = {
       location: reference.location,
@@ -46,12 +46,12 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: any
       image_url: reference.image_url,
       issue: reference.issue,
       api_source: reference.apiSource,
-      tagID: reference.tagID,
+      tags: reference.tags,
     };
 
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
-      reference.tagID.push(tags[i]._id);
+      reference.tags.push(tags[i]);
     }
 
     /*Send the new data to the API to be modified*/

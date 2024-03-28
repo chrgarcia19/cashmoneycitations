@@ -78,19 +78,19 @@ export interface CSLBibInterface extends mongoose.Document {
     month_published: String,
     day_published: String,
     year_published: String,
-    date: Date, //Date Published
+    date: String, //Date Published
     /*The next 3 fields are for 
     displaying/editing data for a date*/
     month_accessed: String,
     day_accessed: String,
     year_accessed: String,
-    urldate: Date, //Date Accessed
+    urldate: String, //Date Accessed
     /*The next 3 fields are for 
     displaying/editing data for a date*/
     month_event: String,
     day_event: String,
     year_event: String,
-    eventdate: Date, //Date event occurred (ex: conference)
+    eventdate: String, //Date event occurred (ex: conference)
     note: string,
     number: number,
     organization: string,
@@ -191,19 +191,19 @@ const CSLBibSchema = new Schema({
     month_published: String,
     day_published: String,
     year_published: String,
-    date: Date, //Date Published
+    date: String, //Date Published
     /*The next 3 fields are for 
     displaying/editing data for a date*/
     month_accessed: String,
     day_accessed: String,
     year_accessed: String,
-    urldate: Date, //Date Accessed
+    urldate: String, //Date Accessed
     /*The next 3 fields are for 
     displaying/editing data for a date*/
     month_event: String,
     day_event: String,
     year_event: String,
-    eventdate: Date,
+    eventdate: String,
     month: String,
     year: String,
     note: String,

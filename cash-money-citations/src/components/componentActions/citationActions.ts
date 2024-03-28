@@ -3,6 +3,7 @@
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
+let { parse, format } = require('@citation-js/date')
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
@@ -131,13 +132,11 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 async function HandleInitialFormat(bibResponse: any) {
     // Converts our mimic CSLBib-JSON schema thing to BibLaTex
     const toBibTex = new Cite(JSON.stringify(bibResponse))
-
     const bibtexOutput = toBibTex.format('biblatex', {
         format: 'text',
         template: 'biblatex',
         lang: 'en-US'
     });
-
     // Converts the BibTex to CSL-JSON
     const cslJson = await toCslJson(bibtexOutput)
 
@@ -146,9 +145,27 @@ async function HandleInitialFormat(bibResponse: any) {
 }
 
 async function formatDate(form: any) {
-    let formattedDate = new Date(form.year_published, form.month_published, form.day_published);
-    form.date = formattedDate;
+    // According to CSL-JSON Schema and BibLaTex standards the follow type map is used
+    // BibLaTex ------ CSL-JSON
+    // date(Published Date) ---------- issued
+    // eventdate(Date of Event) ------ event-date
+    // origdate(Date of OG Item) ----- original-date
+    // urldate(Date when URL was accessed) ---- accessed
 
+    if (form.year_published || form.month_published || form.day_published) {
+        const datePublished = new Date(form.year_published, form.month_published, form.day_published);
+        form.date = datePublished.toISOString().split('T')[0];
+    }
+
+    if (form.year_accessed || form.month_accessed || form.day_accessed) {
+        const dateAccessed = new Date(form.year_accessed, form.month_accessed, form.day_accessed);
+        form.urldate = dateAccessed.toISOString().split('T')[0];
+    }
+
+    if (form.year_event || form.month_event || form.day_event) {
+        const dateEvent = new Date(form.year_event, form.month_event, form.day_event);
+        form.eventdate = dateEvent.toISOString().split('T')[0];
+    }
 }
 
 async function formatLocation(form: any) {
@@ -179,7 +196,6 @@ export async function HandleManualReference(form: any, userId: any) {
         const bibResponse = await CSLBibModel.create(form)
 
         await AddRef2User(userId, bibResponse._id);
-
         const bibJsonData = {
             id: bibResponse._id,
             type: bibResponse.type,
@@ -188,7 +204,9 @@ export async function HandleManualReference(form: any, userId: any) {
             family: contributor.lastName,
             given: contributor.firstName,
             })),
-            date: bibResponse.date,
+            issued: parse(bibResponse.date),
+            accessed: parse(bibResponse.date),
+            eventdate: parse(bibResponse.eventdate),
             publisher: bibResponse.publisher,
             DOI: bibResponse.doi,
             URL: bibResponse.url,
@@ -202,15 +220,6 @@ export async function HandleManualReference(form: any, userId: any) {
             editor: bibResponse.editor,
             howpublished: bibResponse.howpublished,
             institution: bibResponse.institution,
-            month_published: bibResponse.month_published,
-            day_published: bibResponse.day_published,
-            year_published: bibResponse.year_published,
-            month_accessed: bibResponse.month_accessed,
-            day_accessed: bibResponse.day_accessed,
-            year_accessed: bibResponse.year_accessed,
-            month_event: bibResponse.month_event,
-            day_event: bibResponse.day_event,
-            year_event: bibResponse.year_event,
             note: bibResponse.note,
             number: bibResponse.number,
             organization: bibResponse.organization,

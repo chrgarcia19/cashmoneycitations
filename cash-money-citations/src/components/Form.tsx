@@ -70,6 +70,7 @@ interface ReferenceFormData {
   editor: string;
   howpublished: string;
   institution: string;
+  date: string;
   /*The next three fields are later
   converted into a date object*/
   month_published: string;
@@ -140,6 +141,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     chapter: referenceForm.chapter,
     edition: referenceForm.edition,
     editor: referenceForm.editor,
+    date: referenceForm.date,
     howpublished: referenceForm.howpublished,
     institution: referenceForm.institution,
     month_published: referenceForm.month_published,
@@ -218,12 +220,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (Object.keys(errs).length === 0) {
       if (forNewReference){
         HandleManualReference(form, userId);
-        router.push("reference-table");
-        router.refresh();
+        // router.push("reference-table");
+        // router.refresh();
       } else {
         EditReference(form, id);
-        router.push("reference-table");
-        router.refresh();
+        // router.push("reference-table");
+        // router.refresh();
       }
     } else {
       setErrors({ errs });

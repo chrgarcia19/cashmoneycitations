@@ -91,6 +91,7 @@ export interface CSLBibInterface extends mongoose.Document {
     day_event: String,
     year_event: String,
     eventdate: String, //Date event occurred (ex: conference)
+    origdate: String, //Date of orignal work
     note: string,
     number: number,
     organization: string,
@@ -204,6 +205,7 @@ const CSLBibSchema = new Schema({
     day_event: String,
     year_event: String,
     eventdate: String,
+    origdate: String,
     month: String,
     year: String,
     note: String,

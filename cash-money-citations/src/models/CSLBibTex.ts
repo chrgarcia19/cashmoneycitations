@@ -130,6 +130,35 @@ export interface CSLGeneralFields {
   issued: Date; // Date published
   "original-date": Date; // Issue date of original version
   submitted: Date; // Date item was submitted for publication
+
+  // Contributor variables *********
+  author: string;
+  chair: string;
+  "collection-editor": string;
+  compiler: string;
+  composer: string;
+  "container-author": string;
+  contributor: string;
+  curator: string;
+  director: string;
+  editor: string;
+  "editorial-director": string;
+  "editor-translator": string;
+  "executive-producer": string;
+  guest: string;
+  host: string;
+  illustrator: string;
+  interviewer: string;
+  narrator: string;
+  organizer: string;
+  "original-author": string;
+  performer: string;
+  producer: string;
+  recipient: string;
+  "reviewed-author": string;
+  "script-writer": string;
+  "series-creator": string;
+  translator: string;
 }
 
 export interface CSLBibInterface extends mongoose.Document, CSLGeneralFields {
@@ -167,10 +196,6 @@ export interface CSLBibInterface extends mongoose.Document, CSLGeneralFields {
   tags: Tag[],
 }
 
-const CSLLocationSchema = new Schema({
-  city: String,
-  country: String,
-})
 
 const CSLBibSchema = new Schema({
   entryType: {
@@ -227,10 +252,10 @@ const CSLBibSchema = new Schema({
       type: String,
       default: generateCiteKey,
   },
-  "archive-place": CSLLocationSchema,
-  "event-place": CSLLocationSchema,
-  "original-publisher-place": CSLLocationSchema,
-  "publisher-place": CSLLocationSchema,
+  "archive-place": String,
+  "event-place": String,
+  "original-publisher-place": String,
+  "publisher-place": String,
   abstract: String,
   annote: String,
   archive: String,
@@ -297,6 +322,34 @@ const CSLBibSchema = new Schema({
   dateOriginal: Date,
   dateSubmitted: Date,
   contributors: [ContributorSchema],
+  // Contributor variables *********
+  author: [ContributorSchema],
+  chair: [ContributorSchema],
+  "collection-editor": [ContributorSchema],
+  compiler: [ContributorSchema],
+  composer: [ContributorSchema],
+  "container-author": [ContributorSchema],
+  contributor: [ContributorSchema],
+  curator: [ContributorSchema],
+  director: [ContributorSchema],
+  editor: [ContributorSchema],
+  "editorial-director": [ContributorSchema],
+  "editor-translator": [ContributorSchema],
+  "executive-producer": [ContributorSchema],
+  guest: [ContributorSchema],
+  host: [ContributorSchema],
+  illustrator: [ContributorSchema],
+  interviewer: [ContributorSchema],
+  narrator: [ContributorSchema],
+  organizer: [ContributorSchema],
+  "original-author": [ContributorSchema],
+  performer: [ContributorSchema],
+  producer: [ContributorSchema],
+  recipient: [ContributorSchema],
+  "reviewed-author": [ContributorSchema],
+  "script-writer": [ContributorSchema],
+  "series-creator": [ContributorSchema],
+  translator: [ContributorSchema],
   organization: String,
   series: String,
   type: String,

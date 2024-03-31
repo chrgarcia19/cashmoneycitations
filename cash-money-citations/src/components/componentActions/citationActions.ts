@@ -5,7 +5,7 @@ require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 let { parse, format } = require('@citation-js/date')
 import dbConnect from "@/utils/dbConnect";
-import CSLBibModel from "@/models/CSLBibTex";
+import CSLBibModel, { CSLGeneralFields } from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
 import { RedirectType, redirect } from "next/navigation";
 import User from "@/models/User";
@@ -155,7 +155,6 @@ async function HandleInitialFormat(bibResponse: any) {
      })
     // Converts the BibTex to CSL-JSON
     const cslJson = await toCslJson(test)
-     console.log(cslJson)
     // Adds the CSL-JSON to the existing database collection
     InitializeCslJson(bibResponse.id, cslJson);
 }
@@ -167,20 +166,19 @@ async function formatDate(form: any) {
     // eventdate(Date of Event) ------ event-date
     // origdate(Date of OG Item) ----- original-date
     // urldate(Date when URL was accessed) ---- accessed
-
-    if (form.year_published || form.month_published || form.day_published) {
-        const datePublished = new Date(form.year_published, form.month_published, form.day_published);
-        form.date = datePublished.toISOString().split('T')[0];
+    if (form.yearPublished || form.monthPublished || form.dayPublished) {
+        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
+        form.datePublished = datePublished;
     }
 
-    if (form.year_accessed || form.month_accessed || form.day_accessed) {
-        const dateAccessed = new Date(form.year_accessed, form.month_accessed, form.day_accessed);
-        form.urldate = dateAccessed.toISOString().split('T')[0];
+    if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {
+        const dateAccessed = new Date(form.yearAccessed, form.monthAccessed, form.dayAccessed);
+        form.dateAccessed = dateAccessed.toISOString().split('T')[0];
     }
 
-    if (form.year_event || form.month_event || form.day_event) {
-        const dateEvent = new Date(form.year_event, form.month_event, form.day_event);
-        form.eventdate = dateEvent.toISOString().split('T')[0];
+    if (form.yearEvent || form.monthEvent || form.dayEvent) {
+        const dateEvent = new Date(form.yearEvent, form.monthEvent, form.dayEvent);
+        form.dateEvent = dateEvent.toISOString().split('T')[0];
     }
 }
 
@@ -216,153 +214,76 @@ function userInputToBibLaTex(userInput: any) {
     return bibLaTex;
 }
 
+
+// Interface for creating bibliographies/citations
+export interface CSLInterface extends CSLGeneralFields {
+    "archive-place": string;
+    "event-place": string;
+    "original-publisher-place": string;
+    "publisher-place": string;
+    
+    // Contributor variables *********
+    author: string;
+    chair: string;
+    "collection-editor": string;
+    compiler: string;
+    composer: string;
+    "container-author": string;
+    contributor: string;
+    curator: string;
+    director: string;
+    editor: string;
+    "editorial-director": string;
+    "editor-translator": string;
+    "executive-producer": string;
+    guest: string;
+    host: string;
+    illustrator: string;
+    interviewer: string;
+    narrator: string;
+    organizer: string;
+    "original-author": string;
+    performer: string;
+    producer: string;
+    recipient: string;
+    "reviewed-author": string;
+    "script-writer": string;
+    "series-creator": string;
+    translator: string;
+}
+
 export async function HandleManualReference(form: any, userId: any) {
-    const userInput = {
-        type: 'book',
-        id: '123',
-        author: 'Doe, John Sr',
-        title: 'Some Book',
-        publisher: 'Some Publisher',
-        eventdate: '1, 5, 2014',
-        origdate: '2000-5-1',
-        date: "1943-11-3",
-        year: '2022'
-    };
+
     await dbConnect();
     // Create reference entry
     try {
         await formatDate(form);
         await formatLocation(form);
-        const bibTest = await userInputToBibLaTex(userInput);
-        console.log(bibTest)
-        const cslJson = await toCslJson(bibTest)
-        console.log(cslJson[0])
         const bibResponse = await CSLBibModel.create(form)
+        console.log(bibResponse)
         await AddRef2User(userId, bibResponse._id);
 
-        interface CSL {
-            abstract: string;
-            annote: string;
-            archive: string;
-            archive_collection: string;
-            archive_location: string;
-            "archive-place": string;
-            authority: string;
-            "call-number": string;
-            "citation-key": string;
-            "citation-label": string;
-            "collection-title": string;
-            "container-title": string;
-            dimensions: string;
-            division: string;
-            DOI: string;
-            event: string;
-            "event-title": string;
-            "event-place": string;
-            genre: string;
-            ISBN: string;
-            ISSN: string;
-            jurisdiction: string;
-            keyword: string;
-            language: string;
-            license: string;
-            medium: string;
-            note: string;
-            "original-publisher": string;
-            "original-publisher-place": string;
-            "original-title": string;
-            "part-title": string;
-            PMCID: string;
-            PMID: string;
-            publisher: string;
-            "publisher-place": string;
-            references: string;
-            "reviewed-genre": string;
-            "reviewed-title": string;
-            scale: string;
-            source: string;
-            status: string;
-            title: string;
-            URL: string;
-            "volume-title": string;
-            "year-suffix": string;
-            "chapter-number": string;
-            "citation-number": string;
-            "collection-number": string;
-            edition: string;
-            "first-reference-note-number": string;
-            issue: string;
-            locator: string;
-            number: string;
-            "number-of-pages": string;
-            "number-of-volumes": string;
-            page: string;
-            "page-first": string;
-            "part-number": string;
-            "printing-number": string;
-            section: string;
-            "supplement-number": string;
-            version: string;
-            volume: string;
-
-            // Date variables ***************
-            accessed: string;
-            "available-date": string;
-            "event-date": string;
-            issued: string;
-            "original-date": string;
-            submitted: string;
-
-            // Contributor variables *********
-            author: string;
-            chair: string;
-            "collection-editor": string;
-            compiler: string;
-            composer: string;
-            "container-author": string;
-            contributor: string;
-            curator: string;
-            director: string;
-            editor: string;
-            "editorial-director": string;
-            "editor-translator": string;
-            "executive-producer": string;
-            guest: string;
-            host: string;
-            illustrator: string;
-            interviewer: string;
-            narrator: string;
-            organizer: string;
-            "original-author": string;
-            performer: string;
-            producer: string;
-            recipient: string;
-            "reviewed-author": string;
-            "script-writer": string;
-            "series-creator": string;
-            translator: string;
-        }
-
-        const bibJsonData = {
+        const cslJsonData = {
             id: bibResponse._id,
             type: bibResponse.type,
             title: bibResponse.title,
             abstract: "",
             annote: bibResponse.annote,
             archive: "",
-            author: bibResponse.contributors.map((contributor: { role: any; firstName: any; lastName: any; }) => ({
-            family: contributor.lastName,
-            given: contributor.firstName,
+            author: bibResponse.contributors.map((contributor: { role: any; firstName: any; lastName: any; middleName: any; suffix: any; }) => ({
+                family: contributor.lastName,
+                given: contributor.firstName,
             })),
-            issued: parse(bibResponse.date),
-            accessed: parse(bibResponse.urldate),
-            eventdate: parse(bibResponse.eventdate),
-            availableDate: parse(bibResponse.date),
+            issued: parse(bibResponse.datePublished.toISOString().split('T')[0]),
+            accessed: parse(bibResponse.dateAccessed.toISOString().split('T')[0]),
+            eventDate: parse(bibResponse["event-date"]),
+            availableDate: parse(bibResponse["available-date"]),
             publisher: bibResponse.publisher,
-            "container-title": "New York Times", // container-title is the title of the Journal (if journal article) or Book (if book chapter)
-            DOI: bibResponse.doi,
-            URL: bibResponse.url,
-            ISBN: bibResponse.isbn,
+            "container-title": bibResponse["container-title"], // container-title is the title of the Journal (if journal article) or Book (if book chapter)
+            DOI: bibResponse.DOI,
+            URL: bibResponse.URL,
+            ISBN: bibResponse.ISBN,
+            ISSN: bibResponse.ISSN,
             location: bibResponse.location,
             contributors: bibResponse.contributors,
             indextitle: bibResponse.indextitle,
@@ -380,9 +301,6 @@ export async function HandleManualReference(form: any, userId: any) {
             volumes: bibResponse.volumes,
             short_title: bibResponse.short_title,
             volume: bibResponse.volume,
-            doi: bibResponse.doi,
-            issn: bibResponse.issn,
-            isbn: bibResponse.isbn,
             url: bibResponse.url,
             running_time: bibResponse.running_time,
             format: bibResponse.format,
@@ -391,7 +309,7 @@ export async function HandleManualReference(form: any, userId: any) {
             api_source: bibResponse.api_source,
         };
 
-        await HandleInitialFormat(bibJsonData);
+        await HandleInitialFormat(cslJsonData);
 
       } catch (error) {
         console.error(error)

@@ -220,24 +220,23 @@ export interface CSLInterface extends CSLGeneralFields {
 }
 
 async function HandleContributors(form: any) {
-    form.author = form.contributors
-    .filter((contributor: any) => contributor.role === 'Author')
-    .map((contributor: any) => ({
-      family: contributor.family,
-      middle: contributor.middle,
-      given: contributor.given,
-      suffix: contributor.suffix
-    }));
-  form.editor = form.contributors
-    .filter((contributor: any) => contributor.role === 'Editor')
-    .map((contributor: any) => ({
-      family: contributor.family,
-      middle: contributor.middle,
-      given: contributor.given,
-      suffix: contributor.suffix
-    }));
-  
+    function filterAndMapContributors(form: any, role: string) {
+        return form.contributors
+        .filter((contributor: any) => contributor.role === role)
+        .map((contributor: any) => ({
+            family: contributor.family,
+            middle: contributor.middle,
+            given: contributor.given,
+            suffix: contributor.suffix,
+        }));
+    }
+
+    form.author = filterAndMapContributors(form, 'Author');
+    form.editor = filterAndMapContributors(form, 'Editor');
+
 }
+
+
 
 export async function HandleManualReference(form: any, userId: any) {
 

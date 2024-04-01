@@ -51,7 +51,7 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag
 
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
-      reference.tags.push(tags[i]);
+      referenceForm.tags.push(tags[i]);
     }
 
     /*Send the new data to the API to be modified*/
@@ -78,7 +78,7 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag
       }
 }
 
-export async function applyReferencesToTag (tag: Tag, references: any[]) {
+export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
   /*Create the form*/
   const tagForm = {
       tagName: tag.tagName,
@@ -87,8 +87,8 @@ export async function applyReferencesToTag (tag: Tag, references: any[]) {
   };
 
   /*Put the proper data in the tag object*/
-  for (let i = 0; i < references.length; i++){
-    tag.referenceID.push(references[i]._id);
+  for (let i = 0; i < refs.length; i++){
+    tagForm.referenceID.push(refs[i]._id);
   }
   
   /*Send the new data to the API to be modified*/

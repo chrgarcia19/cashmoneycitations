@@ -135,7 +135,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
         return tags;
     }
 
-    function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>, e: React.FormEvent<HTMLFormElement>){
+    async function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>, e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
 
         const refs = getSelectedRefs(refChecked);
@@ -143,11 +143,11 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
         /*Add Tag IDs to References first*/
         for (let i = 0; i < refs.length; i++){
-            applyTagsToReference(refs[i], tags);
+            await applyTagsToReference(refs[i], tags);
         }
         /*Add Reference IDs to Tags*/
         for (let i = 0; i < tags.length; i++){
-            applyReferencesToTag(tags[i], refs);
+            await applyReferencesToTag(tags[i], refs);
         }
         router.push("/");
         router.refresh();

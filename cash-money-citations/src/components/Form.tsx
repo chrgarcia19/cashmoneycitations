@@ -64,15 +64,19 @@ export enum EntryType {
 interface ReferenceFormData extends CSLGeneralFields {
   type: string,
   /* Geographical location of archive (Will be converted into archive-place) */
+  "archive-place": string,
   archivePlaceCity: string,
   archivePlaceCountry: string,
   /* Geographical location of event (Will be converted into event-place) */
+  "event-place": string,
   eventPlaceCity: string,
   eventPlaceCountry: string,
   /* Geographical location of Original publisher place (Will be converted into original-publisher-place) */
+  "original-publisher-place": string,
   origPubPlaceCity: string,
   origPubPlaceCountry: string,
   /* Geographical location of the current publisher place (Will be converted into publisher-place) */
+  "publisher-place": string,
   publisherPlaceCity: string,
   publisherPlaceCountry: string,
   monthPublished: string,
@@ -112,19 +116,21 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const contentType = "application/json";
 
   /*Set initial state to website so the page is not blank*/
+  // These form field names must match the field names of the Mongoose schema to be saved in the DB
   const [form, setForm] = useState({
     archivePlaceCity: referenceForm.archivePlaceCity,
     archivePlaceCountry: referenceForm.archivePlaceCountry,
+    "archive-place": referenceForm["archive-place"],
     eventPlaceCity: referenceForm.eventPlaceCity,
     eventPlaceCountry: referenceForm.eventPlaceCountry,
     publisherPlaceCity: referenceForm.publisherPlaceCity,
     publisherPlaceCountry: referenceForm.publisherPlaceCountry,
-    containerTitle: referenceForm["container-title"],
-    collectionTitle: referenceForm["collection-title"], // Series
+    "container-title": referenceForm["container-title"],
+    "collection-title": referenceForm["collection-title"], // Series
     page: referenceForm.page, // Range of pages
-    pages: referenceForm["number-of-pages"], // Total # of pages
+    "number-of-pages": referenceForm["number-of-pages"], // Total # of pages
     volume: referenceForm.volume, // Associated volume
-    volumes: referenceForm["number-of-volumes"], // Total # of volumes
+    "number-of-volumes": referenceForm["number-of-volumes"], // Total # of volumes
     edition: referenceForm.edition,
     monthPublished: referenceForm.monthPublished, // Date published
     yearPublished: referenceForm.yearPublished, // Date published
@@ -136,6 +142,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     dateAccessed: referenceForm.accessed,
     annote: referenceForm.annote,
     contributors: referenceForm.contributors,
+    editor: referenceForm.editor,
     note: referenceForm.note,
     number: referenceForm.number,
     publisher: referenceForm.publisher,
@@ -144,7 +151,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     DOI: referenceForm.DOI,
     ISSN: referenceForm.ISSN,
     ISBN: referenceForm.ISBN,
-    url: referenceForm.URL,
+    URL: referenceForm.URL,
     running_time: referenceForm.running_time,
     format: referenceForm.format,
     image_url: referenceForm.image_url,
@@ -249,7 +256,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 {/*Will need to make a case for book titles since container-title covers jounrals, books, and more */}
                 {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper"
                   || form.type == "webpage") && (
-                  <FormField labelText={"Title From Where the Source Came From"} fieldName={"containerTitle"} fieldValue={form.containerTitle} fieldType={"text"} fieldPlaceholder={"Title From Where the Source Came From"} handleChange={handleChange} />
+                  <FormField labelText={"Title From Where the Source Came From"} fieldName={"container-title"} fieldValue={form["container-title"]} fieldType={"text"} fieldPlaceholder={"Title From Where the Source Came From"} handleChange={handleChange} />
                 )}
 
                 {/*Contributors Field*/}
@@ -261,13 +268,13 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
                 {/*CollectionTitle Field*/}
                 {(form.type == "book" || form.type == "article-journal") && (
-                  <FormField labelText={"Collection Title (series)"} fieldName={"collectionTitle"} fieldValue={form.collectionTitle} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
+                  <FormField labelText={"Collection Title (series)"} fieldName={"collection-title"} fieldValue={form["collection-title"]} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
                 )}
 
                 {/*Pages Field*/}
                 {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
                   || form.type == "article-newspaper") && (
-                  <FormField labelText={"Number of Pages"} fieldName={"pages"} fieldValue={form.pages} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
+                  <FormField labelText={"Number of Pages"} fieldName={"number-of-pages"} fieldValue={form["number-of-pages"]} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
                 )}
 
                 {/*Volume Field*/}
@@ -277,12 +284,15 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
                 {/*Number of Volumes Field*/}
                 {(form.type == "book") && (
-                  <FormField labelText={"Number of Volumes"} fieldName={"volumes"} fieldValue={form.volumes} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
+                  <FormField labelText={"Number of Volumes"} fieldName={"number-of-volumes"} fieldValue={form["number-of-volumes"]} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
                 )}
 
                 {/*Publisher Location Field*/}
                 {(form.type == "article-newspaper") && (
-                  <FormField labelText={"Publisher Location"} fieldName={"publisherLocation"} fieldValue={[form.publisherPlaceCity, form.publisherPlaceCountry]} fieldType={"text"} fieldPlaceholder={"Publisher Location"} handleChange={handleChange} />
+                  <div>
+                    <FormField labelText={"Publisher City"} fieldName={"publisherPlaceCity"} fieldValue={form.publisherPlaceCity} fieldType={"text"} fieldPlaceholder={"Publisher City"} handleChange={handleChange} />
+                    <FormField labelText={"Publisher Country"} fieldName={"publisherPlaceCountry"} fieldValue={form.publisherPlaceCountry} fieldType={"text"} fieldPlaceholder={"Publisher Country"} handleChange={handleChange} />
+                  </div>
                 )}
 
                 {/*Edition Field*/}
@@ -302,7 +312,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
                 {/*URL Accessed Field*/}
                 {form.type && (
-                  <FormField labelText={"Source Accessed By URL "} fieldName={"url"} fieldValue={form.url} fieldType={"url"} fieldPlaceholder={"Source Accessed By URL"} handleChange={handleChange} />
+                  <FormField labelText={"Source Accessed By URL "} fieldName={"URL"} fieldValue={form.URL} fieldType={"url"} fieldPlaceholder={"Source Accessed By URL"} handleChange={handleChange} />
                 )}
 
                 {/*Date Accessed Field*/}

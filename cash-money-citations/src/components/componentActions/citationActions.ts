@@ -39,9 +39,9 @@ function translateForeignModel(result: any) {
     let i = 0;
     let newContributor: Contributor = {
         role: "",
-        firstName: "",
-        lastName: "",
-        middleName: "",
+        given: "",
+        family: "",
+        middle: "",
         suffix: ""
     };
     let contributors = new Array<Contributor>();
@@ -51,9 +51,9 @@ function translateForeignModel(result: any) {
         for (i; i<result[0].author.length; i++) {
             newContributor = {
                 role: "Author",
-                firstName: result[0].author[i].given,
-                lastName: result[0].author[i].family,
-                middleName: "",
+                given: result[0].author[i].given,
+                family: result[0].author[i].family,
+                middle: "",
                 suffix: ""
             };
             contributors.push(newContributor);
@@ -62,9 +62,9 @@ function translateForeignModel(result: any) {
     else {
         newContributor = {
             role: "Author",
-            firstName: "Unknown",
-            lastName: "Unknown",
-            middleName: "",
+            given: "Unknown",
+            family: "Unknown",
+            middle: "",
             suffix: ""
         };
         contributors.push(newContributor);
@@ -217,35 +217,26 @@ export interface CSLInterface extends CSLGeneralFields {
     "event-place": string;
     "original-publisher-place": string;
     "publisher-place": string;
-    
-    // Contributor variables *********
-    author: string;
-    chair: string;
-    "collection-editor": string;
-    compiler: string;
-    composer: string;
-    "container-author": string;
-    contributor: string;
-    curator: string;
-    director: string;
-    editor: string;
-    "editorial-director": string;
-    "editor-translator": string;
-    "executive-producer": string;
-    guest: string;
-    host: string;
-    illustrator: string;
-    interviewer: string;
-    narrator: string;
-    organizer: string;
-    "original-author": string;
-    performer: string;
-    producer: string;
-    recipient: string;
-    "reviewed-author": string;
-    "script-writer": string;
-    "series-creator": string;
-    translator: string;
+}
+
+async function HandleContributors(form: any) {
+    form.author = form.contributors
+    .filter((contributor: any) => contributor.role === 'Author')
+    .map((contributor: any) => ({
+      family: contributor.family,
+      middle: contributor.middle,
+      given: contributor.given,
+      suffix: contributor.suffix
+    }));
+  form.editor = form.contributors
+    .filter((contributor: any) => contributor.role === 'Editor')
+    .map((contributor: any) => ({
+      family: contributor.family,
+      middle: contributor.middle,
+      given: contributor.given,
+      suffix: contributor.suffix
+    }));
+  
 }
 
 export async function HandleManualReference(form: any, userId: any) {
@@ -255,90 +246,87 @@ export async function HandleManualReference(form: any, userId: any) {
     try {
         await formatDate(form);
         await formatLocation(form);
-        console.log(form)
+        
+        // Sorts through the contributor array of objects and assigns them properly
+        await HandleContributors(form);
+        const bibResponse = await CSLBibModel.create(form);
+        await AddRef2User(userId, bibResponse._id);
+        console.log(bibResponse)
 
+        const formattedCslJson = {
+            ...bibResponse,
+
+        }
         const cslJsonData = {
-            id: form._id,
-            type: form.type,
-            title: form.title,
+            id: bibResponse._id,
+            type: bibResponse.type,
+            title: bibResponse.title,
             abstract: "",
-            annote: form.annote,
+            annote: bibResponse.annote,
             archive: "",
-            author: form.contributors
-            .filter((contributor: any) => contributor.role === 'Author')
-            .map((contributor: any) => ({
-            lastName: contributor.lastName,
-            middleName: contributor.middleName,
-            firstName: contributor.firstName,
-            suffix: contributor.suffix
+            author: bibResponse.contributors
+                .filter((contributor: any) => contributor.role === 'Author')
+                .map((contributor: any) => ({
+                family: contributor.family,
+                middle: contributor.middle,
+                given: contributor.given,
+                suffix: contributor.suffix
             })),
-            editor: form.contributors
-            .filter((contributor: any) => contributor.role === 'Editor')
-            .map((contributor: any) => ({
-                lastName: contributor.lastName,
-                middleName: contributor.middleName,
-                firstName: contributor.firstName,
-            suffix: contributor.suffix
+            editor: bibResponse.contributors
+                .filter((contributor: any) => contributor.role === 'Editor')
+                .map((contributor: any) => ({
+                family: contributor.family,
+                middle: contributor.middle,
+                given: contributor.given,
+                suffix: contributor.suffix
             })),
-            translator: form.contributors
-            .filter((contributor: any) => contributor.role === 'Translator')
-            .map((contributor: any) => ({
-                lastName: contributor.lastName,
-                middleName: contributor.middleName,
-                firstName: contributor.firstName,
-            suffix: contributor.suffix
+            translator: bibResponse.contributors
+                .filter((contributor: any) => contributor.role === 'Translator')
+                .map((contributor: any) => ({
+                family: contributor.lastName,
+                middle: contributor.middleName,
+                given: contributor.firstName,
+                suffix: contributor.suffix
             })),
-            compiler: form.contributors
-            .filter((contributor: any) => contributor.role === 'Compiler')
-            .map((contributor: any) => ({
-                lastName: contributor.lastName,
-            middleName: contributor.middleName,
-            firstName: contributor.firstName,
-            suffix: contributor.suffix
+            compiler: bibResponse.contributors
+                .filter((contributor: any) => contributor.role === 'Compiler')
+                .map((contributor: any) => ({
+                family: contributor.family,
+                middle: contributor.middle,
+                given: contributor.given,
+                suffix: contributor.suffix
             })), 
-            issued: parse(form.datePublished?.toISOString().split('T')[0]),
-            accessed: parse(form.dateAccessed),
-            eventDate: parse(form["event-date"]),
-            availableDate: parse(form["available-date"]),
-            publisher: form.publisher,
-            "container-title": form["container-title"], // container-title is the title of the Journal (if journal article) or Book (if book chapter)
-            DOI: form.DOI,
-            URL: form.URL,
-            ISBN: form.ISBN,
-            ISSN: form.ISSN,
-            "archive-place": form["archive-place"],
-            "event-place": form["event-place"],
-            "original-publisher-place": form["original-publisher-place"],
-            "publisher-place": form["publisher-place"],
-            contributors: form.contributors,
-            indextitle: form.indextitle,
-            chapter: form.chapter,
-            edition: form.edition,
-            howpublished: form.howpublished,
-            institution: form.institution,
-            note: form.note,
-            number: form.number,
-            organization: form.organization,
-            pages: form.pages,
-            school: form.school,
-            series: form.series,
-            volumes: form.volumes,
-            short_title: form.short_title,
-            volume: form.volume,
-            url: form.url,
-            running_time: form.running_time,
-            format: form.format,
-            image_url: form.image_url,
-            issue: form.issue,
-            api_source: form.api_source,
+            issued: parse(bibResponse.datePublished?.toISOString().split('T')[0]),
+            accessed: parse(bibResponse.dateAccessed?.toISOString().split('T')[0]),
+            eventDate: parse(bibResponse["event-date"]),
+            availableDate: parse(bibResponse["available-date"]),
+            publisher: bibResponse.publisher,
+            "container-title": bibResponse["container-title"], // container-title is the title of the Journal (if journal article) or Book (if book chapter)
+            DOI: bibResponse.DOI,
+            URL: bibResponse.URL,
+            ISBN: bibResponse.ISBN,
+            ISSN: bibResponse.ISSN,
+            "archive-place": bibResponse["archive-place"],
+            "event-place": bibResponse["event-place"],
+            "original-publisher-place": bibResponse["original-publisher-place"],
+            "publisher-place": bibResponse["publisher-place"],
+            chapter: bibResponse.chapter,
+            edition: bibResponse.edition,
+            note: bibResponse.note,
+            number: bibResponse.number,
+            "number-of-pages": bibResponse["number-of-pages"],
+            series: bibResponse.series,
+            volumes: bibResponse.volumes,
+            volume: bibResponse.volume,
+            issue: bibResponse.issue,
+            running_time: bibResponse.running_time,
+            format: bibResponse.format,
+            image_url: bibResponse.image_url,
+            api_source: bibResponse.api_source,
         };
 
-        const bibResponse = await new CSLBibModel(cslJsonData);
-        await AddRef2User(userId, bibResponse._id);
-
-        console.log(bibResponse)
         console.log(cslJsonData)
-        await HandleInitialFormat(cslJsonData);
+        await HandleInitialFormat(bibResponse);
 
       } catch (error) {
         console.error(error)

@@ -21,13 +21,13 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     role: {
       type: String
     },
-    firstName: {
+    given: {
       type: String
     },
-    lastName: {
+    family: {
       type: String
     },
-    middleName: {
+    middle: {
       type: String
     },
     suffix: {
@@ -132,7 +132,7 @@ export interface CSLGeneralFields {
   submitted: Date; // Date item was submitted for publication
 
   // Contributor variables *********
-  author: string;
+  author: Contributor[];
   chair: string;
   "collection-editor": string;
   compiler: string;
@@ -141,7 +141,7 @@ export interface CSLGeneralFields {
   contributor: string;
   curator: string;
   director: string;
-  editor: string;
+  editor: Contributor[];
   "editorial-director": string;
   "editor-translator": string;
   "executive-producer": string;
@@ -322,34 +322,8 @@ const CSLBibSchema = new Schema({
   dateOriginal: Date,
   dateSubmitted: Date,
   contributors: [ContributorSchema],
-  // Contributor variables *********
   author: [ContributorSchema],
-  chair: [ContributorSchema],
-  "collection-editor": [ContributorSchema],
-  compiler: [ContributorSchema],
-  composer: [ContributorSchema],
-  "container-author": [ContributorSchema],
-  contributor: [ContributorSchema],
-  curator: [ContributorSchema],
-  director: [ContributorSchema],
   editor: [ContributorSchema],
-  "editorial-director": [ContributorSchema],
-  "editor-translator": [ContributorSchema],
-  "executive-producer": [ContributorSchema],
-  guest: [ContributorSchema],
-  host: [ContributorSchema],
-  illustrator: [ContributorSchema],
-  interviewer: [ContributorSchema],
-  narrator: [ContributorSchema],
-  organizer: [ContributorSchema],
-  "original-author": [ContributorSchema],
-  performer: [ContributorSchema],
-  producer: [ContributorSchema],
-  recipient: [ContributorSchema],
-  "reviewed-author": [ContributorSchema],
-  "script-writer": [ContributorSchema],
-  "series-creator": [ContributorSchema],
-  translator: [ContributorSchema],
   organization: String,
   series: String,
   type: String,

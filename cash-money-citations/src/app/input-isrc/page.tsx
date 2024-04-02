@@ -103,20 +103,28 @@ function InputCDDB() {
         let month = "";
         let year = "";
         let monthInt = 0;
-        //Splitting the publishedDate into month, year, day if appropriate
-        if (item['first-release-date'].includes("-")){
-            publishedArray = item['first-release-date'].split("-");
-            year = publishedArray[0];
-            monthInt = parseInt(publishedArray[1]);
-            monthInt = monthInt - 1;
-            month = monthInt.toString();
-            day = publishedArray[2].replace("0", "");
+        //Splitting the release date into month, year, day if appropriate
+        if (item['first-release-date']){
+            if (item['first-release-date'].includes("-")){
+                publishedArray = item['first-release-date'].split("-");
+                year = publishedArray[0];
+                monthInt = parseInt(publishedArray[1]);
+                monthInt = monthInt - 1;
+                month = monthInt.toString();
+                day = publishedArray[2].replace("0", "");
+            }
+            else {
+                month = "0";
+                day = "1"
+                year = item.volumeInfo.publishedDate;
+            }
         }
         else {
             month = "0";
-            day = "1"
-            year = item.volumeInfo.publishedDate;
+            day = "1";
+            year = "0";
         }
+        
 
         let musicReference: any = {
             type: "song",

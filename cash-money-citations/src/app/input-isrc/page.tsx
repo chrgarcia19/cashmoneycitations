@@ -13,7 +13,9 @@ function InputCDDB() {
     const router = useRouter();
     const errorItem: any = [
         {
-            isrcs: ["Please enter a valid ISRC"],
+            ['artist-credit']: {
+                name: "Unknown"
+            },
             title: "Unknown"
         }
     ]
@@ -38,7 +40,7 @@ function InputCDDB() {
     };
 
     const addToDB = async (item: any) => {
-        /*
+        
         let i = 0;
         let newContributor: Contributor = {
             role: "",
@@ -49,22 +51,45 @@ function InputCDDB() {
         };
         let contributors = new Array<Contributor>();
 
-        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.author) {
-            for (i; i<item.author.length; i++) {
-                newContributor = {
-                    role: "Author",
-                    firstName: item.author[i].given,
-                    lastName: item.author[i].family,
-                    middleName: "",
-                    suffix: ""
-                };
+        //If item.artist-credit is populated, populate the contributor array
+        if (item['artist-credit']) {
+            for (i; i<item['artist-credit'].length; i++) {
+                if (/\s/.test(item['artist-credit'][i].name)) {
+                    let names = item['artist-credit'][i].name.split(" ");
+                    if (names.length === 3) {
+                        newContributor = {
+                            role: "Performer",
+                            firstName: names[0],
+                            lastName: names[1],
+                            middleName: names[2],
+                            suffix: ""
+                        };
+                    }
+                    else {
+                        newContributor = {
+                            role: "Performer",
+                            firstName: names[0],
+                            lastName: names[1],
+                            middleName: "",
+                            suffix: ""
+                        };
+                    }
+                }
+                else {
+                    newContributor = {
+                        role: "Performer",
+                        firstName: item['artist-credit'][i].name,
+                        lastName: "",
+                        middleName: "",
+                        suffix: ""
+                    };
+                }
                 contributors.push(newContributor);
             }
         }
         else {
             newContributor = {
-                role: "Author",
+                role: "Performer",
                 firstName: "",
                 lastName: "",
                 middleName: "",
@@ -73,59 +98,43 @@ function InputCDDB() {
             contributors.push(newContributor);
         }
 
+        let publishedArray = [];
         let day = "";
         let month = "";
         let year = "";
         let monthInt = 0;
-        if (item['published-online']['date-parts'][0].length === 3) {
-            monthInt = parseInt(item['published-online']['date-parts'][0][1].toString());
+        //Splitting the publishedDate into month, year, day if appropriate
+        if (item['first-release-date'].includes("-")){
+            publishedArray = item['first-release-date'].split("-");
+            year = publishedArray[0];
+            monthInt = parseInt(publishedArray[1]);
             monthInt = monthInt - 1;
             month = monthInt.toString();
-            day = item['published-online']['date-parts'][0][2].toString();
-            year = item['published-online']['date-parts'][0][0].toString();
+            day = publishedArray[2].replace("0", "");
         }
-        else if (item['published-online']['date-parts'][0].length === 2) {
-            monthInt = parseInt(item['published-online']['date-parts'][0][1].toString());
-            monthInt = monthInt - 1;
-            month = monthInt.toString();
-            day = "1";
-            year = item['published-online']['date-parts'][0][0].toString();
-        }
-        else if (item['published-online']['date-parts'][0].length === 1) {
-            day = "1";
+        else {
             month = "0";
-            year = item['published-online']['date-parts'][0][0].toString();
-        }
-        else { 
-            month = "1";
-            day = "1";
-            year = "2000";
+            day = "1"
+            year = item.volumeInfo.publishedDate;
         }
 
-        let doiReference: any = {
-            type: "article-journal",
+        let musicReference: any = {
+            type: "song",
             title: item.title,
-            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
+            image_url: "https://cdn4.picryl.com/photo/1881/01/01/erin-38c0d0-1024.jpg",
             contributors: contributors,
-            publisher: item.publisher,
+            publisher: "",
             volume: item.volume,
             month_published: month,
             day_published: day,
             year_published: year,
-            doi: item.DOI,
-            issn: item.issn,
-            issnType: item['issn-type'],
-            pages: item.page,
-            indextitle: "",
             urldate: new Date(),
-            abstract: item.abstract,
-            apiSource: item.source
         };
 
-        HandleManualReference(doiReference, session?.user?.id)
+        HandleManualReference(musicReference, session?.user?.id)
         router.push("/reference-table");
         router.refresh();
-        */
+        
     }
 
     return (
@@ -147,7 +156,7 @@ function InputCDDB() {
                 <table className="table-auto mt-4 border-solid">
                 <thead className="bg-zinc-700 text-white">
                   <tr>
-                    <th>Main Artist</th>
+                    <th>Artists</th>
                     <th>Title</th>
                     <th>Action</th>
                   </tr>
@@ -155,7 +164,7 @@ function InputCDDB() {
                 <tbody>
                     {data.map(item => (
                         <tr key={item.id} className="border-b hover:bg-gray-100">
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item['artist-credit'][0].name}</td>
+                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item['artist-credit'].map((artist: { name: String; }) => artist.name).join(', ')}</td>
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title}</td>
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
                                 <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>

@@ -82,11 +82,21 @@ interface ReferenceFormData extends CSLGeneralFields {
   monthPublished: string,
   yearPublished: string,
   dayPublished: string,
-  issued: Date,
+  monthEvent: string,
+  yearEvent: string,
+  dayEvent: string,
   monthAccessed: string,
   yearAccessed: string,
   dayAccessed: string,
-  accessed: Date,
+  monthAvailable: string,
+  yearAvailable: string,
+  dayAvailable: string,
+  monthOriginal: string,
+  yearOriginal: string,
+  dayOriginal: string,
+  monthSubmitted: string,
+  yearSubmitted: string,
+  daySubmitted: string,
   contributors: Contributor[];
   running_time: string;
   format: string;
@@ -134,14 +144,26 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     volume: referenceForm.volume, // Associated volume
     "number-of-volumes": referenceForm["number-of-volumes"], // Total # of volumes
     edition: referenceForm.edition,
+    /* Date Fields */
     monthPublished: referenceForm.monthPublished, // Date published
     yearPublished: referenceForm.yearPublished, // Date published
     dayPublished: referenceForm.dayPublished, // Date published
-    monthAccessed: referenceForm.monthAccessed,
-    yearAccessed: referenceForm.yearAccessed,
-    dayAccessed: referenceForm.dayAccessed,
-    datePublished: referenceForm.issued,
-    dateAccessed: referenceForm.accessed,
+    monthAccessed: referenceForm.monthAccessed, // Date accessed
+    yearAccessed: referenceForm.yearAccessed, // Date accessed
+    dayAccessed: referenceForm.dayAccessed, // Date accessed
+    monthEvent: referenceForm.monthEvent, // Date of event
+    yearEvent: referenceForm.yearEvent, // Date of event
+    dayEvent: referenceForm.dayEvent, // Date of event
+    monthAvailable: referenceForm.monthAvailable, // Date available
+    yearAvailable: referenceForm.yearAvailable, // Date available
+    dayAvailable: referenceForm.dayAvailable, // Date available
+    monthOriginal: referenceForm.monthOriginal, // Date of original
+    yearOriginal: referenceForm.yearOriginal, // Date of original
+    dayOriginal: referenceForm.dayOriginal, // Date of original
+    monthSubmitted: referenceForm.monthSubmitted, // Date submitted
+    yearSubmitted: referenceForm.yearSubmitted, // Date submitted
+    daySubmitted: referenceForm.daySubmitted, // Date submitted
+    /* End Date Fields */
     annote: referenceForm.annote,
     contributors: referenceForm.contributors,
     editor: referenceForm.editor,

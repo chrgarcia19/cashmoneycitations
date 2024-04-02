@@ -82,9 +82,11 @@ interface ReferenceFormData extends CSLGeneralFields {
   monthPublished: string,
   yearPublished: string,
   dayPublished: string,
+  issued: Date,
   monthAccessed: string,
   yearAccessed: string,
   dayAccessed: string,
+  accessed: Date,
   contributors: Contributor[];
   running_time: string;
   format: string;

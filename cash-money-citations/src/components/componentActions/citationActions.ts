@@ -169,6 +169,7 @@ async function formatDate(form: any) {
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
         const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
         form.datePublished = datePublished;
+        form.issued = datePublished;
     }
 
     if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {
@@ -232,8 +233,7 @@ async function HandleContributors(form: any) {
     }
 
     form.author = filterAndMapContributors(form, 'Author');
-    form.editor = filterAndMapContributors(form, 'Editor');
-
+    form.editor = filterAndMapContributors(form, 'Editor');    
 }
 
 
@@ -254,8 +254,9 @@ export async function HandleManualReference(form: any, userId: any) {
 
         const formattedCslJson = {
             ...bibResponse,
-
-        }
+            issued: parse(bibResponse.datePublished?.toISOString().split('T')[0]),
+            accessed: parse(bibResponse.dateAccessed?.toISOString().split('T')[0]),       
+         }
         const cslJsonData = {
             id: bibResponse._id,
             type: bibResponse.type,

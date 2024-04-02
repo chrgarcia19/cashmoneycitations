@@ -169,17 +169,39 @@ async function formatDate(form: any) {
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
         const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
         form.datePublished = datePublished;
-        form.issued = datePublished;
+        form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 
     if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {
         const dateAccessed = new Date(form.yearAccessed, form.monthAccessed, form.dayAccessed);
-        form.dateAccessed = dateAccessed.toISOString().split('T')[0];
+        form.dateAccessed = dateAccessed;
+        form.accessed = parse(dateAccessed.toISOString().split('T')[0]);
     }
 
     if (form.yearEvent || form.monthEvent || form.dayEvent) {
         const dateEvent = new Date(form.yearEvent, form.monthEvent, form.dayEvent);
         form.dateEvent = dateEvent.toISOString().split('T')[0];
+        form["event-date"] = parse(dateEvent.toISOString().split('T')[0]);
+    }
+
+    if (form.yearAvailable || form.monthAvailable || form.dayAvailable) {
+        const dateAvailable = new Date(form.yearAvailable, form.monthAvailable, form.dayAvailable);
+        form.dateAvailable = dateAvailable;
+        form["available-date"] = parse(dateAvailable.toISOString().split('T')[0]);
+    }
+
+    // CHANGE TO ORIGINAL-DATE
+    if (form.yearPublished || form.monthPublished || form.dayPublished) {
+        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
+        form.datePublished = datePublished;
+        form.issued = parse(datePublished.toISOString().split('T')[0]);
+    }
+
+    // CHANGE TO SUBMITTED
+    if (form.yearPublished || form.monthPublished || form.dayPublished) {
+        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
+        form.datePublished = datePublished;
+        form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 }
 
@@ -233,7 +255,8 @@ async function HandleContributors(form: any) {
     }
 
     form.author = filterAndMapContributors(form, 'Author');
-    form.editor = filterAndMapContributors(form, 'Editor');    
+    form.editor = filterAndMapContributors(form, 'Editor');
+    
 }
 
 
@@ -250,83 +273,10 @@ export async function HandleManualReference(form: any, userId: any) {
         await HandleContributors(form);
         const bibResponse = await CSLBibModel.create(form);
         await AddRef2User(userId, bibResponse._id);
-        console.log(bibResponse)
+        // Add DB id to form
+        form.id = bibResponse._id;
 
-        const formattedCslJson = {
-            ...bibResponse,
-            issued: parse(bibResponse.datePublished?.toISOString().split('T')[0]),
-            accessed: parse(bibResponse.dateAccessed?.toISOString().split('T')[0]),       
-         }
-        const cslJsonData = {
-            id: bibResponse._id,
-            type: bibResponse.type,
-            title: bibResponse.title,
-            abstract: "",
-            annote: bibResponse.annote,
-            archive: "",
-            author: bibResponse.contributors
-                .filter((contributor: any) => contributor.role === 'Author')
-                .map((contributor: any) => ({
-                family: contributor.family,
-                middle: contributor.middle,
-                given: contributor.given,
-                suffix: contributor.suffix
-            })),
-            editor: bibResponse.contributors
-                .filter((contributor: any) => contributor.role === 'Editor')
-                .map((contributor: any) => ({
-                family: contributor.family,
-                middle: contributor.middle,
-                given: contributor.given,
-                suffix: contributor.suffix
-            })),
-            translator: bibResponse.contributors
-                .filter((contributor: any) => contributor.role === 'Translator')
-                .map((contributor: any) => ({
-                family: contributor.lastName,
-                middle: contributor.middleName,
-                given: contributor.firstName,
-                suffix: contributor.suffix
-            })),
-            compiler: bibResponse.contributors
-                .filter((contributor: any) => contributor.role === 'Compiler')
-                .map((contributor: any) => ({
-                family: contributor.family,
-                middle: contributor.middle,
-                given: contributor.given,
-                suffix: contributor.suffix
-            })), 
-            issued: parse(bibResponse.datePublished?.toISOString().split('T')[0]),
-            accessed: parse(bibResponse.dateAccessed?.toISOString().split('T')[0]),
-            eventDate: parse(bibResponse["event-date"]),
-            availableDate: parse(bibResponse["available-date"]),
-            publisher: bibResponse.publisher,
-            "container-title": bibResponse["container-title"], // container-title is the title of the Journal (if journal article) or Book (if book chapter)
-            DOI: bibResponse.DOI,
-            URL: bibResponse.URL,
-            ISBN: bibResponse.ISBN,
-            ISSN: bibResponse.ISSN,
-            "archive-place": bibResponse["archive-place"],
-            "event-place": bibResponse["event-place"],
-            "original-publisher-place": bibResponse["original-publisher-place"],
-            "publisher-place": bibResponse["publisher-place"],
-            chapter: bibResponse.chapter,
-            edition: bibResponse.edition,
-            note: bibResponse.note,
-            number: bibResponse.number,
-            "number-of-pages": bibResponse["number-of-pages"],
-            series: bibResponse.series,
-            volumes: bibResponse.volumes,
-            volume: bibResponse.volume,
-            issue: bibResponse.issue,
-            running_time: bibResponse.running_time,
-            format: bibResponse.format,
-            image_url: bibResponse.image_url,
-            api_source: bibResponse.api_source,
-        };
-
-        console.log(cslJsonData)
-        await HandleInitialFormat(bibResponse);
+        await HandleInitialFormat(form);
 
       } catch (error) {
         console.error(error)

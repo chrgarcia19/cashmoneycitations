@@ -1,26 +1,30 @@
-"use client"
+'use client'
 
 import React, { useEffect, useRef } from 'react';
 import lottie from 'lottie-web';
 
-const MyAnimationComponent: React.FC = () => {
+// Define the props with a more specific type
+interface MyAnimationComponentProps {
+  imgPath: string; // Specify that imgPath must be a string
+}
+
+const MyAnimationComponent = ({ imgPath }: MyAnimationComponentProps) => {
   const animationContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (animationContainer.current) {
       const anim = lottie.loadAnimation({
-        container: animationContainer.current,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        // Adjust the path to your animation file
-        path: '/animations/booksAnimation.json',
+        container: animationContainer.current, // The DOM element to contain the animation
+        renderer: 'svg', // Render as SVG
+        loop: true, // Loop the animation
+        autoplay: true, // Start playing the animation as soon as it's loaded
+        path: imgPath, // Use the imgPath string directly
       });
 
-      // Optional: Clean up animation on component unmount
+      // Optional: Clean up the animation on component unmount
       return () => anim.destroy();
     }
-  }, []); // The empty array ensures this effect runs only once after the initial render
+  }, [imgPath]); // Depend on imgPath to reload the animation if the prop changes
 
   return <div ref={animationContainer} />;
 };

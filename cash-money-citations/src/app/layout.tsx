@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import NavBar from '../components/NavBar';
 import { AuthProvider } from "./Providers"
 import SideBar from "@/components/SideBar";
+import IconSidebar from "@/components/sidebar-components/IconSidebar";
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
@@ -23,6 +24,8 @@ export default async function RootLayout({
                 <div className="content">
                     <AuthProvider>{children}</AuthProvider>
                 </div>
+
+                {/* <IconSidebar/> */}
 
                 <footer className="fixed left-32 bottom-0 right-0 w-screen px-20 py-4 text-center text-sm text-gray-500 bg-gray-200">
                     <p>

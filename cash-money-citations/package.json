@@ -21,6 +21,7 @@
     "cors": "^2.8.5",
     "formidable": "^3.5.1",
     "jsonwebtoken": "^9.0.2",
+    "lottie-web": "^5.12.2",
     "mongoose": "^7.4.2",
     "next": "latest",
     "next-auth": "^4.24.5",

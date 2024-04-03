@@ -234,14 +234,6 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
     }
 }
 
-// Interface for creating bibliographies/citations
-export interface CSLInterface extends CSLGeneralFields {
-    "archive-place": string;
-    "event-place": string;
-    "original-publisher-place": string;
-    "publisher-place": string;
-}
-
 async function HandleContributors(form: any) {
     function filterAndMapContributors(form: any, role: string) {
         return form.contributors
@@ -256,10 +248,32 @@ async function HandleContributors(form: any) {
 
     form.author = filterAndMapContributors(form, 'Author');
     form.editor = filterAndMapContributors(form, 'Editor');
-    
+    form.chair = filterAndMapContributors(form, 'Chair');
+    form["collection-editor"] = filterAndMapContributors(form, 'Collection Editor');
+    form.compiler = filterAndMapContributors(form, 'Compiler');
+    form.composer = filterAndMapContributors(form, 'Composer');
+    form["container-author"] = filterAndMapContributors(form, 'Container Author');
+    form.contributor = filterAndMapContributors(form, 'Contributor');
+    form.curator = filterAndMapContributors(form, 'Curator');
+    form.director = filterAndMapContributors(form, 'Director');
+    form["editorial-director"] = filterAndMapContributors(form, 'Editorial Director');
+    form["editor-translator"] = filterAndMapContributors(form, 'Editor Translator');
+    form["executive-producer"] = filterAndMapContributors(form, 'Executive Producer');
+    form.guest = filterAndMapContributors(form, 'Guest');
+    form.host = filterAndMapContributors(form, 'Host');
+    form.illustrator = filterAndMapContributors(form, 'Illustrator');
+    form.interviewer = filterAndMapContributors(form, 'Interviewer');
+    form.narrator = filterAndMapContributors(form, 'Narrator');
+    form.organizer = filterAndMapContributors(form, 'Organizer');
+    form["original-author"] = filterAndMapContributors(form, 'Original Author');
+    form.performer = filterAndMapContributors(form, 'Performer');
+    form.producer = filterAndMapContributors(form, 'Producer');
+    form.recipient = filterAndMapContributors(form, 'Recipient');
+    form["reviewed-author"] = filterAndMapContributors(form, 'Reviewed Author');
+    form["script-writer"] = filterAndMapContributors(form, 'Script Writer');
+    form["series-creator"] = filterAndMapContributors(form, 'Series Creator');
+    form.translator = filterAndMapContributors(form, 'Translator');
 }
-
-
 
 export async function HandleManualReference(form: any, userId: any) {
 
@@ -276,6 +290,7 @@ export async function HandleManualReference(form: any, userId: any) {
         // Add DB id to form
         form.id = bibResponse._id;
 
+        console.log(form)
         await HandleInitialFormat(form);
 
       } catch (error) {

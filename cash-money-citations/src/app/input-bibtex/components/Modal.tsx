@@ -96,14 +96,23 @@ export function UploadBibModal() {
     return (
     <>
         <Button onPress={onOpen}>Upload Bib(La)Tex</Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
+        <Modal
+          isOpen={isOpen} 
+          onOpenChange={onOpenChange}
+          backdrop="transparent"
+          radius="lg"
+          size="3xl"
+          shadow="lg"
+        >
+          <ModalContent className="h-[90%]">
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Bib(La)Tex Input</ModalHeader>
-                <Button color="primary" variant="shadow" onPress={handleButtonClick}>
-                    Upload .Bib
-                </Button>
+                <div className="flex flex-wrap gap-4 items-center">
+                  <ModalHeader className="flex flex-col gap-1">Bib(La)Tex Input</ModalHeader>
+                  <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
+                      Upload .Bib File
+                  </Button>
+                </div>
                 <input
                   type="file"
                   accept=".bib"
@@ -117,10 +126,8 @@ export function UploadBibModal() {
                     <Textarea
                      label="Enter Bib(La)Tex here or upload a .Bib file above"
                      variant="bordered"
-                     classNames={{
-                        base: "max-w-md",
-                        input: "resize-y min-h-[80px]"
-                     }}
+                     minRows={12}
+                     maxRows={48}
                      value={parsedData}
                      onValueChange={setParsedData}
                     />

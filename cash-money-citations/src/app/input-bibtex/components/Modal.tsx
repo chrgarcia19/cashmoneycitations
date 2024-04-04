@@ -1,12 +1,33 @@
 'use client'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, useRef } from "react";
+import { ParseBibTexUpload } from "./BibFileUpload";
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     const [value, setValue] = useState("");
+    const [file, setFile] = useState<File>();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleButtonClick = () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
+      }
+    }
+
+    const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        await setFile(e.target.files[0])
+        if (e.target.files.length > 0) {
+          const formData = new FormData();
+          formData.append("file", e.target.files[0] as File);
+          const data = await ParseBibTexUpload(formData);
+        }
+      }
+    };
+
     return (
     <>
         <Button onPress={onOpen}>Upload Bib(La)Tex</Button>
@@ -15,9 +36,16 @@ export function UploadBibModal() {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">Bib(La)Tex Input</ModalHeader>
-                <Button color="primary" variant="shadow" onPress={onClose} >
+                <Button color="primary" variant="shadow" onPress={handleButtonClick}>
                     Upload .Bib
                 </Button>
+                <input
+                  type="file"
+                  style={{ display: 'none'}}
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                />
+                
                 <ModalBody>
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <Textarea

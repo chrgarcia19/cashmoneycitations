@@ -8,6 +8,7 @@ export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [parsedData, setParsedData] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Load data from localStorage when the component mounts
     useEffect(() => {
@@ -16,6 +17,17 @@ export function UploadBibModal() {
           setParsedData(cachedData);
       }
     }, []);
+
+    // Save data to localStorage whenever parsedData changes
+    useEffect(() => {
+        if (debounceTimeoutRef.current) {
+            clearTimeout(debounceTimeoutRef.current);
+        }
+
+        debounceTimeoutRef.current = setTimeout(() => {
+            localStorage.setItem('bibtexData', parsedData);
+        }, 2000); // 2 seconds delay
+    }, [parsedData]);
 
     const handleButtonClick = () => {
       if (fileInputRef.current) {

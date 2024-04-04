@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import NavBar from "../components/NavBar";
 import { AuthProvider } from "./Providers";
 import SideBar from "@/components/SideBar";
-import IconSidebar from "@/components/sidebar-components/IconSidebar";
+
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {

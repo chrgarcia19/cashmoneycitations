@@ -225,9 +225,9 @@ li {
 }
 
 .content {
-  margin-left: 256px;
+  /* margin-left: 256px;
   margin-bottom: 72px;
-  margin-top: 96px;
+  margin-top: 96px; */
   justify-content: center;
   align-items: center;
 }
@@ -358,3 +358,5 @@ text-slate-950 hover:text-white
   mx-2;
 }
 }
+
+/* card styling homepage */

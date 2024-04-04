@@ -1,42 +1,104 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { BsTable } from "react-icons/bs";
+import { BsTable, BsList } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
 import { FaBook, FaBarcode } from "react-icons/fa";
-import { getServerAuthSession } from "@/lib/auth";
 
-const SideBarItem = ({ href, icon, label } : any) => (
-  <li>
-    <Link href={href}>
-      <div className="sidebar-icon group">
-        {icon}
-        <span className="sidebar-tooltip group-hover:scale-100">{label}</span>
-      </div>
-    </Link>
-  </li>
-);
+const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false); // State to manage icons visibility
 
-export default async function SideBar() {
-  const authSession = await getServerAuthSession();
+  // Toggle function to show/hide icons
+  const toggleIcons = () => setIsOpen(!isOpen);
 
   return (
-    <aside className='fixed top-0 left-0 h-screen w-16 flex flex-col bg-blue-300 dark:bg-gray-800 text-white shadow-lg z-40'>
-      <div className="flex flex-col items-center justify-start pt-10">
-        {authSession?.user && (
-          <ul className="space-y-2">
-            <SideBarItem href="/new" icon={<HiDocumentAdd size="28" />} label="Add Reference" />
-            <SideBarItem href="/reference-gallery" icon={<GrGallery size="28" />} label="Gallery View" />
-            <SideBarItem href="/reference-table" icon={<BsTable size="28" />} label="Table View" />
-            <SideBarItem href="/tag-center" icon={<IoPricetags size="28" />} label="Tag Center" />
-            <SideBarItem href="/input-doi" icon={<SiDoi size="28" />} label="DOI Input" />
-            <SideBarItem href="/input-isbn" icon={<FaBook size="28" />} label="ISBN Input" />
-            <SideBarItem href="/input-issn" icon={<FaBarcode size="28" />} label="ISSN Input" />
-          </ul>
-        )}
+    <div className="fixed top-28 flex flex-col items-center text-white transition-all ease-in-out duration-300">
+      {/* Dedicated Toggle Button */}
+      <div className="p-4">
+        <button
+          onClick={toggleIcons}
+          className="mb-4 flex items-center justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition duration-300 ease-in-out"
+        >
+          <BsList className="text-xl" size={32} />
+        </button>
       </div>
-    </aside>
+
+      {/* Icons container, visibility controlled by isOpen state */}
+      <div
+        className={`flex flex-col items-center transition-all ease-in-out duration-300 ${
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
+        }`}
+      >
+        <SideBarIcon
+          href="/new"
+          icon={<HiDocumentAdd size="28" />}
+          tooltip="Add Reference"
+        />
+        <Divider />
+        <SideBarIcon
+          href="/reference-gallery"
+          icon={<GrGallery size="28" />}
+          tooltip="Gallery View"
+        />
+        <SideBarIcon
+          href="/reference-table"
+          icon={<BsTable size="28" />}
+          tooltip="Table View"
+        />
+        <Divider />
+        <SideBarIcon
+          href="/tag-center"
+          icon={<IoPricetags size="28" />}
+          tooltip="Tag Center"
+        />
+        <Divider />
+        <SideBarIcon
+          href="input-doi"
+          icon={<SiDoi size="28" />}
+          tooltip="DOI Input"
+        />
+        <SideBarIcon
+          href="input-isbn"
+          icon={<FaBook size="28" />}
+          tooltip="ISBN Input"
+        />
+        <SideBarIcon
+          href="input-isbn"
+          icon={<FaBarcode size="28" />}
+          tooltip="ISSN Input"
+        />
+      </div>
+    </div>
   );
-}
+};
+
+const SideBarIcon = ({
+  href,
+  icon,
+  tooltip,
+}: {
+  href: string;
+  icon: JSX.Element;
+  tooltip?: string;
+}) => (
+  <Link href={href}>
+    <div className="sidebar-icon group">
+      <div className="text-center text-xl cursor-pointer flex items-center justify-center h-12 w-12 mx-auto group-hover:scale-125 transition-transform duration-200">
+        {icon}
+      </div>
+      {tooltip && (
+        <span className="sidebar-tooltip group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {tooltip}
+        </span>
+      )}
+    </div>
+  </Link>
+);
+
+const Divider = () => <hr className="my-2 border-gray-700 w-full" />;
+
+export default Sidebar;

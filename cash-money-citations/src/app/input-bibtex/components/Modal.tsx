@@ -1,16 +1,21 @@
 'use client'
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { ParseBibTexUpload } from "./BibFileUpload";
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
-    const [value, setValue] = useState("");
-    const [file, setFile] = useState<File>();
     const [parsedData, setParsedData] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Load data from localStorage when the component mounts
+    useEffect(() => {
+      const cachedData = localStorage.getItem('bibtexData');
+      if (cachedData) {
+          setParsedData(cachedData);
+      }
+    }, []);
 
     const handleButtonClick = () => {
       if (fileInputRef.current) {
@@ -20,13 +25,16 @@ export function UploadBibModal() {
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
-        await setFile(e.target.files[0])
-        if (e.target.files.length > 0) {
-          const formData = new FormData();
-          formData.append("file", e.target.files[0] as File);
-          const parsedBibTex = await ParseBibTexUpload(formData);
-          setParsedData(parsedBibTex);
-        }
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append("file", file as File);
+
+        const parsedBibTex = await ParseBibTexUpload(formData);
+        setParsedData(parsedBibTex);
+
+        // Save users input to localStorage
+        localStorage.setItem('bibtexData', parsedBibTex);
+        
       }
     };
 

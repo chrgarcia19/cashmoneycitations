@@ -2,7 +2,7 @@
 import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
-import { ParseBibTexUpload } from "./BibFileUpload";
+import { ParseBibTexUpload, SaveBibFileToDb } from "./BibFileUpload";
 import {BibLatexParser} from "biblatex-csl-converter"
 
 export function UploadBibModal() {
@@ -69,6 +69,10 @@ export function UploadBibModal() {
 
         
       }
+    };
+
+    const handleSaveToReferences = async () => {
+      await SaveBibFileToDb(parsedData);
     };
 
     // New function to validate data
@@ -141,8 +145,8 @@ export function UploadBibModal() {
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Action
+                  <Button color="primary" onPress={handleSaveToReferences}>
+                    Save to references
                   </Button>
                 </ModalFooter>
               </>

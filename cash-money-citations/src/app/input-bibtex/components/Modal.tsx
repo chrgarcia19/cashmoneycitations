@@ -9,6 +9,7 @@ export function UploadBibModal() {
 
     const [value, setValue] = useState("");
     const [file, setFile] = useState<File>();
+    const [parsedData, setParsedData] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleButtonClick = () => {
@@ -23,7 +24,8 @@ export function UploadBibModal() {
         if (e.target.files.length > 0) {
           const formData = new FormData();
           formData.append("file", e.target.files[0] as File);
-          const data = await ParseBibTexUpload(formData);
+          const parsedBibTex = await ParseBibTexUpload(formData);
+          setParsedData(parsedBibTex);
         }
       }
     };
@@ -55,8 +57,8 @@ export function UploadBibModal() {
                         base: "max-w-md",
                         input: "resize-y min-h-[80px]"
                      }}
-                     value={value}
-                     onValueChange={setValue}
+                     value={parsedData}
+                     onValueChange={setParsedData}
                     />
                 </div>
 

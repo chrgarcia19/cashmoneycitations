@@ -9,7 +9,7 @@ import FormField from "./FormField";
 import DatePicker from "./DatePicker";
 import ContributorForm from "./ContributorForm";
 import { useSession } from "next-auth/react";
-
+import { UploadBibModal } from "@/app/input-bibtex/components/Modal"; 
 
 export enum EntryType {
   Article = 'article',
@@ -236,7 +236,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
           <div className="bg-gray-100 w-2/5 rounded-xl pb-5">
             <div className="flex justify-center items-center">
               {forNewReference && (
-                <h1 className="text-2xl align-middle pt-5">Add Reference</h1>
+                <div>
+                  <h1 className="text-2xl align-middle pt-5">Add Reference</h1>
+                  <UploadBibModal />
+                </div>
               )}
               {!forNewReference && (
                 <h1 className="text-2xl align-middle pt-5">Edit Reference</h1>

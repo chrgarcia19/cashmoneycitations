@@ -131,29 +131,10 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 }
 
 async function HandleInitialFormat(bibResponse: any) {
-    // Converts our mimic CSLBib-JSON schema thing to BibLaTex
-
-    //const toBibTex = new Cite(JSON.stringify(bibResponse))
-    // const bibtexOutput = toBibTex.format('biblatex', {
-    //     format: 'text',
-    //     template: 'biblatex',
-    //     lang: 'en-US'
-    // });
-
     const test = Cite.plugins.input.chain(JSON.stringify(bibResponse), {
         target: '@else/json'
     })
-    const { plugins } = require('@citation-js/core')
-    const config = plugins.config.get('@bibtex')
-
-    //console.log(config.constants.fieldTypes)
-    const toBibTex = new Cite(test)
-     const bibtexOutput = toBibTex.get({
-        format: 'real',
-        type: 'string',
-        style: 'bibtex'
-     })
-    // Converts the BibTex to CSL-JSON
+    
     const cslJson = await toCslJson(test)
     // Adds the CSL-JSON to the existing database collection
     InitializeCslJson(bibResponse.id, cslJson);
@@ -290,7 +271,6 @@ export async function HandleManualReference(form: any, userId: any) {
         // Add DB id to form
         form.id = bibResponse._id;
 
-        console.log(form)
         await HandleInitialFormat(form);
 
       } catch (error) {

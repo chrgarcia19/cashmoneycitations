@@ -336,10 +336,20 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   <FormField labelText={"Collection Title (series)"} fieldName={"collection-title"} fieldValue={form["collection-title"]} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
                 )}
 
-                {/*Pages Field*/}
+                {/*Amount of Pages Field*/}
                 {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
                   || form.type == "article-newspaper") && (
                   <FormField labelText={"Number of Pages"} fieldName={"number-of-pages"} fieldValue={form["number-of-pages"]} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
+                )}
+
+                {/*Page Range Field*/}
+                {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
+                  || form.type == "article-newspaper") && (
+                  <div>
+                    <FormField labelText={"Page Range"} fieldName={"page"} fieldValue={form["page"]} fieldType={"number"} fieldPlaceholder={"Page range"} handleChange={handleChange} />
+                    {/*First page in range*/}
+                    <FormField labelText={"First page in range"} fieldName={"page-first"} fieldValue={form["page-first"]} fieldType={"number"} fieldPlaceholder={"First Page in range"} handleChange={handleChange} />
+                  </div>
                 )}
 
                 {/*Volume Field*/}

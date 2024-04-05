@@ -4,6 +4,7 @@ import {Textarea} from "@nextui-org/react";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { ParseBibTexUpload, SaveBibFileToDb } from "./BibFileUpload";
 import {BibLatexParser} from "biblatex-csl-converter"
+import { useSession } from "next-auth/react";
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -11,12 +12,13 @@ export function UploadBibModal() {
     const [errors, setErrors] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const session = useSession();
 
     // Load data from localStorage when the component mounts
     useEffect(() => {
       const cachedData = localStorage.getItem('bibtexData');
       if (cachedData) {
-          setParsedData(cachedData);
+        setParsedData(cachedData);
       }
     }, []);
 
@@ -72,7 +74,8 @@ export function UploadBibModal() {
     };
 
     const handleSaveToReferences = async () => {
-      await SaveBibFileToDb(parsedData);
+      const userId = session.data?.user?.id ?? '';
+      await SaveBibFileToDb(parsedData, userId);
     };
 
     // New function to validate data
@@ -93,9 +96,9 @@ export function UploadBibModal() {
       }
     };
 
-    useEffect(() => {
-      validateData(parsedData);
-    }, [parsedData]);
+    // useEffect(() => {
+    //   validateData(parsedData);
+    // }, [parsedData]);
 
     return (
     <>

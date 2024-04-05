@@ -26,7 +26,7 @@ const typeMap: {[key: string]: string } = {
   }
   
 // Takes reference data & converts to CSL-JSON
-function toCslJson(ReferenceData: any) {
+export async function toCslJson(ReferenceData: any) {
     // Requires any of the following formats: DOI, Bib(La)Tex, WikiData, CSL|https://citation.js.org/api/0.3/tutorial-input_formats.html
     const cslJson = Cite.input(ReferenceData);
     return cslJson;
@@ -87,12 +87,29 @@ function translateForeignModel(result: any) {
     return mergedData
 }
 
+export async function CreateCslFromBibTex(bibData: string, userId: string | undefined) {
+    try {
+        await dbConnect();
+        const input = bibData;
+        const result = await toCslJson(input);
+        const CSLBibTexDocument = new CSLBibModel(result);
+        await CSLBibTexDocument.save();
+
+        await AddRef2User(userId, CSLBibTexDocument._id);
+        // Adds the CSL-JSON to the existing database collection
+        InitializeCslJson(CSLBibTexDocument.id, result);
+
+    } catch(error) {
+        console.error(error)
+    }
+}
+
 // Creates CSL-JSON for auto input -> DOI, ISBN, ISSN, etc.
 export async function CreateCslJsonDocument(automaticInput: any, userId: string | undefined) {
     try {
         await dbConnect();
         const input = automaticInput
-        const result = toCslJson(input);
+        const result = await toCslJson(input);
 
         const mergedData = translateForeignModel(result);
 

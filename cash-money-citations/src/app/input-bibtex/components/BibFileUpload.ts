@@ -6,8 +6,7 @@
 // Return to Textarea
 // Allow user to edit BibTex
 // Once user clicks submit, save to db as a reference and pass to CSL
-import { toCslJson } from "@/components/componentActions/citationActions";
-import { GiConsoleController } from "react-icons/gi";
+import { CreateCslFromBibTex } from "@/components/componentActions/citationActions";
 
 export const ParseBibTexUpload = async (formData: FormData) => {
     try {
@@ -23,9 +22,9 @@ export const ParseBibTexUpload = async (formData: FormData) => {
     }
 }
 
-export const SaveBibFileToDb = async (bibFile: string) => {
+export const SaveBibFileToDb = async (bibFile: string, userId: string) => {
     try {
-        const cslBibData = await toCslJson(bibFile);
+        const cslBibData = await CreateCslFromBibTex(bibFile, userId);
     } catch(e) {
         console.error(e)
     }

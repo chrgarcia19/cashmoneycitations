@@ -2,6 +2,10 @@
 
 import useSWR from "swr";
 import Form from "@/components/Form";
+import { getUserReferences } from "@/components/componentActions/actions";
+import { useState, useEffect } from 'react';
+import { ReferenceFormData } from "@/components/Form";
+let { parse, format } = require('@citation-js/date')
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -22,50 +26,104 @@ export default function EditReference( {
     error,
     isLoading,
   } = useSWR(id ? `/api/references/${id}` : null, fetcher);
-
   if (error) return <p>Failed to load</p>;
   if (isLoading) return <p>Loading...</p>;
   if (!reference) return null;
 
+  // date-parts is ALWAYS [year, month, day]
+
   const referenceForm = {
-    location: reference.location,
-    annote: reference.annote,
-    contributors: reference.contributors,
-    indextitle: reference.indextitle,
-    chapter: reference.chapter,
+    _id: id,
+    archivePlaceCity: reference.archivePlaceCity,
+    archivePlaceCountry: reference.archivePlaceCountry,
+    eventPlaceCity: reference.eventPlaceCity,
+    eventPlaceCountry: reference.eventPlaceCountry,
+    publisherPlaceCity: reference.publisherPlaceCity,
+    publisherPlaceCountry: reference.publisherPlaceCountry,
+    "container-title": reference["container-title"],
+    "collection-title": reference["collection-title"], // Series
+    page: reference.page, // Range of pages
+    "number-of-pages": reference["number-of-pages"], // Total # of pages
+    volume: reference.volume, // Associated volume
+    "number-of-volumes": reference["number-of-volumes"], // Total # of volumes
     edition: reference.edition,
-    editor: reference.editor,
-    howpublished: reference.howpublished,
-    institution: reference.institution,
-    month_published: reference.month_published,
-    day_published: reference.day_published,
-    year_published: reference.year_published,
-    month_accessed: reference.month_accessed,
-    day_accessed: reference.day_accessed,
-    year_accessed: reference.year_accessed,
-    month_event: reference.month_event,
-    day_event: reference.day_event,
-    year_event: reference.year_event,
-    note: reference.note,
+    /* Date Fields */
+    yearPublished: reference.yearPublished, // Date published
+    monthPublished: reference.monthPublished, // Date published
+    dayPublished: reference.dayPublished, // Date published
+    // yearAccessed: reference.cslJson[0], // Date accessed
+    // monthAccessed: reference.cslJson[0], // Date accessed
+    // dayAccessed: reference.cslJson[0], // Date accessed
+    yearEvent: reference.cslJson[0].yearEvent, // Date of event
+    monthEvent: reference.cslJson[0].monthEvent, // Date of event
+    dayEvent: reference.cslJson[0].dayEvent, // Date of event
+    yearAvailable: reference.cslJson[0].yearAvailable, // Date available
+    monthAvailable: reference.cslJson[0].monthAvailable, // Date available
+    dayAvailable: reference.cslJson[0].dayOriginal, // Date available
+    yearOriginal: reference.cslJson[0].yearOriginal, // Date of original
+    monthOriginal: reference.cslJson[0].monthOriginal, // Date of original
+    dayOriginal: reference.cslJson[0].dayOriginal, // Date of original
+    yearSubmitted: reference.cslJson[0].yearSubmitted, // Date submitted
+    monthSubmitted: reference.cslJson[0].monthSubmitted, // Date submitted
+    daySubmitted: reference.cslJson[0].daySubmitted, // Date submitted
+    /* End Date Fields */
+    annote: reference.annote,
+    abstract: reference.abstract,
+    archive: reference.archive,
+    archive_collection: reference.archive_collection,
+    archive_location: reference.archive_location,
+    authority: reference.authority,
+    "call-number": reference["call-number"],
+    "citation-key": reference["citation-key"],
+    "citation-label": reference["citation-label"],
+    dimensions: reference.dimensions,
+    division: reference.division,
+    genre: reference.genre,
+    jurisdiction: reference.jurisdiction,
+    keyword: reference.keyword,
+    language: reference.language,
+    license: reference.license,
+    medium: reference.medium,
+    "original-publisher": reference["original-publisher"],
+    "original-title": reference["original-title"],
+    "part-title": reference["part-title"],
+    PMCID: reference.PMCID,
+    PMID: reference.PMID,
+    references: reference.references,
+    "reviewed-genre": reference["reviewed-genre"],
+    "reviewed-title": reference["reviewed-title"],
+    scale: reference.scale,
+    source: reference.source,
+    status: reference.status,
+    "volume-title": reference["volume-title"],
+    "year-suffix": reference["year-suffix"],
+    "chapter-number": reference["chapter-number"],
+    "citation-number": reference["citation-number"],
+    "collection-number": reference["collection-number"],
+    "first-reference-note-number": reference["first-reference-note-number"],
+    issue: reference.issue,
+    locator: reference.locator,
     number: reference.number,
-    organization: reference.organization,
-    pages: reference.pages,
+    "page-first": reference["page-first"],
+    "part-number": reference["part-number"],
+    "printing-number": reference["printing-number"],
+    "supplement-number": reference["supplement-number"],
+    version: reference.version,    
+    section: reference.section,
+    contributors: reference.contributors,
+    editor: reference.editor,
+    note: reference.note,
     publisher: reference.publisher,
-    school: reference.school,
-    series: reference.series,
-    volumes: reference.volumes,
-    short_title: reference.short_title,
     title: reference.title,
     type: reference.type,
-    volume: reference.volume,
-    doi: reference.doi,
-    issn: reference.issn,
-    isbn: reference.isbn,
-    url: reference.url,
+    DOI: reference.DOI,
+    ISSN: reference.ISSN,
+    ISBN: reference.ISBN,
+    URL: reference.URL,
+    organization: reference.organizer,
     running_time: reference.running_time,
     format: reference.format,
     image_url: reference.image_url,
-    issue: reference.issue,
     api_source: reference.api_source,
   };
 

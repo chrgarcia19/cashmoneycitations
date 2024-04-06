@@ -124,15 +124,15 @@ export interface CSLGeneralFields {
   volume?: number;
 
   /* Date fields */
-  accessed: Date; // Date accessed
-  "available-date": Date; // Date treaty was signed, or online publication date before formal publication
-  "event-date": Date; // Date of event
-  issued: Date; // Date published
-  "original-date": Date; // Issue date of original version
-  submitted: Date; // Date item was submitted for publication
+  accessed: string; // Date accessed
+  "available-date": string; // Date treaty was signed, or online publication date before formal publication
+  "event-date": string; // Date of event
+  issued: string; // Date published
+  "original-date": string; // Issue date of original version
+  submitted: string; // Date item was submitted for publication
 
   // Contributor variables *********
-  author: Contributor[];
+  author: string;
   chair: string;
   "collection-editor": string;
   compiler: string;
@@ -141,7 +141,7 @@ export interface CSLGeneralFields {
   contributor: string;
   curator: string;
   director: string;
-  editor: Contributor[];
+  editor: string;
   "editorial-director": string;
   "editor-translator": string;
   "executive-producer": string;

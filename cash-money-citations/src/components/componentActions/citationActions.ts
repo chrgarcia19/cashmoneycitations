@@ -131,16 +131,16 @@ async function InitializeCslJson(_id: string, cslJson: object) {
 }
 
 async function HandleInitialFormat(bibResponse: any) {
-    const test = Cite.plugins.input.chain(JSON.stringify(bibResponse), {
+    const cslParsedRef = Cite.plugins.input.chain(JSON.stringify(bibResponse), {
         target: '@else/json'
     })
     
-    const cslJson = await toCslJson(test)
+    const cslJson = await toCslJson(cslParsedRef)
     // Adds the CSL-JSON to the existing database collection
     InitializeCslJson(bibResponse.id, cslJson);
 }
 
-async function formatDate(form: any) {
+export async function formatDate(form: any) {
     // According to CSL-JSON Schema and BibLaTex standards the follow type map is used
     // BibLaTex ------ CSL-JSON
     // date(Published Date) ---------- issued
@@ -263,15 +263,98 @@ export async function HandleManualReference(form: any, userId: any) {
     try {
         await formatDate(form);
         await formatLocation(form);
-        
         // Sorts through the contributor array of objects and assigns them properly
         await HandleContributors(form);
         const bibResponse = await CSLBibModel.create(form);
         await AddRef2User(userId, bibResponse._id);
+
+        const cslJson = {
+            id: bibResponse._id,
+            type: bibResponse.type,
+            title: bibResponse.title,
+            "container-title": bibResponse["container-title"],
+            "collection-title": bibResponse["collection-title"],
+            // Date fields
+            issued: form.issued,
+            accessed: form.accessed,
+            "event-date": form["event-date"],
+            "available-date": form["available-date"],
+            "original-date": form["original-date"],
+            submitted: form.submitted,
+            // End date fields
+            // Contributor fields
+            author: bibResponse.author,
+            editor: bibResponse.editor,
+            translator: bibResponse.translator,
+            compiler: bibResponse.compiler,
+            // End contributor fields
+            publisher: bibResponse.publisher,
+            DOI: bibResponse.doi,
+            URL: bibResponse.url,
+            ISBN: bibResponse.isbn,
+            annote: bibResponse.annote,
+            chapter: bibResponse.chapter,
+            edition: bibResponse.edition,
+            note: bibResponse.note,
+            number: bibResponse.number,
+            series: bibResponse.series,
+            volumes: bibResponse.volumes,
+            volume: bibResponse.volume,
+            abstract: bibResponse.abstract,
+            archive: bibResponse.archive,
+            archive_collection: bibResponse.archive_collection,
+            archive_location: bibResponse.archive_location,
+            authority: bibResponse.authority,
+            "call-number": bibResponse["call-number"],
+            "citation-key": bibResponse["citation-key"],
+            "citation-label": bibResponse["citation-label"],
+            dimensions: bibResponse.dimensions,
+            division: bibResponse.division,
+            genre: bibResponse.genre,
+            jurisdiction: bibResponse.jurisdiction,
+            keyword: bibResponse.keyword,
+            language: bibResponse.language,
+            license: bibResponse.license,
+            medium: bibResponse.medium,
+            "original-publisher": bibResponse["original-publisher"],
+            "original-title": bibResponse["original-title"],
+            "part-title": bibResponse["part-title"],
+            PMCID: bibResponse.PMCID,
+            PMID: bibResponse.PMID,
+            references: bibResponse.references,
+            "reviewed-genre": bibResponse["reviewed-genre"],
+            "reviewed-title": bibResponse["reviewed-title"],
+            scale: bibResponse.scale,
+            source: bibResponse.source,
+            status: bibResponse.status,
+            "volume-title": bibResponse["volume-title"],
+            "year-suffix": bibResponse["year-suffix"],
+            "chapter-number": bibResponse["chapter-number"],
+            "citation-number": bibResponse["citation-number"],
+            "collection-number": bibResponse["collection-number"],
+            "first-reference-note-number": bibResponse["first-reference-note-number"],
+            issue: bibResponse.issue,
+            locator: bibResponse.locator,
+            "page-first": bibResponse["page-first"],
+            page: bibResponse.page,
+            "number-of-pages": bibResponse["number-of-pages"],
+            "part-number": bibResponse["part-number"],
+            "printing-number": bibResponse["printing-number"],
+            "supplement-number": bibResponse["supplement-number"],
+            version: bibResponse.version,
+            "number-of-volumes": bibResponse["number-of-volumes"],
+            section: bibResponse.section,
+            organization: bibResponse.organizer,
+            running_time: bibResponse.running_time,
+            format: bibResponse.format,
+            image_url: bibResponse.image_url,
+            api_source: bibResponse.api_source,
+        }
+
         // Add DB id to form
         form.id = bibResponse._id;
 
-        await HandleInitialFormat(form);
+        await HandleInitialFormat(cslJson);
 
       } catch (error) {
         console.error(error)

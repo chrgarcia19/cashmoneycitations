@@ -62,6 +62,7 @@ export enum EntryType {
 
 
 export interface ReferenceFormData extends CSLGeneralFields {
+  id: string,
   type: string,
   /* Geographical location of archive (Will be converted into archive-place) */
   "archive-place": string,
@@ -130,6 +131,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   /*Set initial state to website so the page is not blank*/
   // These form field names must match the field names of the Mongoose schema to be saved in the DB
   const [form, setForm] = useState({
+    _id: referenceForm.id,
     archivePlaceCity: referenceForm.archivePlaceCity,
     archivePlaceCountry: referenceForm.archivePlaceCountry,
     eventPlaceCity: referenceForm.eventPlaceCity,

@@ -61,7 +61,7 @@ export enum EntryType {
 }
 
 
-interface ReferenceFormData extends CSLGeneralFields {
+export interface ReferenceFormData extends CSLGeneralFields {
   type: string,
   /* Geographical location of archive (Will be converted into archive-place) */
   "archive-place": string,
@@ -132,7 +132,6 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const [form, setForm] = useState({
     archivePlaceCity: referenceForm.archivePlaceCity,
     archivePlaceCountry: referenceForm.archivePlaceCountry,
-    "archive-place": referenceForm["archive-place"],
     eventPlaceCity: referenceForm.eventPlaceCity,
     eventPlaceCountry: referenceForm.eventPlaceCountry,
     publisherPlaceCity: referenceForm.publisherPlaceCity,

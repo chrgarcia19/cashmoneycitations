@@ -34,7 +34,7 @@ export default function EditTag(){
             <div className="card w-1/2 bg-base-100 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title">Edit Tag</h2>
-                        <TagForm formID={"edit-tag"} tagForm={tagForm} />
+                        <TagForm formID={"edit-tag"} tagForm={tagForm} forNewTag={false}/>
                 </div>
             </div>
         </div>

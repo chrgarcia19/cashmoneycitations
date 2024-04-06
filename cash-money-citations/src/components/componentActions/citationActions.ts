@@ -122,7 +122,7 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
     }
 }
 
-async function InitializeCslJson(_id: string, cslJson: object) {
+export async function InitializeCslJson(_id: string, cslJson: object) {
     try {
         await CSLBibModel.findByIdAndUpdate(_id, { cslJson: cslJson })
     } catch(error) {
@@ -130,12 +130,12 @@ async function InitializeCslJson(_id: string, cslJson: object) {
     }
 }
 
-async function HandleInitialFormat(bibResponse: any) {
+export async function HandleInitialFormat(bibResponse: any) {
     const cslParsedRef = Cite.plugins.input.chain(JSON.stringify(bibResponse), {
         target: '@else/json'
     })
-    
     const cslJson = await toCslJson(cslParsedRef)
+    await formatDate(cslJson[0])
     // Adds the CSL-JSON to the existing database collection
     InitializeCslJson(bibResponse.id, cslJson);
 }
@@ -148,40 +148,33 @@ export async function formatDate(form: any) {
     // origdate(Date of OG Item) ----- original-date
     // urldate(Date when URL was accessed) ---- accessed
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
-        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
-        form.datePublished = datePublished;
-        form.issued = parse(datePublished.toISOString().split('T')[0]);
+        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);        form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 
     if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {
         const dateAccessed = new Date(form.yearAccessed, form.monthAccessed, form.dayAccessed);
-        form.dateAccessed = dateAccessed;
         form.accessed = parse(dateAccessed.toISOString().split('T')[0]);
     }
 
     if (form.yearEvent || form.monthEvent || form.dayEvent) {
         const dateEvent = new Date(form.yearEvent, form.monthEvent, form.dayEvent);
-        form.dateEvent = dateEvent.toISOString().split('T')[0];
         form["event-date"] = parse(dateEvent.toISOString().split('T')[0]);
     }
 
     if (form.yearAvailable || form.monthAvailable || form.dayAvailable) {
         const dateAvailable = new Date(form.yearAvailable, form.monthAvailable, form.dayAvailable);
-        form.dateAvailable = dateAvailable;
         form["available-date"] = parse(dateAvailable.toISOString().split('T')[0]);
     }
 
     // CHANGE TO ORIGINAL-DATE
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
         const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
-        form.datePublished = datePublished;
         form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 
     // CHANGE TO SUBMITTED
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
         const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
-        form.datePublished = datePublished;
         form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 }

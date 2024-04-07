@@ -1,9 +1,9 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import searchRefs from "./searchRefs";
 import { useSession } from "next-auth/react";
 import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
-import { getUserReferences } from '../../components/componentActions/actions';
+import { getUserReferences, getReferences } from '../../components/componentActions/actions';
 import { useRouter } from "next/navigation";
 
 class SearchFieldProps {
@@ -17,7 +17,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
   const [tableShown, setTableShown] = useState<boolean>(false);
   const [userOwnedRefs, setUserOwnedRefs] = useState<any[]>([]);
   const router = useRouter();
-  
+
   async function getReference() {
     setTableShown(false);
     let arr = await searchRefs(searchTerm);
@@ -29,6 +29,8 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     setTableShown(true);
   }
 
+  
+
   const addToDB = async (item: any) => {
     // Ensure item includes an ID field
     const itemWithId = { ...item, _id: undefined }; // Set _id to undefined to let MongoDB generate a new ID
@@ -39,6 +41,19 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     router.refresh();
   }
 
+  useEffect(() => {
+    async function initialGetRefs() {
+      setTableShown(false);
+      let arr = await getReferences();
+      setRefsArr(arr);
+      //Checking to see if user owns refs or not
+      const userOwnedRefsData = await getUserReferences(session?.user?.id ?? '');
+      setUserOwnedRefs(userOwnedRefsData ?? []);
+      setTableShown(true);
+    };
+    initialGetRefs();
+  }, [])
+  
   return (
     <div className="flex flex-col items-center h-screen">
       <div className="flex flex-col max-w-md mx-auto w-96">

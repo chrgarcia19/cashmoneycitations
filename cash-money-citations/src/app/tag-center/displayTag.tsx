@@ -1,37 +1,10 @@
-import dbConnect from "@/utils/dbConnect";
-import Tag from "../../models/Tag";
 import Link from "next/link";
 import TagForm from "@/components/TagForm";
 import { ApplyTagsToRef } from "./applyTagsToRef";
-import CSLBibTex from "@/models/CSLBibTex";
-import { getSpecificTagById, getUserTags } from "@/components/componentActions/tagActions";
+import { getUserTags } from "@/components/componentActions/tagActions";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import { getUserReferences } from "@/components/componentActions/actions";
-
-async function getTags() {
-    await dbConnect();
-  
-    const result = await Tag.find({});
-    const tags = result.map((doc) => {
-      const tag = JSON.parse(JSON.stringify(doc));
-      return tag;
-    });
-  
-    return tags;
-}
-
-async function getReferences() {
-    await dbConnect();
-  
-    const result = await CSLBibTex.find({});
-    const references = result.map((doc) => {
-      const reference = JSON.parse(JSON.stringify(doc));
-      return reference;
-    });
-  
-    return references;
-}
 
 export default async function DisplayTags(){
     const session = await getServerSession(authConfig);
@@ -39,15 +12,11 @@ export default async function DisplayTags(){
 
     const tags = await getUserTags(userId);
     const references = await getUserReferences(userId);
-    //const tags = await getTags();
-    //const references = await getReferences();
 
     const tagData = {
         tagName: "",
         tagColor: "",
     }
-
-    console.log(getSpecificTagById("66131365b1537a69d9daa551"));
 
     return (
         <>

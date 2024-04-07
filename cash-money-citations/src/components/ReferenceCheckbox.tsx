@@ -12,6 +12,7 @@ const config = plugins.config.get('@bibtex')
 
 interface IProps {
     references: any;
+    tags: any;
 }
 
 function monthConversion(month_num: string) {
@@ -45,7 +46,7 @@ function monthConversion(month_num: string) {
     }
 }
 
-export const Checkbox = ({ references }: IProps) => {
+export const Checkbox = ({ references, tags }: IProps) => {
     const router = useRouter();
 
     const handleDelete = async (refID: string) => {
@@ -87,6 +88,12 @@ export const Checkbox = ({ references }: IProps) => {
     useEffect(() => {
         setRefData(references);
     }, [refData]);
+
+    const [tagData, setTagData] = useState<Tag[]>([]);
+
+    useEffect(() => {
+        setTagData(tags);
+    }, [tagData]);
 
     const [isChecked, setIsChecked] = useState(
         new Array(references.length).fill(false)
@@ -221,6 +228,13 @@ export const Checkbox = ({ references }: IProps) => {
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
+                <td className="border border-slate-600 text-center">
+                    {tags?.map((tag: any) => (
+                        <div className={`badge badge-lg bg-teal-200 me-2`} key={tag._id}>
+                            {tag.tagName}
+                        </div>
+                    ))}
+                </td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          
                 {reference.contributors.map((contributor: any) => {

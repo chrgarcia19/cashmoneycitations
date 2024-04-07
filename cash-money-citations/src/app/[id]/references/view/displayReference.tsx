@@ -171,7 +171,6 @@ const ViewReference = () => {
 
 export function ExportReferenceData({ referenceId }: any){
   const [reference, setReference] = useState(Object);
-  const [tag, setTag] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
   
   // Fetch initial citation state
@@ -179,15 +178,10 @@ export function ExportReferenceData({ referenceId }: any){
     fetchReference();
   }, []);
 
-  const fetchReference = async () => {
-    const tagData = await getSpecificTagById("66131365b1537a69d9daa551");
-    setTag(tagData);
-    
+  const fetchReference = async () => {    
     const referenceData = await getSpecificReferenceById(referenceId);  
     setReference(referenceData);
   }
-
-  console.log(JSON.stringify(tag));
 
   const downloadReference = async(event: any) => {
     event.preventDefault(); // Prevent the form from refreshing the page

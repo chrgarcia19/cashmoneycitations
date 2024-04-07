@@ -1,8 +1,10 @@
 "use client"
 
+import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { mutate } from "swr";
+import { editTag, handleNewTag } from "./componentActions/tagActions";
 
 interface TagData {
     tagName: string;
@@ -17,6 +19,7 @@ type Props = {
 
 const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
     const searchParams = useSearchParams();
+    const { data: session } = useSession();
     const router = useRouter();
     const contentType = "application/json";
 
@@ -25,56 +28,6 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         tagColor: tagForm.tagColor,
     });
 
-    /* The PUT method edits an existing entry in the mongodb database. */
-  const putData = async (form: TagData) => {
-    const id  = searchParams.get("id");
-
-    try {
-      const res = await fetch(`/api/tags/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      const { data } = await res.json();
-
-      mutate(`/api/tags/${id}`, data, true); // Update the local data without a revalidation
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-   
-    }
-  };
-
-  /* The POST method adds a new entry in the mongodb database. */
-  const postData = async (form: TagData) => {
-    try {
-      const res = await fetch("/api/tags", {
-        method: "POST",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-      router.push("/tag-center");
-      router.refresh();
-    } catch (error) {
-    }
-  };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -114,10 +67,20 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const id = searchParams.get('id');
+        const userId = session?.user?.id;
 
         form.tagColor = assignTagColor();
 
-        forNewTag ? postData(form) : putData(form);
+        if (forNewTag) {
+          handleNewTag(form, userId);
+          router.push("tag-center");
+          router.refresh();
+        } else {
+          editTag(form, id);
+          router.push("tag-center");
+          router.refresh();
+        }
     };
 
     return (

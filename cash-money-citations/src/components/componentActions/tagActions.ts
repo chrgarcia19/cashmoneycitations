@@ -75,3 +75,41 @@ export async function getUserTags(userId: string) {
       console.error(e);
     }
   }
+
+  async function addTagToUser(userId: string | undefined, tagId: string){
+    await dbConnect();
+
+    try {
+      const user = await User.findById(userId);
+      if (user) {
+        user.ownedTags = [...user.ownedTags, tagId];
+        await user.save();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  } 
+
+  export async function handleNewTag(form: any, userId: any) {
+    await dbConnect();
+
+    try {
+      const tagResponse = await Tag.create(form);
+
+      await addTagToUser(userId, tagResponse._id);
+    } catch (e){
+      console.error(e);
+    }
+  }
+
+  export async function editTag(form: any, id: any){
+    await dbConnect();
+
+    try {
+      await Tag.findByIdAndUpdate(id, form, {
+        new: true,
+        runValidators: true,});
+    } catch (e){
+      console.error(e);
+    }
+  }

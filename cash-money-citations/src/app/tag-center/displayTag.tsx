@@ -4,7 +4,10 @@ import Link from "next/link";
 import TagForm from "@/components/TagForm";
 import { ApplyTagsToRef } from "./applyTagsToRef";
 import CSLBibTex from "@/models/CSLBibTex";
-import { getSpecificTagById } from "@/components/componentActions/tagActions";
+import { getSpecificTagById, getUserTags } from "@/components/componentActions/tagActions";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import { getUserReferences } from "@/components/componentActions/actions";
 
 async function getTags() {
     await dbConnect();
@@ -31,8 +34,13 @@ async function getReferences() {
 }
 
 export default async function DisplayTags(){
-    const tags = await getTags();
-    const references = await getReferences();
+    const session = await getServerSession(authConfig);
+    const userId = session?.user?.id ?? '';
+
+    const tags = await getUserTags(userId);
+    const references = await getUserReferences(userId);
+    //const tags = await getTags();
+    //const references = await getReferences();
 
     const tagData = {
         tagName: "",
@@ -47,7 +55,7 @@ export default async function DisplayTags(){
                 <div className="join join-horizontal">
                     <div className="card w-1/3 bg-base-100 shadow-xl">
                         <div className="card-body items-center text-center">
-                            {tags.map((tag) => (
+                            {tags?.map((tag) => (
                                 <span key={tag._id}>
                                     <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
                                         <div className={`badge badge-lg bg-teal-200 me-2`}>

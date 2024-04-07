@@ -31,14 +31,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
 
   async function handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter') {
-      setTableShown(false);
-      let arr = await searchRefs(searchTerm);
-      let arrJSON = JSON.parse(arr);
-      setRefsArr(arrJSON);
-      //Checking to see if user owns refs or not
-      const userOwnedRefsData = await getUserReferences(session?.user?.id ?? '');
-      setUserOwnedRefs(userOwnedRefsData ?? []);
-      setTableShown(true);
+      getReference();
     }
   }
 

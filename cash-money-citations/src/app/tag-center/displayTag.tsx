@@ -4,6 +4,7 @@ import Link from "next/link";
 import TagForm from "@/components/TagForm";
 import { ApplyTagsToRef } from "./applyTagsToRef";
 import CSLBibTex from "@/models/CSLBibTex";
+import { getSpecificTagById } from "@/components/componentActions/tagActions";
 
 async function getTags() {
     await dbConnect();
@@ -37,6 +38,8 @@ export default async function DisplayTags(){
         tagName: "",
         tagColor: "",
     }
+
+    console.log(getSpecificTagById("66131365b1537a69d9daa551"));
 
     return (
         <>

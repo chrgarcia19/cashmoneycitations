@@ -1,7 +1,9 @@
+'use server'
+
 import Tag from "@/models/Tag";
 import User from "@/models/User";
 import dbConnect from "@/utils/dbConnect";
-import CSLBibModel from "@/models/CSLBibTex";
+import mongoose from "mongoose";
 
 export async function getTags() {
     await dbConnect();
@@ -16,14 +18,40 @@ export async function getTags() {
 }
 
 
-export async function getSingleTag(id: string) {
-    try {
-        let result = await Tag.findById(id);
-        const parsedResult = JSON.parse(JSON.stringify(result));
-        return parsedResult;
-    } catch (error) {
-        
+function toObjectRecursive(doc: any) {
+  if (doc instanceof mongoose.Document || doc instanceof mongoose.Types.DocumentArray) {
+    doc = doc.toObject({ getters: true, virtuals: true });
+    for (let key in doc) {
+      doc[key] = toObjectRecursive(doc[key]);
     }
+  } else if (doc instanceof mongoose.Types.ObjectId) {
+    doc = doc.toString();
+  } else if (Array.isArray(doc)) {
+    for (let i = 0; i < doc.length; i++) {
+      doc[i] = toObjectRecursive(doc[i]);
+    }
+  } else if (typeof doc === 'object' && doc !== null) {
+    for (let key in doc) {
+      doc[key] = toObjectRecursive(doc[key]);
+    }
+  }
+  return doc;
+}
+
+export async function getSpecificTagById(id: string | string[] | undefined) {
+  try {
+    let result = await Tag.findById(id);
+
+    result = toObjectRecursive(result);
+
+    if (result) {
+      return result;
+    } else {
+      return false;
+    }
+  } catch(error) {
+    console.error(error)
+  }
 }
 
 export async function getUserTags(userId: string) {

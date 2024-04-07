@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
+import { getSpecificTagById } from "@/components/componentActions/tagActions";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -63,14 +64,6 @@ function ReferenceDetails({ reference }: any) {
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Reference Type:</label>
           {reference.type}
-      </span>
-      <span className="block h-auto rounded-lg">
-          <label className="font-bold">Tags:</label>
-          {reference.tags.map((tag: Tag) => (
-            <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
-              {tag.tagName}
-            </div>  
-          ))}
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Title:</label>
@@ -178,6 +171,7 @@ const ViewReference = () => {
 
 export function ExportReferenceData({ referenceId }: any){
   const [reference, setReference] = useState(Object);
+  const [tag, setTag] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
   
   // Fetch initial citation state
@@ -186,9 +180,14 @@ export function ExportReferenceData({ referenceId }: any){
   }, []);
 
   const fetchReference = async () => {
+    const tagData = await getSpecificTagById("66131365b1537a69d9daa551");
+    setTag(tagData);
+    
     const referenceData = await getSpecificReferenceById(referenceId);  
     setReference(referenceData);
   }
+
+  console.log(JSON.stringify(tag));
 
   const downloadReference = async(event: any) => {
     event.preventDefault(); // Prevent the form from refreshing the page

@@ -1,6 +1,6 @@
 import DisplayTags from "./displayTag";
 
-export default function TagCenter() {
+export default async function TagCenter() {
     return (
         <>
             <DisplayTags />

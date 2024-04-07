@@ -33,13 +33,20 @@ export default function EditReference( {
   // date-parts is ALWAYS [year, month, day]
 
   const referenceForm = {
-    _id: id,
+    id: id,
+    type: reference.type,
     archivePlaceCity: reference.archivePlaceCity,
     archivePlaceCountry: reference.archivePlaceCountry,
     eventPlaceCity: reference.eventPlaceCity,
     eventPlaceCountry: reference.eventPlaceCountry,
     publisherPlaceCity: reference.publisherPlaceCity,
     publisherPlaceCountry: reference.publisherPlaceCountry,
+    "archive-place": reference['archive-place'],
+    "event-place": reference['event-place'],
+    "original-publisher-place": reference['original-publisher-place'],
+    origPubPlaceCity: reference.origPubPlaceCity,
+    origPubPlaceCountry: reference.origPubPlaceCountry,
+    "publisher-place": reference["publisher-place"],
     "container-title": reference["container-title"],
     "collection-title": reference["collection-title"], // Series
     page: reference.page, // Range of pages
@@ -51,21 +58,27 @@ export default function EditReference( {
     yearPublished: reference.yearPublished, // Date published
     monthPublished: reference.monthPublished, // Date published
     dayPublished: reference.dayPublished, // Date published
-    // yearAccessed: reference.cslJson[0], // Date accessed
-    // monthAccessed: reference.cslJson[0], // Date accessed
-    // dayAccessed: reference.cslJson[0], // Date accessed
-    yearEvent: reference.cslJson[0].yearEvent, // Date of event
-    monthEvent: reference.cslJson[0].monthEvent, // Date of event
-    dayEvent: reference.cslJson[0].dayEvent, // Date of event
-    yearAvailable: reference.cslJson[0].yearAvailable, // Date available
-    monthAvailable: reference.cslJson[0].monthAvailable, // Date available
-    dayAvailable: reference.cslJson[0].dayOriginal, // Date available
-    yearOriginal: reference.cslJson[0].yearOriginal, // Date of original
-    monthOriginal: reference.cslJson[0].monthOriginal, // Date of original
-    dayOriginal: reference.cslJson[0].dayOriginal, // Date of original
-    yearSubmitted: reference.cslJson[0].yearSubmitted, // Date submitted
-    monthSubmitted: reference.cslJson[0].monthSubmitted, // Date submitted
-    daySubmitted: reference.cslJson[0].daySubmitted, // Date submitted
+    yearAccessed: reference.yearAccessed, // Date accessed
+    monthAccessed: reference.monthAccessed, // Date accessed
+    dayAccessed: reference.dayAccessed, // Date accessed
+    yearEvent: reference.yearEvent, // Date of event
+    monthEvent: reference.monthEvent, // Date of event
+    dayEvent: reference.dayEvent, // Date of event
+    yearAvailable: reference.yearAvailable, // Date available
+    monthAvailable: reference.monthAvailable, // Date available
+    dayAvailable: reference.dayOriginal, // Date available
+    yearOriginal: reference.yearOriginal, // Date of original
+    monthOriginal: reference.monthOriginal, // Date of original
+    dayOriginal: reference.dayOriginal, // Date of original
+    yearSubmitted: reference.yearSubmitted, // Date submitted
+    monthSubmitted: reference.monthSubmitted, // Date submitted
+    daySubmitted: reference.daySubmitted, // Date submitted
+    accessed: '',
+    "available-date": '',
+    "event-date": '',
+    issued: '',
+    "original-date": '',
+    submitted: '',
     /* End Date Fields */
     annote: reference.annote,
     abstract: reference.abstract,
@@ -115,12 +128,37 @@ export default function EditReference( {
     note: reference.note,
     publisher: reference.publisher,
     title: reference.title,
-    type: reference.type,
     DOI: reference.DOI,
     ISSN: reference.ISSN,
     ISBN: reference.ISBN,
     URL: reference.URL,
     organization: reference.organizer,
+    author: '',
+    chair: '',
+    "collection-editor": '',
+    compiler: '',
+    composer: '',
+    "container-author": '',
+    contributor: '',
+    curator: '',
+    director: '',
+    "editorial-director": '',
+    "editor-translator": '',
+    "executive-producer": '',
+    guest: '',
+    host: '',
+    illustrator: '',
+    interviewer: '',
+    narrator: '',
+    organizer: '',
+    "original-author": '',
+    performer: '',
+    producer: '',
+    recipient: '',
+    "reviewed-author": '',
+    "script-writer": '',
+    "series-creator": '',
+    translator: '',
     running_time: reference.running_time,
     format: reference.format,
     image_url: reference.image_url,
@@ -131,5 +169,3 @@ export default function EditReference( {
     <Form formId={"edit-reference-form"} referenceForm={referenceForm} forNewReference={false}/>
   )
 };
-
-//export default EditReference;

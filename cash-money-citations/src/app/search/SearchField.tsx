@@ -29,7 +29,18 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     setTableShown(true);
   }
 
-  
+  async function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Enter') {
+      setTableShown(false);
+      let arr = await searchRefs(searchTerm);
+      let arrJSON = JSON.parse(arr);
+      setRefsArr(arrJSON);
+      //Checking to see if user owns refs or not
+      const userOwnedRefsData = await getUserReferences(session?.user?.id ?? '');
+      setUserOwnedRefs(userOwnedRefsData ?? []);
+      setTableShown(true);
+    }
+  }
 
   const addToDB = async (item: any) => {
     // Ensure item includes an ID field
@@ -64,7 +75,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
             </svg>
           </div>
-          <input type="search" id="default-search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="block w-96 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search by title..." required />
+          <input type="search" id="default-search" value={searchTerm} onKeyDown={(e) => handleKeyDown(e)} onChange={(e) => setSearchTerm(e.target.value)} className="block w-96 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search by title..." required />
           <button type="submit" className="text-white absolute end-px bottom-0 right-0 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={getReference}>Search</button>
         </div>
       </div>

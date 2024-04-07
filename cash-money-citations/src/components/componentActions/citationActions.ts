@@ -207,16 +207,14 @@ export async function formatDate(form: any) {
         form["available-date"] = parse(dateAvailable.toISOString().split('T')[0]);
     }
 
-    // CHANGE TO ORIGINAL-DATE
-    if (form.yearPublished || form.monthPublished || form.dayPublished) {
-        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
-        form.issued = parse(datePublished.toISOString().split('T')[0]);
+    if (form.yearOriginal || form.monthOriginal || form.dayOriginal) {
+        const dateOriginal = new Date(form.yearOriginal, form.monthOriginal, form.dayOriginal);
+        form["original-date"] = parse(dateOriginal.toISOString().split('T')[0]);
     }
 
-    // CHANGE TO SUBMITTED
-    if (form.yearPublished || form.monthPublished || form.dayPublished) {
-        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
-        form.issued = parse(datePublished.toISOString().split('T')[0]);
+    if (form.yearSubmitted || form.monthSubmitted || form.daySubmitted) {
+        const dateSubmitted = new Date(form.yearSubmitted, form.monthSubmitted, form.daySubmitted);
+        form.submitted = parse(dateSubmitted.toISOString().split('T')[0]);
     }
 }
 

@@ -208,7 +208,7 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
     }
 }
 
-async function HandleContributors(form: any) {
+export async function HandleContributors(form: any) {
     function filterAndMapContributors(form: any, role: string) {
         return form.contributors
         .filter((contributor: any) => contributor.role === role)

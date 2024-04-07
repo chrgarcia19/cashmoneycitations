@@ -314,7 +314,7 @@ const CSLBibSchema = new Schema({
   section: Number,
   "supplement-number": Number,
   version: Number,
-  volume: Number,
+  volume: String,
   yearPublished: String,
   monthPublished: String,
   dayPublished: String,

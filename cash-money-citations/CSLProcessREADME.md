@@ -210,7 +210,254 @@ Differing dates are requried for the different input types (DOI, Manual, ISBN, e
   pmcid: [ 'field', 'literal' ]
 }
 ```
+
+## CSL
+
+### CSL Types
+- article
+  - A self-contained work made widely available but not published in a journal or other publication;
+  - Use for preprints, working papers, and similar works posted on a platform where some level of persistence or stewardship is expected (e.g. arXiv or other preprint repositories, working paper series);
+  - For unpublished works not made widely available or only hosted on personal websites, use manuscript
+- article-journal
+  - An article published in an academic journal
+- article-magazine
+  - An article published in a non-academic magazine
+- article-newspaper
+  - An article published in a newspaper
+- bill
+  - A proposed piece of legislation
+- book
+  - A book or similar work;
+  - Can be an authored book or an edited collection of self-contained chapters;
+  - Can be a physical book or an ebook;
+  - The format for an ebook may be specified using medium;
+  - Can be a single-volume work, a multivolume work, or one volume of a multivolume work;
+  - If a container-title is present, the item is interpreted as a book republished in a collection or anthology;
+  - Also used for whole conference proceedings volumes or exhibition catalogs by specifying event and related variables
+- broadcast
+  - A recorded work broadcast over an electronic medium (e.g. a radio broadcast, a television show, a podcast);
+  - The type of broadcast may be specified using genre;
+  - If container-title is present, the item is interpreted as an episode contained within a larger broadcast series (e.g. an episode in a television show or an episode of a podcast)
+- chapter
+  - A part of a book cited separately from the book as a whole (e.g. a chapter in an edited book);
+  - Also used for introductions, forewords, and similar supplemental components of a book
+- classic
+  - A classical or ancient work, sometimes cited using a common abbreviation
+- collection
+  - An archival collection in a museum or other institution
+- dataset
+  - A data set or a similar collection of (mostly) raw data
+- document
+  - A catch-all category for items not belonging to other types;
+  - Use a more specific type when appropriate
+- entry
+  - An entry in a database, directory, or catalog;
+  - For entries in a dictionary, use entry-dictionary;
+  - For entries in an encyclopedia, use entry-encyclopedia
+- entry-dictionary
+  - An entry in a dictionary
+- entry-encyclopedia
+  - An entry in an encyclopedia or similar reference work
+- event
+  - An organized event (e.g., an exhibition or conference);
+  - Use for direct citations to the event, rather than to works contained within an event (e.g. a presentation in a conference, a graphic in an exhibition) or based on an event (e.g. a paper-conference published in a proceedings, an exhibition catalog)
+- figure
+  - A illustration or representation of data, typically as part of a journal article or other larger work;
+  - May be in any format (e.g. image, video, audio recording, 3D model);
+  - The format of the item can be specified using medium
+- graphic
+  - A still visual work;
+  - Can be used for artwork or other works (e.g. journalistic or historical photographs);
+  - Can be used for any still visual work (e.g. photographs, drawings, paintings, sculptures, clothing);
+  - The format of the item can be specified using medium
+- hearing
+  - A hearing by a government committee or transcript thereof
+- interview
+  - An interview of a person;
+  - Also used for a recording or transcript of an interview; author is interpreted as the interviewee
+- legal_case
+  - A legal case
+- legislation
+  - A law or resolution enacted by a governing body
+- manuscript
+  - An unpublished manuscript;
+  - Use for both modern unpublished works and classical manuscripts;
+  - For working papers, preprints, and similar works posted to a repository, use article
+- map
+  - A geographic map
+- motion_picture
+  - A video or visual recording;
+  - If a container-title is present, the item is interpreted as a part contained within a larger compilation of recordings (e.g. a part of a multipart documentary))
+- musical_score
+  - The printed score for a piece of music;
+  - For a live performance of the music, use performance;
+  - For recordings of the music, use song (for audio recordings) or motion_picture (for video recordings)
+- pamphlet
+  - A fragment, historical document, or other unusually-published or ephemeral work (e.g. a sales brochure)
+- paper-conference
+  - A paper formally published in conference proceedings;
+  - For papers presented at a conference, but not published in a proceedings, use speech
+- patent
+  - A patent for an invention
+- performance
+  - A live performance of an artistic work;
+  - For non-artistic presentations, use speech;
+  - For recordings of a performance, use song or motion_picture
+- periodical
+  - A full issue or run of issues in a periodical publication (e.g. a special issue of a journal)
+- personal_communication
+  - Personal communications between multiple parties;
+  - May be unpublished (e.g. private correspondence between two researchers) or collected/published (e.g. a letter published in a collection)
+- post
+  - A post on a online forum, social media platform, or similar platform;
+  - Also used for comments posted to online items
+- post-weblog
+  - A blog post
+- regulation
+  - An administrative order from any level of government
+- report
+  - A technical report, government report, white paper, brief, or similar work distributed by an institution;
+  - Also used for manuals and similar technical documentation (e.g. a software, instrument, or test manual);
+  - If a container-title is present, the item is interpreted as a chapter contained within a larger report
+- review
+  - A review of an item other than a book (e.g. a film review, posted peer review of an article);
+  - If reviewed-title is absent, title is taken to be the title of the reviewed item
+- review-book
+  - A review of a book;
+  - If reviewed-title is absent, title is taken to be the title of the reviewed book
+- software
+  - A computer program, app, or other piece of software
+- song
+  - An audio recording;
+  - Can be used for any audio recording (not only music);
+  - If a container-title is present, the item is interpreted as a track contained within a larger album or compilation of recordings
+- speech
+  - A speech or other presentation (e.g. a paper, talk, poster, or symposium at a conference);
+  - Use genre to specify the type of presentation;
+  - Use event to indicate the event where the presentation was made (e.g. the conference name);
+  - Use container-title if the presentation is part of a larger session (e.g. a paper in a symposium);
+  - For papers published in conference proceedings, use paper-conference;
+  - For artistic performances, use performance
+- standard
+  - A technical standard or similar set of rules or norms
+- thesis
+  - A thesis written to satisfy requirements for a degree;
+  - Use genre to specify the type of thesis
+- treaty
+  - A treaty agreement among political authorities
+- webpage
+  - A website or page on a website;
+  - Intended for sources which are intrinsically online; use a more specific type when appropriate (e.g. article-journal, post-weblog, report, entry);
+  - If a container-title is present, the item is interpreted as a page contained within a larger website
+
+### CSL Fields
+##### Descriptions for the fields can be found at the following link:
+https://docs.citationstyles.org/en/stable/specification.html#standard-variables
+
+abstract
+annote
+archive
+archive_collection
+archive_location
+archive-place
+authority
+call-number
+citation-key
+citation-label
+collection-title
+container-title
+container-title-short
+dimensions
+division
+DOI
+event
+event-title
+event-place
+genre
+ISBN
+ISSN
+jurisdiction
+keyword
+language
+license
+medium
+note
+original-publisher
+original-publisher-place
+original-title
+part-title
+PMCID
+PMID
+publisher
+publisher-place
+references
+reviewed-genre
+reviewed-title
+scale
+source
+status
+title
+title-short
+URL
+volume-title
+year-suffix
+chapter-number
+citation-number
+collection-number
+edition
+first-reference-note-number
+issue
+locator
+number
+number-of-pages
+number-of-volumes
+page
+page-first
+part-number
+printing-number
+section
+supplement-number
+version
+volume
+accessed
+available-date
+event-date
+issued
+original-date
+submitted
+author
+chair
+collection-editor
+compiler
+composer
+container-author
+contributor
+curator
+director
+editor
+editorial-director
+editor-translator
+executive-producer
+guest
+host
+illustrator
+interviewer
+narrator
+organizer
+original-author
+performer
+producer
+recipient
+reviewed-author
+script-writer
+series-creator
+translator
+
+
 ### Zotero References
+
+#### Difference between CSL & BibLaTex
+https://tex.stackexchange.com/questions/434946/citation-style-language-vs-biblatex-vs-possibly-other-citing-systems
 
 ##### Zotero Schema
 https://github.com/zotero/zotero-schema/blob/master/schema.json

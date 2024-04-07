@@ -10,6 +10,8 @@ import DatePicker from "./DatePicker";
 import ContributorForm from "./ContributorForm";
 import { useSession } from "next-auth/react";
 import { UploadBibModal } from "@/app/input-bibtex/components/Modal"; 
+import { CSLGeneralFields } from "@/models/CSLBibTex";
+
 
 export enum EntryType {
   Article = 'article',
@@ -60,51 +62,47 @@ export enum EntryType {
 }
 
 
-interface ReferenceFormData {
-  location: string;
-  annote: string;
+export interface ReferenceFormData extends CSLGeneralFields {
+  id: string | string[] | undefined,
+  type: string,
+  /* Geographical location of archive (Will be converted into archive-place) */
+  "archive-place": string,
+  archivePlaceCity: string,
+  archivePlaceCountry: string,
+  /* Geographical location of event (Will be converted into event-place) */
+  "event-place": string,
+  eventPlaceCity: string,
+  eventPlaceCountry: string,
+  /* Geographical location of Original publisher place (Will be converted into original-publisher-place) */
+  "original-publisher-place": string,
+  origPubPlaceCity: string,
+  origPubPlaceCountry: string,
+  /* Geographical location of the current publisher place (Will be converted into publisher-place) */
+  "publisher-place": string,
+  publisherPlaceCity: string,
+  publisherPlaceCountry: string,
+  monthPublished: string,
+  yearPublished: string,
+  dayPublished: string,
+  monthEvent: string,
+  yearEvent: string,
+  dayEvent: string,
+  monthAccessed: string,
+  yearAccessed: string,
+  dayAccessed: string,
+  monthAvailable: string,
+  yearAvailable: string,
+  dayAvailable: string,
+  monthOriginal: string,
+  yearOriginal: string,
+  dayOriginal: string,
+  monthSubmitted: string,
+  yearSubmitted: string,
+  daySubmitted: string,
   contributors: Contributor[];
-  indextitle: string;
-  chapter: string;
-  edition: string;
-  editor: string;
-  howpublished: string;
-  institution: string;
-  /*The next three fields are later
-  converted into a date object*/
-  month_published: string;
-  day_published: string;
-  year_published: string;
-  /*The next three fields are later
-  converted into a date object*/
-  month_accessed: string;//
-  day_accessed: string;//
-  year_accessed: string;//
-  /*The next three fields are later
-  converted into a date object*/
-  month_event: string;
-  day_event: string;
-  year_event: string;
-  note: string;
-  number: number;
-  organization: string;
-  pages: string;
-  publisher: string;
-  school: string;
-  series: string;
-  volumes: string;
-  short_title: string;
-  title: [string];
-  type: string;
-  volume: number;
-  doi: string;//
-  issn: [string];
-  isbn: string;//
-  url: string;
   running_time: string;
   format: string;
-  image_url: string;//
-  issue: string;
+  image_url: string;
   api_source: string;
 }
 
@@ -119,7 +117,7 @@ interface Error {
 
 type Props = {
   formId: string;
-  referenceForm: ReferenceFormData;
+  referenceForm?: ReferenceFormData;
   forNewReference?: boolean;
 };
 
@@ -132,46 +130,99 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const contentType = "application/json";
 
   /*Set initial state to website so the page is not blank*/
+  // These form field names must match the field names of the Mongoose schema to be saved in the DB
   const [form, setForm] = useState({
-    location: referenceForm.location,
-    annote: referenceForm.annote,
-    contributors: referenceForm.contributors,
-    indextitle: referenceForm.indextitle,
-    chapter: referenceForm.chapter,
-    edition: referenceForm.edition,
-    editor: referenceForm.editor,
-    howpublished: referenceForm.howpublished,
-    institution: referenceForm.institution,
-    month_published: referenceForm.month_published,
-    day_published: referenceForm.day_published,
-    year_published: referenceForm.year_published,
-    month_accessed: referenceForm.month_accessed,
-    day_accessed: referenceForm.day_accessed,
-    year_accessed: referenceForm.year_accessed,
-    month_event: referenceForm.month_event,
-    day_event: referenceForm.day_event,
-    year_event: referenceForm.year_event,
-    note: referenceForm.note,
-    number: referenceForm.number,
-    organization: referenceForm.organization,
-    pages: referenceForm.pages,
-    publisher: referenceForm.publisher,
-    school: referenceForm.school,
-    series: referenceForm.series,
-    volumes: referenceForm.volumes,
-    short_title: referenceForm.short_title,
-    title: referenceForm.title,
-    type: referenceForm.type,
-    volume: referenceForm.volume,
-    doi: referenceForm.doi,
-    issn: referenceForm.issn,
-    isbn: referenceForm.isbn,
-    url: referenceForm.url,
-    running_time: referenceForm.running_time,
-    format: referenceForm.format,
-    image_url: referenceForm.image_url,
-    issue: referenceForm.issue,
-    api_source: referenceForm.api_source,
+    archivePlaceCity: referenceForm?.archivePlaceCity ?? null,
+    archivePlaceCountry: referenceForm?.archivePlaceCountry ?? null,
+    eventPlaceCity: referenceForm?.eventPlaceCity ?? null,
+    eventPlaceCountry: referenceForm?.eventPlaceCountry ?? null,
+    publisherPlaceCity: referenceForm?.publisherPlaceCity ?? null,
+    publisherPlaceCountry: referenceForm?.publisherPlaceCountry ?? null,
+    "container-title": referenceForm?.["container-title"] ?? null,
+    "collection-title": referenceForm?.["collection-title"] ?? null, // Series
+    page: referenceForm?.page ?? null, // Range of pages
+    "number-of-pages": referenceForm?.["number-of-pages"] ?? null, // Total # of pages
+    volume: referenceForm?.volume ?? null, // Associated volume
+    "number-of-volumes": referenceForm?.["number-of-volumes"] ?? null, // Total # of volumes
+    edition: referenceForm?.edition ?? null,
+    /* Date Fields */
+    monthPublished: referenceForm?.monthPublished ?? '', // Date published
+    yearPublished: referenceForm?.yearPublished ?? '', // Date published
+    dayPublished: referenceForm?.dayPublished ?? '', // Date published
+    monthAccessed: referenceForm?.monthAccessed ?? '', // Date accessed
+    yearAccessed: referenceForm?.yearAccessed ?? '', // Date accessed
+    dayAccessed: referenceForm?.dayAccessed ?? '', // Date accessed
+    monthEvent: referenceForm?.monthEvent ?? '', // Date of event
+    yearEvent: referenceForm?.yearEvent ?? null, // Date of event
+    dayEvent: referenceForm?.dayEvent ?? null, // Date of event
+    monthAvailable: referenceForm?.monthAvailable ?? null, // Date available
+    yearAvailable: referenceForm?.yearAvailable ?? null, // Date available
+    dayAvailable: referenceForm?.dayAvailable ?? null, // Date available
+    monthOriginal: referenceForm?.monthOriginal ?? null, // Date of original
+    yearOriginal: referenceForm?.yearOriginal ?? null, // Date of original
+    dayOriginal: referenceForm?.dayOriginal ?? null, // Date of original
+    monthSubmitted: referenceForm?.monthSubmitted ?? null, // Date submitted
+    yearSubmitted: referenceForm?.yearSubmitted ?? null, // Date submitted
+    daySubmitted: referenceForm?.daySubmitted ?? null, // Date submitted
+    /* End Date Fields */
+    annote: referenceForm?.annote ?? null,
+    abstract: referenceForm?.abstract ?? null,
+    archive: referenceForm?.archive ?? null,
+    archive_collection: referenceForm?.archive_collection ?? null,
+    archive_location: referenceForm?.archive_location ?? null,
+    authority: referenceForm?.authority ?? null,
+    "call-number": referenceForm?.["call-number"] ?? null,
+    "citation-key": referenceForm?.["citation-key"] ?? null,
+    "citation-label": referenceForm?.["citation-label"] ?? null,
+    dimensions: referenceForm?.dimensions ?? null,
+    division: referenceForm?.division ?? null,
+    genre: referenceForm?.genre ?? null,
+    jurisdiction: referenceForm?.jurisdiction ?? null,
+    keyword: referenceForm?.keyword ?? null,
+    language: referenceForm?.language ?? null,
+    license: referenceForm?.license ?? null,
+    medium: referenceForm?.medium ?? null,
+    "original-publisher": referenceForm?.["original-publisher"] ?? null,
+    "original-title": referenceForm?.["original-title"] ?? null,
+    "part-title": referenceForm?.["part-title"] ?? null,
+    PMCID: referenceForm?.PMCID ?? null,
+    PMID: referenceForm?.PMID ?? null,
+    references: referenceForm?.references ?? null,
+    "reviewed-genre": referenceForm?.["reviewed-genre"] ?? null,
+    "reviewed-title": referenceForm?.["reviewed-title"] ?? null,
+    scale: referenceForm?.scale ?? null,
+    source: referenceForm?.source ?? null,
+    status: referenceForm?.status ?? null,
+    "volume-title": referenceForm?.["volume-title"] ?? null,
+    "year-suffix": referenceForm?.["year-suffix"] ?? null,
+    "chapter-number": referenceForm?.["chapter-number"] ?? null,
+    "citation-number": referenceForm?.["citation-number"] ?? null,
+    "collection-number": referenceForm?.["collection-number"] ?? null,
+    "first-reference-note-number": referenceForm?.["first-reference-note-number"] ?? null,
+    issue: referenceForm?.issue ?? null,
+    locator: referenceForm?.locator ?? null,
+    number: referenceForm?.number ?? null,
+    "page-first": referenceForm?.["page-first"] ?? null,
+    "part-number": referenceForm?.["part-number"] ?? null,
+    "printing-number": referenceForm?.["printing-number"] ?? null,
+    "supplement-number": referenceForm?.["supplement-number"] ?? null,
+    version: referenceForm?.version ?? null,    
+    section: referenceForm?.section ?? null,
+    contributors: referenceForm?.contributors ?? new Array<Contributor>(),
+    editor: referenceForm?.editor ?? null,
+    note: referenceForm?.note ?? null,
+    publisher: referenceForm?.publisher ?? null,
+    title: referenceForm?.title ?? null,
+    type: referenceForm?.type ?? null,
+    DOI: referenceForm?.DOI ?? null,
+    ISSN: referenceForm?.ISSN ?? null,
+    ISBN: referenceForm?.ISBN ?? null,
+    URL: referenceForm?.URL ?? null,
+    organization: referenceForm?.organizer ?? null,
+    running_time: referenceForm?.running_time ?? null,
+    format: referenceForm?.format ?? null,
+    image_url: referenceForm?.image_url ?? null,
+    api_source: referenceForm?.api_source ?? null,
   });
 
 
@@ -205,7 +256,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (!form.title) err.title = "Title is required";
     if (!form.contributors) err.contributors = "Contributor info is required";
     //if (!form.publisher) err.publisher = "Publisher is required";
-    if (!form.year_published) err.year = "Year is required";
+    //if (!form.year_published) err.year = "Year is required";
     return err;
   };
 
@@ -218,12 +269,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     if (Object.keys(errs).length === 0) {
       if (forNewReference){
         HandleManualReference(form, userId);
-        router.push("reference-table");
-        router.refresh();
+        // router.push("reference-table");
+        // router.refresh();
       } else {
         EditReference(form, id);
-        router.push("reference-table");
-        router.refresh();
+        // router.push("reference-table");
+        // router.refresh();
       }
     } else {
       setErrors({ errs });
@@ -270,10 +321,11 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   <FormField labelText={"Title"} fieldName={"title"} fieldValue={form.title} fieldType={"text"} fieldPlaceholder={"Title"} handleChange={handleChange} />
                 )}
 
-                {/*Index Title Field*/}
+                {/*Container Title Field*/}
+                {/*Will need to make a case for book titles since container-title covers jounrals, books, and more */}
                 {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper"
                   || form.type == "webpage") && (
-                  <FormField labelText={"Title From Where the Source Came From"} fieldName={"indextitle"} fieldValue={form.indextitle} fieldType={"text"} fieldPlaceholder={"Title From Where the Source Came From"} handleChange={handleChange} />
+                  <FormField labelText={"Title From Where the Source Came From"} fieldName={"container-title"} fieldValue={form["container-title"]} fieldType={"text"} fieldPlaceholder={"Title From Where the Source Came From"} handleChange={handleChange} />
                 )}
 
                 {/*Contributors Field*/}
@@ -283,15 +335,25 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   </div>
                 )}
 
-                {/*Series Field*/}
+                {/*CollectionTitle Field*/}
                 {(form.type == "book" || form.type == "article-journal") && (
-                  <FormField labelText={"Series"} fieldName={"series"} fieldValue={form.series} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
+                  <FormField labelText={"Collection Title (series)"} fieldName={"collection-title"} fieldValue={form["collection-title"]} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
                 )}
 
-                {/*Pages Field*/}
+                {/*Amount of Pages Field*/}
                 {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
                   || form.type == "article-newspaper") && (
-                  <FormField labelText={"Number of Pages"} fieldName={"pages"} fieldValue={form.pages} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
+                  <FormField labelText={"Number of Pages"} fieldName={"number-of-pages"} fieldValue={form["number-of-pages"]} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
+                )}
+
+                {/*Page Range Field*/}
+                {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
+                  || form.type == "article-newspaper") && (
+                  <div>
+                    <FormField labelText={"Page Range"} fieldName={"page"} fieldValue={form["page"]} fieldType={"number"} fieldPlaceholder={"Page range"} handleChange={handleChange} />
+                    {/*First page in range*/}
+                    <FormField labelText={"First page in range"} fieldName={"page-first"} fieldValue={form["page-first"]} fieldType={"number"} fieldPlaceholder={"First Page in range"} handleChange={handleChange} />
+                  </div>
                 )}
 
                 {/*Volume Field*/}
@@ -301,12 +363,15 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
                 {/*Number of Volumes Field*/}
                 {(form.type == "book") && (
-                  <FormField labelText={"Number of Volumes"} fieldName={"volumes"} fieldValue={form.volumes} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
+                  <FormField labelText={"Number of Volumes"} fieldName={"number-of-volumes"} fieldValue={form["number-of-volumes"]} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
                 )}
 
-                {/*Location Field*/}
+                {/*Publisher Location Field*/}
                 {(form.type == "article-newspaper") && (
-                  <FormField labelText={"Location"} fieldName={"location"} fieldValue={form.location} fieldType={"text"} fieldPlaceholder={"Location"} handleChange={handleChange} />
+                  <div>
+                    <FormField labelText={"Publisher City"} fieldName={"publisherPlaceCity"} fieldValue={form.publisherPlaceCity} fieldType={"text"} fieldPlaceholder={"Publisher City"} handleChange={handleChange} />
+                    <FormField labelText={"Publisher Country"} fieldName={"publisherPlaceCountry"} fieldValue={form.publisherPlaceCountry} fieldType={"text"} fieldPlaceholder={"Publisher Country"} handleChange={handleChange} />
+                  </div>
                 )}
 
                 {/*Edition Field*/}
@@ -321,23 +386,23 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
                 {/*Date Published Field*/}
                 {form.type && (
-                  <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month_published", "day_published", "year_published"]} fieldValue={[form.month_published, form.day_published, form.year_published]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
+                  <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["monthPublished", "dayPublished", "yearPublished"]} fieldValue={[form.monthPublished, form.dayPublished, form.yearPublished]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
                 )}
 
                 {/*URL Accessed Field*/}
                 {form.type && (
-                  <FormField labelText={"Source Accessed By URL "} fieldName={"url"} fieldValue={form.url} fieldType={"url"} fieldPlaceholder={"Source Accessed By URL"} handleChange={handleChange} />
+                  <FormField labelText={"Source Accessed By URL "} fieldName={"URL"} fieldValue={form.URL} fieldType={"url"} fieldPlaceholder={"Source Accessed By URL"} handleChange={handleChange} />
                 )}
 
                 {/*Date Accessed Field*/}
                 {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper"
                   || form.type == "webpage") && (
-                  <DatePicker masterLabelText={"Date Accessed (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month_accessed", "day_accessed", "year_accessed"]} fieldValue={[form.month_accessed, form.day_accessed, form.year_accessed]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
+                  <DatePicker masterLabelText={"Date Accessed (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]} fieldValue={[form.monthAccessed, form.dayAccessed, form.yearAccessed]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
                 )}
 
                 {/*ISBN Field*/}
                 {(form.type == "book") && (
-                  <FormField labelText={"International Standard Book Number (ISBN)"} fieldName={"isbn"} fieldValue={form.isbn} fieldType={"text"} fieldPlaceholder={"ISBN"} handleChange={handleChange} />
+                  <FormField labelText={"International Standard Book Number (ISBN)"} fieldName={"ISBN"} fieldValue={form.ISBN} fieldType={"text"} fieldPlaceholder={"ISBN"} handleChange={handleChange} />
                 )}
 
                 {/*Issue Field*/}
@@ -347,12 +412,12 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         
                 {/*DOI Field*/}
                 {(form.type == "article-journal") && (
-                  <FormField labelText={"Digital Object Identifier (DOI)"} fieldName={"doi"} fieldValue={form.doi} fieldType={"text"} fieldPlaceholder={"DOI"} handleChange={handleChange} />
+                  <FormField labelText={"Digital Object Identifier (DOI)"} fieldName={"DOI"} fieldValue={form.DOI} fieldType={"text"} fieldPlaceholder={"DOI"} handleChange={handleChange} />
                 )}
 
                 {/*ISSN Field*/}
                 {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper") && (
-                  <FormField labelText={"International Standard Serial Number (ISSN)"} fieldName={"issn"} fieldValue={form.issn} fieldType={"text"} fieldPlaceholder={"ISSN"} handleChange={handleChange} />
+                  <FormField labelText={"International Standard Serial Number (ISSN)"} fieldName={"ISSN"} fieldValue={form.ISSN} fieldType={"text"} fieldPlaceholder={"ISSN"} handleChange={handleChange} />
                 )}
 
                 {/*Fields that may need added in the future     

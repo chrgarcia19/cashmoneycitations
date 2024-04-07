@@ -3,8 +3,6 @@ import { Contributor } from "./Contributor";
 import User from './User';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth';
-import { Tag } from './Tag';
-
 
 async function getUserId() {
   const session = await getServerSession(authConfig);

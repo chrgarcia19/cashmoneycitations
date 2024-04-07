@@ -58,12 +58,20 @@ function Button({ color, onClick, children }: any) {
 }
 
 // Displays reference details
-function ReferenceDetails({ reference }: any) {
+function ReferenceDetails({ reference, tags }: any) {
   return (
     <>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Reference Type:</label>
           {reference.type}
+      </span>
+      <span className="block h-auto rounded-lg">
+          <label className="font-bold">Tags:</label>
+            {tags?.map((tag: any) => (
+                <div className={`badge badge-lg bg-teal-200 me-2`} key={tag._id}>
+                    {tag.tagName}
+                </div>
+            ))}
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Title:</label>

@@ -229,11 +229,14 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
-                    {tags?.map((tag: any) => (
-                        <div className={`badge badge-lg bg-teal-200 me-2`} key={tag._id}>
-                            {tag.tagName}
-                        </div>
-                    ))}
+                    {/*tags?.map((tag: any) => (
+                        <span key={tag._id}>
+                            <div className={`badge badge-lg bg-teal-200 me-2`}>
+                               
+                            </div>
+                        </span>
+                        
+                    ))*/}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          

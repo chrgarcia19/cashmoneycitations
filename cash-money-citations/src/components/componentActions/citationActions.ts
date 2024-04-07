@@ -94,7 +94,11 @@ export async function CreateCslFromBibTex(bibData: string, userId: string | unde
         await dbConnect();
         const input = bibData;
         const result = await toCslJson(input);
-        const CSLBibTexDocument = new CSLBibModel(result);
+        if (result[0].id) {
+            result[0].id = null;
+        }
+
+        const CSLBibTexDocument = new CSLBibModel(result[0]);
         await CSLBibTexDocument.save();
 
         await AddRef2User(userId, CSLBibTexDocument._id);

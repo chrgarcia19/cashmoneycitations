@@ -74,9 +74,6 @@ function translateForeignModel(result: any) {
 
 
     const CSLBibTexData: { [key: string]: any } = {
-        year: result[0].created['date-parts'][0][0],
-        day: result[0].created['date-parts'][0][2],
-        month: result[0].created['date-parts'][0][1],
         contributors: contributors,
     };
 
@@ -88,6 +85,8 @@ function translateForeignModel(result: any) {
     
             // Capitalizes first letter of field name and assigns it
             CSLBibTexData["year" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[0];
+            CSLBibTexData["month" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[1];
+            CSLBibTexData["day" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[2];
         }
     }
 
@@ -106,7 +105,6 @@ function translateForeignModel(result: any) {
     }
 
     const mergedData = { ...result[0], ...CSLBibTexData };
-    console.log(mergedData)
     return mergedData
 }
 

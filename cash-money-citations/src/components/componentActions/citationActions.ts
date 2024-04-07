@@ -84,9 +84,18 @@ function translateForeignModel(result: any) {
             let parts = formatParts.split("-");
     
             // Capitalizes first letter of field name and assigns it
-            CSLBibTexData["year" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[0];
-            CSLBibTexData["month" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[1];
-            CSLBibTexData["day" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[2];
+
+            // Parse month to integer to remove leading zero, then convert back to string
+            let year = parseInt(parts[0]).toString();
+            CSLBibTexData["year" + field.charAt(0).toUpperCase() + field.slice(1)] = year;
+
+            // Parse month to integer to remove leading zero, then convert back to string
+            let month = parseInt(parts[1]).toString();
+            CSLBibTexData["month" + field.charAt(0).toUpperCase() + field.slice(1)] = month;
+
+            // Parse day to integer to remove leading zero, then convert back to string
+            let day = parseInt(parts[2]).toString();
+            CSLBibTexData["day" + field.charAt(0).toUpperCase() + field.slice(1)] = day;
         }
     }
 

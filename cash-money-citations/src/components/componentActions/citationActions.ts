@@ -53,8 +53,8 @@ function translateForeignModel(result: any) {
                 role: "Author",
                 given: result[0].author[i].given,
                 family: result[0].author[i].family,
-                middle: "",
-                suffix: ""
+                middle: result[0].author[i].middle,
+                suffix: result[0].author[i].suffix
             };
             contributors.push(newContributor);
         }
@@ -71,12 +71,33 @@ function translateForeignModel(result: any) {
     }
 
 
+
+
     const CSLBibTexData: { [key: string]: any } = {
         year: result[0].created['date-parts'][0][0],
         day: result[0].created['date-parts'][0][2],
         month: result[0].created['date-parts'][0][1],
         contributors: contributors,
     };
+
+    // Dynamically processes each date field to CSL standards
+    function processDateField(result: any[], field: string) {
+        if (result[0][field]) {
+            let formatParts = format(result[0][field])
+            let parts = formatParts.split("-");
+    
+            // Capitalizes first letter of field name and assigns it
+            CSLBibTexData["year" + field.charAt(0).toUpperCase() + field.slice(1)] = parts[0];
+        }
+    }
+
+    // Process each date field from incoming data
+    processDateField(result, 'issued')
+    processDateField(result, 'accessed')
+    processDateField(result, 'available-date')
+    processDateField(result, 'original-date')
+    processDateField(result, 'event-date')
+    processDateField(result, 'submitted')
 
     for (const key in result[0]) {
         if (typeMap[key as keyof typeof typeMap]) {
@@ -85,7 +106,7 @@ function translateForeignModel(result: any) {
     }
 
     const mergedData = { ...result[0], ...CSLBibTexData };
-
+    console.log(mergedData)
     return mergedData
 }
 
@@ -95,10 +116,10 @@ export async function CreateCslFromBibTex(bibData: string, userId: string | unde
         const input = bibData;
         const result = await toCslJson(input);
         if (result[0].id) {
-            result[0].id = null;
+            delete result[0].id;
         }
-
-        const CSLBibTexDocument = new CSLBibModel(result[0]);
+        const mergedData = await translateForeignModel(result)
+        const CSLBibTexDocument = new CSLBibModel(mergedData);
         await CSLBibTexDocument.save();
 
         await AddRef2User(userId, CSLBibTexDocument._id);
@@ -169,7 +190,8 @@ export async function formatDate(form: any) {
     // origdate(Date of OG Item) ----- original-date
     // urldate(Date when URL was accessed) ---- accessed
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
-        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);        form.issued = parse(datePublished.toISOString().split('T')[0]);
+        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
+        form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 
     if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {

@@ -74,11 +74,11 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
 
         if (forNewTag) {
           handleNewTag(form, userId);
-          router.push("tag-center");
+          router.push("/tag-center");
           router.refresh();
         } else {
           editTag(form, id);
-          router.push("tag-center");
+          router.push("/tag-center");
           router.refresh();
         }
     };

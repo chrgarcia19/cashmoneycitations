@@ -6,7 +6,6 @@ import { ReferenceFormData } from '../../components/Form';
 
 const NewReference = () => {
   const referenceForm = {
-    id: '',
     type: '',
     /* Geographical location of archive (Will be converted into archive-place) */
     "archive-place": '',
@@ -17,7 +16,7 @@ const NewReference = () => {
     eventPlaceCity: '',
     eventPlaceCountry: '',
     /* Geographical location of Original publisher place (Will be converted into original-publisher-place) */
-    "original-publisher-place": '',
+    "original-publisher-place": null,
     origPubPlaceCity: '',
     origPubPlaceCountry: '',
     /* Geographical location of the current publisher place (Will be converted into publisher-place) */
@@ -90,24 +89,24 @@ const NewReference = () => {
     URL: '',
     "volume-title": '',
     "year-suffix": '',
-    "chapter-number": 0,
-    "citation-number": 0,
-    "collection-number": 0,
-    edition: 0,
-    "first-reference-note-number": 0,
-    issue: 0,
-    locator: 0,
-    number: 0,
-    "number-of-pages": 0,
-    "number-of-volumes": 0,
-    page: 0,
-    "page-first": 0,
-    "part-number": 0,
-    "printing-number": 0,
-    section: 0,
-    "supplement-number": 0,
-    version: 0,
-    volume: 0,
+    "chapter-number": '',
+    "citation-number": '',
+    "collection-number": '',
+    edition: '',
+    "first-reference-note-number": '',
+    issue: '',
+    locator: '',
+    number: '',
+    "number-of-pages": '',
+    "number-of-volumes": '',
+    page: '',
+    "page-first": '',
+    "part-number": '',
+    "printing-number": '',
+    section: '',
+    "supplement-number": '',
+    version: '',
+    volume: '',
     author: '',
     chair: '',
     "collection-editor": '',
@@ -142,7 +141,7 @@ const NewReference = () => {
   };
   
   
-  return <Suspense><Form formId="add-reference-form" referenceForm={referenceForm} /></Suspense>;
+  return <Suspense><Form formId="add-reference-form" /></Suspense>;
 };
 
 export default NewReference;

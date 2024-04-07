@@ -62,7 +62,7 @@ export enum EntryType {
 
 
 export interface ReferenceFormData extends CSLGeneralFields {
-  id: string,
+  id: string | string[] | undefined,
   type: string,
   /* Geographical location of archive (Will be converted into archive-place) */
   "archive-place": string,
@@ -116,7 +116,7 @@ interface Error {
 
 type Props = {
   formId: string;
-  referenceForm: ReferenceFormData;
+  referenceForm?: ReferenceFormData;
   forNewReference?: boolean;
 };
 
@@ -131,98 +131,97 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   /*Set initial state to website so the page is not blank*/
   // These form field names must match the field names of the Mongoose schema to be saved in the DB
   const [form, setForm] = useState({
-    _id: referenceForm.id,
-    archivePlaceCity: referenceForm.archivePlaceCity,
-    archivePlaceCountry: referenceForm.archivePlaceCountry,
-    eventPlaceCity: referenceForm.eventPlaceCity,
-    eventPlaceCountry: referenceForm.eventPlaceCountry,
-    publisherPlaceCity: referenceForm.publisherPlaceCity,
-    publisherPlaceCountry: referenceForm.publisherPlaceCountry,
-    "container-title": referenceForm["container-title"],
-    "collection-title": referenceForm["collection-title"], // Series
-    page: referenceForm.page, // Range of pages
-    "number-of-pages": referenceForm["number-of-pages"], // Total # of pages
-    volume: referenceForm.volume, // Associated volume
-    "number-of-volumes": referenceForm["number-of-volumes"], // Total # of volumes
-    edition: referenceForm.edition,
+    archivePlaceCity: referenceForm?.archivePlaceCity ?? null,
+    archivePlaceCountry: referenceForm?.archivePlaceCountry ?? null,
+    eventPlaceCity: referenceForm?.eventPlaceCity ?? null,
+    eventPlaceCountry: referenceForm?.eventPlaceCountry ?? null,
+    publisherPlaceCity: referenceForm?.publisherPlaceCity ?? null,
+    publisherPlaceCountry: referenceForm?.publisherPlaceCountry ?? null,
+    "container-title": referenceForm?.["container-title"] ?? null,
+    "collection-title": referenceForm?.["collection-title"] ?? null, // Series
+    page: referenceForm?.page ?? null, // Range of pages
+    "number-of-pages": referenceForm?.["number-of-pages"] ?? null, // Total # of pages
+    volume: referenceForm?.volume ?? null, // Associated volume
+    "number-of-volumes": referenceForm?.["number-of-volumes"] ?? null, // Total # of volumes
+    edition: referenceForm?.edition ?? null,
     /* Date Fields */
-    monthPublished: referenceForm.monthPublished, // Date published
-    yearPublished: referenceForm.yearPublished, // Date published
-    dayPublished: referenceForm.dayPublished, // Date published
-    monthAccessed: referenceForm.monthAccessed, // Date accessed
-    yearAccessed: referenceForm.yearAccessed, // Date accessed
-    dayAccessed: referenceForm.dayAccessed, // Date accessed
-    monthEvent: referenceForm.monthEvent, // Date of event
-    yearEvent: referenceForm.yearEvent, // Date of event
-    dayEvent: referenceForm.dayEvent, // Date of event
-    monthAvailable: referenceForm.monthAvailable, // Date available
-    yearAvailable: referenceForm.yearAvailable, // Date available
-    dayAvailable: referenceForm.dayAvailable, // Date available
-    monthOriginal: referenceForm.monthOriginal, // Date of original
-    yearOriginal: referenceForm.yearOriginal, // Date of original
-    dayOriginal: referenceForm.dayOriginal, // Date of original
-    monthSubmitted: referenceForm.monthSubmitted, // Date submitted
-    yearSubmitted: referenceForm.yearSubmitted, // Date submitted
-    daySubmitted: referenceForm.daySubmitted, // Date submitted
+    monthPublished: referenceForm?.monthPublished ?? '', // Date published
+    yearPublished: referenceForm?.yearPublished ?? '', // Date published
+    dayPublished: referenceForm?.dayPublished ?? '', // Date published
+    monthAccessed: referenceForm?.monthAccessed ?? '', // Date accessed
+    yearAccessed: referenceForm?.yearAccessed ?? '', // Date accessed
+    dayAccessed: referenceForm?.dayAccessed ?? '', // Date accessed
+    monthEvent: referenceForm?.monthEvent ?? '', // Date of event
+    yearEvent: referenceForm?.yearEvent ?? null, // Date of event
+    dayEvent: referenceForm?.dayEvent ?? null, // Date of event
+    monthAvailable: referenceForm?.monthAvailable ?? null, // Date available
+    yearAvailable: referenceForm?.yearAvailable ?? null, // Date available
+    dayAvailable: referenceForm?.dayAvailable ?? null, // Date available
+    monthOriginal: referenceForm?.monthOriginal ?? null, // Date of original
+    yearOriginal: referenceForm?.yearOriginal ?? null, // Date of original
+    dayOriginal: referenceForm?.dayOriginal ?? null, // Date of original
+    monthSubmitted: referenceForm?.monthSubmitted ?? null, // Date submitted
+    yearSubmitted: referenceForm?.yearSubmitted ?? null, // Date submitted
+    daySubmitted: referenceForm?.daySubmitted ?? null, // Date submitted
     /* End Date Fields */
-    annote: referenceForm.annote,
-    abstract: referenceForm.abstract,
-    archive: referenceForm.archive,
-    archive_collection: referenceForm.archive_collection,
-    archive_location: referenceForm.archive_location,
-    authority: referenceForm.authority,
-    "call-number": referenceForm["call-number"],
-    "citation-key": referenceForm["citation-key"],
-    "citation-label": referenceForm["citation-label"],
-    dimensions: referenceForm.dimensions,
-    division: referenceForm.division,
-    genre: referenceForm.genre,
-    jurisdiction: referenceForm.jurisdiction,
-    keyword: referenceForm.keyword,
-    language: referenceForm.language,
-    license: referenceForm.license,
-    medium: referenceForm.medium,
-    "original-publisher": referenceForm["original-publisher"],
-    "original-title": referenceForm["original-title"],
-    "part-title": referenceForm["part-title"],
-    PMCID: referenceForm.PMCID,
-    PMID: referenceForm.PMID,
-    references: referenceForm.references,
-    "reviewed-genre": referenceForm["reviewed-genre"],
-    "reviewed-title": referenceForm["reviewed-title"],
-    scale: referenceForm.scale,
-    source: referenceForm.source,
-    status: referenceForm.status,
-    "volume-title": referenceForm["volume-title"],
-    "year-suffix": referenceForm["year-suffix"],
-    "chapter-number": referenceForm["chapter-number"],
-    "citation-number": referenceForm["citation-number"],
-    "collection-number": referenceForm["collection-number"],
-    "first-reference-note-number": referenceForm["first-reference-note-number"],
-    issue: referenceForm.issue,
-    locator: referenceForm.locator,
-    number: referenceForm.number,
-    "page-first": referenceForm["page-first"],
-    "part-number": referenceForm["part-number"],
-    "printing-number": referenceForm["printing-number"],
-    "supplement-number": referenceForm["supplement-number"],
-    version: referenceForm.version,    
-    section: referenceForm.section,
-    contributors: referenceForm.contributors,
-    editor: referenceForm.editor,
-    note: referenceForm.note,
-    publisher: referenceForm.publisher,
-    title: referenceForm.title,
-    type: referenceForm.type,
-    DOI: referenceForm.DOI,
-    ISSN: referenceForm.ISSN,
-    ISBN: referenceForm.ISBN,
-    URL: referenceForm.URL,
-    organization: referenceForm.organizer,
-    running_time: referenceForm.running_time,
-    format: referenceForm.format,
-    image_url: referenceForm.image_url,
-    api_source: referenceForm.api_source,
+    annote: referenceForm?.annote ?? null,
+    abstract: referenceForm?.abstract ?? null,
+    archive: referenceForm?.archive ?? null,
+    archive_collection: referenceForm?.archive_collection ?? null,
+    archive_location: referenceForm?.archive_location ?? null,
+    authority: referenceForm?.authority ?? null,
+    "call-number": referenceForm?.["call-number"] ?? null,
+    "citation-key": referenceForm?.["citation-key"] ?? null,
+    "citation-label": referenceForm?.["citation-label"] ?? null,
+    dimensions: referenceForm?.dimensions ?? null,
+    division: referenceForm?.division ?? null,
+    genre: referenceForm?.genre ?? null,
+    jurisdiction: referenceForm?.jurisdiction ?? null,
+    keyword: referenceForm?.keyword ?? null,
+    language: referenceForm?.language ?? null,
+    license: referenceForm?.license ?? null,
+    medium: referenceForm?.medium ?? null,
+    "original-publisher": referenceForm?.["original-publisher"] ?? null,
+    "original-title": referenceForm?.["original-title"] ?? null,
+    "part-title": referenceForm?.["part-title"] ?? null,
+    PMCID: referenceForm?.PMCID ?? null,
+    PMID: referenceForm?.PMID ?? null,
+    references: referenceForm?.references ?? null,
+    "reviewed-genre": referenceForm?.["reviewed-genre"] ?? null,
+    "reviewed-title": referenceForm?.["reviewed-title"] ?? null,
+    scale: referenceForm?.scale ?? null,
+    source: referenceForm?.source ?? null,
+    status: referenceForm?.status ?? null,
+    "volume-title": referenceForm?.["volume-title"] ?? null,
+    "year-suffix": referenceForm?.["year-suffix"] ?? null,
+    "chapter-number": referenceForm?.["chapter-number"] ?? null,
+    "citation-number": referenceForm?.["citation-number"] ?? null,
+    "collection-number": referenceForm?.["collection-number"] ?? null,
+    "first-reference-note-number": referenceForm?.["first-reference-note-number"] ?? null,
+    issue: referenceForm?.issue ?? null,
+    locator: referenceForm?.locator ?? null,
+    number: referenceForm?.number ?? null,
+    "page-first": referenceForm?.["page-first"] ?? null,
+    "part-number": referenceForm?.["part-number"] ?? null,
+    "printing-number": referenceForm?.["printing-number"] ?? null,
+    "supplement-number": referenceForm?.["supplement-number"] ?? null,
+    version: referenceForm?.version ?? null,    
+    section: referenceForm?.section ?? null,
+    contributors: referenceForm?.contributors ?? new Array<Contributor>(),
+    editor: referenceForm?.editor ?? null,
+    note: referenceForm?.note ?? null,
+    publisher: referenceForm?.publisher ?? null,
+    title: referenceForm?.title ?? null,
+    type: referenceForm?.type ?? null,
+    DOI: referenceForm?.DOI ?? null,
+    ISSN: referenceForm?.ISSN ?? null,
+    ISBN: referenceForm?.ISBN ?? null,
+    URL: referenceForm?.URL ?? null,
+    organization: referenceForm?.organizer ?? null,
+    running_time: referenceForm?.running_time ?? null,
+    format: referenceForm?.format ?? null,
+    image_url: referenceForm?.image_url ?? null,
+    api_source: referenceForm?.api_source ?? null,
   });
 
 

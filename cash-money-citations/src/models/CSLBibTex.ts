@@ -35,11 +35,6 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     }
 });
 
-const TagSchema = new mongoose.Schema<Tag>({
-  tagName: String,
-  tagColor: String,
-});
-
 const referencesUsedSchema = new mongoose.Schema({
   referenceId: String,
   doiAssertedBy: String,
@@ -119,7 +114,7 @@ export interface CSLBibInterface extends mongoose.Document {
     referencesUsed: ReferencesUsed[],
     citationIdList: string[],
     isOwnedBy: string[],
-    tags: Tag[],
+    tagID: string[],
 }
 
 const CSLBibSchema = new Schema({
@@ -234,7 +229,7 @@ const CSLBibSchema = new Schema({
     referencesUsed: [referencesUsedSchema],
     citationIdList: [String],
     isOwnedBy: [String],
-    tags: [TagSchema],
+    tagID: [String],
 
 }, {timestamps: true});
 

@@ -46,12 +46,12 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag
       image_url: reference.image_url,
       issue: reference.issue,
       api_source: reference.apiSource,
-      tags: reference.tags,
+      tagID: reference.tagID,
     };
 
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
-      referenceForm.tags.push(tags[i]);
+      referenceForm.tagID.push(tags[i]._id);
     }
 
     /*Send the new data to the API to be modified*/

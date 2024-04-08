@@ -8,20 +8,33 @@ import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
 import { FaBook, FaBarcode } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // State to manage icons visibility
+  const { data: session, status } = useSession(); // Use useSession to access the session
+
 
   // Toggle function to show/hide icons
-  const toggleIcons = () => setIsOpen(!isOpen);
+  const toggleIcons = () =>  setIsOpen(!isOpen);
+
+  // Check if the user is logged in
+  // Render null if not authenticated to hide the sidebar
+  if (status !== "authenticated") {
+    return null;
+  }
+
 
   return (
+    <>
+    
     <div className="fixed top-28 flex flex-col items-center text-white transition-all ease-in-out duration-300">
       {/* Dedicated Toggle Button */}
       <div className="p-4">
         <button
           onClick={toggleIcons}
-          className="mb-4 flex items-center justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition duration-300 ease-in-out"
+          className="mb-4 flex items-center justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
         >
           <BsList className="text-xl" size={32} />
         </button>
@@ -73,6 +86,7 @@ const Sidebar = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

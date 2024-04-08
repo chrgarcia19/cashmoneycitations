@@ -15,7 +15,7 @@ export default async function NavBar() {
         id="Logo"
         src="cashmoneycitations_logo.png"
         alt="Cash Money Citations Logo"
-        width={80}
+        width={60}
       >
       </img>
     </Link>

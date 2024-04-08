@@ -1,11 +1,59 @@
 "use client";
-
+import React, { useState } from "react";
 import Image from "next/image";
 import MyAnimationComponent from "../components/MyAnimationComponent";
 import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 
 export default function Home() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  // Update form data as user types
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Submit form data to API
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/message", {
+        // Make sure this endpoint matches your API route
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setResponseMessage("Message sent successfully!");
+        // Optionally reset form here
+      } else {
+        setResponseMessage("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setResponseMessage("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 py-2">
@@ -27,7 +75,10 @@ export default function Home() {
                 Harris Gustafson, Thomas Hohnholt, & Hamza Faisal
               </p>
               <div className="mt-4 flex gap-4">
-                <Link href ="/login" className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                <Link
+                  href="/login"
+                  className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                >
                   Get Started
                 </Link>
                 <button className="rounded bg-gray-300 py-2 px-4 text-gray-700 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50">
@@ -36,7 +87,7 @@ export default function Home() {
               </div>
             </div>
             <div className="m-4 flex flex-1 justify-center">
-              {/* <MyAnimationComponent imgPath="/animations/booksAnimation.json" /> */}
+              <MyAnimationComponent imgPath="/animations/booksAnimation.json" />
             </div>
           </div>
 
@@ -68,78 +119,98 @@ export default function Home() {
 
           {/* GitHub Repository Section */}
           <div className="mt-10 w-full max-w-4xl flex justify-around items-stretch space-x-4">
-  {/* Card for View Repository */}
-  <div className="flex-1 bg-white shadow-lg rounded-2xl overflow-hidden">
-    <img src="https://avatars.githubusercontent.com/u/93625102?v=4" alt="Repository Image" className="w-full h-48 object-cover rounded-t-2xl" />
-    <div className="p-6">
-      <button
-        onClick={() => window.open("https://github.com/chrgarcia19/cashmoneycitations", "_blank")}
-        className="w-full bg-gray-800 text-white px-12 py-6 rounded-xl hover:bg-gray-700 transition duration-300 ease-in-out"
-      >
-        View Repository
-      </button>
-    </div>
-  </div>
+            {/* Card for View Repository */}
+            <div className="flex-1 bg-white shadow-lg rounded-2xl overflow-hidden">
+              <img
+                src="https://avatars.githubusercontent.com/u/93625102?v=4"
+                alt="Repository Image"
+                className="w-full h-48 object-cover rounded-t-2xl"
+              />
+              <div className="p-6">
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://github.com/chrgarcia19/cashmoneycitations",
+                      "_blank"
+                    )
+                  }
+                  className="w-full bg-gray-800 text-white px-12 py-6 rounded-xl hover:bg-gray-700 transition duration-300 ease-in-out"
+                >
+                  View Repository
+                </button>
+              </div>
+            </div>
 
-  {/* Card for Project Roadmap */}
-  <div className="flex-1 bg-white shadow-lg rounded-3xl overflow-hidden">
-    <img src="https://github.blog/wp-content/uploads/2020/07/87728232-766b4a80-c777-11ea-8f81-1d468fc360ab.png?fit=1200%2C630" alt="Roadmap Image" className="w-full h-48 object-cover rounded-t-2xl" />
-    <div className="p-6">
-      <button
-        onClick={() => window.open("https://github.com/users/chrgarcia19/projects/2", "_blank")}
-        className="w-full bg-blue-500 text-white px-12 py-6 rounded-xl hover:bg-blue-400 transition duration-300 ease-in-out"
-      >
-        Project Roadmap
-      </button>
-    </div>
-  </div>
-</div>
-
+            {/* Card for Project Roadmap */}
+            <div className="flex-1 bg-white shadow-lg rounded-3xl overflow-hidden">
+              <img
+                src="https://github.blog/wp-content/uploads/2020/07/87728232-766b4a80-c777-11ea-8f81-1d468fc360ab.png?fit=1200%2C630"
+                alt="Roadmap Image"
+                className="w-full h-48 object-cover rounded-t-2xl"
+              />
+              <div className="p-6">
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://github.com/users/chrgarcia19/projects/2",
+                      "_blank"
+                    )
+                  }
+                  className="w-full bg-blue-500 text-white px-12 py-6 rounded-xl hover:bg-blue-400 transition duration-300 ease-in-out"
+                >
+                  Project Roadmap
+                </button>
+              </div>
+            </div>
+          </div>
 
           {/* Contact Section */}
           <div className="mt-10 w-full max-w-7xl mx-auto bg-white border border-gray-200 rounded-lg shadow-lg p-8">
-  <h3 className="text-3xl font-extrabold text-gray-900">
-    Contact Us
-  </h3>
-  <p className="mt-4 text-gray-600">
-    Have questions or feedback? We'd love to hear from you.
-  </p>
-  <div className="mt-8 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 items-start">
-    <div className="flex-1">
-      <form
-        action="#"
-        method="POST"
-        className="flex flex-col space-y-6"
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          className="px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          className="px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
-        />
-        <textarea
-          name="message"
-          rows={6}
-          placeholder="Your Message"
-          className="px-4 py-3 pb-32 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
-        ></textarea>
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
-        >
-          Send Message
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-
+            <h3 className="text-3xl font-extrabold text-gray-900">
+              Contact Us
+            </h3>
+            <p className="mt-4 text-gray-600">
+              Have questions or feedback? We'd love to hear from you.
+            </p>
+            <div className="mt-8 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 items-start">
+              <div className="flex-1">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col space-y-6"
+                >
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    onChange={handleChange}
+                    className="px-4 py-3 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
+                  />
+                  <textarea
+                    name="message"
+                    rows={6}
+                    placeholder="Your Message"
+                    onChange={handleChange}
+                    className="px-4 py-3 pb-32 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-full transition ease-in-out duration-150"
+                  ></textarea>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </button>
+                </form>
+              </div>
+            </div>
+            {responseMessage && <p className="mt-4">{responseMessage}</p>}
+          </div>
         </main>
       </div>
     </>

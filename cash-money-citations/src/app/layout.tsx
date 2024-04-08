@@ -5,6 +5,7 @@ import { AuthProvider } from "./Providers";
 import SideBar from "@/components/SideBar";
 
 
+
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
   title: "Home",
@@ -20,9 +21,11 @@ export default async function RootLayout({
     <html lang="en" data-theme="light">
       <body>
         <NavBar />
-        <SideBar />
         <div className="content">
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+        <SideBar />
+            {children}
+            </AuthProvider>
         </div>
 
         {/* <IconSidebar/> */}

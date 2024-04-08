@@ -139,8 +139,10 @@ export async function CreateCslFromBibTex(bibData: string, userId: string | unde
         // Adds the CSL-JSON to the existing database collection
         InitializeCslJson(CSLBibTexDocument.id, result);
 
+        return true;
     } catch(error) {
         console.error(error)
+        return false;
     }
 }
 

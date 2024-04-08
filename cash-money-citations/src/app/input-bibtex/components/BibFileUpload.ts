@@ -33,7 +33,12 @@ export const SaveBibFileToDb = async (bibEntries: string[], userId: string) => {
         for (const bibFile of bibEntries) {
             if (bibFile) {
                 // Save cslBibData to the database
-                await CreateCslFromBibTex(bibFile, userId);
+                const bibFileEntry = await CreateCslFromBibTex(bibFile, userId);
+                if (bibFileEntry) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     } catch(e) {

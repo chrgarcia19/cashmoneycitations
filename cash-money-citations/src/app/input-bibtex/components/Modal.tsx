@@ -10,6 +10,7 @@ export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [parsedData, setParsedData] = useState<string[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
+    const [submitResult, setSubmitResult] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const session = useSession();
@@ -87,7 +88,12 @@ export function UploadBibModal() {
     const handleSaveToReferences = async () => {
       validateData(parsedData);
       const userId = session.data?.user?.id ?? '';
-      await SaveBibFileToDb(parsedData, userId);
+      const success = await SaveBibFileToDb(parsedData, userId);
+      if (success) {
+        setSubmitResult(true);
+      } else {
+        setSubmitResult(false);
+      }
     };
 
     const handleValueChange = (newValue: string, index: number) => {
@@ -142,7 +148,7 @@ export function UploadBibModal() {
             {(onClose) => (
               <>
                 <div className="flex flex-wrap gap-4 items-center">
-                  <ModalHeader className="flex flex-col gap-1">Bib(La)Tex Input</ModalHeader>
+                  <ModalHeader className="flex flex-col gap-1 self-end">Bib(La)Tex Input</ModalHeader>
                   <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
                       Upload .Bib File
                   </Button>
@@ -157,10 +163,10 @@ export function UploadBibModal() {
                 
                 <ModalBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                   <div>
-                    <button onClick={handleAddEntry}>Add Entry</button>
+                    <Button onClick={handleAddEntry}>Add Entry</Button>
 
                       {parsedData.map((entry, index) => (
-                        <div className="flex items-stretch" key={index}>
+                        <div className="flex items-end" key={index}>
                           <Textarea
                             label={`Entry ${index + 1}`}
                             variant="bordered"
@@ -168,7 +174,7 @@ export function UploadBibModal() {
                             value={entry}
                             onValueChange={(newValue) => handleValueChange(newValue, index)}
                           />
-                          <button onClick={() => handleDelete(index)}>Delete</button>
+                          <Button onClick={() => handleDelete(index)}>Delete</Button>
                         </div>
                       ))}
                       {errors.map((error, index) => (
@@ -185,6 +191,12 @@ export function UploadBibModal() {
                     Save to references
                   </Button>
                 </ModalFooter>
+                {submitResult &&
+                  <div role="alert" className="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Bib(La)Tex references have been successfully added.</span>
+                  </div>
+                }
               </>
             )}
           </ModalContent>

@@ -85,6 +85,7 @@ export function UploadBibModal() {
     };
 
     const handleSaveToReferences = async () => {
+      validateData(parsedData);
       const userId = session.data?.user?.id ?? '';
       await SaveBibFileToDb(parsedData, userId);
     };
@@ -112,7 +113,7 @@ export function UploadBibModal() {
           if (parsedData.errors.length == 0) {
             validEntries.push(entry);
           } else {
-            errors.push(...parsedData.errors.map(error => `Error in line ${error.line}: ${error.type}`));
+            errors.push(...parsedData.errors.map(error => `Error on line ${error.line}: ${error.type}`));
           }
         } catch(e) {
           errors.push('Invalid BibTex Data');
@@ -135,6 +136,7 @@ export function UploadBibModal() {
           radius="lg"
           size="3xl"
           shadow="lg"
+          scrollBehavior="inside"
         >
           <ModalContent className="h-[90%]">
             {(onClose) => (
@@ -153,26 +155,26 @@ export function UploadBibModal() {
                   ref={fileInputRef}
                 />
                 
-                <ModalBody>
-                <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                  <button onClick={handleAddEntry}>Add Entry</button>
+                <ModalBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                  <div>
+                    <button onClick={handleAddEntry}>Add Entry</button>
 
-                    {parsedData.map((entry, index) => (
-                      <div key={index}>
-                        <Textarea
-                          label={`Entry ${index + 1}`}
-                          variant="bordered"
-                          minRows={12}
-                          value={entry}
-                          onValueChange={(newValue) => handleValueChange(newValue, index)}
-                        />
-                        <button onClick={() => handleDelete(index)}>Delete</button>
-                      </div>
-                    ))}
-                    {errors.map((error, index) => (
-                      <div key={index} className="error">{error}</div>
-                    ))}
-                </div>
+                      {parsedData.map((entry, index) => (
+                        <div className="flex items-stretch" key={index}>
+                          <Textarea
+                            label={`Entry ${index + 1}`}
+                            variant="bordered"
+                            minRows={12}
+                            value={entry}
+                            onValueChange={(newValue) => handleValueChange(newValue, index)}
+                          />
+                          <button onClick={() => handleDelete(index)}>Delete</button>
+                        </div>
+                      ))}
+                      {errors.map((error, index) => (
+                        <span key={index} className="error">{error}</span>
+                      ))}
+                  </div>
 
                 </ModalBody>
                 <ModalFooter>

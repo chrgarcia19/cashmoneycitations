@@ -231,7 +231,9 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
                     {reference.tagID.map((id: string) => (
-                        <DisplayTags tagId={id} />
+                        <span key={id}>
+                            <DisplayTags tagId={id} />
+                        </span>
                     ))}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   

@@ -16,15 +16,24 @@ export const ParseBibTexUpload = async (formData: FormData) => {
         const buffer = Buffer.from(bytes);
 
         const parsedBibFile = buffer.toString('utf-8');
-        return parsedBibFile;
+
+        // Split the file into individual BibTeX entries
+        const entries = parsedBibFile.split('@').filter(entry => entry.trim() !== '');
+
+        // Add '@' back to the start of each entry
+        const bibEntries = entries.map(entry => '@' + entry);
+        return bibEntries;
     } catch(error) {
-        return "Parsing BibTex File Failed."
+        return "Parsing BibTex File Failed.";
     }
 }
 
-export const SaveBibFileToDb = async (bibFile: string, userId: string) => {
+export const SaveBibFileToDb = async (bibEntries: string[], userId: string) => {
     try {
-        const cslBibData = await CreateCslFromBibTex(bibFile, userId);
+        for (const bibFile of bibEntries) {
+            const cslBibData = await CreateCslFromBibTex(bibFile, userId);
+            // Save cslBibData to the database
+        }
     } catch(e) {
         console.error(e)
     }

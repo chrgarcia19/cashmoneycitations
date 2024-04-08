@@ -192,7 +192,6 @@ function InputISBN() {
         else {
             publisher = "Unknown";
         }
-        console.log(day + month + year);
         
         let isbnReference: any = {
             type: "book",

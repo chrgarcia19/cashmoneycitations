@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const [parsedData, setParsedData] = useState<string>('');
+    const [parsedData, setParsedData] = useState<string[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -18,7 +18,7 @@ export function UploadBibModal() {
     useEffect(() => {
       const cachedData = localStorage.getItem('bibtexData');
       if (cachedData) {
-        setParsedData(cachedData);
+        setParsedData([cachedData]); // Update setParsedData to accept a string array
       }
     }, []);
 
@@ -29,7 +29,7 @@ export function UploadBibModal() {
         }
 
         debounceTimeoutRef.current = setTimeout(() => {
-            localStorage.setItem('bibtexData', parsedData);
+            localStorage.setItem('bibtexData', JSON.stringify(parsedData));
         }, 2000); // 2 seconds delay
     }, [parsedData]);
 
@@ -50,26 +50,37 @@ export function UploadBibModal() {
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append("file", file as File);
-
-        const parsedBibTex = await ParseBibTexUpload(formData);
-
+    
+        const bibEntries = await ParseBibTexUpload(formData);
+    
         try {
-          let parser = new BibLatexParser(parsedBibTex, {processUnexpected: false, processUnknown: false})
-          let data = parser.parse();
-          setParsedData(parsedBibTex);
+          let parsedData = [];
+          let errors = [];
+    
+          for (const bibEntry of bibEntries) {
+            let parser = new BibLatexParser(bibEntry, {processUnexpected: false, processUnknown: false})
+            let data = parser.parse();
+    
+            if (data.errors.length == 0) {
+              parsedData.push(bibEntry);
+            } else {
+              errors.push(...data.errors.map(error => `Error in line ${error.line}: ${error.type}`));
+            }
+          }
+    
+          setParsedData(parsedData);
           // Save users input to localStorage
-          localStorage.setItem('bibtexData', parsedBibTex);
-          if (data.errors.length == 0) {
-            setErrors([]);
+          localStorage.setItem('bibtexData', JSON.stringify(parsedData));
+    
+          if (errors.length > 0) {
+            setErrors(errors);
           } else {
-            setErrors(data.errors.map(error => `Error in line ${error.line}: ${error.type}`));
+            setErrors([]);
           }
           
         } catch(e) {
           setErrors(['Invalid BibTex Data']);
         }
-
-        
       }
     };
 
@@ -78,22 +89,34 @@ export function UploadBibModal() {
       await SaveBibFileToDb(parsedData, userId);
     };
 
-    // New function to validate data
-    const validateData = async (data: string) => {
-      try {
-        let parser = new BibLatexParser(data, {processUnexpected: false, processUnknown: false})
-        let parsedData = parser.parse();
-        // Save users input to localStorage
-        localStorage.setItem('bibtexData', data);
-        if (parsedData.errors.length == 0) {
-          setParsedData(data);
-          setErrors([]);
-        } else {
-          setErrors(parsedData.errors.map(error => `Error in line ${error.line}: ${error.type}`));
+    const handleValueChange = (newValue: string, index: number) => {
+      setParsedData(prevData => prevData.map((entry, i) => i === index ? newValue : entry));
+    };
+
+    const validateData = async (data: string[]) => {
+      let errors = [];
+      let validEntries = [];
+    
+      for (const entry of data) {
+        try {
+          let parser = new BibLatexParser(entry, {processUnexpected: false, processUnknown: false})
+          let parsedData = parser.parse();
+    
+          if (parsedData.errors.length == 0) {
+            validEntries.push(entry);
+          } else {
+            errors.push(...parsedData.errors.map(error => `Error in line ${error.line}: ${error.type}`));
+          }
+        } catch(e) {
+          errors.push('Invalid BibTex Data');
         }
-      } catch(e) {
-        setErrors(['Invalid BibTex Data']);
       }
+    
+      // Save users input to localStorage
+      localStorage.setItem('bibtexData', JSON.stringify(validEntries));
+    
+      setParsedData(validEntries);
+      setErrors(errors);
     };
 
     // useEffect(() => {
@@ -130,14 +153,16 @@ export function UploadBibModal() {
                 
                 <ModalBody>
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <Textarea
-                     label="Enter Bib(La)Tex here or upload a .Bib file above"
-                     variant="bordered"
-                     minRows={12}
-                     maxRows={48}
-                     value={parsedData}
-                     onValueChange={setParsedData}
-                    />
+                    {parsedData.map((entry, index) => (
+                      <Textarea
+                        key={index}
+                        label={`Entry ${index + 1}`}
+                        variant="bordered"
+                        minRows={12}
+                        value={entry}
+                        onValueChange={(newValue) => handleValueChange(newValue, index)}
+                      />
+                    ))}
                     {errors.map((error, index) => (
                       <div key={index} className="error">{error}</div>
                     ))}

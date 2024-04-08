@@ -70,9 +70,6 @@ function translateForeignModel(result: any) {
         contributors.push(newContributor);
     }
 
-
-
-
     const CSLBibTexData: { [key: string]: any } = {
         contributors: contributors,
     };

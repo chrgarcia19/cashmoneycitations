@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { mutate } from "swr";
-import { editTag, handleNewTag } from "./componentActions/tagActions";
+import { editTag, handleNewTag } from "../componentActions/tagActions";
 
 interface TagData {
     tagName: string;
@@ -85,20 +85,23 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
 
     return (
       <>    
-        <form id={formID} onSubmit={handleSubmit}>
-          <div className="join join-horizontal">
-            <input
-                type="text"
-                name="tagName"
-                onChange={handleChange}
-                value={form.tagName}
-                required
-            /> 
-            <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
-                Submit
-            </button>
-          </div>    
-        </form>  
+        <div className="flex justify-center items-center">
+          <form id={formID} onSubmit={handleSubmit}>
+            <div className="join join-horizontal">
+              <input
+                  type="text"
+                  name="tagName"
+                  className="w-3/5"
+                  onChange={handleChange}
+                  value={form.tagName}
+                  required
+              /> 
+              <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
+                  Submit
+              </button>
+            </div>    
+          </form>  
+        </div>
       </>
         
     )

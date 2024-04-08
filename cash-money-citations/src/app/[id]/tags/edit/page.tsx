@@ -1,6 +1,7 @@
 'use client'
 
-import TagForm from "@/components/TagForm";
+
+import TagForm from "@/components/tagComponents/TagForm";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 

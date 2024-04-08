@@ -1,13 +1,16 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { getSpecificTagById } from "./componentActions/tagActions";
+import { getSpecificTagById, getUserTags } from "./componentActions/tagActions";
+import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 type Props = {
     tagId: string;
 }
 
-const DisplayTags = (props: Props) => {
+const DisplayTags = async (props: Props) => {
     const [tags, setTags] = useState(Object);
 
     useEffect(() => {
@@ -23,7 +26,7 @@ const DisplayTags = (props: Props) => {
         <>
             <div className={`badge badge-lg bg-teal-200 me-2`}>
                 {tags.tagName}           
-            </div>
+            </div>            
         </>
     )
 }

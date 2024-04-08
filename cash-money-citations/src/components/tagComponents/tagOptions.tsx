@@ -1,11 +1,13 @@
 'use client'
 
-import {Tabs, Tab, Card, CardBody, CardHeader} from "@nextui-org/react";
+import {Tabs, Tab} from "@nextui-org/react";
 import ModifyTag from "./modifyTag";
 import { useRouter } from "next/navigation";
+import { ApplyTagsToRef } from "./applyTagsToRef";
 
 type Props = {
     tags: any;
+    references: any;
 }
 
 const TagOptions = async (props: Props) => {
@@ -19,7 +21,7 @@ const TagOptions = async (props: Props) => {
                         <ModifyTag tags={props.tags} router={router} />
                     </Tab>
                     <Tab key="apply" title="Apply Tags to References">
-                        Apply Tags to References
+                        <ApplyTagsToRef tags={props.tags} references={props.references} />
                     </Tab>
                     <Tab key="group" title="View Tag Groups">
                         View Tag Groups

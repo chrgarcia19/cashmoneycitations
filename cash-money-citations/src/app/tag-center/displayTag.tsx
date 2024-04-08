@@ -1,6 +1,6 @@
 import Link from "next/link";
 import TagForm from "@/components/TagForm";
-import { ApplyTagsToRef } from "./applyTagsToRef";
+import { ApplyTagsToRef } from "../../components/tagComponents/applyTagsToRef";
 import { getUserTags } from "@/components/componentActions/tagActions";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";

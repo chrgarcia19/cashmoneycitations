@@ -328,7 +328,7 @@ taken and modified from DaisyUI*/
 .table :where(.table-pin-row thead tr) {
   position: sticky;
   top: 95px;
-  z-index: 50;
+  z-index: 20;
   --tw-bg-opacity: 1;
   background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
 }

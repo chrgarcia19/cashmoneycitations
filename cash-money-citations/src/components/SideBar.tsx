@@ -7,7 +7,7 @@ import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
-import { FaBook, FaBarcode } from "react-icons/fa";
+import { FaHome, FaBook, FaBarcode } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 
 
@@ -29,12 +29,12 @@ const Sidebar = () => {
   return (
     <>
     
-    <div className="fixed top-28 flex flex-col items-center text-white transition-all ease-in-out duration-300">
+    <div className="fixed z-50 flex flex-col items-center text-white transition-all ease-in-out duration-300">
       {/* Dedicated Toggle Button */}
       <div className="p-4">
         <button
           onClick={toggleIcons}
-          className="mb-4 flex items-center justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+          className="mb-4 flex items-center opacity-0  justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
         >
           <BsList className="text-xl" size={32} />
         </button>
@@ -46,6 +46,12 @@ const Sidebar = () => {
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
         }`}
       >
+         <SideBarIcon
+          href="/"
+          icon={<FaHome size="28" />}
+          tooltip="Home"
+        />
+        <Divider />
         <SideBarIcon
           href="/new"
           icon={<HiDocumentAdd size="28" />}

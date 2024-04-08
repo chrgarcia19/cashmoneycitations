@@ -18,7 +18,7 @@ export function UploadBibModal() {
     useEffect(() => {
       const cachedData = localStorage.getItem('bibtexData');
       if (cachedData) {
-        setParsedData([cachedData]); // Update setParsedData to accept a string array
+        setParsedData(JSON.parse(cachedData)); // Update setParsedData to accept a string array
       }
     }, []);
 
@@ -93,6 +93,14 @@ export function UploadBibModal() {
       setParsedData(prevData => prevData.map((entry, i) => i === index ? newValue : entry));
     };
 
+    const handleAddEntry = () => {
+      setParsedData(prevData => [...prevData, '']);
+    };
+
+    const handleDelete = (index: number) => {
+      setParsedData(prevData => prevData.filter((entry, i) => i !== index));
+    };
+
     const validateData = async (data: string[]) => {
       let errors = [];
       let validEntries = [];
@@ -153,15 +161,19 @@ export function UploadBibModal() {
                 
                 <ModalBody>
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                  <button onClick={handleAddEntry}>Add Entry</button>
+
                     {parsedData.map((entry, index) => (
-                      <Textarea
-                        key={index}
-                        label={`Entry ${index + 1}`}
-                        variant="bordered"
-                        minRows={12}
-                        value={entry}
-                        onValueChange={(newValue) => handleValueChange(newValue, index)}
-                      />
+                      <div key={index}>
+                        <Textarea
+                          label={`Entry ${index + 1}`}
+                          variant="bordered"
+                          minRows={12}
+                          value={entry}
+                          onValueChange={(newValue) => handleValueChange(newValue, index)}
+                        />
+                        <button onClick={() => handleDelete(index)}>Delete</button>
+                      </div>
                     ))}
                     {errors.map((error, index) => (
                       <div key={index} className="error">{error}</div>

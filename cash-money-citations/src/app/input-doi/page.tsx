@@ -42,9 +42,9 @@ function InputDOI() {
         let i = 0;
         let newContributor: Contributor = {
             role: "",
-            firstName: "",
-            lastName: "",
-            middleName: "",
+            given: "",
+            family: "",
+            middle: "",
             suffix: ""
         };
         let contributors = new Array<Contributor>();
@@ -54,9 +54,9 @@ function InputDOI() {
             for (i; i<item.author.length; i++) {
                 newContributor = {
                     role: "Author",
-                    firstName: item.author[i].given,
-                    lastName: item.author[i].family,
-                    middleName: "",
+                    given: item.author[i].given,
+                    family: item.author[i].family,
+                    middle: "",
                     suffix: ""
                 };
                 contributors.push(newContributor);
@@ -65,9 +65,9 @@ function InputDOI() {
         else {
             newContributor = {
                 role: "Author",
-                firstName: "",
-                lastName: "",
-                middleName: "",
+                given: "",
+                family: "",
+                middle: "",
                 suffix: ""
             };
             contributors.push(newContributor);

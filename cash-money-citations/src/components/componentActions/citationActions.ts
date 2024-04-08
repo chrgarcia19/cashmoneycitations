@@ -205,12 +205,20 @@ export async function formatDate(form: any) {
     // origdate(Date of OG Item) ----- original-date
     // urldate(Date when URL was accessed) ---- accessed
     if (form.yearPublished || form.monthPublished || form.dayPublished) {
-        const datePublished = new Date(form.yearPublished, form.monthPublished, form.dayPublished);
+        let year = (form.yearPublished != 'NaN') ? form.yearPublished: 0;
+        let month = (form.monthPublished != 'NaN') ? form.monthPublished: 0; 
+        let day = (form.dayPublished != 'NaN') ? form.dayPublished: 0; 
+
+        const datePublished = new Date(year, month, day);
         form.issued = parse(datePublished.toISOString().split('T')[0]);
     }
 
     if (form.yearAccessed || form.monthAccessed || form.dayAccessed) {
-        const dateAccessed = new Date(form.yearAccessed, form.monthAccessed, form.dayAccessed);
+        let year = (form.yearAccessed != 'NaN') ? form.yearAccessed: 0;
+        let month = (form.monthAccessed != 'NaN') ? form.monthAccessed: 0; 
+        let day = (form.dayAccessed != 'NaN') ? form.dayAccessed: 0; 
+
+        const dateAccessed = new Date(year, month, day);
         form.accessed = parse(dateAccessed.toISOString().split('T')[0]);
     }
 

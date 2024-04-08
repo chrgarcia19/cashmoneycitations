@@ -2,6 +2,8 @@
 
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 
 export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag[]){
@@ -115,4 +117,13 @@ export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
     }
 }
 
-export default applyReferencesToTag;
+export const handleDelete = async (tagID: string, router: AppRouterInstance) => {
+  try {
+    await fetch(`/api/tags/${tagID}`, {
+      method: "Delete",
+    });
+    router.push('/tag-center');
+    router.refresh();
+  } catch (error) {
+  }
+};

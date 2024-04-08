@@ -1,12 +1,12 @@
-import { authConfig } from "@/lib/auth";
-import {Card, CardHeader, CardBody, Divider} from "@nextui-org/react";
-import { getServerSession } from "next-auth";
-import { getUserTags } from "../componentActions/tagActions";
+import {Card, CardHeader, CardBody, Divider, Chip} from "@nextui-org/react";
 import TagForm from "./TagForm";
 import Link from "next/link";
+import { handleDelete } from "@/app/tag-center/tagActions";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 type Props = {
     tags: any;
+    router: AppRouterInstance;
 }
 
 const ModifyTag = (props: Props) => {
@@ -23,12 +23,15 @@ const ModifyTag = (props: Props) => {
                 <Card className="py-4 w-3/4">
                     <CardBody className="overflow-visible py-2">
                         <div className="flex flex-wrap justify-center items-center">
-                            {props.tags?.map((tag: any) => (
-                                <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
-                                    <div className={`badge badge-lg bg-teal-200 me-2 mb-2`}>
-                                        {tag.tagName}           
-                                    </div> 
-                                </Link>
+                            {props.tags?.map((tag: any, index: any) => (
+                                <Chip key={index} 
+                                        variant="flat"
+                                        className="bg-teal-200 me-2 mb-2"
+                                        onClose={() => handleDelete(tag._id, props.router)}>
+                                            <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
+                                            {tag.tagName}     
+                                            </Link> 
+                                </Chip>
                             ))}
                         </div>
                     </CardBody>

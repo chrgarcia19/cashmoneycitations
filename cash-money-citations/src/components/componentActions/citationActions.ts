@@ -77,25 +77,34 @@ function translateForeignModel(result: any) {
         contributors: contributors,
     };
 
+    const bibDateTypeMap: { [key: string]: string} = {
+        'issued': 'Published',
+        'available-date': 'Available',
+        'event-date': 'Event',
+        'original-date': 'Original',
+    }
+
     // Dynamically processes each date field to CSL standards
     function processDateField(result: any[], field: string) {
         if (result[0][field]) {
             let formatParts = format(result[0][field])
             let parts = formatParts.split("-");
     
-            // Capitalizes first letter of field name and assigns it
+            // Maps the inputted field to the database field name
+            let mappedField = bibDateTypeMap[field] || field;
 
+            // Capitalizes first letter of field name and assigns it
             // Parse month to integer to remove leading zero, then convert back to string
             let year = parseInt(parts[0]).toString();
-            CSLBibTexData["year" + field.charAt(0).toUpperCase() + field.slice(1)] = year;
+            CSLBibTexData["year" + mappedField.charAt(0).toUpperCase() + mappedField.slice(1)] = year;
 
             // Parse month to integer to remove leading zero, then convert back to string
             let month = parseInt(parts[1]).toString();
-            CSLBibTexData["month" + field.charAt(0).toUpperCase() + field.slice(1)] = month;
+            CSLBibTexData["month" + mappedField.charAt(0).toUpperCase() + mappedField.slice(1)] = month;
 
             // Parse day to integer to remove leading zero, then convert back to string
             let day = parseInt(parts[2]).toString();
-            CSLBibTexData["day" + field.charAt(0).toUpperCase() + field.slice(1)] = day;
+            CSLBibTexData["day" + mappedField.charAt(0).toUpperCase() + mappedField.slice(1)] = day;
         }
     }
 

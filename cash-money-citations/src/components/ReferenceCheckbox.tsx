@@ -1,5 +1,6 @@
 "use client"
 
+import DisplayTags from "./DisplayTags";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import Link from "next/link";
@@ -229,14 +230,9 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
-                    {/*tags?.map((tag: any) => (
-                        <span key={tag._id}>
-                            <div className={`badge badge-lg bg-teal-200 me-2`}>
-                               
-                            </div>
-                        </span>
-                        
-                    ))*/}
+                    {reference.tagID.map((id: string) => (
+                        <DisplayTags tagId={id} />
+                    ))}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          

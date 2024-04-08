@@ -8,6 +8,7 @@ import { getSpecificReferenceById } from "@/components/componentActions/actions"
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
+import DisplayTags from "@/components/DisplayTags";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -58,7 +59,7 @@ function Button({ color, onClick, children }: any) {
 }
 
 // Displays reference details
-function ReferenceDetails({ reference, tags }: any) {
+function ReferenceDetails({ reference }: any) {
   return (
     <>
       <span className="block h-auto rounded-lg">
@@ -67,10 +68,10 @@ function ReferenceDetails({ reference, tags }: any) {
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Tags:</label>
-            {tags?.map((tag: any) => (
-                <div className={`badge badge-lg bg-teal-200 me-2`} key={tag._id}>
-                    {tag.tagName}
-                </div>
+            {reference.tagID.map((id: string) => (
+              <span key={id}>
+                <DisplayTags tagId={id} />
+              </span>
             ))}
       </span>
       <span className="block h-auto rounded-lg">

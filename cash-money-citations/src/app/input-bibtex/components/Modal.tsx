@@ -104,7 +104,6 @@ export function UploadBibModal() {
     const validateData = async (data: string[]) => {
       let errors = [];
       let validEntries = [];
-    
       for (const entry of data) {
         try {
           let parser = new BibLatexParser(entry, {processUnexpected: false, processUnknown: false})
@@ -119,17 +118,12 @@ export function UploadBibModal() {
           errors.push('Invalid BibTex Data');
         }
       }
-    
-      // Save users input to localStorage
-      localStorage.setItem('bibtexData', JSON.stringify(validEntries));
-    
-      setParsedData(validEntries);
       setErrors(errors);
     };
 
-    // useEffect(() => {
-    //   validateData(parsedData);
-    // }, [parsedData]);
+    useEffect(() => {
+      validateData(parsedData)
+    }, [parsedData]);
 
     return (
     <>

@@ -161,7 +161,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                             <h2 className="card-title">Apply Tags to References</h2>
                         </div>
                         <div className="flex items-center justify-center">
-                            <form id="assign_tag" onSubmit={(e) => handleSubmit(isCheckedRef, isCheckedTag, e)}>
+                            <form id="assign_tag" onSubmit={async (e) => await handleSubmit(isCheckedRef, isCheckedTag, e)}>
                                 <div className="join join-horizontal">
                                     {tagTable()}
                                     {refTable()}

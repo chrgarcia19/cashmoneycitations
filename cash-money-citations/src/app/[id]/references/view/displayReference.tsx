@@ -7,8 +7,7 @@ import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nextui-org/react";
-import {Button, ButtonGroup} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem} from "@nextui-org/react";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -309,14 +308,13 @@ export function ExportReferenceData({ referenceId }: any){
   return (
     <>
       <form onSubmit={downloadReference} className='flex items-center space-x-2'>
-        <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
+        <Select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} label="Select Export Type" className='max-w-[45%] p-1 rounded-md'>
           {/* <option value='txt'>TXT</option> */}
-          <option value=''>Export Options</option>
-          <option value='json'>JSON</option>
-          <option value='bibtex'>BibTex</option>
-          <option value='biblatex'>BibLaTex</option>
+          <SelectItem key='json' value='json'>JSON</SelectItem>
+          <SelectItem key='bibtex' value='bibtex'>BibTex</SelectItem>
+          <SelectItem key='biblatex' value='biblatex'>BibLaTex</SelectItem>
           {/* <option value='csv'>CSV</option> */}
-        </select>
+        </Select>
         <Button type='submit' disabled={!downloadFormat} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
           Download Reference
         </Button>

@@ -6,6 +6,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 type Props = {
     tags: any;
+    references: any;
     router: AppRouterInstance;
 }
 
@@ -27,7 +28,7 @@ const ModifyTag = (props: Props) => {
                                 <Chip key={index} 
                                         variant="flat"
                                         className="bg-teal-200 me-2 mb-2"
-                                        onClose={() => handleDelete(tag._id, props.router)}>
+                                        onClose={() => handleDelete(tag._id, props.references, props.router)}>
                                             <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
                                             {tag.tagName}     
                                             </Link> 

@@ -19,7 +19,7 @@ const TagOptions = async (props: Props) => {
             <div className="center-content flex w-full flex-col">
                 <Tabs aria-label="Tag Options" variant="solid">
                     <Tab key="modify" title="Modify Tags">
-                        <ModifyTag tags={props.tags} router={router} />
+                        <ModifyTag tags={props.tags} router={router} references={props.references} />
                     </Tab>
                     <Tab key="apply" title="Apply Tags to References">
                         <ApplyTagsToRef tags={props.tags} references={props.references} />

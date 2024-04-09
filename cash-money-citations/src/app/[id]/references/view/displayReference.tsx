@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nextui-org/react";
+import {Button, ButtonGroup} from "@nextui-org/react";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -45,14 +47,14 @@ fetch(url)
   }
 
 // Styles buttons for Edit, Delete, & Export
-function Button({ color, onClick, children }: any) {
+function exportButton({ color, onClick, children }: any) {
   return (
-    <button
+    <Button
       className={`linkBtn inline-block bg-gradient-to-r from-${color}-400 to-${color}-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
       onClick={onClick}
     >
       <span>{children}</span>
-    </button>
+    </Button>
   );
 }
 
@@ -88,6 +90,7 @@ function ReferenceDetails({ reference }: any) {
           <label className="font-bold">Reference Type:</label>
           {reference.type}
       </span>
+
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>
           {(reference.yearPublished === "NaN") ? "YYYY": reference.yearPublished} - {(reference.monthPublished === "NaN") ? "MM": reference.monthPublished} - {(reference.dayPublished === "NaN") ? "DD": reference.dayPublished}
@@ -99,27 +102,24 @@ function ReferenceDetails({ reference }: any) {
 function ReferenceActions({ onEdit, onDelete, onExport }: any) {
   return (
     <div>
-      {/* <Button color="green" onClick={onEdit}>Edit</Button>
-      <Button color="red" onClick={onDelete}>Delete</Button>
-      <Button color="orange" onClick={onExport}>Bibliography</Button> */}
-      <button
-      className={`linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+      <Button
+      className={`m-2 linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
       onClick={onEdit}
     >
       <span>Edit</span>
-    </button>
-    <button
-      className={`linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+    </Button>
+    <Button
+      className={`m-2 linkBtn inline-block bg-gradient-to-r from-red-400 to-red-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
       onClick={onDelete}
     >
       <span>Delete</span>
-    </button>
-    <button
-      className={`linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
+    </Button>
+    <Button
+      className={`m-2 linkBtn inline-block bg-gradient-to-r from-orange-400 to-orange-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 `}
       onClick={onExport}
     >
-      <span>Export</span>
-    </button>
+      <span>Create Citation</span>
+    </Button>
     </div>
   )
 }
@@ -165,17 +165,22 @@ const ViewReference = () => {
 
 
     return(
-            
-          <div className="flex justify-center items-center pt-10">
-              <div className="bg-gray-100 w-2/5 rounded-xl p-4 space-y-4">
-                  <ReferenceDetails reference={reference}/>
-                  <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-                  <ExportReferenceData referenceId={reference._id}/>
-              </div> 
-          </div>  
-            
+      <Card className="min-w-[40%] max-w-[60%] ">
+
+          <CardHeader>
+            {reference.title}
+          </CardHeader>
+          <Divider/>
+          <CardBody>
+            <ReferenceDetails reference={reference} />
+            <Divider/>
+            <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
+            <Divider/>
+            <ExportReferenceData referenceId={reference._id}/>
+          </CardBody>
+      </Card>
+
     )
-    
 }
 
 export function ExportReferenceData({ referenceId }: any){
@@ -312,9 +317,9 @@ export function ExportReferenceData({ referenceId }: any){
           <option value='biblatex'>BibLaTex</option>
           {/* <option value='csv'>CSV</option> */}
         </select>
-        <button type='submit' disabled={!downloadFormat} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
+        <Button type='submit' disabled={!downloadFormat} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
           Download Reference
-        </button>
+        </Button>
       </form>
     </>
   );

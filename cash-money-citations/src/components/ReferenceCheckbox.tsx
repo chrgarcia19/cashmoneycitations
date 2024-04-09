@@ -232,12 +232,12 @@ export const Checkbox = ({ references }: IProps) => {
                 <td className="border border-slate-600 text-center">          
                 {reference.contributors.map((contributor: any) => {
                   return(
-                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div>
+                    <div key={contributor._id}>{contributor.given} {contributor.middle} {contributor.family} {contributor.suffix}</div>
                   )
                 })}
                 </td>
                 <td className="border border-slate-600 text-center">
-                    {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}</td>
+                    {monthConversion(reference.monthPublished)} {reference.dayPublished}, {reference.yearPublished}</td>
                 </tr>
             ))}
         </>

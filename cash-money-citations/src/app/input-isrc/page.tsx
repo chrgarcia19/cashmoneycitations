@@ -44,9 +44,9 @@ function InputCDDB() {
         let i = 0;
         let newContributor: Contributor = {
             role: "",
-            firstName: "",
-            lastName: "",
-            middleName: "",
+            given: "",
+            family: "",
+            middle: "",
             suffix: ""
         };
         let contributors = new Array<Contributor>();
@@ -59,18 +59,18 @@ function InputCDDB() {
                     if (names.length === 3) {
                         newContributor = {
                             role: "Performer",
-                            firstName: names[0],
-                            lastName: names[1],
-                            middleName: names[2],
+                            given: names[0],
+                            family: names[1],
+                            middle: names[2],
                             suffix: ""
                         };
                     }
                     else {
                         newContributor = {
                             role: "Performer",
-                            firstName: names[0],
-                            lastName: names[1],
-                            middleName: "",
+                            given: names[0],
+                            family: names[1],
+                            middle: "",
                             suffix: ""
                         };
                     }
@@ -78,9 +78,9 @@ function InputCDDB() {
                 else {
                     newContributor = {
                         role: "Performer",
-                        firstName: item['artist-credit'][i].name,
-                        lastName: "",
-                        middleName: "",
+                        given: item['artist-credit'][i].name,
+                        family: "",
+                        middle: "",
                         suffix: ""
                     };
                 }
@@ -90,9 +90,9 @@ function InputCDDB() {
         else {
             newContributor = {
                 role: "Performer",
-                firstName: "",
-                lastName: "",
-                middleName: "",
+                given: "",
+                family: "",
+                middle: "",
                 suffix: ""
             };
             contributors.push(newContributor);
@@ -133,9 +133,9 @@ function InputCDDB() {
             contributors: contributors,
             publisher: "",
             volume: item.volume,
-            month_published: month,
-            day_published: day,
-            year_published: year,
+            monthPublished: month,
+            dayPublished: day,
+            yearPublished: year,
             urldate: new Date(),
         };
 

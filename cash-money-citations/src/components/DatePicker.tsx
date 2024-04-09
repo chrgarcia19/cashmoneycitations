@@ -32,9 +32,9 @@ const DatePicker = (props: Props) => {
                         <select
                             name={props.fieldName[0]}
                             className="select select-sm select-bordered w-40"
-                            defaultValue={props.fieldValue[0]}
+                            defaultValue={props.fieldValue[0] ? props.fieldValue[0]: 0}
                             onChange={props.handleChange}>
-                            <option value="" disabled>Pick a Month</option>
+                            <option value="">Pick a Month</option>
                             <option value="0">January</option>
                             <option value="1">February</option>
                             <option value="2">March</option>
@@ -60,7 +60,7 @@ const DatePicker = (props: Props) => {
                             className="select select-sm select-bordered w-40"
                             defaultValue={props.fieldValue[1]}
                             onChange={props.handleChange}>
-                            <option value="" disabled>Pick a day</option>
+                            <option value="">Pick a day</option>
                             {days.map((day, i) => (
                                 <option 
                                     key={i}

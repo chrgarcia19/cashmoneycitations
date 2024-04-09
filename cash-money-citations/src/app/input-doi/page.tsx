@@ -2,7 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
 
 function InputDOI() {
@@ -77,24 +77,24 @@ function InputDOI() {
         let month = "";
         let year = "";
         let monthInt = 0;
-        if (item['published-online']['date-parts'][0].length === 3) {
-            monthInt = parseInt(item['published-online']['date-parts'][0][1].toString());
+        if (item['published']['date-parts'][0].length === 3) {
+            monthInt = parseInt(item['published']['date-parts'][0][1].toString());
             monthInt = monthInt - 1;
             month = monthInt.toString();
-            day = item['published-online']['date-parts'][0][2].toString();
-            year = item['published-online']['date-parts'][0][0].toString();
+            day = item['published']['date-parts'][0][2].toString();
+            year = item['published']['date-parts'][0][0].toString();
         }
-        else if (item['published-online']['date-parts'][0].length === 2) {
-            monthInt = parseInt(item['published-online']['date-parts'][0][1].toString());
+        else if (item['published']['date-parts'][0].length === 2) {
+            monthInt = parseInt(item['published']['date-parts'][0][1].toString());
             monthInt = monthInt - 1;
             month = monthInt.toString();
             day = "1";
-            year = item['published-online']['date-parts'][0][0].toString();
+            year = item['published']['date-parts'][0][0].toString();
         }
-        else if (item['published-online']['date-parts'][0].length === 1) {
+        else if (item['published']['date-parts'][0].length === 1) {
             day = "1";
             month = "0";
-            year = item['published-online']['date-parts'][0][0].toString();
+            year = item['published']['date-parts'][0][0].toString();
         }
         else { 
             month = "1";
@@ -109,15 +109,14 @@ function InputDOI() {
             contributors: contributors,
             publisher: item.publisher,
             volume: item.volume,
-            month_published: month,
-            day_published: day,
-            year_published: year,
-            doi: item.DOI,
-            issn: item.issn,
+            monthPublished: month,
+            dayPublished: day,
+            yearPublished: year,
+            DOI: item.DOI,
+            ISSN: item.issn,
             issnType: item['issn-type'],
-            pages: item.page,
+            page: item.page,
             indextitle: "",
-            urldate: new Date(),
             abstract: item.abstract,
             apiSource: item.source
         };

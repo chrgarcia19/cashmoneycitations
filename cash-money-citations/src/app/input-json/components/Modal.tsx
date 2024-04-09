@@ -115,7 +115,17 @@ export function UploadJSONModal() {
       const jsonSchema = {
         type: "object",
         properties: {
-            title: {type: ["string"]}
+            title: {type: ["string"]},
+            issue: {type: ["string"]},
+            volume: {type: ["string"]},
+            DOI: {type: ["string"]},
+            ISSN: {type: ["string"]},
+            ISBN: {type: ["string"]},
+            URL: {type: ["string"]},
+            "container-title": {type: ["string"]},
+            language: {type: ["string"]},
+            page: {type: ["string"]},
+            type: {type: ["string"]}
         },
       }
 
@@ -125,7 +135,7 @@ export function UploadJSONModal() {
           const valid = ajv.validate(jsonSchema, jsonData);
           if (!valid && ajv.errors) {
             ajv.errors.forEach((error) => {
-                errors.push(`Data at path ${error.instancePath} ${error.message}`);
+                errors.push(`${error.instancePath} ${error.message}`);
               });
             }
         } catch(e) {

@@ -52,9 +52,9 @@ function InputISSN() {
         let i = 0;
         let newContributor: Contributor = {
             role: "",
-            firstName: "",
-            lastName: "",
-            middleName: "",
+            given: "",
+            family: "",
+            middle: "",
             suffix: ""
         };
         let contributors = new Array<Contributor>();
@@ -64,9 +64,9 @@ function InputISSN() {
             for (i; i<item.author.length; i++) {
                 newContributor = {
                     role: "Author",
-                    firstName: item.author[i].given,
-                    lastName: item.author[i].family,
-                    middleName: "",
+                    given: item.author[i].given,
+                    family: item.author[i].family,
+                    middle: "",
                     suffix: ""
                 };
                 contributors.push(newContributor);
@@ -75,9 +75,9 @@ function InputISSN() {
         else {
             newContributor = {
                 role: "Author",
-                firstName: "",
-                lastName: "",
-                middleName: "",
+                given: "",
+                family: "",
+                middle: "",
                 suffix: ""
             };
             contributors.push(newContributor);
@@ -115,20 +115,23 @@ function InputISSN() {
         let issnReference: any = {
             type: "article-journal",
             title: item.title,
+            "container-title": item["container-title"],
             image_url: "https://pbs.twimg.com/profile_images/592645671863328768/uv0v0EV8_400x400.jpg",
+            URL: item.URL,
             contributors: contributors,
             publisher: item.publisher,
             volume: item.volume,
-            month_published: month,
-            day_published: day,
-            year_published: year,
-            doi: item.DOI,
-            issn: item.issn,
+            issue: item.issue,
+            monthPublished: month,
+            dayPublished: day,
+            yearPublished: year,
+            DOI: item.DOI,
+            ISSN: item.ISSN,
             issnType: item['issn-type'],
-            pages: item.page,
-            indextitle: "",
-            urldate: new Date(),
+            "number-of-pages": item.page,
             abstract: item.abstract,
+            language: item.language,
+            subject: item.subject,
             apiSource: item.source
         };
 

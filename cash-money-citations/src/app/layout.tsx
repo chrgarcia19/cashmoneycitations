@@ -21,7 +21,9 @@ export default async function RootLayout({
                 <NavBar />
                 <SideBar />
                 <div className="content">
-                    <AuthProvider>{children}</AuthProvider>
+                    <AuthProvider>
+                            {children}
+                    </AuthProvider>
                 </div>
 
                 <footer className="fixed left-32 bottom-0 right-0 w-screen px-20 py-4 text-center text-sm text-gray-500 bg-gray-200">

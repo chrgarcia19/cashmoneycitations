@@ -24,9 +24,9 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   const addFields = () => {
     const newField: Contributor = {
       role: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
+      given: "",
+      middle: "",
+      family: "",
       suffix: "",
     };
     setFormFields([...formFields, newField]);
@@ -46,9 +46,9 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
       setFormFields([
         {
           role: "",
-          firstName: "",
-          middleName: "",
-          lastName: "",
+          given: "",
+          middle: "",
+          family: "",
           suffix: "",
         }
       ]);
@@ -71,22 +71,22 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               <option value="Compiler">Compiler</option>
             </select>
             <input
-              name='firstName'
+              name='given'
               placeholder='First Name'
               onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.firstName}
+              defaultValue={form.given}
               className="w-2/4 pr-0.5 mr-0.5" />
             <input
-              name='middleName'
+              name='middle'
               placeholder='Middle Name/Initial'
               onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.middleName}
+              defaultValue={form.middle}
               className="w-2/4 pr-0.5 mr-0.5" />
             <input
-              name='lastName'
+              name='family'
               placeholder='Last Name'
               onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.lastName}
+              defaultValue={form.family}
               className="w-2/4 pr-0.5 mr-0.5" />
             
             <input

@@ -203,6 +203,28 @@ export function ExportReferenceData({ referenceId }: any){
         }
         formattedReference = await getJSON();
         fileExtension = 'json';
+
+        // Create a blob from the JSON data
+        const jsonBlob = new Blob([JSON.stringify(formattedReference, null, 2)], { type: 'application/json' });
+
+        // Create a link element
+        const jsonLink = document.createElement('a');
+
+        // Set the download attribute of the link element
+        jsonLink.download = `reference.${fileExtension}`;
+
+        // Create a URL for the blob and set it as the href of the link
+        jsonLink.href = URL.createObjectURL(jsonBlob);
+
+        // Append the link to the body
+        document.body.appendChild(jsonLink);
+
+        // Trigger a click on the link to start the download
+        jsonLink.click();
+
+        // Remove the link from the body
+        document.body.removeChild(jsonLink);
+
         break;
       case 'bibtex':
         const getBibTex = async() => {
@@ -211,6 +233,29 @@ export function ExportReferenceData({ referenceId }: any){
         }
         formattedReference = await getBibTex();
         fileExtension = 'bib';
+
+        // Create a blob from the JSON data
+        const bibTexBlob = new Blob([formattedReference], { type: 'application/text' });
+
+        // Create a link element
+        const bibTexLink = document.createElement('a');
+
+        // Set the download attribute of the link element
+        bibTexLink.download = `reference.${fileExtension}`;
+
+        // Create a URL for the blob and set it as the href of the link
+        bibTexLink.href = URL.createObjectURL(bibTexBlob);
+
+        // Append the link to the body
+        document.body.appendChild(bibTexLink);
+
+        // Trigger a click on the link to start the download
+        bibTexLink.click();
+
+        // Remove the link from the body
+        document.body.removeChild(bibTexLink);
+        
+        break;
       case 'biblatex':
         // Format the reference as BibTex or BibLaTex
         const getBibLaTex = async() => {
@@ -219,7 +264,26 @@ export function ExportReferenceData({ referenceId }: any){
         }
         formattedReference = await getBibLaTex();
         fileExtension = 'bib';
+        // Create a blob from the JSON data
+        const bibLaTexBlob = new Blob([formattedReference], { type: 'application/text' });
 
+        // Create a link element
+        const bibLaTexLink = document.createElement('a');
+
+        // Set the download attribute of the link element
+        bibLaTexLink.download = `reference.${fileExtension}`;
+
+        // Create a URL for the blob and set it as the href of the link
+        bibLaTexLink.href = URL.createObjectURL(bibLaTexBlob);
+
+        // Append the link to the body
+        document.body.appendChild(bibLaTexLink);
+
+        // Trigger a click on the link to start the download
+        bibLaTexLink.click();
+
+        // Remove the link from the body
+        document.body.removeChild(bibLaTexLink);
         break;
       case 'csv':
         // Format the reference as CSV
@@ -233,13 +297,6 @@ export function ExportReferenceData({ referenceId }: any){
 
         break;
     }
-
-    const element = document.createElement('a');
-    const file = new Blob([formattedReference], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file);
-    element.download = `reference.${fileExtension}`;
-    document.body.appendChild(element);
-    element.click();
   }
 
   return (

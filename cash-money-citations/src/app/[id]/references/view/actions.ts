@@ -109,13 +109,13 @@ export async function GetJSONFile(referenceId: string) {
     const cslJson = referenceData.cslJson
 
     const citation = new Cite(cslJson);
-
     // Create custom citation with user specified style & locale
     const customCitation = citation.format('data', {
-        format: 'text',
+        format: 'object',
         template: "data",
         lang: "en-US",
     });
 
-    return customCitation;
+
+    return customCitation[0];
 }

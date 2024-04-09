@@ -112,7 +112,7 @@ function InputDOI() {
             DOI: item.DOI,
             ISSN: item.ISSN,
             issnType: item['issn-type'],
-            page: item.page,
+            "number-of-pages": item.page,
             abstract: item.abstract,
             apiSource: item.source
         };

@@ -204,6 +204,7 @@ function InputISBN() {
             yearPublished: year,
             dayPublished: day,
             monthPublished: month,
+            "number-of-pages": item.volumeInfo.pageCount,
             ISBN: staticSearchVal,
             image_url: imageLink,
         };

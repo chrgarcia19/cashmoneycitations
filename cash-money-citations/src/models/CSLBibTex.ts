@@ -305,7 +305,7 @@ const CSLBibSchema = new Schema({
   issue: Number,
   locator: Number,
   number: Number,
-  "number-of-pages": Number,
+  "number-of-pages": String,
   "number-of-volumes": Number,
   page: String,
   "page-first": Number,

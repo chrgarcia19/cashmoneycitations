@@ -49,28 +49,21 @@ function InputDOI() {
         };
         let contributors = new Array<Contributor>();
 
-        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.author) {
-            for (i; i<item.author.length; i++) {
+        // Loop through each contributor type
+        const contributorTypes = ['author', 'editor', 'translator', 'compiler'];
+        for (const type of contributorTypes) {
+            if (item[type]) {
+            for (i; i < item[type].length; i++) {
                 newContributor = {
-                    role: "Author",
-                    given: item.author[i].given,
-                    family: item.author[i].family,
-                    middle: "",
-                    suffix: ""
+                role: type.charAt(0).toUpperCase() + type.slice(1),
+                given: item[type][i].given,
+                family: item[type][i].family,
+                middle: "",
+                suffix: ""
                 };
                 contributors.push(newContributor);
             }
-        }
-        else {
-            newContributor = {
-                role: "Author",
-                given: "",
-                family: "",
-                middle: "",
-                suffix: ""
-            };
-            contributors.push(newContributor);
+            }
         }
 
         let day = "";
@@ -102,6 +95,7 @@ function InputDOI() {
             year = "2000";
         }
 
+        // NEED TO ADD THE REST OF THE DATE FIELDS
         let doiReference: any = {
             type: "article-journal",
             title: item.title,

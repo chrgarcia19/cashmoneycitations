@@ -4,6 +4,7 @@ import {Textarea} from "@nextui-org/react";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { ParseJsonUpload, SaveJsonFileToDB } from "./JSONFileUpload";
+import Ajv from "ajv";
 
 export function UploadJSONModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -61,9 +62,9 @@ export function UploadJSONModal() {
           let errors = [];
           for (const jsonEntry of jsonEntries) {
             if (errors.length == 0) {
-              parsedData.push(jsonEntry);
+              parsedData.push(JSON.stringify(jsonEntry, null, 2));
             } else {
-              errors.push(...jsonEntry.errors.map((error: any) => `Error in line ${error.line}: ${error.type}`));
+              errors.push("");
             }
           }
           setParsedData(parsedData);
@@ -77,7 +78,7 @@ export function UploadJSONModal() {
           }
           
         } catch(e) {
-          setErrors(['Invalid JSON Data']);
+          setErrors(['Invalid Imported JSON Data']);
           console.error(e)
         }
       }
@@ -108,12 +109,27 @@ export function UploadJSONModal() {
 
     const validateData = async (data: string[]) => {
       let errors = [];
+      const ajv = new Ajv();
+
+      // Ajv schema for JSON validation
+      const jsonSchema = {
+        type: "object",
+        properties: {
+            title: {type: ["string"]}
+        },
+      }
+
       for (const entry of data) {
         try {
-            JSON.parse(entry);
+          const jsonData = JSON.parse(entry);
+          const valid = ajv.validate(jsonSchema, jsonData);
+          if (!valid && ajv.errors) {
+            ajv.errors.forEach((error) => {
+                errors.push(`Data at path ${error.instancePath} ${error.message}`);
+              });
+            }
         } catch(e) {
           errors.push('Invalid JSON Data');
-
         }
       }
       setErrors(errors);
@@ -162,7 +178,7 @@ export function UploadJSONModal() {
                             label={`Entry ${index + 1}`}
                             variant="bordered"
                             minRows={12}
-                            value={JSON.stringify(entry, null, 2)}
+                            value={entry}
                             onValueChange={(newValue) => handleValueChange(newValue, index)}
                           />
                           <Button onClick={() => handleDelete(index)}>Delete</Button>

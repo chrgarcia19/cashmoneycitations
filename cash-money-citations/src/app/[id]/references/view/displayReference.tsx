@@ -304,12 +304,13 @@ export function ExportReferenceData({ referenceId }: any){
       <form onSubmit={downloadReference} className='flex items-center space-x-2'>
         <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
           {/* <option value='txt'>TXT</option> */}
+          <option value=''>Export Options</option>
           <option value='json'>JSON</option>
           <option value='bibtex'>BibTex</option>
           <option value='biblatex'>BibLaTex</option>
           {/* <option value='csv'>CSV</option> */}
         </select>
-        <button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
+        <button type='submit' disabled={!downloadFormat} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>
           Download Reference
         </button>
       </form>

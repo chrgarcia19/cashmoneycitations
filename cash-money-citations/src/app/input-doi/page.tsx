@@ -97,7 +97,7 @@ function InputDOI() {
 
         // NEED TO ADD THE REST OF THE DATE FIELDS
         let doiReference: any = {
-            type: item.type,
+            type: "article-journal",
             title: item.title,
             "container-title": item['container-title'],
             image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",

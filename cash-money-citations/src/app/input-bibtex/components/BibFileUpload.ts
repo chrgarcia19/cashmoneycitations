@@ -30,17 +30,20 @@ export const ParseBibTexUpload = async (formData: FormData) => {
 
 export const SaveBibFileToDb = async (bibEntries: string[], userId: string) => {
     try {
+        let success = false;
         for (const bibFile of bibEntries) {
             if (bibFile) {
                 // Save cslBibData to the database
                 const bibFileEntry = await CreateCslFromBibTex(bibFile, userId);
                 if (bibFileEntry) {
-                    return true;
+                    success = true;
                 } else {
-                    return false;
+                    success = false;
                 }
             }
         }
+
+        return success;
     } catch(e) {
         console.error(e)
     }

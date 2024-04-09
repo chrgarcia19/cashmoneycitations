@@ -6,7 +6,7 @@
 // Return to Textarea
 // Allow user to edit BibTex
 // Once user clicks submit, save to db as a reference and pass to CSL
-import { HandleManualReference } from "@/components/componentActions/citationActions";
+import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
 
 export const ParseJsonUpload = async (formData: FormData) => {
     try {
@@ -29,7 +29,7 @@ export const SaveJsonFileToDB = async (bibEntries: string[], userId: string) => 
         for (const bibFile of bibEntries) {
             if (bibFile) {
                 // Save cslBibData to the database
-                const bibFileEntry = await HandleManualReference(bibFile, userId);
+                const bibFileEntry = await CreateCslJsonDocument(bibFile, userId);
                 if (bibFileEntry) {
                     success = true;
                 } else {

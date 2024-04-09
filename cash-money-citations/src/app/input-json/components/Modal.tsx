@@ -114,6 +114,7 @@ export function UploadJSONModal() {
       // Ajv schema for JSON validation
       const jsonSchema = {
         type: "object",
+        // These fields are checked for JSON file input
         properties: {
             title: {type: ["string"]},
             issue: {type: ["string"]},

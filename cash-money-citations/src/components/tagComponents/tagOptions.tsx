@@ -4,6 +4,7 @@ import {Tabs, Tab} from "@nextui-org/react";
 import ModifyTag from "./modifyTag";
 import { useRouter } from "next/navigation";
 import { ApplyTagsToRef } from "./applyTagsToRef";
+import GroupCard from "./groupCard";
 
 type Props = {
     tags: any;
@@ -24,7 +25,13 @@ const TagOptions = async (props: Props) => {
                         <ApplyTagsToRef tags={props.tags} references={props.references} />
                     </Tab>
                     <Tab key="group" title="View Tag Groups">
-                        View Tag Groups
+                        <div className="flex flex-wrap">
+                            {props.tags.map((tag: any) => (
+                                <span key={tag._id} className="me-5">
+                                    <GroupCard tag={tag} /> 
+                                </span>
+                            ))}
+                        </div>
                     </Tab>
                 </Tabs>
             </div>

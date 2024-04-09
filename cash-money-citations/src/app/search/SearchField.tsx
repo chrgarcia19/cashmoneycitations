@@ -18,12 +18,44 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
   const [userOwnedRefs, setUserOwnedRefs] = useState<any[]>([]);
   const router = useRouter();
 
+  function monthConversion(month_num: string) {
+    switch(month_num){
+        case "0":
+            return "January";
+        case "1":
+            return "February";
+        case "2":
+            return "March"; 
+        case "3":
+            return "April";
+        case "4":
+            return "May";
+        case "5":
+            return "June";
+        case "6":
+            return "July";
+        case "7":
+            return "August";
+        case "8":
+            return "September";
+        case "9":
+            return "October";
+        case "10":
+            return "November";
+        case "11":
+            return "December";   
+        default:
+            return (month_num + 1);     
+    }
+}
+
   async function getReference() {
     setTableShown(false);
     let arr = await searchRefs(searchTerm);
     let arrJSON = JSON.parse(arr);
     setRefsArr(arrJSON);
     //Checking to see if user owns refs or not
+    console.log(session?.user?.id)
     const userOwnedRefsData = await getUserReferences(session?.user?.id ?? '');
     setUserOwnedRefs(userOwnedRefsData ?? []);
     setTableShown(true);
@@ -51,15 +83,21 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
       let arr = await getReferences();
       setRefsArr(arr);
       //Checking to see if user owns refs or not
-      const userOwnedRefsData = await getUserReferences(session?.user?.id ?? '');
-      setUserOwnedRefs(userOwnedRefsData ?? []);
+      const userId = session?.user?.id;
+      if (userId){
+        const userOwnedRefsData = await getUserReferences(userId);
+        setUserOwnedRefs(userOwnedRefsData ?? []);
+      }
+      else {
+        setUserOwnedRefs([]);
+      }
       setTableShown(true);
     };
     initialGetRefs();
   }, [])
   
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className="flex flex-col items-center h-screen mb-8 pb-20 absolute-bottom">
       <div className="flex flex-col max-w-md mx-auto w-96">
         <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div className="relative">
@@ -74,40 +112,42 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
       </div>
 
       {tableShown && (
-        <table className="table-auto w-full mt-4 border-solid">
-          <thead className="bg-zinc-700 text-white">
-            <tr>
-              <th className="w-1/4 border-r">Title</th>
-              <th className="w-1/4 border-r">Date Published</th>
-              <th className="w-1/4 border-r">Contributors</th>
-              <th className="w-1/4 border-r">Your Reference?</th>
-              <th className="w-1/6">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {refsArr.map(item => {
-              // Check if the user owns the reference
-              const isUserOwned = userOwnedRefs.some(ref => ref._id === item._id);
-              return (
-                <tr key={item._id} className="border-b hover:bg-gray-100">
-                  <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title[0]}</td>
-                  <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.date}</td>
-                  <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
-                    {item.contributors.map((contributor: any) => {
-                      return (
-                        <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div>
-                      );
-                    })}
-                  </td>
-                  <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{isUserOwned ? "Yes" : "No"}</td>
-                  <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
-                    <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to my list</button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="pb-20">
+          <table className="table-auto w-full mt-4 border-solid">
+            <thead className="bg-zinc-700 text-white">
+              <tr>
+                <th className="w-1/4 border-r">Title</th>
+                <th className="w-1/4 border-r">Date Published</th>
+                <th className="w-1/4 border-r">Contributors</th>
+                <th className="w-1/4 border-r">Your Reference?</th>
+                <th className="w-1/6">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {refsArr.map(item => {
+                // Check if the user owns the reference
+                const isUserOwned = userOwnedRefs.some(ref => ref._id === item._id);
+                return (
+                  <tr key={item._id} className="border-b hover:bg-gray-100">
+                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title[0]}</td>
+                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{monthConversion(item.monthPublished)} {item.dayPublished}, {item.yearPublished}</td>
+                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
+                      {item.contributors.map((contributor: any) => {
+                        return (
+                          <div key={contributor._id}>{contributor.given} {contributor.middle} {contributor.family} {contributor.suffix}</div>
+                        );
+                      })}
+                    </td>
+                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{isUserOwned ? "Yes" : "No"}</td>
+                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
+                      <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to my list</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   )

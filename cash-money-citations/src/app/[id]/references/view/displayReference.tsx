@@ -61,9 +61,10 @@ function ReferenceDetails({ reference }: any) {
   return (
     <>
       <span className="block h-auto rounded-lg">
-          <label className="font-bold">Reference Type:</label>
-          {reference.type}
+          <label className="font-bold">Title:</label>
+          {reference.title}
       </span>
+
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Tags:</label>
           {reference.tags.map((tag: Tag) => (
@@ -72,10 +73,7 @@ function ReferenceDetails({ reference }: any) {
             </div>  
           ))}
       </span>
-      <span className="block h-auto rounded-lg">
-          <label className="font-bold">Title:</label>
-          {reference.title}
-      </span>
+
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Contributors:</label>
           {reference.contributors.map((contributor: any) => (
@@ -86,9 +84,13 @@ function ReferenceDetails({ reference }: any) {
           <label className="font-bold">Publisher:</label>
           {reference.publisher}
       </span>
+      <span className="block h-auto rounded-lg">
+          <label className="font-bold">Reference Type:</label>
+          {reference.type}
+      </span>
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>
-          {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}
+          {(reference.yearPublished === "NaN") ? "YYYY": reference.yearPublished} - {(reference.monthPublished === "NaN") ? "MM": reference.monthPublished} - {(reference.dayPublished === "NaN") ? "DD": reference.dayPublished}
       </span>
     </>
   )

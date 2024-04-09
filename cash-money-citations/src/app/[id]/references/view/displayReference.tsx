@@ -89,6 +89,11 @@ function ReferenceDetails({ reference }: any) {
           <label className="font-bold">Reference Type:</label>
           {reference.type}
       </span>
+      {reference.edition ? <span className="block h-16 rounded-lg"><label className="font-bold">Edition:</label>{reference.edition}</span> : ""}
+      {reference.language ? <span className="block h-16 rounded-lg"><label className="font-bold">Language:</label>{reference.language}</span> : ""}
+      {reference.ISBN ? <span className="block h-16 rounded-lg"><label className="font-bold">ISBN:</label>{reference.ISBN}</span> : ""}
+      {reference.DOI ? <span className="block h-16 rounded-lg"><label className="font-bold">DOI:</label>{reference.DOI}</span> : ""}
+      {reference.ISSN ? <span className="block h-16 rounded-lg"><label className="font-bold">Edition:</label>{reference.ISSN}</span> : ""}
 
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>

@@ -98,6 +98,7 @@ function InputISBN() {
     };
 
     const addToDB = async (item: any) => {
+        console.log(item)
         let i = 0;
         let authorArray = [];
         let newContributor: Contributor = {
@@ -193,15 +194,17 @@ function InputISBN() {
             publisher = "Unknown";
         }
         
+
+        
         let isbnReference: any = {
-            type: "book",
+            type: item.volumeInfo.printType.toLowerCase(),
             title: item.volumeInfo.title,
             contributors: contributors,
             publisher: publisher,
-            year_published: year,
-            day_published: day,
-            month_published: month,
-            isbn: staticSearchVal,
+            yearPublished: year,
+            dayPublished: day,
+            monthPublished: month,
+            ISBN: staticSearchVal,
             image_url: imageLink,
         };
         

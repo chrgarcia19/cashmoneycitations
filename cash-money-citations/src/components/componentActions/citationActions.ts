@@ -413,8 +413,10 @@ export async function HandleManualReference(form: any, userId: any) {
 
         await HandleInitialFormat(cslJson);
 
+        return true;
       } catch (error) {
         console.error(error)
+        return false;
       }
 
 

@@ -11,6 +11,7 @@ import ContributorForm from "./ContributorForm";
 import { useSession } from "next-auth/react";
 import { UploadBibModal } from "@/app/input-bibtex/components/Modal"; 
 import { CSLGeneralFields } from "@/models/CSLBibTex";
+import { UploadJSONModal } from "@/app/input-json/components/Modal";
 
 
 export enum EntryType {
@@ -290,6 +291,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 <div>
                   <h1 className="text-2xl align-middle pt-5">Add Reference</h1>
                   <UploadBibModal />
+                  <UploadJSONModal />
                 </div>
               )}
               {!forNewReference && (

@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
+import { getSpecificTagById } from "@/components/componentActions/tagActions";
+import DisplayTags from "@/components/DisplayTags";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -66,11 +68,11 @@ function ReferenceDetails({ reference }: any) {
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Tags:</label>
-          {reference.tags.map((tag: Tag) => (
-            <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
-              {tag.tagName}
-            </div>  
-          ))}
+            {reference.tagID.map((id: string) => (
+              <span key={id}>
+                <DisplayTags tagId={id} />
+              </span>
+            ))}
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Title:</label>
@@ -185,7 +187,7 @@ export function ExportReferenceData({ referenceId }: any){
     fetchReference();
   }, []);
 
-  const fetchReference = async () => {
+  const fetchReference = async () => {    
     const referenceData = await getSpecificReferenceById(referenceId);  
     setReference(referenceData);
   }

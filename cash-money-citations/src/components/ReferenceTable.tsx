@@ -2,12 +2,14 @@ import ReferenceCheckbox from "./ReferenceCheckbox";
 import {getUserReferences} from "./componentActions/actions";
 import { authConfig } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
+import { getUserTags } from "./componentActions/tagActions";
 
 async function ReferenceTable(){
   const session = await getServerSession(authConfig);
   const userId = session?.user?.id ?? '';
 
   const references = await getUserReferences(userId);
+  const tags = await getUserTags(userId);
   
     return(
       <>
@@ -16,15 +18,15 @@ async function ReferenceTable(){
           <thead>
             <tr className="sticky">
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Select</th>
-              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Tags</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Type</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Tags</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Title</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Contributors</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Date Published</th>
             </tr>
           </thead>
           <tbody>
-            <ReferenceCheckbox references={references}></ReferenceCheckbox>
+            <ReferenceCheckbox references={references} tags={tags}></ReferenceCheckbox>
           </tbody>
         </table>
         </div>

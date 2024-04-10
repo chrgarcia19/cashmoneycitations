@@ -19,13 +19,13 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     role: {
       type: String
     },
-    firstName: {
+    given: {
       type: String
     },
-    lastName: {
+    family: {
       type: String
     },
-    middleName: {
+    middle: {
       type: String
     },
     suffix: {
@@ -55,184 +55,339 @@ interface ReferencesUsed {
   journalTitle: String
 }
 
-export interface CSLBibInterface extends mongoose.Document {
-  entryType: "article" | "article-journal" | "article-magazine" | "article-newspaper" | "bill" | "book" | "broadcast" | "chapter" | "classic" | "collection" | "dataset" | "document" | "entry" | "entry-dictionary" | "entry-encyclopedia" | "event" | "figure" | "graphic" | "hearing";
-    location: String, 
-    annote: String, //annotation provided by a user
-    contributors: Contributor[],
-    chapter: String,
-    edition: String,
-    editor: String,
-    howpublished: String,
-    institution: String, 
-    indextitle: String, // Title of a website, journal, etc.
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_published: String,
-    day_published: String,
-    year_published: String,
-    date: Date, //Date Published
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_accessed: String,
-    day_accessed: String,
-    year_accessed: String,
-    urldate: Date, //Date Accessed
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_event: String,
-    day_event: String,
-    year_event: String,
-    eventdate: Date, //Date event occurred (ex: conference)
-    note: string,
-    number: number,
-    organization: string,
-    pages: string,
-    publisher: string,
-    school: string,
-    series: string,
-    volumes: number,
-    shorttitle: string,
-    title: string[],
-    type: string,
-    volume: string,
-    doi: string,
-    issn: string[],
-    issnType: object[],
-    isbn: string,
-    url: string,
-    runningTime: string,
-    format: string,
-    cslJson: object,
-    image_url: string,
-    issue: string,
-    abstract: string,
-    apiSource: string,
-    subject: string[],
-    referencesUsed: ReferencesUsed[],
-    citationIdList: string[],
-    isOwnedBy: string[],
-    tagID: string[],
+export interface CSLGeneralFields {
+  abstract?: string;
+  annote?: string;
+  archive?: string;
+  archive_collection?: string;
+  archive_location?: string;
+  authority?: string;
+  "call-number"?: string;
+  "citation-key"?: string; // Identifier for input data file
+  "citation-label"?: string; // Identifier for in-text citation
+  "collection-title"?: string; // i.e. Series title for a book
+  "container-title"?: string; // i.e. Book title for a book chapter, journal title for a journal article
+  dimensions?: string;
+  division?: string;
+  DOI?: string;
+  event?: string; // Legacy. New version is event-title
+  "event-title"?: string;
+  genre?: string;
+  ISBN?: string;
+  ISSN?: string;
+  jurisdiction?: string;
+  keyword?: string;
+  language?: string;
+  license?: string;
+  medium?: string;
+  note?: string;
+  "original-publisher"?: string;
+  "original-title"?: string;
+  "part-title"?: string;
+  PMCID?: string;
+  PMID?: string;
+  publisher?: string;
+  references?: string[];
+  "reviewed-genre"?: string;
+  "reviewed-title"?: string;
+  scale?: string;
+  source?: string;
+  status?: string;
+  title: string[];
+  URL?: string;
+  "volume-title"?: string;
+  "year-suffix"?: string;
+  "chapter-number"?: number;
+  "citation-number"?: number;
+  "collection-number"?: number;
+  edition?: number;
+  "first-reference-note-number"?: number;
+  issue?: number;
+  locator?: number;
+  number?: number;
+  "number-of-pages"?: number;
+  "number-of-volumes"?: number;
+  page?: number;
+  "page-first"?: number;
+  "part-number"?: number;
+  "printing-number"?: number;
+  section?: number;
+  "supplement-number"?: number;
+  version?: number;
+  volume?: number;
+
+  /* Date fields */
+  accessed: string; // Date accessed
+  "available-date": string; // Date treaty was signed, or online publication date before formal publication
+  "event-date": string; // Date of event
+  issued: string; // Date published
+  "original-date": string; // Issue date of original version
+  submitted: string; // Date item was submitted for publication
+
+  // Contributor variables *********
+  author: string;
+  chair: string;
+  "collection-editor": string;
+  compiler: string;
+  composer: string;
+  "container-author": string;
+  contributor: string;
+  curator: string;
+  director: string;
+  editor: string;
+  "editorial-director": string;
+  "editor-translator": string;
+  "executive-producer": string;
+  guest: string;
+  host: string;
+  illustrator: string;
+  interviewer: string;
+  narrator: string;
+  organizer: string;
+  "original-author": string;
+  performer: string;
+  producer: string;
+  recipient: string;
+  "reviewed-author": string;
+  "script-writer": string;
+  "series-creator": string;
+  translator: string;
 }
 
+export interface CSLBibInterface extends mongoose.Document, CSLGeneralFields {
+  entryType: "article" | "article-journal" | "article-magazine" | "article-newspaper" | "bill" | "book" | "broadcast" | "chapter" | "classic" | "collection" | "dataset" | "document" | "entry" | "entry-dictionary" | "entry-encyclopedia" | "event" | "figure" | "graphic" | "hearing";
+  contributors: Contributor[],
+  /* Geographical location of archive (Will be converted into archive-place) */
+  archivePlaceCity: string,
+  archivePlaceCountry: string,
+  /* Geographical location of event (Will be converted into event-place) */
+  eventPlaceCity: string,
+  eventPlaceCountry: string,
+  /* Geographical location of Original publisher place (Will be converted into original-publisher-place) */
+  origPubPlaceCity: string,
+  origPubPlaceCountry: string,
+  /* Geographical location of the current publisher place (Will be converted into publisher-place) */
+  publisherPlaceCity: String,
+  publisherPlaceCountry: String,
+  "archive-place": String,
+  "event-place": String,
+  "original-publisher-place": String,
+  "publisher-place": String,
+  yearPublished: String,
+  monthPublished: String,
+  dayPublished: String,
+  yearAccessed: String,
+  monthAccessed: String,
+  dayAccessed:String ,
+  yearEvent: String,
+  monthEvent: String,
+  dayEvent: String,
+  yearAvailable: String,
+  monthAvailable: String,
+  dayAvailable: String,
+  yearOriginal: String,
+  monthOriginal: String,
+  dayOriginal: String,
+  yearSubmitted: String,
+  monthSubmitted: String,
+  daySubmitted: String,
+
+  type: string,
+  runningTime: string,
+  format: string,
+  cslJson: object,
+  image_url: string,
+  apiSource: string,
+  subject: string[],
+  referencesUsed: ReferencesUsed[],
+  citationIdList: string[],
+  isOwnedBy: string[],
+  tagID: string[],
+}
+
+
 const CSLBibSchema = new Schema({
-    entryType: {
-        type: String,
-        enum: [
-          "article",
-          "article-journal",
-          "article-magazine",
-          "article-newspaper",
-          "bill",
-          "book",
-          "broadcast",
-          "chapter",
-          "classic",
-          "collection",
-          "dataset",
-          "document",
-          "entry",
-          "entry-dictionary",
-          "entry-encyclopedia",
-          "event",
-          "figure",
-          "graphic",
-          "hearing",
-          "interview",
-          "legal_case",
-          "legislation",
-          "manuscript",
-          "map",
-          "motion_picture",
-          "musical_score",
-          "pamphlet",
-          "paper-conference",
-          "patent",
-          "performance",
-          "periodical",
-          "personal_communication",
-          "post",
-          "post-weblog",
-          "regulation",
-          "report",
-          "review",
-          "review-book",
-          "software",
-          "song",
-          "speech",
-          "standard",
-          "thesis",
-          "treaty",
-          "webpage"
-        ]
-    },
-    citekey: {
-        type: String,
-        default: generateCiteKey,
-    },
-    location: String,
-    annote: String,
-    contributors: [ContributorSchema],
-    chapter: String,
-    edition: String,
-    editor: String,
-    howpublished: String,
-    institution: String, 
-    indextitle: String, //Journal Title
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_published: String,
-    day_published: String,
-    year_published: String,
-    date: Date, //Date Published
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_accessed: String,
-    day_accessed: String,
-    year_accessed: String,
-    urldate: Date, //Date Accessed
-    /*The next 3 fields are for 
-    displaying/editing data for a date*/
-    month_event: String,
-    day_event: String,
-    year_event: String,
-    eventdate: Date,
-    month: String,
-    year: String,
-    note: String,
-    number: Number, //Issue Number for Journal
-    organization: String,
-    pages: String,
-    publisher: String,
-    school: String,
-    series: String,
-    volumes: Number,
-    shorttitle: String,
-    title: [String],
-    type: String,
-    volume: String,
-    doi: String,
-    issn: [String],
-    issnType: [Object],
-    isbn: String,
-    url: String, //Website URL
-    runningTime: String,
-    format: String,
-    cslJson: Object,
-    image_url: String,
-    issue: String,
-    abstract: String,
-    apiSource: String,
-    subject: [String],
-    referencesUsed: [referencesUsedSchema],
-    citationIdList: [String],
-    isOwnedBy: [String],
-    tagID: [String],
+  entryType: {
+      type: String,
+      enum: [
+        "article",
+        "article-journal",
+        "article-magazine",
+        "article-newspaper",
+        "bill",
+        "book",
+        "broadcast",
+        "chapter",
+        "classic",
+        "collection",
+        "dataset",
+        "document",
+        "entry",
+        "entry-dictionary",
+        "entry-encyclopedia",
+        "event",
+        "figure",
+        "graphic",
+        "hearing",
+        "interview",
+        "legal_case",
+        "legislation",
+        "manuscript",
+        "map",
+        "motion_picture",
+        "musical_score",
+        "pamphlet",
+        "paper-conference",
+        "patent",
+        "performance",
+        "periodical",
+        "personal_communication",
+        "post",
+        "post-weblog",
+        "regulation",
+        "report",
+        "review",
+        "review-book",
+        "software",
+        "song",
+        "speech",
+        "standard",
+        "thesis",
+        "treaty",
+        "webpage"
+      ]
+  },
+  citekey: {
+      type: String,
+      default: generateCiteKey,
+  },
+  "archive-place": String,
+  "event-place": String,
+  "original-publisher-place": String,
+  "publisher-place": String,
+  abstract: String,
+  annote: String,
+  archive: String,
+  archive_collection: String,
+  archive_location: String,
+  authority: String,
+  "call-number": String,
+  "citation-key": String,
+  "citation-label": String,
+  "collection-title": String,
+  "container-title": [String],
+  dimensions: String,
+  division: String,
+  DOI: String,
+  event: String,
+  "event-title": String,
+  genre: String,
+  ISBN: [String],
+  ISSN: [String],
+  jurisdiction: String,
+  keyword: String,
+  language: String,
+  license: String,
+  medium: String,
+  note: String,
+  "original-publisher": String,
+  "original-title": String,
+  "part-title": String,
+  PMCID: String,
+  PMID: String,
+  publisher: String,
+  references: [String],
+  "reviewed-genre": String,
+  "reviewed-title": String,
+  scale: String,
+  source: String,
+  status: String,
+  title: [String],
+  URL: String,
+  "volume-title": String,
+  "year-suffix": String,
+  "chapter-number": Number,
+  "citation-number": Number,
+  "collection-number": Number,
+  edition: String,
+  "first-reference-note-number": Number,
+  issue: Number,
+  locator: Number,
+  number: Number,
+  "number-of-pages": String,
+  "number-of-volumes": Number,
+  page: String,
+  "page-first": Number,
+  "part-number": Number,
+  "printing-number": Number,
+  section: Number,
+  "supplement-number": Number,
+  version: Number,
+  volume: String,
+  yearPublished: String,
+  monthPublished: String,
+  dayPublished: String,
+  yearAccessed: String,
+  monthAccessed: String,
+  dayAccessed:String ,
+  yearEvent: String,
+  monthEvent: String,
+  dayEvent: String,
+  yearAvailable: String,
+  monthAvailable: String,
+  dayAvailable: String,
+  yearOriginal: String,
+  monthOriginal: String,
+  dayOriginal: String,
+  yearSubmitted: String,
+  monthSubmitted: String,
+  daySubmitted: String,
+  contributors: [ContributorSchema],
+  author: [ContributorSchema],
+  editor: [ContributorSchema],
+  chair: [ContributorSchema],
+  "collection-editor": [ContributorSchema],
+  compiler: [ContributorSchema],
+  composer: [ContributorSchema],
+  "container-author": [ContributorSchema],
+  contributor: [ContributorSchema],
+  curator: [ContributorSchema],
+  director: [ContributorSchema],
+  "editorial-director": [ContributorSchema],
+  "editor-translator": [ContributorSchema],
+  "executive-producer": [ContributorSchema],
+  guest: [ContributorSchema],
+  host: [ContributorSchema],
+  illustrator: [ContributorSchema],
+  interviewer: [ContributorSchema],
+  narrator: [ContributorSchema],
+  organizer: [ContributorSchema],
+  "original-author": [ContributorSchema],
+  performer: [ContributorSchema],
+  producer: [ContributorSchema],
+  recipient: [ContributorSchema],
+  "reviewed-author": [ContributorSchema],
+  "script-writer": [ContributorSchema],
+  "series-creator": [ContributorSchema],
+  translator: [ContributorSchema],
+  organization: String,
+  series: String,
+  type: String,
+  runningTime: String,
+  format: String,
+  cslJson: Object,
+  image_url: String,
+  apiSource: String,
+  subject: [String],
+  referencesUsed: [referencesUsedSchema],
+  citationIdList: [String],
+  isOwnedBy: [String],
+  tagID: [String],
 
 }, {timestamps: true});
 
 CSLBibSchema.pre('save', async function (next) {
-  const reference = this as CSLBibInterface;
+  const reference = this as unknown as CSLBibInterface;
   const userId = await getUserId();
 
   // Retrieve the owner of the reference

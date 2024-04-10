@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const {nextui} = require("@nextui-org/react");
-const colors = require('tailwindcss/colors');
+const colors = require('tailwindcss/colors')
 module.exports = {
   content: [
   "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,7 +12,7 @@ module.exports = {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui(), require("daisyui")], 
+  plugins: [nextui(), require("daisyui")],
   daisyui: {
     themes: true,
   },

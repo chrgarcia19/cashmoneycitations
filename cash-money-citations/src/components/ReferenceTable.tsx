@@ -18,11 +18,11 @@ async function ReferenceTable(){
           <thead>
             <tr className="sticky">
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Select</th>
-              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Type</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Tags</th>
-              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Reference Title</th>
-              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Contributors</th>
               <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Date Published</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Title</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Contributors</th>
+              <th className="border border-slate-800 text-center text-black text-xl bg-sky-400">Type</th>
             </tr>
           </thead>
           <tbody>

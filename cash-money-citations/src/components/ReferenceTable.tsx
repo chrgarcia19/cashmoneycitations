@@ -2,12 +2,14 @@ import ReferenceCheckbox from "./ReferenceCheckbox";
 import {getUserReferences} from "./componentActions/actions";
 import { authConfig } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
+import { getUserTags } from "./componentActions/tagActions";
 
 async function ReferenceTable(){
   const session = await getServerSession(authConfig);
   const userId = session?.user?.id ?? '';
 
   const references = await getUserReferences(userId);
+  const tags = await getUserTags(userId);
   
     return(
       <>
@@ -24,7 +26,7 @@ async function ReferenceTable(){
             </tr>
           </thead>
           <tbody>
-            <ReferenceCheckbox references={references}></ReferenceCheckbox>
+            <ReferenceCheckbox references={references} tags={tags}></ReferenceCheckbox>
           </tbody>
         </table>
         </div>

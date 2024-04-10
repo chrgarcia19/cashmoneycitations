@@ -152,7 +152,9 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
         await dbConnect();
         const input = automaticInput
         const result = await toCslJson(input);
-
+        if (result[0].id) {
+            delete result[0].id;
+        }
         const mergedData = translateForeignModel(result);
 
 
@@ -172,10 +174,13 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
         // Converts the BibTex to CSL-JSON
         const cslJson = await toCslJson(bibtexOutput)
         // Adds the CSL-JSON to the existing database collection
-        InitializeCslJson(CSLBibTexDocument.id, cslJson);
+        await InitializeCslJson(CSLBibTexDocument.id, cslJson);
+
+        return true;
 
     } catch(error) {
         console.error(error)
+        return false;
     }
 }
 
@@ -413,8 +418,10 @@ export async function HandleManualReference(form: any, userId: any) {
 
         await HandleInitialFormat(cslJson);
 
+        return true;
       } catch (error) {
         console.error(error)
+        return false;
       }
 
 

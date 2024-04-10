@@ -6,8 +6,9 @@ import SideBar from "@/components/SideBar";
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
-    title: 'Home',
-    description: 'CashMoneyCitations'
+    title: 'Cash Money Citations',
+    description: 'CashMoneyCitations',
+    icons: 'cashmoneycitations_logo.png'
 }
 
 export default async function RootLayout({

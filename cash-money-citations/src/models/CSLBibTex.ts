@@ -3,8 +3,6 @@ import { Contributor } from "./Contributor";
 import User from './User';
 import { getServerSession } from 'next-auth';
 import { authConfig } from '@/lib/auth';
-import { Tag } from './Tag';
-
 
 async function getUserId() {
   const session = await getServerSession(authConfig);
@@ -33,11 +31,6 @@ const ContributorSchema = new mongoose.Schema<Contributor>({
     suffix: {
       type: String
     }
-});
-
-const TagSchema = new mongoose.Schema<Tag>({
-  tagName: String,
-  tagColor: String,
 });
 
 const referencesUsedSchema = new mongoose.Schema({
@@ -176,12 +169,28 @@ export interface CSLBibInterface extends mongoose.Document, CSLGeneralFields {
   /* Geographical location of the current publisher place (Will be converted into publisher-place) */
   publisherPlaceCity: String,
   publisherPlaceCountry: String,
-  datePublished: Date,
-  dateAccessed: Date,
-  dateEvent: Date,
-  dateAvailable: Date,
-  dateOriginal: Date,
-  dateSubmitted: Date,
+  "archive-place": String,
+  "event-place": String,
+  "original-publisher-place": String,
+  "publisher-place": String,
+  yearPublished: String,
+  monthPublished: String,
+  dayPublished: String,
+  yearAccessed: String,
+  monthAccessed: String,
+  dayAccessed:String ,
+  yearEvent: String,
+  monthEvent: String,
+  dayEvent: String,
+  yearAvailable: String,
+  monthAvailable: String,
+  dayAvailable: String,
+  yearOriginal: String,
+  monthOriginal: String,
+  dayOriginal: String,
+  yearSubmitted: String,
+  monthSubmitted: String,
+  daySubmitted: String,
 
   type: string,
   runningTime: string,
@@ -193,7 +202,7 @@ export interface CSLBibInterface extends mongoose.Document, CSLGeneralFields {
   referencesUsed: ReferencesUsed[],
   citationIdList: string[],
   isOwnedBy: string[],
-  tags: Tag[],
+  tagID: string[],
 }
 
 
@@ -373,7 +382,7 @@ const CSLBibSchema = new Schema({
   referencesUsed: [referencesUsedSchema],
   citationIdList: [String],
   isOwnedBy: [String],
-  tags: [TagSchema],
+  tagID: [String],
 
 }, {timestamps: true});
 

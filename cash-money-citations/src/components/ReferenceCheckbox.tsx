@@ -1,10 +1,11 @@
 "use client"
 
+import DisplayTags from "./DisplayTags";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
@@ -12,6 +13,7 @@ const config = plugins.config.get('@bibtex')
 
 interface IProps {
     references: any;
+    tags: any;
 }
 
 function monthConversion(month_num: string) {
@@ -45,7 +47,7 @@ function monthConversion(month_num: string) {
     }
 }
 
-export const Checkbox = ({ references }: IProps) => {
+export const Checkbox = ({ references, tags }: IProps) => {
     const router = useRouter();
 
     const handleDelete = async (refID: string) => {
@@ -87,6 +89,12 @@ export const Checkbox = ({ references }: IProps) => {
     useEffect(() => {
         setRefData(references);
     }, [refData]);
+
+    const [tagData, setTagData] = useState<Tag[]>([]);
+
+    useEffect(() => {
+        setTagData(tags);
+    }, [tagData]);
 
     const [isChecked, setIsChecked] = useState(
         new Array(references.length).fill(false)
@@ -221,23 +229,24 @@ export const Checkbox = ({ references }: IProps) => {
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
                 <td className="border border-slate-600 text-center">
-                    {reference.tags.map((tag: Tag) => (
-                        <div key={tag._id} className={`badge badge-lg bg-teal-200 me-2`}>
-                            {tag.tagName}
-                        </div>
+                    {reference.tagID.map((id: string) => (
+                        <Suspense>
+                            <DisplayTags key={id} tagId={id} />
+                        </Suspense>
                     ))}
                 </td>
-                <td className="border border-slate-600 text-center">{reference.type}</td>
+                <td className="border border-slate-600 text-center">{monthConversion(reference.monthPublished)} {reference.dayPublished}, {reference.yearPublished}</td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
-                <td className="border border-slate-600 text-center">          
-                {reference.contributors.map((contributor: any) => {
-                  return(
-                    <div key={contributor._id}>{contributor.given} {contributor.middle} {contributor.family} {contributor.suffix}</div>
-                  )
-                })}
-                </td>
                 <td className="border border-slate-600 text-center">
-                    {monthConversion(reference.monthPublished)} {reference.dayPublished}, {reference.yearPublished}</td>
+                    {reference.contributors.slice(0, 3).map((contributor: any) => {
+                       return <div key={contributor._id}>{contributor.given}</div>
+                    })}
+                    {reference.contributors.length > 3 ?
+                        <div>And {reference.contributors.length - 3} more</div> 
+                        : ""
+                    }
+                </td>
+                <td className="border border-slate-600 text-center">{reference.type}</td>
                 </tr>
             ))}
         </>

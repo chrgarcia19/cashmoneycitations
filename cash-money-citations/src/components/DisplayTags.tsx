@@ -1,10 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { getSpecificTagById, getUserTags } from "./componentActions/tagActions";
-import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
+import { getSpecificTagById } from "./componentActions/tagActions";
 
 type Props = {
     tagId: string;

@@ -5,7 +5,7 @@ import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
@@ -231,18 +231,16 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
                     {reference.tagID.map((id: string) => (
-                        <span key={id}>
-                            <DisplayTags tagId={id} />
-                        </span>
+                        <Suspense>
+                            <DisplayTags key={id} tagId={id} />
+                        </Suspense>
                     ))}
                 </td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
                 <td className="border border-slate-600 text-center">          
-                {reference.contributors.map((contributor: any) => {
-                  return(
-                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div>
-                  )
-                })}
+                {reference.contributors.map((contributor: any) => (
+                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div> 
+                ))}
                 </td>
                 <td className="border border-slate-600 text-center">
                     {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}</td>

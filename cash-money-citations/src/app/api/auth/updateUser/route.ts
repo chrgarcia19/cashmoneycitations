@@ -65,7 +65,8 @@ export async function DELETE(request: Request) {
 
         const email = req.get('userEmail');
 
-        // Update user
+        // Delete user by email
+
         const user = await User.findOneAndDelete({email});
         return NextResponse.json({ success: true, data: user, message: "User Updated"}, {status: 201});
     } catch (error) {

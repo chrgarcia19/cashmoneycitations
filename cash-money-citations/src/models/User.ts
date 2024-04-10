@@ -11,7 +11,9 @@ export interface Users extends mongoose.Document {
         provider: string,
         providerAccountId: string,
     }],
-    dateCreated: Date,
+    ownedReferences: [string],
+    ownedTags: [string],
+    ownedCitations: [string],
 }
 
 /* UserSchema will correspond to a collection in your MongoDB database. */
@@ -68,10 +70,9 @@ const UserSchema = new mongoose.Schema<Users>({
         provider: String,
         providerAccountId: String,
     }],
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    },
-});
+    ownedReferences: [String],
+    ownedTags: [String],
+    ownedCitations: [String],
+}, {timestamps: true});
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

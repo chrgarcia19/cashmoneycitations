@@ -2,8 +2,11 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
+import { useSession } from "next-auth/react";
 
 function InputDOI() {
+    const { data: session } = useSession();
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>("");
     const [data, setData] = useState<any[]>([]);
@@ -15,7 +18,6 @@ function InputDOI() {
             title: "Unknown"
         }
     ]
-        
 
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -38,83 +40,86 @@ function InputDOI() {
 
     const addToDB = async (item: any) => {
         let i = 0;
-        let title = "";
         let newContributor: Contributor = {
-            contributorType: "",
-            contributorFirstName: "",
-            contributorLastName: "",
-            contributorMiddleI: ""
+            role: "",
+            given: "",
+            family: "",
+            middle: "",
+            suffix: ""
         };
         let contributors = new Array<Contributor>();
 
-        //If item.author is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.author) {
-            for (i; i<item.author.length; i++) {
+        // Loop through each contributor type
+        const contributorTypes = ['author', 'editor', 'translator', 'compiler'];
+        for (const type of contributorTypes) {
+            if (item[type]) {
+            for (i; i < item[type].length; i++) {
                 newContributor = {
-                    contributorType: "Author",
-                    contributorFirstName: item.author[i].given,
-                    contributorLastName: item.author[i].family,
-                    contributorMiddleI: ""
+                role: type.charAt(0).toUpperCase() + type.slice(1),
+                given: item[type][i].given,
+                family: item[type][i].family,
+                middle: "",
+                suffix: ""
                 };
                 contributors.push(newContributor);
             }
-        }
-        else {
-            newContributor = {
-                contributorType: "Author",
-                contributorFirstName: "Unknown",
-                contributorLastName: "Unknown",
-                contributorMiddleI: ""
-            };
-            contributors.push(newContributor);
+            }
         }
 
-        //If item.title is populated, move forward on that, otherwise, handle the error appropriately
-        if (item.title) {
-            title = item.title[0];
+        let day = "";
+        let month = "";
+        let year = "";
+        let monthInt = 0;
+        if (item['published']['date-parts'][0].length === 3) {
+            monthInt = parseInt(item['published']['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = item['published']['date-parts'][0][2].toString();
+            year = item['published']['date-parts'][0][0].toString();
         }
-        else {
-            title = "Unknown";
+        else if (item['published']['date-parts'][0].length === 2) {
+            monthInt = parseInt(item['published']['date-parts'][0][1].toString());
+            monthInt = monthInt - 1;
+            month = monthInt.toString();
+            day = "1";
+            year = item['published']['date-parts'][0][0].toString();
         }
-        
+        else if (item['published']['date-parts'][0].length === 1) {
+            day = "1";
+            month = "0";
+            year = item['published']['date-parts'][0][0].toString();
+        }
+        else { 
+            month = "1";
+            day = "1";
+            year = "2000";
+        }
+
+        // NEED TO ADD THE REST OF THE DATE FIELDS
         let doiReference: any = {
-            type: "journal",
-            citekey: "please edit this",
-            title: title,
+            type: "article-journal",
+            title: item.title,
+            "container-title": item['container-title'],
+            image_url: "https://www.arnold-bergstraesser.de/sites/default/files/styles/placeholder_image/public/2023-11/abi-publication-placeholder-journal-article.jpg?h=10d202d3&itok=_uhYkrvi",
             contributors: contributors,
             publisher: item.publisher,
-            year: item.created['date-parts'][0][0],
-            month: item.created['date-parts'][0][1],
-            address: "",
-            edition: "",
             volume: item.volume,
-            isbn: "",
-            doi: item.DOI,
-            pages: item.page,
-            journal: "",
-            image_url: "",
+            monthPublished: month,
+            dayPublished: day,
+            yearPublished: year,
+            URL: item.URL,
+            issue: item.issue,
+            DOI: item.DOI,
+            ISSN: item.ISSN,
+            issnType: item['issn-type'],
+            "number-of-pages": item.page,
+            abstract: item.abstract,
+            apiSource: item.source
         };
-        
-        try {
-            const res = await fetch("/api/references", {
-              method: "POST",
-              headers: {
-                Accept: contentType,
-                "Content-Type": contentType,
-              },
-              body: JSON.stringify(doiReference),
-            });
-      
-            // Throw error with status code in case Fetch API req failed
-            if (!res.ok) {
-              throw new Error(res.status.toString());
-            }
-            router.push("/reference-table");
-            router.refresh();
-          } catch (error) {
-            console.log("Failed to add reference");
-          }
 
+        HandleManualReference(doiReference, session?.user?.id)
+        router.push("/reference-table");
+        router.refresh();
     }
 
     return (

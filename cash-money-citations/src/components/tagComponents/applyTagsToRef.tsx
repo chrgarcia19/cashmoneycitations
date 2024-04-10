@@ -3,8 +3,9 @@
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { useEffect, useState } from "react";
-import {  applyReferencesToTag, applyTagsToReference } from "./tagActions";
+import {  applyReferencesToTag, applyTagsToReference } from "../../app/tag-center/tagActions";
 import { useRouter } from "next/navigation";
+import {Card, CardHeader, CardBody, Divider, Chip} from "@nextui-org/react";
 
 interface IProps {
     tags: any;
@@ -51,7 +52,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
     function tagTable(){
         return (
-            <table className="table table-sm table-pin-rows table-pin-cols">
+            <table className="table table-xs table-pin-rows table-pin-cols">
                 <thead>
                     <tr>
                         <th className="border border-slate-800 text-black bg-green-400">Select</th>
@@ -83,7 +84,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
     function refTable(){
         return (
-            <table className="table table-sm table-pin-rows table-pin-cols">
+            <table className="table table-xs table-pin-rows table-pin-cols">
                 <thead>
                     <tr>
                         <th className="border border-slate-800 text-black bg-sky-400">Select</th>
@@ -135,7 +136,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
         return tags;
     }
 
-    function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>, e: React.FormEvent<HTMLFormElement>){
+    async function handleSubmit(refChecked: Array<boolean>, tagChecked: Array<boolean>, e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
 
         const refs = getSelectedRefs(refChecked);
@@ -143,11 +144,11 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
         /*Add Tag IDs to References first*/
         for (let i = 0; i < refs.length; i++){
-            applyTagsToReference(refs[i], tags);
+            await applyTagsToReference(refs[i], tags);
         }
         /*Add Reference IDs to Tags*/
         for (let i = 0; i < tags.length; i++){
-            applyReferencesToTag(tags[i], refs);
+            await applyReferencesToTag(tags[i], refs);
         }
         router.push("/");
         router.refresh();
@@ -155,28 +156,29 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
 
     return(
         <>
-            <div className="card w-3/4 h-auto bg-base-100 shadow-xl">
-                    <div className="card-body">
-                        <div className="flex items-center justify-center">
-                            <h2 className="card-title">Apply Tags to References</h2>
+            <div className="flex justify-center items-center">
+                <Card className="py-4 w-3/4">
+                    <CardHeader className="flex pb-0 pt-2 flex-col items-center">
+                        <h4 className="font-bold text-large">Add Tags to References</h4>   
+                    </CardHeader> 
+                    <Divider orientation="horizontal" className="my-1"/>
+                    <CardBody className="overflow-visible py-2">
+                    <form id="assign_tag" onSubmit={async (e) => await handleSubmit(isCheckedRef, isCheckedTag, e)}>
+                        <div className="join join-horizontal">
+                            {tagTable()}
+                            {refTable()}
                         </div>
-                        <div className="flex items-center justify-center">
-                            <form id="assign_tag" onSubmit={(e) => handleSubmit(isCheckedRef, isCheckedTag, e)}>
-                                <div className="join join-horizontal">
-                                    {tagTable()}
-                                    {refTable()}
-                                </div>
-                                <div className="card-actions justify-end">
-                                    <button 
-                                        className="btn btn-primary"
-                                        type="submit"
-                                        >
-                                        Add to Reference</button>
-                                </div>
-                            </form>
+                        <div className="card-actions justify-end">
+                            <button 
+                                className="btn btn-primary"
+                                type="submit"
+                                >
+                                Add to Reference</button>
                         </div>
-                    </div>
-                </div>
-            </>
+                    </form>
+                    </CardBody>   
+                </Card>
+            </div>
+        </>
     )
 }

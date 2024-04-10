@@ -56,7 +56,7 @@ function ImportCSLStyles({ handleCslSubmit }: any) {
       <div className='text-center'>
         <label htmlFor="csl-file-upload" className="cursor-pointer flex justify-center items-center text-center space-x-2">
           <svg className="w-6 h-6 text-blue-600 hover:text-blue-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16.707 5.293a1 1 0 00-1.414 0L10 10.586 6.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l6-6a1 1 0 000-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
-          <span>Upload a .csl file</span>
+          <span>Upload a zip file containing .csl files</span>
         </label>
         <input id="csl-file-upload" type="file" accept=".zip" onChange={handleFileChange} className="hidden"/>
       </div>

@@ -12,6 +12,7 @@ export interface Users extends mongoose.Document {
         providerAccountId: string,
     }],
     ownedReferences: [string],
+    ownedTags: [string],
     ownedCitations: [string],
 }
 
@@ -50,6 +51,7 @@ const UserSchema = new mongoose.Schema<Users>({
         providerAccountId: String,
     }],
     ownedReferences: [String],
+    ownedTags: [String],
     ownedCitations: [String],
 }, {timestamps: true});
 

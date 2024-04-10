@@ -23,13 +23,18 @@ function InputCDDB() {
     async function showResults(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setTableShown(false);
-        const res = await fetch(`http://musicbrainz.org/ws/2/recording/?query=title:${searchVal}&fmt=json`);
-        const result = await res.json();
-        if (result.recordings && result.recordings.length !== 0){
-            setData(result.recordings);
+        try {
+            const res = await fetch(`https://musicbrainz.org/ws/2/recording/?query=title:${searchVal}&fmt=json`);
+            const result = await res.json();
+            if (result.recordings && result.recordings.length !== 0){
+                setData(result.recordings);
+            }
+            else {
+                setData(errorItem)
+            }
         }
-        else {
-            setData(errorItem)
+        catch {
+            setData(errorItem);
         }
         setTableShown(true);
     }

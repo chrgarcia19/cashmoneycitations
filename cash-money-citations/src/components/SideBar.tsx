@@ -32,10 +32,10 @@ const Sidebar = () => {
     
     <div className="fixed z-50 flex flex-col items-center text-white transition-all ease-in-out duration-300">
       {/* Dedicated Toggle Button */}
-      <div className="p-4 mt-[-11 0px]">
+      <div className="p-4 mt-[-100px]">
         <button
           onClick={toggleIcons}
-          className="mb-4 flex items-center opacity-0  justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+          className="mb-4 flex items-center opacity-0   justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
         >
           <BsList className="text-xl" size={32} />
         </button>
@@ -43,7 +43,7 @@ const Sidebar = () => {
 
       {/* Icons container, visibility controlled by isOpen state */}
       <div
-        className={`flex flex-col items-center transition-all ease-in-out duration-300 ${
+        className={`flex mt-[-20px] flex-col items-center transition-all ease-in-out duration-300 ${
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
         }`}
       >

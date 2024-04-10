@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <>
       
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 py-2">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
           <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
             {/* Hero Section */}
             <div className="flex w-full max-w-4xl flex-wrap items-center justify-around bg-white shadow-md rounded-lg p-8 mt-32">

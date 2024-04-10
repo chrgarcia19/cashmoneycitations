@@ -247,7 +247,6 @@ export const Checkbox = ({ references, tags }: IProps) => {
                     }
                 </td>
                 <td className="border border-slate-600 text-center">{reference.type}</td>
-
                 </tr>
             ))}
         </>

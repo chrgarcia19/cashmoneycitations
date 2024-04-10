@@ -80,7 +80,7 @@ function ReferenceDetails({ reference }: any) {
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Contributors:</label>
           {reference.contributors.map((contributor: any) => (
-          <div key={contributor._id}>{contributor.suffix}{contributor.given} {contributor.middle} {contributor.family}<br></br></div>
+            <div key={contributor._id}>{contributor.suffix}{contributor.given} {contributor.middle} {contributor.family}<br></br></div>
           ))}
       </span>
       <span className="block h-auto rounded-lg">
@@ -99,7 +99,7 @@ function ReferenceDetails({ reference }: any) {
 
       <span className="block h-16 rounded-lg">
           <label className="font-bold">Date Published:</label>
-          {(reference.yearPublished === "NaN") ? "YYYY": reference.yearPublished} - {(reference.monthPublished === "NaN") ? "MM": reference.monthPublished} - {(reference.dayPublished === "NaN") ? "DD": reference.dayPublished}
+            {(reference.yearPublished === "NaN") ? "YYYY": reference.yearPublished} - {(reference.monthPublished === "NaN") ? "MM": reference.monthPublished} - {(reference.dayPublished === "NaN") ? "DD": reference.dayPublished}
       </span>
     </>
   )

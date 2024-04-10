@@ -130,13 +130,17 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
                 return (
                   <tr key={item._id} className="border-b hover:bg-gray-100">
                     <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title[0]}</td>
-                    <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{monthConversion(item.monthPublished)} {item.dayPublished}, {item.yearPublished}</td>
+                    <td className="border border-slate-600 text-center">
+                      {monthConversion(item.monthPublished)} {item.dayPublished}, {item.yearPublished}
+                    </td>
                     <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
-                      {item.contributors.map((contributor: any) => {
-                        return (
-                          <div key={contributor._id}>{contributor.given} {contributor.middle} {contributor.family} {contributor.suffix}</div>
-                        );
+                      {item.contributors.slice(0, 3).map((contributor: any) => {
+                        return <div key={contributor._id}>{contributor.given}</div>
                       })}
+                      {item.contributors.length > 3 ?
+                          <div>And {item.contributors.length - 3} more</div> 
+                          : ""
+                      }
                     </td>
                     <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{isUserOwned ? "Yes" : "No"}</td>
                     <td className="border-r border-b border-l border-zinc-500 py-2 px-2">

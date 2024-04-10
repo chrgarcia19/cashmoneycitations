@@ -1,8 +1,7 @@
 import React from "react";
-import { FaSearch, FaFileExport, FaGlobeAmericas, FaBook, FaBarcode, FaIdBadge, FaKey } from "react-icons/fa"; // Added icons for each feature
+import { FaSearch, FaFileExport, FaGlobeAmericas, FaBook, FaBarcode, FaIdBadge, FaKey } from "react-icons/fa";
 
 const Dashboard = () => {
-  // Updated list of features with separate cards for DOI, ISSN, ISBN
   const features = [
     {
       icon: <FaBook className="text-4xl" />,
@@ -41,7 +40,8 @@ const Dashboard = () => {
       <h1 className="text-center text-4xl font-bold text-gray-800 mb-10">Welcome to Your Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feature, index) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
+          <div key={index}
+            className="bg-white rounded-lg shadow p-6 transition duration-300 ease-in-out hover:bg-green-200 hover:shadow-lg">
             <div className="flex flex-col items-center text-center">
               <div className="text-blue-500 mb-4">
                 {feature.icon}

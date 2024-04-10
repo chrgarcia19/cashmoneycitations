@@ -8,6 +8,7 @@ import { HiDocumentAdd } from "react-icons/hi";
 import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
 import { FaHome, FaBook, FaBarcode } from "react-icons/fa";
+import { MdSpaceDashboard } from "react-icons/md";
 import { useSession } from "next-auth/react";
 
 
@@ -31,7 +32,7 @@ const Sidebar = () => {
     
     <div className="fixed z-50 flex flex-col items-center text-white transition-all ease-in-out duration-300">
       {/* Dedicated Toggle Button */}
-      <div className="p-4">
+      <div className="p-4 mt-[-11 0px]">
         <button
           onClick={toggleIcons}
           className="mb-4 flex items-center opacity-0  justify-center bg-gray-800 p-2 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
@@ -50,6 +51,11 @@ const Sidebar = () => {
           href="/"
           icon={<FaHome size="28" />}
           tooltip="Home"
+        />
+         <SideBarIcon
+          href="/dashboard"
+          icon={<MdSpaceDashboard size="28" />}
+          tooltip="Dashboard"
         />
         <Divider />
         <SideBarIcon

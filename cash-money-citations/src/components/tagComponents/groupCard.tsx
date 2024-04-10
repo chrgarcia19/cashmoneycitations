@@ -31,8 +31,11 @@ const GroupCard = (props: Props) => {
                             {props.tag.tagName} - Group Contents:
                         </ModalHeader>
                         <ModalBody>
-                            {props.tag.referenceID.map((id: string) => (
-                                <ViewReference referenceId={id} />
+                            {props.tag.referenceID.map((id: string, index: any) => (
+                                <span key={index}>
+                                    <ViewReference referenceId={id} />
+                                </span>
+                                
                             ))}
                         </ModalBody>
                         <ModalFooter>

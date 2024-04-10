@@ -88,6 +88,22 @@ export async function getSpecificReferenceById(id: string | string[] | undefined
   }
 }
 
+export async function getSpecificUserById(id: string | string[] | undefined) {
+  try {
+    let result = await User.findById(id);
+
+    result = toObjectRecursive(result);
+
+    if (result) {
+      return result;
+    } else {
+      return false;
+    }
+  } catch(error) {
+    console.error(error)
+  }
+}
+
 async function initializeUserStyleList(userId: string) {
     // Create a new UserStyleList document that references the user
     const userStyleList = new UserStyleList({

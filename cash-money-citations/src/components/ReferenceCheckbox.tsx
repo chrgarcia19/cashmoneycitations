@@ -228,7 +228,6 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 {countSelected(isChecked) > 1 ? multiMenu(getSelectedID(isChecked), getSelectedRef(isChecked)) : ""}
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
-                <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
                     {reference.tagID.map((id: string) => (
                         <Suspense>

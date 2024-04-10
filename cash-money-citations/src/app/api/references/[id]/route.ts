@@ -53,13 +53,26 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   await dbConnect();
 
   const req = await request.json();
-  const id = params.id
+
+  const session = await getServerSession(authConfig);
+  const userId = session?.user?.id ?? '';
+  const id = params.id;
 
   try {
 
-    const reference = await CSLBibModel.findByIdAndUpdate(id, req, {
-      new: true,
-      runValidators: true,})
+    const userOwnedRefs = await User.findById(userId).select("ownedReferences");
+    const reference = await CSLBibModel.findOneAndUpdate({
+      // Find references where _id matches userOwnedRefs
+      _id: { $in: userOwnedRefs.ownedReferences ? id : null}
+    }, 
+    { $set: req }, // update the document with req
+    {
+      new: true, // return the updated document
+    });
+
+    // const reference = await CSLBibModel.findByIdAndUpdate(id, req, {
+    //   new: true,
+    //   runValidators: true,})
     return NextResponse.json({ success: true, data: reference }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });

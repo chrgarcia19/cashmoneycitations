@@ -10,11 +10,10 @@ import { authConfig } from "@/lib/auth";
 export default async function UserProfilePage() {
     const session = await getServerSession(authConfig);
     const userId = session?.user?.id ?? "";
-    const userImage = session?.user?.image;
 
     return (
         <>
-         <Profile userId={userId} userImage={userImage} />
+         <Profile userId={userId} />
         </>
     )
 }

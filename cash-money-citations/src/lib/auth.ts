@@ -63,9 +63,8 @@ export const authConfig: NextAuthOptions = ({
   callbacks: {
     async signIn({ user, account, profile }) {
       await dbConnect();
-
       let dbUser = await User.findOne({ email: profile?.email });
-        
+
         if (!dbUser) {
           dbUser = await User.create({ 
             // Create 1st time user fields (OAuth users)
@@ -80,13 +79,18 @@ export const authConfig: NextAuthOptions = ({
       
       return Promise.resolve(true)
     },
-    async jwt({token, trigger, user, session }) {
-      const oauthDbId = await User.findOne({
-        email: token.email, 
-      })
+    async jwt({token, account,  trigger, user, session }) {
 
-      token.id = oauthDbId.id;
-      token.sub = oauthDbId.id;
+      if (account?.type == 'oauth') {
+        const oauthDbId = await User.findOne({
+          email: token.email, 
+        })
+
+        token.id = oauthDbId.id;
+        token.sub = oauthDbId.id;
+      }
+
+
       
       if (trigger === "update" && session) {
         return { ...token, ...session?.user };

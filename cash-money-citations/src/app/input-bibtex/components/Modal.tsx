@@ -5,12 +5,17 @@ import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { ParseBibTexUpload, SaveBibFileToDb } from "./BibFileUpload";
 import {BibLatexParser} from "biblatex-csl-converter"
 import { useSession } from "next-auth/react";
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import {Code} from "@nextui-org/react";
+import { okaidia } from '@uiw/codemirror-theme-okaidia';
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [parsedData, setParsedData] = useState<string[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
     const [submitResult, setSubmitResult] = useState(false);
+    const [value, setValue] = React.useState("console.log('hello world!');");
     const fileInputRef = useRef<HTMLInputElement>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const session = useSession();
@@ -167,13 +172,22 @@ export function UploadBibModal() {
 
                       {parsedData.map((entry, index) => (
                         <div className="flex items-end" key={index}>
-                          <Textarea
+                          {/* <Textarea
                             label={`Entry ${index + 1}`}
                             variant="bordered"
                             minRows={12}
                             value={entry}
                             onValueChange={(newValue) => handleValueChange(newValue, index)}
-                          />
+                          /> */}
+                          <Code color="default">
+                            <CodeMirror value={entry} height="200px"
+                                  theme={okaidia}
+                                  
+                            onChange={(newValue) => handleValueChange(newValue, index)}
+                            extensions={[javascript({ jsx: true })]} />
+
+                          </Code>
+
                           <Button onClick={() => handleDelete(index)}>Delete</Button>
                         </div>
                       ))}

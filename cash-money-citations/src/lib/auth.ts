@@ -85,7 +85,6 @@ export const authConfig: NextAuthOptions = ({
         const oauthDbId = await User.findOne({
           email: token.email, 
         })
-
         token.id = oauthDbId.id;
         token.sub = oauthDbId.id;
       }
@@ -105,7 +104,7 @@ export const authConfig: NextAuthOptions = ({
     async session({session, token }) {
       if (token && session.user) {
         session.user.role = token.role;
-        session.user.id = token.id;
+        session.user.id = token.sub ?? token.id;
         session.user.image = token.image;
       }
       return session;

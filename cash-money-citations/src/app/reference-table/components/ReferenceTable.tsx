@@ -139,7 +139,7 @@ export default function TestRefTable(userRefObject: any) {
         return (
           <>
             {userRef.tagID.map((id: string) => (
-              <Suspense fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
+              <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
                 <DisplayTags key={id} tagId={id} />
               </Suspense>
             ))}
@@ -156,17 +156,17 @@ export default function TestRefTable(userRefObject: any) {
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
+            <Tooltip content="View">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EyeIcon />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user">
+            <Tooltip content="Edit">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Delete">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </span>

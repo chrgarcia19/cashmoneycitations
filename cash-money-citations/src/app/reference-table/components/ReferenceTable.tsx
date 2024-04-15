@@ -57,6 +57,8 @@ export default function TestRefTable(userRefObject: any) {
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [reference, setReference] = useState<CSLBibInterface[]>([]);
+  const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "datePublished",
     direction: "ascending",
@@ -118,8 +120,13 @@ export default function TestRefTable(userRefObject: any) {
           await fetch(`/api/references/${refID}`, {
             method: "Delete",
           });
-          
+          // Filter out the item with the given refID
+          const newReferences = items.filter(item => item._id !== refID);
+
+          // Set state to new reference array
+          setReference(newReferences);
         } catch (error) {
+          console.error(error);
         }
     };
 
@@ -146,7 +153,6 @@ export default function TestRefTable(userRefObject: any) {
         router.refresh();
     }
 
-  const [reference, setReference] = useState<CSLBibInterface[]>([]);
 
   useEffect(() => {
     const newSortedItems = [...items].sort((a: UserReference, b: UserReference) => {
@@ -325,7 +331,7 @@ export default function TestRefTable(userRefObject: any) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {userRefs.length} users</span>
+          <span className="text-default-400 text-small">{refLength} Total References</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select

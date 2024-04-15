@@ -46,7 +46,7 @@ export default function TestRefTable(userRefObject: any) {
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "age",
     direction: "ascending",
@@ -315,7 +315,7 @@ export default function TestRefTable(userRefObject: any) {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        wrapper: "max-h-[80%]",
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"

@@ -1,13 +1,21 @@
 import ReferenceTable from "@/components/ReferenceTable";
+import TestRefTable from "./components/ReferenceTable";
+import { getUserReferences } from "@/components/componentActions/actions";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
-export default function RefTable() {
-  
+export default async function RefTable() {
+    // Get User Id from session
+    const session = await getServerSession(authConfig);
+
+    const userId = session?.user?.id ?? '';
+
+    const userRefObject = await getUserReferences(userId);
+
     return(
       <>
-      <div>
-        <ReferenceTable />
-      </div>
+        <TestRefTable userRefObject={userRefObject} />
       </>
-      
+
     )
   }

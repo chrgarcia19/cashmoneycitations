@@ -9,6 +9,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import {Code} from "@nextui-org/react";
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+import ReactCodeMirror from '@uiw/react-codemirror';
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -180,11 +181,24 @@ export function UploadBibModal() {
                             onValueChange={(newValue) => handleValueChange(newValue, index)}
                           /> */}
                           <Code color="default">
-                            <CodeMirror value={entry} height="200px"
+                            {/* <CodeMirror value={entry} height="200px"
                                   theme={okaidia}
                                   
                             onChange={(newValue) => handleValueChange(newValue, index)}
-                            extensions={[javascript({ jsx: true })]} />
+                            extensions={[javascript({ jsx: true })]} /> */}
+                            <CodeMirror
+                              value={entry}
+                              theme="light"
+                              basicSetup={{
+                                lineNumbers:true,
+                                history: true
+                              }
+                              }
+            
+                              onChange={(value, viewUpdate) => {
+                                handleValueChange(value, index);
+                              }}
+                            />
 
                           </Code>
 

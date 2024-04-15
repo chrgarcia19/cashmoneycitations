@@ -36,6 +36,7 @@ import {Skeleton} from "@nextui-org/react";
 import {EditIcon} from "./EditIcon";
 import {DeleteIcon} from "./DeleteIcon";
 import {EyeIcon} from "./EyeIcon";
+import Link from "next/link";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -162,9 +163,9 @@ export default function TestRefTable(userRefObject: any) {
               </span>
             </Tooltip>
             <Tooltip content="Edit">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
+              <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" style={{display: 'grid'}} href={{ pathname: `/${userRef._id}/references/edit`, query: { id: userRef._id} } }>
+                  <EditIcon />
+              </Link>
             </Tooltip>
             <Tooltip color="danger" content="Delete">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -278,7 +279,7 @@ export default function TestRefTable(userRefObject: any) {
               className="bg-transparent outline-none text-default-400 text-small"
               onChange={onRowsPerPageChange}
             >
-              <option value="5">5</option>
+              <option value="20">20</option>
               <option value="50">50</option>
               <option value="100">100</option>
             </select>

@@ -35,7 +35,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "actions"];
 
 
 
@@ -99,8 +99,8 @@ export default function TestRefTable(userRefObject: any) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: UserReference, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof UserReference];
+  const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {
+    const cellValue = userRef[columnKey as keyof UserReference];
     switch (columnKey) {
       case "title":
         return (
@@ -109,17 +109,23 @@ export default function TestRefTable(userRefObject: any) {
           </div>
         );
       case "datePublished":
-        const date = format(user.cslJson[0].issued);
+        const date = format(userRef.cslJson[0].issued);
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{date}</p>
           </div>
         );
-      case "status":
+      case "contributors":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
+          <>
+              {userRef.contributors.slice(0, 3).map((contributor: any) => {
+                  return <Chip className="capitalize" color={statusColorMap[userRef.status]} size="sm" variant="flat" key={contributor._id}>{contributor.given}</Chip>
+              })}
+              {userRef.contributors.length > 3 ?
+                  <div>And {userRef.contributors.length - 3} more</div> 
+                  : ""
+              }
+          </>
         );
       case "actions":
         return (

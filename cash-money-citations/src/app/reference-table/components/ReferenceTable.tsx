@@ -27,6 +27,7 @@ import {ChevronDownIcon} from "./ChevronDownloadIcon";
 import {SearchIcon} from "./SearchIcon";
 import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
+let { parse, format } = require('@citation-js/date')
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -34,7 +35,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "status", "actions"];
 
 
 
@@ -67,7 +68,7 @@ export default function TestRefTable(userRefObject: any) {
 
     if (hasSearchFilter) {
       filteredReferences = filteredReferences.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        user.title[0].toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -100,23 +101,18 @@ export default function TestRefTable(userRefObject: any) {
 
   const renderCell = React.useCallback((user: UserReference, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof UserReference];
-
     switch (columnKey) {
       case "title":
         return (
-          <User
-            avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
+          <div>
+            {cellValue}
+          </div>
         );
-      case "role":
+      case "datePublished":
+        const date = format(user.cslJson[0].issued);
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
+            <p className="text-bold text-small capitalize">{date}</p>
           </div>
         );
       case "status":

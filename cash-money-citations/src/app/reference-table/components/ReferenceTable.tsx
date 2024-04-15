@@ -25,7 +25,7 @@ import {PlusIcon} from "./PlusIcon";
 import {VerticalDotsIcon} from "./VerticalDotIcon";
 import {ChevronDownIcon} from "./ChevronDownloadIcon";
 import {SearchIcon} from "./SearchIcon";
-import {columns, users, statusOptions} from "./data";
+import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -34,11 +34,11 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "role", "status", "actions"];
 
-type User = typeof users[0];
 
-export default function TestRefTable() {
+
+export default function TestRefTable(userRefObject: any) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -48,6 +48,9 @@ export default function TestRefTable() {
     column: "age",
     direction: "ascending",
   });
+
+  const userRefs = userRefObject.userRefObject;
+  type UserReference = typeof userRefs.userRefs[0];
 
   const [page, setPage] = React.useState(1);
 
@@ -60,21 +63,21 @@ export default function TestRefTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredReferences = [...userRefs];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
+      filteredReferences = filteredReferences.filter((user) =>
         user.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
+      filteredReferences = filteredReferences.filter((user) =>
         Array.from(statusFilter).includes(user.status),
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredReferences;
+  }, [userRefs, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -86,20 +89,20 @@ export default function TestRefTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: UserReference, b: UserReference) => {
+      const first = a[sortDescriptor.column as keyof UserReference] as number;
+      const second = b[sortDescriptor.column as keyof UserReference] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((user: UserReference, columnKey: React.Key) => {
+    const cellValue = user[columnKey as keyof UserReference];
 
     switch (columnKey) {
-      case "name":
+      case "title":
         return (
           <User
             avatarProps={{radius: "lg", src: user.avatar}}
@@ -237,7 +240,7 @@ export default function TestRefTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {userRefs.length} users</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -258,7 +261,7 @@ export default function TestRefTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    userRefs.length,
     hasSearchFilter,
   ]);
 
@@ -321,7 +324,7 @@ export default function TestRefTable() {
       </TableHeader>
       <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item._id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

@@ -5,6 +5,7 @@ const columns = [
   {name: "CONTRIBUTORS", uid: "contributors", sortable: true},
   {name: "TAGS", uid: "tags", sortable: true},
   {name: "STATUS", uid: "status", sortable: true},
+  {name: "ACTIONS", uid: "actions"}
 ];
 
 const statusOptions = [

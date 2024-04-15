@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Table,
   TableHeader,
@@ -27,6 +27,8 @@ import {ChevronDownIcon} from "./ChevronDownloadIcon";
 import {SearchIcon} from "./SearchIcon";
 import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
+import { getUserReferences } from "@/components/componentActions/actions";
+import DisplayTags from "@/components/DisplayTags";
 let { parse, format } = require('@citation-js/date')
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -127,6 +129,16 @@ export default function TestRefTable(userRefObject: any) {
               }
           </>
         );
+      case "tags":
+        return (
+          <>
+            {userRef.tagID.map((id: string) => (
+              <Suspense>
+                  <DisplayTags key={id} tagId={id} />
+              </Suspense>
+            ))}
+          </>
+        )
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">

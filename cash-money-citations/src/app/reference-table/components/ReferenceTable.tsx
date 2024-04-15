@@ -158,9 +158,9 @@ export default function TestRefTable(userRefObject: any) {
         return (
           <div className="relative flex items-center gap-2">
             <Tooltip content="View">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/${userRef._id}/references/view`, query: { id: userRef._id} } }>
                 <EyeIcon />
-              </span>
+              </Link>
             </Tooltip>
             <Tooltip content="Edit">
               <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" style={{display: 'grid'}} href={{ pathname: `/${userRef._id}/references/edit`, query: { id: userRef._id} } }>

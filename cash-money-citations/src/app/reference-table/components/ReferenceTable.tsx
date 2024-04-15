@@ -125,6 +125,7 @@ export default function TestRefTable(userRefObject: any) {
 
           // Set state to new reference array
           setReference(newReferences);
+          setRefLength(newReferences.length);
         } catch (error) {
           console.error(error);
         }
@@ -146,6 +147,8 @@ export default function TestRefTable(userRefObject: any) {
                 await fetch(`/api/references/${refIDs[i]}`, {
                     method: "Delete"
                 });
+
+                
             } catch (error) {
             }
         }
@@ -164,6 +167,7 @@ export default function TestRefTable(userRefObject: any) {
     });
   
     setReference(newSortedItems);
+    setRefLength(newSortedItems.length);
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {

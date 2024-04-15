@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -37,6 +37,9 @@ import {EditIcon} from "./EditIcon";
 import {DeleteIcon} from "./DeleteIcon";
 import {EyeIcon} from "./EyeIcon";
 import Link from "next/link";
+import { CSLBibInterface } from "@/models/CSLBibTex";
+import { useRouter } from "next/navigation";
+import { Tag } from "@/models/Tag";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -55,7 +58,7 @@ export default function TestRefTable(userRefObject: any) {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "age",
+    column: "datePublished",
     direction: "ascending",
   });
 
@@ -106,6 +109,55 @@ export default function TestRefTable(userRefObject: any) {
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
+  }, [sortDescriptor, items]);
+
+  const router = useRouter();
+
+    const handleDelete = async (refID: string) => {
+        try {
+          await fetch(`/api/references/${refID}`, {
+            method: "Delete",
+          });
+          
+        } catch (error) {
+        }
+    };
+
+    async function exportSingleCitation(refId: string) {
+        // Call to server action to create citations & save in DB
+        router.push(`/displayCitation?citation=${refId}`)
+    }
+
+    async function exportMultipleCitation(refIds: string[]) {
+        // Call to server action to create citations & save in DB
+        router.push(`/displayCitation?citation=${refIds}`)
+    }
+
+    const handleDeleteMany = async (refIDs: string[]) => {
+        for (let i = 0; i < refIDs.length; i++){
+            try {
+                await fetch(`/api/references/${refIDs[i]}`, {
+                    method: "Delete"
+                });
+            } catch (error) {
+            }
+        }
+        router.push('/reference-table');
+        router.refresh();
+    }
+
+  const [reference, setReference] = useState<CSLBibInterface[]>([]);
+
+  useEffect(() => {
+    const newSortedItems = [...items].sort((a: UserReference, b: UserReference) => {
+      const first = a[sortDescriptor.column as keyof UserReference] as number;
+      const second = b[sortDescriptor.column as keyof UserReference] as number;
+      const cmp = first < second ? -1 : first > second ? 1 : 0;
+  
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  
+    setReference(newSortedItems);
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {
@@ -168,9 +220,10 @@ export default function TestRefTable(userRefObject: any) {
               </Link>
             </Tooltip>
             <Tooltip color="danger" content="Delete">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
+              <button className="text-lg text-danger cursor-pointer active:opacity-50"
+                    onClick={() => handleDelete(userRef._id)}>
+                      <DeleteIcon />
+              </button>
             </Tooltip>
           </div>
         );
@@ -354,7 +407,7 @@ export default function TestRefTable(userRefObject: any) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No references found"} items={reference}>
         {(item) => (
           <TableRow key={item._id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

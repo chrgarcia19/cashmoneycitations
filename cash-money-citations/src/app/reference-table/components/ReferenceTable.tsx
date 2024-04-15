@@ -19,7 +19,9 @@ import {
   Pagination,
   Selection,
   ChipProps,
-  SortDescriptor
+  SortDescriptor,
+  skeleton,
+  Tooltip
 } from "@nextui-org/react";
 import {PlusIcon} from "./PlusIcon";
 import {VerticalDotsIcon} from "./VerticalDotIcon";
@@ -30,6 +32,10 @@ import {capitalize} from "./utils";
 import { getUserReferences } from "@/components/componentActions/actions";
 import DisplayTags from "@/components/DisplayTags";
 let { parse, format } = require('@citation-js/date')
+import {Skeleton} from "@nextui-org/react";
+import {EditIcon} from "./EditIcon";
+import {DeleteIcon} from "./DeleteIcon";
+import {EyeIcon} from "./EyeIcon";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -37,7 +43,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "actions", "tags"];
 
 
 
@@ -133,27 +139,38 @@ export default function TestRefTable(userRefObject: any) {
         return (
           <>
             {userRef.tagID.map((id: string) => (
-              <Suspense>
-                  <DisplayTags key={id} tagId={id} />
+              <Suspense fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
+                <DisplayTags key={id} tagId={id} />
               </Suspense>
             ))}
           </>
         )
+      case "type":
+        return (
+          <>
+          <Chip>
+            {cellValue}
+          </Chip>
+          </>
+        )
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="relative flex items-center gap-2">
+            <Tooltip content="Details">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <EyeIcon />
+              </span>
+            </Tooltip>
+            <Tooltip content="Edit user">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <EditIcon />
+              </span>
+            </Tooltip>
+            <Tooltip color="danger" content="Delete user">
+              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                <DeleteIcon />
+              </span>
+            </Tooltip>
           </div>
         );
       default:
@@ -262,8 +279,8 @@ export default function TestRefTable(userRefObject: any) {
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </select>
           </label>
         </div>

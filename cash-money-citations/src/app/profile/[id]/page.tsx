@@ -11,9 +11,15 @@ export default async function UserProfilePage() {
     const session = await getServerSession(authConfig);
     const userId = session?.user?.id ?? "";
 
+    const profileData = {
+        username: "",
+        email: "",
+        password: "",
+    };
+
     return (
         <>
-         <Profile userId={userId} />
+         <Profile userId={userId} profileForm={profileData} />
         </>
     )
 }

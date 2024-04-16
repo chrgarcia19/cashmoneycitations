@@ -103,15 +103,6 @@ export default function TestRefTable(userRefObject: any) {
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
-  const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: UserReference, b: UserReference) => {
-      const first = a[sortDescriptor.column as keyof UserReference] as number;
-      const second = b[sortDescriptor.column as keyof UserReference] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
-  }, [sortDescriptor, items]);
 
   const router = useRouter();
 
@@ -122,7 +113,6 @@ export default function TestRefTable(userRefObject: any) {
           });
           // Filter out the item with the given refID
           const newReferences = items.filter(item => item._id !== refID);
-
           // Set state to new reference array
           setReference(newReferences);
           setRefLength(newReferences.length);
@@ -167,7 +157,7 @@ export default function TestRefTable(userRefObject: any) {
     });
   
     setReference(newSortedItems);
-    setRefLength(newSortedItems.length);
+    //setRefLength(newSortedItems.length);
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {
@@ -358,6 +348,7 @@ export default function TestRefTable(userRefObject: any) {
     onRowsPerPageChange,
     userRefs.length,
     hasSearchFilter,
+    refLength
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -366,7 +357,7 @@ export default function TestRefTable(userRefObject: any) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${refLength} selected`}
         </span>
         <Pagination
           isCompact
@@ -387,7 +378,7 @@ export default function TestRefTable(userRefObject: any) {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, items.length, page, pages, hasSearchFilter, refLength]);
 
   return (
     <Table

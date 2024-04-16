@@ -132,17 +132,24 @@ export default function TestRefTable(userRefObject: any) {
     }
 
     const handleDeleteMany = async (refIDs: string[]) => {
+      let newReferences = [...items]; // Copy the current items
+
         for (let i = 0; i < refIDs.length; i++){
             try {
                 await fetch(`/api/references/${refIDs[i]}`, {
                     method: "Delete"
                 });
 
+              // Filter out the item with the given refID
+              newReferences = newReferences.filter(item => item._id !== refIDs[i]);
             } catch (error) {
             }
         }
-        router.push('/reference-table');
-        router.refresh();
+
+        // Set state to new reference array
+        setReference(newReferences);
+        setRefLength(newReferences.length); 
+
     }
 
 
@@ -336,13 +343,17 @@ export default function TestRefTable(userRefObject: any) {
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">{refLength} Total References</span>
           <span>
-            {selectedKeys === "all" 
+
+            {selectedKeys !== "all"
               ?
-              <Button color="danger">
+              <Button color="danger" onClick={() => handleDeleteMany(Array.from(selectedKeys).map(String))}>
+                <DeleteIcon />
+                {selectedKeys}
                 Delete Selected
               </Button>
               :
               <Button isDisabled color="danger">
+                <DeleteIcon />
                 Delete Selected
               </Button>
             }

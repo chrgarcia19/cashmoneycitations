@@ -134,21 +134,30 @@ export default function TestRefTable(userRefObject: any) {
     const handleDeleteMany = async (refIDs: string[]) => {
       let newReferences = [...items]; // Copy the current items
 
-        for (let i = 0; i < refIDs.length; i++){
-            try {
-                await fetch(`/api/references/${refIDs[i]}`, {
-                    method: "Delete"
-                });
+        // Collect all fetch promises in an array
+      const fetchPromises = refIDs.map(refID =>
+        fetch(`/api/references/${refID}`, {
+          method: "Delete"
+        })
+      );
 
-              // Filter out the item with the given refID
-              newReferences = newReferences.filter(item => item._id !== refIDs[i]);
-            } catch (error) {
-            }
-        }
+      try {
+        // Wait for all fetch requests to complete
+        await Promise.all(fetchPromises);
+
+        // Filter out the items with the given refIDs
+        newReferences = newReferences.filter(item => !refIDs.includes(item._id));
 
         // Set state to new reference array
         setReference(newReferences);
-        setRefLength(newReferences.length); 
+        setRefLength(newReferences.length);
+
+        // Filter out the deleted refIDs from selectedKeys
+        //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
+        setSelectedKeys(new Set([]));
+      } catch (error) {
+        console.error(error);
+      }
 
     }
 
@@ -348,7 +357,6 @@ export default function TestRefTable(userRefObject: any) {
               ?
               <Button color="danger" onClick={() => handleDeleteMany(Array.from(selectedKeys).map(String))}>
                 <DeleteIcon />
-                {selectedKeys}
                 Delete Selected
               </Button>
               :

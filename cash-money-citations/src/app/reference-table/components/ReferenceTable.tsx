@@ -47,7 +47,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "dateCreated", "actions", "tags"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "createdAt", "actions", "tags"];
 
 
 
@@ -60,7 +60,7 @@ export default function TestRefTable(userRefObject: any) {
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "dateCreated",
+    column: "createdAt",
     direction: "ascending",
   });
 
@@ -149,10 +149,9 @@ export default function TestRefTable(userRefObject: any) {
 
   useEffect(() => {
     const newSortedItems = [...items].sort((a: UserReference, b: UserReference) => {
-      const first = a[sortDescriptor.column as keyof UserReference] as number;
-      const second = b[sortDescriptor.column as keyof UserReference] as number;
+      const first = a[sortDescriptor.column as keyof UserReference];
+      const second = b[sortDescriptor.column as keyof UserReference];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
-  
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   
@@ -188,7 +187,7 @@ export default function TestRefTable(userRefObject: any) {
               }
           </>
         );
-      case "dateCreated":
+      case "createdAt":
           let dateCreated = userRef.createdAt;
           dateCreated = new Date(dateCreated);
           dateCreated = dateCreated.toLocaleString('en-US');

@@ -3,7 +3,7 @@ const columns = [
   {name: "DATE PUBLISHED", uid: "datePublished", sortable: true},
   {name: "CONTRIBUTORS", uid: "contributors", sortable: true},
   {name: "TAGS", uid: "tags", sortable: true},
-  {name: "DATE CREATED", uid: "dateCreated", sortable: true},
+  {name: "DATE CREATED", uid: "createdAt", sortable: true},
   {name: "ACTIONS", uid: "actions"},
   {name: "TYPE", uid: "type", sortable: true},
 ];

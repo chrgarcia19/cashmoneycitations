@@ -47,7 +47,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "actions", "tags"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "dateCreated", "actions", "tags"];
 
 
 
@@ -60,7 +60,7 @@ export default function TestRefTable(userRefObject: any) {
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "datePublished",
+    column: "dateCreated",
     direction: "ascending",
   });
 
@@ -188,6 +188,15 @@ export default function TestRefTable(userRefObject: any) {
               }
           </>
         );
+      case "dateCreated":
+          let dateCreated = userRef.createdAt;
+          dateCreated = new Date(dateCreated);
+          dateCreated = dateCreated.toLocaleString('en-US');
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">{dateCreated}</p>
+            </div>
+          );
       case "tags":
         return (
           <>

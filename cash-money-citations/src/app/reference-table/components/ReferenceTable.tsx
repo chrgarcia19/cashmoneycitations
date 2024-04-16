@@ -327,9 +327,11 @@ export default function TestRefTable(userRefObject: any) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
-              Add New
-            </Button>
+            <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/new`}}>
+              <Button color="primary" endContent={<PlusIcon />}>
+                Add Reference
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex justify-between items-center">

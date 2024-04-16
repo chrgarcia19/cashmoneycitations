@@ -138,7 +138,6 @@ export default function TestRefTable(userRefObject: any) {
                     method: "Delete"
                 });
 
-                
             } catch (error) {
             }
         }
@@ -336,6 +335,19 @@ export default function TestRefTable(userRefObject: any) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">{refLength} Total References</span>
+          <span>
+            {selectedKeys === "all" 
+              ?
+              <Button color="danger">
+                Delete Selected
+              </Button>
+              :
+              <Button isDisabled color="danger">
+                Delete Selected
+              </Button>
+            }
+
+          </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -358,7 +370,8 @@ export default function TestRefTable(userRefObject: any) {
     onRowsPerPageChange,
     userRefs.length,
     hasSearchFilter,
-    refLength
+    refLength,
+    selectedKeys
   ]);
 
   const bottomContent = React.useMemo(() => {

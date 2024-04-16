@@ -39,7 +39,7 @@ const Sidebar = () => {
       <div className="p-4 mt-[-100px] ml-[-10px]">
         <button
           onClick={toggleIcons}
-          className="mb-4 flex items-center opacity-0   justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+          className="mb-4 flex items-center  justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
         >
           <BsList className="text-xl" size={32} />
         </button>

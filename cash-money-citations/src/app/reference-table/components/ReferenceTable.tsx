@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, createContext, useContext, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -39,7 +39,34 @@ import {EyeIcon} from "./EyeIcon";
 import Link from "next/link";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { useRouter } from "next/navigation";
-import { Tag } from "@/models/Tag";
+
+
+const ReferenceContext = createContext({
+  references: [],
+  setReferences: (newSortedItems: any[]) => {},
+  addReference: (newSortedItems: any[]) => {},
+  removeReference: () => {},
+});
+
+export function ReferenceProvider({ children }: any) {
+    const [references, setReferences] = useState<CSLBibInterface[]>([]);
+
+    const addReference = (reference: any) => {
+      setReferences((prevReferences) => [...prevReferences, reference]);
+    };
+    
+    const removeReference = (referenceId: any) => {
+      setReferences((prevReferences) => prevReferences.filter((ref) => ref.id !== referenceId));
+    };
+  
+    return (
+      <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference  }as any}>
+        {children}
+      </ReferenceContext.Provider>
+    );
+}
+
+
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -50,7 +77,6 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "createdAt", "actions", "tags"];
 
 
-
 export default function TestRefTable(userRefObject: any) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -58,6 +84,7 @@ export default function TestRefTable(userRefObject: any) {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
+  const { references, setReferences, addReference, removeReference } = useContext(ReferenceContext);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "createdAt",
@@ -114,7 +141,7 @@ export default function TestRefTable(userRefObject: any) {
           // Filter out the item with the given refID
           const newReferences = items.filter(item => item._id !== refID);
           // Set state to new reference array
-          setReference(newReferences);
+          setReferences(newReferences);
           setRefLength(newReferences.length);
         } catch (error) {
           console.error(error);
@@ -149,7 +176,7 @@ export default function TestRefTable(userRefObject: any) {
         newReferences = newReferences.filter(item => !refIDs.includes(item._id));
 
         // Set state to new reference array
-        setReference(newReferences);
+        setReferences(newReferences);
         setRefLength(newReferences.length);
 
         // Filter out the deleted refIDs from selectedKeys
@@ -170,8 +197,8 @@ export default function TestRefTable(userRefObject: any) {
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   
-    setReference(newSortedItems);
-    //setRefLength(newSortedItems.length);
+    // Calling setReferences since it is replacing the entire array
+    setReferences(newSortedItems);
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {
@@ -450,8 +477,8 @@ export default function TestRefTable(userRefObject: any) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No references found"} items={reference}>
-        {(item) => (
+      <TableBody emptyContent={"No references found"} items={references}>
+        {(item: { _id: string }) => (
           <TableRow key={item._id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>

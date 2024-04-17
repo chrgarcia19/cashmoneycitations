@@ -123,8 +123,8 @@ const InputMusic: React.FC<InputMusicProps> = ({ searchVal, reload }) => {
             }
             else {
                 month = "0";
-                day = "1"
-                year = item.volumeInfo.publishedDate;
+                day = "1";
+                year = item['first-release-date'];
             }
         }
         else {

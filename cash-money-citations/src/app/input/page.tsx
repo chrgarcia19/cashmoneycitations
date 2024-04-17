@@ -1,6 +1,9 @@
 'use client'
 
 import InputDOI from "@/components/InputDOI";
+import InputISBN from "@/components/InputISBN";
+import InputISSN from "@/components/InputISSN";
+import InputMusic from "@/components/InputMusic";
 import { useState } from "react";
 
 function Input () {
@@ -10,6 +13,7 @@ function Input () {
     const [isbn, setISBN] = useState<boolean>(false);
     const [issn, setISSN] = useState<boolean>(false);
     const [music, setMusic] = useState<boolean>(false);
+    const [reloadNestedComponent, setReloadNestedComponent] = useState<boolean>(false);
 
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +28,12 @@ function Input () {
 
     function determineInputType (e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        if (reloadNestedComponent) {
+            setReloadNestedComponent(false);
+        }
+        else {
+            setReloadNestedComponent(true);
+        }
         setDOI(false);
         setISBN(false);
         setISSN(false);
@@ -67,7 +77,10 @@ function Input () {
                         <button type="submit" className="text-white absolute end-px bottom-0 right-0 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
                     </div>
                 </form>
-                {doi && <InputDOI searchVal={searchVal} />}
+                {doi && <InputDOI searchVal={searchVal} reload={reloadNestedComponent} />}
+                {isbn && <InputISBN searchVal={searchVal} reload={reloadNestedComponent} />}
+                {issn && <InputISSN searchVal={searchVal} reload={reloadNestedComponent} />}
+                {music && <InputMusic searchVal={searchVal} reload={reloadNestedComponent} />}
             </div>
         </>
     )

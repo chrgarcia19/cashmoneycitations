@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { CitationChoice, DeleteCitationDisplay, CitationList } from './CitationDisplay';
+import { useReferenceContext } from '../reference-table/components/ReferenceTable';
 
 export default function citationDisplay({
   params,
@@ -11,6 +12,7 @@ export default function citationDisplay({
 }){
   const referenceId = searchParams.citation;
   const [citations, setCitations] = useState([]);
+  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds }  = useReferenceContext();
 
   return (
     <div className='center-content'>
@@ -18,7 +20,7 @@ export default function citationDisplay({
         {/* <CitationChoice referenceId={searchParams} /> */}
 
         <div className='px-20'>
-          <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} />
+          <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} />
           <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
             <thead className='bg-gray-50'>
               <tr>

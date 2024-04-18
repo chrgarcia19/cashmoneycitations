@@ -43,6 +43,8 @@ import { useRouter } from "next/navigation";
 
 const ReferenceContext = createContext({
   references: [],
+  referenceIds: [],
+  setReferenceIds: (newReferenceIds: any[]) => {},
   setReferences: (newSortedItems: any[]) => {},
   addReference: (newSortedItems: any[]) => {},
   removeReference: () => {},
@@ -50,6 +52,7 @@ const ReferenceContext = createContext({
 
 export function ReferenceProvider({ children }: any) {
     const [references, setReferences] = useState<CSLBibInterface[]>([]);
+    const [referenceIds, setReferenceIds] = useState([]);
 
     const addReference = (reference: any) => {
       setReferences((prevReferences) => [...prevReferences, reference]);
@@ -60,10 +63,14 @@ export function ReferenceProvider({ children }: any) {
     };
   
     return (
-      <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference  }as any}>
+      <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference, referenceIds, setReferenceIds  }as any}>
         {children}
       </ReferenceContext.Provider>
     );
+}
+
+export function useReferenceContext() {
+  return useContext(ReferenceContext);
 }
 
 
@@ -84,7 +91,7 @@ export default function TestRefTable(userRefObject: any) {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
-  const { references, setReferences, addReference, removeReference } = useContext(ReferenceContext);
+  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds } = useContext(ReferenceContext);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "createdAt",
@@ -199,6 +206,7 @@ export default function TestRefTable(userRefObject: any) {
   
     // Calling setReferences since it is replacing the entire array
     setReferences(newSortedItems);
+    setReferenceIds(newSortedItems.map((item: any) => item._id));
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {

@@ -10,6 +10,8 @@ import { Tag } from "@/models/Tag";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem} from "@nextui-org/react";
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
+import React, { Suspense, createContext, useContext } from "react";
+import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -192,7 +194,6 @@ const ViewReference = () => {
 export function ExportReferenceData({ referenceId }: any){
   const [reference, setReference] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
-  
   // Fetch initial citation state
   useEffect(() => {
     fetchReference();

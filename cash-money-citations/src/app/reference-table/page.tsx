@@ -14,9 +14,6 @@ export default async function RefTable() {
     const userRefObject = await getUserReferences(userId);
 
     return(
-      <ReferenceProvider>
-        <TestRefTable userRefObject={userRefObject} />
-      </ReferenceProvider>
-
+      <TestRefTable userRefObject={userRefObject} />
     )
   }

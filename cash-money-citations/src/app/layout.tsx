@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import NavBar from '../components/NavBar';
 import { AuthProvider } from "./Providers"
 import SideBar from "@/components/SideBar";
+import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
@@ -23,7 +24,9 @@ export default async function RootLayout({
                 <SideBar />
                 <div className="content">
                     <AuthProvider>
+                        <ReferenceProvider>
                             {children}
+                        </ReferenceProvider>
                     </AuthProvider>
                 </div>
 

@@ -81,13 +81,15 @@ export function DeleteCitationDisplay(citeId: any) {
   )
 }
 
-export function CitationChoice({ referenceId, citations, setCitations}: any) {
+export function CitationChoice({ referenceId, citations, setCitations, referenceIds}: any) {
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('txt');
 
+  console.log(referenceIds)
+  
   async function exportCitation() {
     if (!styleChoice || !localeChoice) {
       setError('Please select both a citation style and a language.');

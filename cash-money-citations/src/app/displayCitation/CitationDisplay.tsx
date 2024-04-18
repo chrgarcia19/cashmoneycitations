@@ -1,14 +1,14 @@
 "use client"
-
 import { useEffect, useState } from 'react';
 import { getSpecificReferenceById, getUserReferences } from '@/components/componentActions/actions';
 import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
 import { CreateCitation } from '../[id]/references/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 
-export function CitationList({ referenceId, citations, setCitations }: any) {
+export function CitationList({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
   const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
@@ -16,9 +16,10 @@ export function CitationList({ referenceId, citations, setCitations }: any) {
   }, []);
 
   const fetchCitations = async () => {
-    // Fetch citations from server and update state
-    const fetchedCitations = await GetCitations(referenceId);
-    setCitations(fetchedCitations);
+    // Fetch citations for all referenceIds in parallel
+    const allCitations = await Promise.all(selectedReferenceIds.map(GetCitations));
+    // Flatten the array of arrays into a single array and update state
+    setCitations(allCitations.flat());
   }
 
   const handleDelete = async (citationId: any) => {
@@ -81,7 +82,7 @@ export function DeleteCitationDisplay(citeId: any) {
   )
 }
 
-export function CitationChoice({ referenceId, citations, setCitations, referenceIds}: any) {
+export const CitationChoice = React.memo(({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds}: any) => {
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
   const [error, setError] = useState('');
@@ -97,7 +98,7 @@ export function CitationChoice({ referenceId, citations, setCitations, reference
     setIsLoading(true);
     try {
       // Call to server action to create citations & save in DB
-      await CreateCitation(referenceId, styleChoice, localeChoice);
+      await CreateCitation(selectedReferenceIds, styleChoice, localeChoice);
       window.location.reload(); // Refresh the page
     } catch (error) {
       setError('An error occurred while creating the citation.');
@@ -146,7 +147,7 @@ export function CitationChoice({ referenceId, citations, setCitations, reference
       </div>
     </>
   )
-}
+});
 
 export function ExportReferenceData({ referenceId }: any){
 

@@ -137,7 +137,8 @@ const ViewReference = () => {
     const id = searchParams.get('id');
     const router = useRouter();
     const [referenceId, setReferenceId] = useState(id);
-    
+    const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds }  = useReferenceContext();
+
     const handleDelete = async () => {
         try {
           await fetch(`/api/references/${reference._id}`, {
@@ -184,14 +185,14 @@ const ViewReference = () => {
             <Divider/>
             <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
             <Divider/>
-            <ExportReferenceData referenceId={reference._id}/>
+            <ExportReferenceData referenceId={reference._id} referenceIds={selectedReferenceIds}/>
           </CardBody>
       </Card>
 
     )
 }
 
-export function ExportReferenceData({ referenceId }: any){
+export function ExportReferenceData({ referenceId, referenceIds }: any){
   const [reference, setReference] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
   // Fetch initial citation state

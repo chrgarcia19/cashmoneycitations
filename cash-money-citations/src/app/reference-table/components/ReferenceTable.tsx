@@ -48,11 +48,15 @@ const ReferenceContext = createContext({
   setReferences: (newSortedItems: any[]) => {},
   addReference: (newSortedItems: any[]) => {},
   removeReference: () => {},
+  selectedReferenceIds: [],
+  setSelectedReferenceIds: (referenceIds: any[]) => {},
 });
 
 export function ReferenceProvider({ children }: any) {
     const [references, setReferences] = useState<CSLBibInterface[]>([]);
     const [referenceIds, setReferenceIds] = useState([]);
+    const [selectedReferenceIds, setSelectedReferenceIds] = useState([]);
+
 
     const addReference = (reference: any) => {
       setReferences((prevReferences) => [...prevReferences, reference]);
@@ -63,7 +67,7 @@ export function ReferenceProvider({ children }: any) {
     };
   
     return (
-      <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference, referenceIds, setReferenceIds  }as any}>
+      <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds  }as any}>
         {children}
       </ReferenceContext.Provider>
     );
@@ -91,7 +95,7 @@ export default function TestRefTable(userRefObject: any) {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
-  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds } = useContext(ReferenceContext);
+  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds } = useContext(ReferenceContext);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "createdAt",
@@ -165,32 +169,37 @@ export default function TestRefTable(userRefObject: any) {
         router.push(`/displayCitation?citation=${refIds}`)
     }
 
-    const handleDeleteMany = async (refIDs: string[]) => {
-      let newReferences = [...items]; // Copy the current items
+    const handleDeleteMany = async (deleteAll: boolean, refIDs: string[]) => {
+      if (deleteAll) {
 
-        // Collect all fetch promises in an array
-      const fetchPromises = refIDs.map(refID =>
-        fetch(`/api/references/${refID}`, {
-          method: "Delete"
-        })
-      );
+      } else if (refIDs) {
 
-      try {
-        // Wait for all fetch requests to complete
-        await Promise.all(fetchPromises);
-
-        // Filter out the items with the given refIDs
-        newReferences = newReferences.filter(item => !refIDs.includes(item._id));
-
-        // Set state to new reference array
-        setReferences(newReferences);
-        setRefLength(newReferences.length);
-
-        // Filter out the deleted refIDs from selectedKeys
-        //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
-        setSelectedKeys(new Set([]));
-      } catch (error) {
-        console.error(error);
+        let newReferences = [...items]; // Copy the current items
+  
+          // Collect all fetch promises in an array
+        const fetchPromises = refIDs.map(refID =>
+          fetch(`/api/references/${refID}`, {
+            method: "Delete"
+          })
+        );
+  
+        try {
+          // Wait for all fetch requests to complete
+          await Promise.all(fetchPromises);
+  
+          // Filter out the items with the given refIDs
+          newReferences = newReferences.filter(item => !refIDs.includes(item._id));
+  
+          // Set state to new reference array
+          setReferences(newReferences);
+          setRefLength(newReferences.length);
+  
+          // Filter out the deleted refIDs from selectedKeys
+          //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
+          setSelectedKeys(new Set([]));
+        } catch (error) {
+          console.error(error);
+        }
       }
 
     }
@@ -208,6 +217,16 @@ export default function TestRefTable(userRefObject: any) {
     setReferences(newSortedItems);
     setReferenceIds(newSortedItems.map((item: any) => item._id));
   }, [sortDescriptor, items]);
+
+  // Update currently selected referenceIds
+  useEffect(() => {
+    if (selectedKeys === "all") {
+      setSelectedReferenceIds(referenceIds);
+    } else if (selectedKeys instanceof Set) {
+      setSelectedReferenceIds(Array.from(selectedKeys));
+    }
+
+  }, [selectedKeys]);
 
   const renderCell = React.useCallback((userRef: UserReference, columnKey: React.Key) => {
     const cellValue = userRef[columnKey as keyof UserReference];
@@ -387,10 +406,16 @@ export default function TestRefTable(userRefObject: any) {
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">{refLength} Total References</span>
           <span>
-
-            {selectedKeys !== "all"
+          {selectedKeys === "all"
+            ?
+            <Button color="danger" onClick={() => handleDeleteMany(true, [])}>
+              <DeleteIcon />
+              Delete All
+            </Button>
+            :
+            (selectedKeys instanceof Set && selectedKeys.size > 0)
               ?
-              <Button color="danger" onClick={() => handleDeleteMany(Array.from(selectedKeys).map(String))}>
+              <Button color="danger" onClick={() => handleDeleteMany(false, Array.from(selectedKeys as Set<React.Key>).map(String))}>
                 <DeleteIcon />
                 Delete Selected
               </Button>
@@ -399,7 +424,7 @@ export default function TestRefTable(userRefObject: any) {
                 <DeleteIcon />
                 Delete Selected
               </Button>
-            }
+          }
 
           </span>
           <label className="flex items-center text-default-400 text-small">

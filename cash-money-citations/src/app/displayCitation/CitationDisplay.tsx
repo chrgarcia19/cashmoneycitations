@@ -88,8 +88,6 @@ export function CitationChoice({ referenceId, citations, setCitations, reference
   const [isLoading, setIsLoading] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('txt');
 
-  console.log(referenceIds)
-  
   async function exportCitation() {
     if (!styleChoice || !localeChoice) {
       setError('Please select both a citation style and a language.');

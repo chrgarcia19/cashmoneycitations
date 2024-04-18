@@ -10,11 +10,19 @@ export async function DeleteCitation(citationId: string) {
 
 export async function GetCitations(referenceId: string) {
     let reference = await CSLBibModel.findOne({_id: referenceId});
+
+    if (!reference) {
+        throw new Error(`No reference found with ID ${referenceId}`);
+    }
     reference = reference.toObject(); // Convert to plain JavaScript object
     const citationList = [];
 
+    
     for (const citationId of reference.citationIdList) {
         let citation = await CitationModel.findById(citationId);
+        if (!citation) {
+            throw new Error(`No citation found with ID ${citationId}`);
+        }
         citation = citation.toObject(); // Convert to plain JavaScript object
 
         // If citation contains nested Mongoose documents, convert them to plain JavaScript objects
@@ -27,8 +35,6 @@ export async function GetCitations(referenceId: string) {
         }
 
         citationList.push(citation);
-
     }
-
     return citationList;
 }

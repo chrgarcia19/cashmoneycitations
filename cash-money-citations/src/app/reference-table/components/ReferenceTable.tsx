@@ -55,7 +55,10 @@ const ReferenceContext = createContext({
 export function ReferenceProvider({ children }: any) {
     const [references, setReferences] = useState<CSLBibInterface[]>([]);
     const [referenceIds, setReferenceIds] = useState([]);
-    const [selectedReferenceIds, setSelectedReferenceIds] = useState([]);
+    const [selectedReferenceIds, setSelectedReferenceIds] = useState(() => {
+      const storedIds = localStorage.getItem('selectedReferenceIds');
+      return storedIds ? JSON.parse(storedIds) : [];
+    });
 
 
     const addReference = (reference: any) => {
@@ -65,6 +68,11 @@ export function ReferenceProvider({ children }: any) {
     const removeReference = (referenceId: any) => {
       setReferences((prevReferences) => prevReferences.filter((ref) => ref.id !== referenceId));
     };
+
+    // Update localStorage whenever selectedReferenceIds changes
+    useEffect(() => {
+      localStorage.setItem('selectedReferenceIds', JSON.stringify(selectedReferenceIds));
+    }, [selectedReferenceIds]);
   
     return (
       <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds  }as any}>

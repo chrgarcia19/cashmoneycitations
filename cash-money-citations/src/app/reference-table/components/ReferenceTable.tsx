@@ -169,38 +169,38 @@ export default function TestRefTable(userRefObject: any) {
         router.push(`/displayCitation?citation=${refIds}`)
     }
 
-    const handleDeleteMany = async (deleteAll: boolean, refIDs: string[]) => {
+    const handleDeleteMany = async (deleteAll: boolean, idsToDelete: string[]) => {
       if (deleteAll) {
-
-      } else if (refIDs) {
-
-        let newReferences = [...items]; // Copy the current items
-  
-          // Collect all fetch promises in an array
-        const fetchPromises = refIDs.map(refID =>
-          fetch(`/api/references/${refID}`, {
-            method: "Delete"
-          })
-        );
-  
-        try {
-          // Wait for all fetch requests to complete
-          await Promise.all(fetchPromises);
-  
-          // Filter out the items with the given refIDs
-          newReferences = newReferences.filter(item => !refIDs.includes(item._id));
-  
-          // Set state to new reference array
-          setReferences(newReferences);
-          setRefLength(newReferences.length);
-  
-          // Filter out the deleted refIDs from selectedKeys
-          //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
-          setSelectedKeys(new Set([]));
-        } catch (error) {
-          console.error(error);
-        }
+        idsToDelete = referenceIds;
       }
+
+      let newReferences = [...items]; // Copy the current items
+
+        // Collect all fetch promises in an array
+      const fetchPromises = idsToDelete.map(refID =>
+        fetch(`/api/references/${refID}`, {
+          method: "Delete"
+        })
+      );
+
+      try {
+        // Wait for all fetch requests to complete
+        await Promise.all(fetchPromises);
+
+        // Filter out the items with the given refIDs
+        newReferences = newReferences.filter(item => !idsToDelete.includes(item._id));
+
+        // Set state to new reference array
+        setReferences(newReferences);
+        setRefLength(newReferences.length);
+
+        // Filter out the deleted refIDs from selectedKeys
+        //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
+        setSelectedKeys(new Set([]));
+      } catch (error) {
+        console.error(error);
+      }
+      
 
     }
 

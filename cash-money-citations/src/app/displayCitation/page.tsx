@@ -12,15 +12,14 @@ export default function citationDisplay({
 }){
   const referenceId = searchParams.citation;
   const [citations, setCitations] = useState([]);
-  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds }  = useReferenceContext();
+  const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
 
   return (
     <div className='center-content'>
       <div className='flex flex-row items-start w-screen'>
-        {/* <CitationChoice referenceId={searchParams} /> */}
 
         <div className='px-20'>
-          <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} />
+          <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
           <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
             <thead className='bg-gray-50'>
               <tr>
@@ -31,7 +30,7 @@ export default function citationDisplay({
               
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              <CitationList referenceId={referenceId} citations={citations} setCitations={setCitations}/>
+              <CitationList referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
             </tbody>
 
           </table>

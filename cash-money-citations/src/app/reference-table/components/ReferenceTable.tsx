@@ -56,8 +56,10 @@ export function ReferenceProvider({ children }: any) {
     const [references, setReferences] = useState<CSLBibInterface[]>([]);
     const [referenceIds, setReferenceIds] = useState([]);
     const [selectedReferenceIds, setSelectedReferenceIds] = useState(() => {
-      const storedIds = localStorage.getItem('selectedReferenceIds');
-      return storedIds ? JSON.parse(storedIds) : [];
+      if (typeof window !== 'undefined') {
+        const storedIds = localStorage.getItem('selectedReferenceIds');
+        return storedIds ? JSON.parse(storedIds) : [];
+    }
     });
 
 

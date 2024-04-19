@@ -359,3 +359,20 @@ text-white hover:text-white
 }
 
 /* card styling homepage */
+
+
+/* Styling for themes */
+/* Define theme-specific color schemes */
+.red-theme {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 235 230 var(--tw-bg-opacity)); /* light red background */
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 var(--tw-text-opacity)); /* dark red text */
+}
+
+.purple-theme {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 233 254 var(--tw-bg-opacity)); /* light purple background */
+  --tw-text-opacity: 1;
+  color: rgb(109 40 217 var(--tw-text-opacity)); /* dark purple text */
+}

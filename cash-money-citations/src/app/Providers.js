@@ -26,5 +26,5 @@ export default function Providers({ children }) {
     return <>{children}</>;
   }
 
-  return <ThemeProvider  attribute="class" themes={['pink', 'red', 'blue', 'light', 'dark']}>{children}</ThemeProvider>;
+  return <ThemeProvider enableSystem={true}  attribute="class" themes={['light', 'dark', 'red', 'purple']}>{children}</ThemeProvider>;
 }

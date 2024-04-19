@@ -6,7 +6,13 @@ import { CreateCitation } from '../[id]/references/view/actions';
 import { DeleteCitation, GetCitations } from './actions';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-
+const Cite = require('citation-js')
+require('@citation-js/plugin-bibtex')
+require('@citation-js/plugin-bibjson')
+require('@citation-js/core')
+const { plugins } = require('@citation-js/core')
+import { GetCSLStyle, GetCSLLocale } from './actions';
+import parse from 'html-react-parser';
 
 export function CitationList({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
   const router = useRouter();
@@ -18,8 +24,32 @@ export function CitationList({ referenceId, citations, setCitations, referenceId
   const fetchCitations = async () => {
     // Fetch citations for all referenceIds in parallel
     const allCitations = await Promise.all(selectedReferenceIds.map(GetCitations));
+    // Create a Cite instance with the references' cslJson data
+    const citation = new Cite(allCitations);
+
+    // Create a custom template and style for each specified style/locale
+    const templateName = "ieee";
+    const localeName = "en-US";
+
+    const styleData = await GetCSLStyle(templateName);
+    const localeData = await GetCSLLocale(localeName);
+
+
+    const config = plugins.config.get('@csl')
+    
+    // Add citation style & locale to Citation.js config
+    config.templates.add(templateName, styleData?.cslData);
+    config.locales.add(localeName, localeData?.localeData);
+
+    // Create custom citation with user specified style & locale
+    const customCitation = citation.format('bibliography', {
+        format: 'html',
+        template: templateName,
+        lang: localeName,
+    });
+
     // Flatten the array of arrays into a single array and update state
-    setCitations(allCitations.flat());
+    setCitations(customCitation);
   }
 
   const handleDelete = async (citationId: any) => {
@@ -32,10 +62,9 @@ export function CitationList({ referenceId, citations, setCitations, referenceId
     //router.push(`/displayCitation?citation=${referenceId}`);
     router.refresh();
   }
-
   return (
     <>
-        {citations?.map((citation: any, index: any) => (
+        {/* {citations?.map((citation: any, index: any) => (
           <tr key={citation._id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
             <td className="px-6 py-4 text-center text-sm">
               {citation.style}
@@ -50,7 +79,12 @@ export function CitationList({ referenceId, citations, setCitations, referenceId
               </button> 
             </td>
           </tr>
-        ))}
+        ))} */}
+          <tr>
+            <td className="px-6 py-4 text-center text-sm">
+            <div dangerouslySetInnerHTML={{ __html: citations }} />            
+            </td>
+          </tr>
     </>
   );
 }

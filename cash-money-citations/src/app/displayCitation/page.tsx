@@ -11,7 +11,7 @@ export default function citationDisplay({
   searchParams: { [key: string]: string | string | undefined }
 }){
   const referenceId = searchParams.citation;
-  const [citations, setCitations] = useState([]);
+  const [citations, setCitations] = useState('');
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
 
   return (

@@ -1,9 +1,13 @@
 'use client'
 import React, { startTransition, useState } from "react";
 import useSWR from "swr";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Image, Button, Checkbox} from "@nextui-org/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { FaArrowAltCircleDown } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 
 const fetcher = (url: string) =>
@@ -13,16 +17,34 @@ const fetcher = (url: string) =>
 
     
 const ChangeField = ({ label, type, name, onFormSubmit, value, handleTextInputChange }: any) => (
-    <form method="PUT" onSubmit={onFormSubmit}>
+    <form method="PUT" onSubmit={onFormSubmit} className="p-2">
         <label htmlFor={name}>New {label}:</label>
-        <input type={type} id={name} name={name} value={value} onChange={handleTextInputChange}/>
-        <button type="submit">Change {label}</button>
+        <input 
+            type={type} 
+            id={name} 
+            name={name} 
+            value={value} 
+            onChange={handleTextInputChange}/>
+        <Button
+            type="submit" 
+            color="success" 
+            endContent={<IoMdCheckmarkCircleOutline />}>
+            Update {label}
+        </Button>
+        {/*<button type="submit">Change {label}</button>*/}
     </form>
 )
 
 const DeleteProfile = ({handleDeleteUser}: any) => (
     <form method="DELETE" onSubmit={(e) => handleDeleteUser(e)}>
-        <button type="submit">Delete Profile</button>
+        <Button
+            type="submit"
+            color="danger" 
+            variant="bordered" 
+            startContent={<FaRegTrashCan />}>
+            Delete user
+        </Button>
+        {/*<button type="submit">Delete Profile</button>*/}
     </form>
 )
 
@@ -96,6 +118,8 @@ const Profile = () => {
         
             update(newSession);
         }
+
+        router.refresh();
     }
 
     async function handleDeleteUser(e: React.FormEvent<HTMLFormElement>) {
@@ -124,25 +148,85 @@ const Profile = () => {
         setter(e.target.value);
     }
 
+    /*const [isVisibleOldPass, setIsVisibleOldPass] = useState(false);
+    const [isVisibleNewPass, setIsVisibleNewPass] = useState(false);
+    const [isVisibleRePass, setIsVisibleRePass] = useState(false);
+    const [isSelected, setIsSelected] = useState(false);
+
+    const toggleVisibilityOldPass = () => setIsVisibleOldPass(!isVisibleOldPass);
+    const toggleVisibilityNewPass = () => setIsVisibleNewPass(!isVisibleNewPass);
+    const toggleVisibilityRePass = () => setIsVisibleRePass(!isVisibleRePass);
+    const toggleChecked = () => setIsSelected(!isSelected);*/
+
     return (
-        <div>
-            <h2 className="text-align-center text-2xl text-slate-500">Hello, {data.username}!</h2>
-
-            <p>Username: {data.username}</p>
-            <ChangeField label="Username" type="text" name="newUsername" onFormSubmit={handleUpdateUser} value={newUsername} handleTextInputChange={(e: any) => handleTextInputChange(e, setNewUsername)}/>
-
-            <p>First Name: {data.firstName}</p>
-
-            <p>Last Name: {data.lastName}</p>
-
-            <p>Email: {data.email}</p>
-            <ChangeField label="Email" type="email" name="newEmail" onFormSubmit={handleUpdateUser} value={newEmail} handleTextInputChange={(e: any) => handleTextInputChange(e, setNewEmail)}/>
-
-            <ChangeField label="Password" type="password" name="newPassword" onFormSubmit={handleUpdateUser} value={newPassword} handleTextInputChange={(e: any) => handleTextInputChange(e, setNewPassword)}/>
-            <p>Role: {data.role}</p>
-
-            <DeleteProfile handleDeleteUser={handleDeleteUser}/>
-        </div>
+        <>
+            <div className="flex items-center justify-center pt-5">
+                <Card>
+                    <CardHeader className="flex items-center justify-center">
+                        <h2 className="font-bold text-2xl">
+                            Hello, {data.username}!
+                        </h2>                        
+                    </CardHeader>
+                    <Divider/>
+                    <CardBody>
+                    <div className="flex flex-col">
+                            <p className="text-md font-bold">Here are your profile details:</p>
+                            <p className="text-sm ml-6">Role: {data.role}</p>
+                            <p className="text-sm ml-6">First Name: {data.firstName}</p>
+                            <p className="text-sm ml-6">Last Name: {data.lastName}</p>
+                            <p className="text-sm ml-6">Email Address: {data.email}</p>
+                        </div>
+                    </CardBody>
+                    <Divider/>
+                    <CardFooter>
+                        <FaArrowAltCircleDown />
+                            <div className="ms-4 me-4">
+                                Change your profile below
+                            </div>
+                        <FaArrowAltCircleDown />
+                    </CardFooter>
+                </Card>
+            </div>
+            <div className="flex items-center justify-center pt-5">
+                <Card className="w-1/4">
+                    <CardHeader className="flex gap-3">
+                        <div className="flex flex-col">
+                            <h4 className="font-bold text-lg">Edit Profile</h4>
+                        </div>
+                    </CardHeader>
+                    <Divider/>
+                    <CardBody>
+                    <ChangeField 
+                        label="Username" 
+                        type="text" 
+                        name="newUsername" 
+                        onFormSubmit={handleUpdateUser} 
+                        value={newUsername} 
+                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewUsername)}/>
+                    <Divider/>
+                    <ChangeField 
+                        label="Email" 
+                        type="email" 
+                        name="newEmail" 
+                        onFormSubmit={handleUpdateUser} 
+                        value={newEmail} 
+                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewEmail)}/>
+                    </CardBody>
+                    <Divider/>
+                    <ChangeField 
+                        label="Password" 
+                        type="password" 
+                        name="newPassword" 
+                        onFormSubmit={handleUpdateUser} 
+                        value={newPassword} 
+                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewPassword)}/>
+                    <Divider/>
+                    <CardFooter>
+                        <DeleteProfile handleDeleteUser={handleDeleteUser}/>
+                    </CardFooter>
+                </Card>
+            </div>
+        </>
     )
 }
 

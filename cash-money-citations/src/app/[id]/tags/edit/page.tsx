@@ -2,6 +2,7 @@
 
 
 import TagForm from "@/components/tagComponents/TagForm";
+import { Card, CardFooter, CardHeader, Chip, Divider } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
@@ -31,13 +32,26 @@ export default function EditTag(){
     };
 
     return (
-        <div className="center-content">
-            <div className="card w-1/2 bg-base-100 shadow-xl">
-                <div className="card-body">
-                    <h2 className="card-title">Edit Tag</h2>
-                        <TagForm formID={"edit-tag"} tagForm={tagForm} forNewTag={false}/>
-                </div>
-            </div>
+        <>
+        <div className="flex justify-center items-center pt-5">
+            <Card className="py-4 w-1/6">
+                <CardHeader className="flex pb-0 pt-2 flex-col items-center">
+                    <div className="join join-horizontal">
+                        <h4 className="font-bold text-large">Edit Tag:</h4>
+                        <Divider orientation="vertical" className="m-2"/>
+                        <Chip
+                            variant="flat"
+                            className="bg-teal-200 me-2 mb-2">
+                                {tag.tagName}     
+                        </Chip>
+                    </div>
+                </CardHeader>
+                <Divider orientation="horizontal" className="my-1"/>
+                <CardFooter className="flex pb-0 pt-4 flex-col items-center">
+                    <TagForm formID={"edit-tag"} tagForm={tagForm} forNewTag={false}/>
+                </CardFooter> 
+            </Card>
         </div>
+        </>
     )
 }

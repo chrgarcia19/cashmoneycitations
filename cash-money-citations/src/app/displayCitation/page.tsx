@@ -10,8 +10,10 @@ export default function citationDisplay({
   params: { slug: string }
   searchParams: { [key: string]: string | string | undefined }
 }){
-  const referenceId = searchParams.citation;
+  //const referenceId = searchParams.citation;
   const [citations, setCitations] = useState('');
+  const [styleChoice, setStyleChoice] = useState('');
+  const [localeChoice, setLocaleChoice] = useState('');
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
 
   return (
@@ -19,7 +21,7 @@ export default function citationDisplay({
       <div className='flex flex-row items-start w-screen'>
 
         <div className='px-20'>
-          <CitationChoice referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
+          <CitationChoice citations={citations} setCitations={setCitations} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} styleChoice={styleChoice} setStyleChoice={setStyleChoice} localeChoice={localeChoice} setLocaleChoice={setLocaleChoice} />
           <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
             <thead className='bg-gray-50'>
               <tr>
@@ -30,7 +32,7 @@ export default function citationDisplay({
               
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              <CitationList referenceId={referenceId} citations={citations} setCitations={setCitations} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
+              <CitationList citations={citations} setCitations={setCitations} styleChoice={styleChoice} localeChoice={localeChoice} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
             </tbody>
 
           </table>

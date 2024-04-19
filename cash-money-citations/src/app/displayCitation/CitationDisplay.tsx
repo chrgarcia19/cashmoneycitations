@@ -12,14 +12,21 @@ require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import { GetCSLStyle, GetCSLLocale } from './actions';
-import parse from 'html-react-parser';
 
-export function CitationList({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
+export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
   const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
-    fetchCitations();
+    //fetchCitations();
   }, []);
+
+  // Add a new useEffect that listens for changes in styleChoice and localeChoice
+  useEffect(() => {
+    if (styleChoice && localeChoice) {
+      fetchCitations();
+    }
+  }, [styleChoice, localeChoice]);
+
 
   const fetchCitations = async () => {
     // Fetch citations for all referenceIds in parallel
@@ -28,8 +35,9 @@ export function CitationList({ referenceId, citations, setCitations, referenceId
     const citation = new Cite(allCitations);
 
     // Create a custom template and style for each specified style/locale
-    const templateName = "ieee";
-    const localeName = "en-US";
+    const templateName = styleChoice;
+    const localeName = localeChoice;
+
 
     const styleData = await GetCSLStyle(templateName);
     const localeData = await GetCSLLocale(localeName);
@@ -80,11 +88,11 @@ export function CitationList({ referenceId, citations, setCitations, referenceId
             </td>
           </tr>
         ))} */}
-          <tr>
-            <td className="px-6 py-4 text-center text-sm">
-            <div dangerouslySetInnerHTML={{ __html: citations }} />            
-            </td>
-          </tr>
+        <tr>
+          <td className="px-6 py-4 text-center text-sm">
+          <div dangerouslySetInnerHTML={{ __html: citations }} />            
+          </td>
+        </tr>
     </>
   );
 }
@@ -116,9 +124,7 @@ export function DeleteCitationDisplay(citeId: any) {
   )
 }
 
-export const CitationChoice = React.memo(({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds}: any) => {
-  const [styleChoice, setStyleChoice] = useState('');
-  const [localeChoice, setLocaleChoice] = useState('');
+export const CitationChoice = React.memo(({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds, styleChoice, setStyleChoice, localeChoice, setLocaleChoice}: any) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('txt');

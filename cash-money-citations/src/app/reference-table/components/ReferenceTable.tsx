@@ -411,6 +411,11 @@ export default function TestRefTable(userRefObject: any) {
                 Add Reference
               </Button>
             </Link>
+            <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/displayCitation`}}>
+              <Button color="primary" endContent={<PlusIcon />}>
+                Bibliography
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex justify-between items-center">

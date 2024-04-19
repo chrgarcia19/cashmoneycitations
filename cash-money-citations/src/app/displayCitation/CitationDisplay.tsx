@@ -12,6 +12,7 @@ require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import { GetCSLStyle, GetCSLLocale } from './actions';
+import parse from 'html-react-parser';
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
   const router = useRouter();
@@ -55,8 +56,8 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
         template: templateName,
         lang: localeName,
     });
+// <div data-csl-entry-id="temp_id_" class="csl-entry">
 
-    // Flatten the array of arrays into a single array and update state
     setCitations(customCitation);
   }
 
@@ -88,11 +89,16 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
             </td>
           </tr>
         ))} */}
-        <tr>
+        <ul>
+          {parse(
+            '<div class="csl-entry"> </div>'
+          )}
+        </ul>
+        {/* <tr>
           <td className="px-6 py-4 text-center text-sm">
-          <div dangerouslySetInnerHTML={{ __html: citations }} />            
+          <div dangerouslySetInnerHTML={{ __html: citations }} />
           </td>
-        </tr>
+        </tr> */}
     </>
   );
 }

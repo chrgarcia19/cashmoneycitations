@@ -1,8 +1,9 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
 import NavBar from "../components/NavBar";
-import { AuthProvider } from "./Providers";
+import { AuthProvider} from "./Providers";
 import SideBar from "@/components/SideBar";
+import Providers from "./Providers";
 
 
 
@@ -20,6 +21,7 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="light">
       <body>
+        <Providers>
         <NavBar />
         <div className="content">
           <AuthProvider>
@@ -30,7 +32,7 @@ export default async function RootLayout({
 
         {/* <IconSidebar/> */}
 
-        <footer className="w-full px-4 py-4 text-center text-sm text-gray-500 bg-gray-200 sm:px-6 md:px-20">
+        <footer className="w-full px-4 py-4 text-center text-sm bg-gray-200 sm:px-6 md:px-20 dark:bg-gray-700 text-white">
           <p>
             Citation Styles created with help from the
             <a
@@ -46,6 +48,7 @@ export default async function RootLayout({
             reserved.
           </p>
         </footer>
+        </Providers>
       </body>
     </html>
   );

@@ -21,7 +21,8 @@ import {
   ChipProps,
   SortDescriptor,
   skeleton,
-  Tooltip
+  Tooltip,
+  cn
 } from "@nextui-org/react";
 import {PlusIcon} from "./PlusIcon";
 import {VerticalDotsIcon} from "./VerticalDotIcon";
@@ -39,7 +40,7 @@ import {EyeIcon} from "./EyeIcon";
 import Link from "next/link";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { useRouter } from "next/navigation";
-
+import { ExportMultipleReferences } from "../actions";
 
 const ReferenceContext = createContext({
   references: [],
@@ -98,7 +99,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "createdAt", "actions", "tags"];
 
 
-export default function TestRefTable(userRefObject: any) {
+export default function ReferenceTable(userRefObject: any) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -350,6 +351,80 @@ export default function TestRefTable(userRefObject: any) {
     setPage(1)
   },[])
 
+  async function DownloadReferences(exportType: string) {
+    let formattedReferences = '';
+    switch (exportType) {
+      case 'biblatex':
+          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          const biblatexBlob = new Blob([formattedReferences], {type: 'application/text'});
+
+          // Create a link element
+          const bibLaTexLink = document.createElement('a');
+
+          // Set the download attribute of the link element
+          bibLaTexLink.download = `reference.bib`;
+
+          // Create a URL for the blob and set it as the href of the link
+          bibLaTexLink.href = URL.createObjectURL(biblatexBlob);
+
+          // Append the link to the body
+          document.body.appendChild(bibLaTexLink);
+
+          // Trigger a click on the link to start the download
+          bibLaTexLink.click();
+
+          // Remove the link from the body
+          document.body.removeChild(bibLaTexLink);
+
+          break;
+      case 'bibtex':
+          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          const bibtexBlob = new Blob([formattedReferences], {type: 'application/text'});
+
+          // Create a link element
+          const bibtexLink = document.createElement('a');
+
+          // Set the download attribute of the link element
+          bibtexLink.download = `reference.bib`;
+
+          // Create a URL for the blob and set it as the href of the link
+          bibtexLink.href = URL.createObjectURL(bibtexBlob);
+
+          // Append the link to the body
+          document.body.appendChild(bibtexLink);
+
+          // Trigger a click on the link to start the download
+          bibtexLink.click();
+
+          // Remove the link from the body
+          document.body.removeChild(bibtexLink);
+          break;
+      case 'csljson':
+          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          const jsonBlob = new Blob([formattedReferences], {type: 'application/json'});
+
+          // Create a link element
+          const jsonLink = document.createElement('a');
+
+          // Set the download attribute of the link element
+          jsonLink.download = `reference.json`;
+
+          // Create a URL for the blob and set it as the href of the link
+          jsonLink.href = URL.createObjectURL(jsonBlob);
+
+          // Append the link to the body
+          document.body.appendChild(jsonLink);
+
+          // Trigger a click on the link to start the download
+          jsonLink.click();
+
+          // Remove the link from the body
+          document.body.removeChild(jsonLink);
+          break;
+      default:
+          throw new Error(`Unsupported Export Type: ${exportType}`);
+  }
+}
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -416,6 +491,25 @@ export default function TestRefTable(userRefObject: any) {
                 Bibliography
               </Button>
             </Link>
+            <Dropdown>
+              <DropdownTrigger >
+                <Button variant="bordered">
+                  Export
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
+                  BibLaTex
+                </DropdownItem>
+                <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
+                  BibTex
+                </DropdownItem>
+                <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
+                  CSL-JSON
+                </DropdownItem>
+              </DropdownMenu>
+              
+            </Dropdown>
           </div>
         </div>
         <div className="flex justify-between items-center">

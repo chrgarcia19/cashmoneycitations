@@ -1,5 +1,4 @@
-import ReferenceTable from "@/components/ReferenceTable";
-import TestRefTable from "./components/ReferenceTable";
+import ReferenceTable from "./components/ReferenceTable";
 import { getUserReferences } from "@/components/componentActions/actions";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
@@ -14,6 +13,6 @@ export default async function RefTable() {
     const userRefObject = await getUserReferences(userId);
 
     return(
-      <TestRefTable userRefObject={userRefObject} />
+      <ReferenceTable userRefObject={userRefObject} />
     )
   }

@@ -1,10 +1,9 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { getSpecificReferenceById, getUserReferences } from '@/components/componentActions/actions';
+import { getSpecificReferenceById } from '@/components/componentActions/actions';
 import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
 import { CreateCitation } from '../[id]/references/view/actions';
 import { DeleteCitation, GetRefCSLJson } from './actions';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
@@ -13,13 +12,13 @@ require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
-
+import ReactDOMServer from 'react-dom/server';
+import { htmlToText } from 'html-to-text';
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
-  const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
-    //fetchCitations();
+
   }, []);
 
   // Add a new useEffect that listens for changes in styleChoice and localeChoice
@@ -123,7 +122,7 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
               {citation.data}
             </td>
             <td className="px-6 py-4 text-center">
-              <CopyToClipboard citationData={citation.CitationData} />
+              <CopyToClipboard citationData={citation.data} />
               <button onClick={() => handleDelete(citation._id)}>
                 Delete
               </button> 
@@ -145,8 +144,18 @@ export function CopyToClipboard(citationData : any){
     });
   };
 
+  const convertReactElementToPlainText = (reactElement: any) => {
+    // Convert React element to HTML string
+    const htmlString = ReactDOMServer.renderToStaticMarkup(reactElement);
+
+    // Convert HTML string to plain text
+    const plainText = htmlToText(htmlString);
+
+    return plainText;
+  };
+
   return (
-    <button onClick={() => copyToClipboard(JSON.stringify(citationData.citationData))}>
+    <button onClick={() => copyToClipboard(convertReactElementToPlainText(citationData.citationData))}>
       <img className='copy-icon' src="/copy-icon.svg" alt="Copy" width="30" height="30" />
     </button> 
   )

@@ -14,6 +14,7 @@ import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
+import {Spinner} from "@nextui-org/react";
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -124,7 +125,7 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
             <td className="px-6 py-4 text-center">
               <CopyToClipboard citationData={citation.data} />
               <button onClick={() => handleDelete(citation._id)}>
-                Delete
+                Remove
               </button> 
             </td>
           </tr>
@@ -171,10 +172,34 @@ export function DeleteCitationDisplay(citeId: any) {
   )
 }
 
+const Alert = ({ message, type, onClose }: any) => {
+  const color = type === 'success' ? 'green' : 'red';
+
+  return (
+    <div className={`bg-${color}-100 border border-${color}-400 text-${color}-700 px-4 py-3 rounded relative`} role="alert">
+      <strong className="font-bold">{type === 'success' ? 'Success!' : 'Error!'}</strong>
+      <span className="block sm:inline"> {message}</span>
+      <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg className="fill-current h-6 w-6 text-${color}-500" role="button" onClick={onClose} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+      </span>
+    </div>
+  );
+};
+
 export const CitationChoice = React.memo(({ referenceId, citations, setCitations, referenceIds, selectedReferenceIds, styleChoice, setStyleChoice, localeChoice, setLocaleChoice}: any) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('txt');
+  const [alert, setAlert] = useState({ type: '', message: ''})
+
+  useEffect(() => {
+    if (alert.message) {
+      const timer = setTimeout(() => {
+        setAlert({ type: '', message: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
 
   async function exportCitation() {
     if (!styleChoice || !localeChoice) {
@@ -186,9 +211,10 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     try {
       // Call to server action to create citations & save in DB
       await CreateCitation(selectedReferenceIds, styleChoice, localeChoice);
-      window.location.reload(); // Refresh the page
+      setAlert({ type: 'success', message: 'Citations saved successfully.' });
     } catch (error) {
       setError('An error occurred while creating the citation.');
+      setAlert({ type: 'error', message: 'Failed to save citations.' });
     } finally {
       setIsLoading(false);
     }
@@ -207,7 +233,8 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
 
   return (
     <>
-    <div className='center-content'>
+      {alert.message && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ type: '', message: '' })} />}    
+      <div className='center-content'>
       <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
         <div className='flex flex-col'>
           <label htmlFor='styleChoice' className='mb-2 font-bold text-lg'>Citation Style</label>
@@ -218,7 +245,9 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
           <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
         </div>
         <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Make Citation'}
+          {isLoading ? 
+            <Spinner label="saving..." color="warning" labelColor="warning"/>
+            : 'Save Citations'}
         </button>
         <form onSubmit={downloadCitations} className='flex items-center space-x-2'>
         <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>

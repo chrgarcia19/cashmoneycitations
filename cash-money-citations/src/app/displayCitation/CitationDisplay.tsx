@@ -12,8 +12,27 @@ require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
 import { GetCSLStyle, GetCSLLocale } from './actions';
-import parse from 'html-react-parser';
+import parse, { domToReact } from 'html-react-parser';
 
+const options = {
+  replace({ attribs, children }: any) {
+    if (!attribs) {
+      return;
+    }
+
+    if (attribs.id === 'main') {
+      return <h1 style={{ fontSize: 42 }}>{domToReact(children, options)}</h1>;
+    }
+
+    if (attribs.class === 'prettify') {
+      return (
+        <span style={{ color: 'hotpink' }}>
+          {domToReact(children, options)}
+        </span>
+      );
+    }
+  },
+}
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
   const router = useRouter();
   // Fetch initial citation state
@@ -89,11 +108,13 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
             </td>
           </tr>
         ))} */}
-        <ul>
-          {parse(
-            '<div class="csl-entry"> </div>'
-          )}
-        </ul>
+        <tr>
+          <td>
+            {parse(
+              citations, options
+            )},
+          </td>
+        </tr>
         {/* <tr>
           <td className="px-6 py-4 text-center text-sm">
           <div dangerouslySetInnerHTML={{ __html: citations }} />

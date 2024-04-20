@@ -9,6 +9,7 @@ import { FaBarcode } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaMusic } from "react-icons/fa";
 import { getServerAuthSession } from "@/lib/auth";
+import { FaLayerGroup } from "react-icons/fa";
 
 export default async function SideBar(){
    const authSession = await getServerAuthSession();
@@ -49,6 +50,14 @@ export default async function SideBar(){
                         className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
                         <IoPricetags />
                         <span className="ms-3">Tag Center</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
+                        href="/group-center"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <FaLayerGroup />
+                        <span className="ms-3">Group Center</span>
                      </Link>
                   </li>
                   <li>

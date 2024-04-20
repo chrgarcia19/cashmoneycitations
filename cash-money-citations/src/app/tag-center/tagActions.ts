@@ -3,10 +3,9 @@
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 
-export async function applyTagsToReference(reference: any, tags: Tag[]){
+export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag[]){
     /*Create the form*/
     const referenceForm = {
       tagId: reference.tagId,
@@ -44,8 +43,6 @@ export async function applyTagsToReference(reference: any, tags: Tag[]){
 export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
   /*Create the form*/
   const tagForm = {
-      tagName: tag.tagName,
-      tagColor: tag.tagColor,
       referenceId: tag.referenceId,
   };
 

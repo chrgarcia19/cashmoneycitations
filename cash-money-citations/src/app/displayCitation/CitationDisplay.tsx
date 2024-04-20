@@ -118,7 +118,7 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
   return (
     <>
         {citations?.map((citation: any, index: any) => (
-          <tr key={citation._id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
+          <tr key={citation._id || index} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
             <td className="px-6 py- text-center text-sm">
               {citation.data}
             </td>

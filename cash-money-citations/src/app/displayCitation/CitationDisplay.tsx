@@ -134,6 +134,16 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
   );
 }
 
+const convertReactElementToPlainText = (reactElement: any) => {
+  // Convert React element to HTML string
+  const htmlString = ReactDOMServer.renderToStaticMarkup(reactElement);
+
+  // Convert HTML string to plain text
+  const plainText = htmlToText(htmlString);
+
+  return plainText;
+};
+
 export function CopyToClipboard(citationData : any){
 
   const copyToClipboard = (text : string) => {
@@ -142,16 +152,6 @@ export function CopyToClipboard(citationData : any){
     }).catch(err => {
       console.error('Failed to copy: ', err);
     });
-  };
-
-  const convertReactElementToPlainText = (reactElement: any) => {
-    // Convert React element to HTML string
-    const htmlString = ReactDOMServer.renderToStaticMarkup(reactElement);
-
-    // Convert HTML string to plain text
-    const plainText = htmlToText(htmlString);
-
-    return plainText;
   };
 
   return (
@@ -198,7 +198,7 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     event.preventDefault(); // Prevent the form from refreshing the page
   
     const element = document.createElement('a');
-    const file = new Blob([citations.map((citation: any) => citation.CitationData).join('\n')], {type: 'text/plain'});
+    const file = new Blob([citations.map((citation: any) => convertReactElementToPlainText(citation.data)).join('\n')], {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
     element.download = `citations.${downloadFormat}`;
     document.body.appendChild(element);

@@ -17,7 +17,7 @@ export async function DeleteCitation(citationId: string) {
     await CitationModel.findOneAndDelete({ _id: citationId });
 }
 
-export async function GetCitations(referenceId: string, styleChoice: string, localeChoice: string) {
+export async function GetRefCSLJson(referenceId: string, styleChoice: string, localeChoice: string) {
     let reference = await CSLBibModel.findOne({_id: referenceId});
 
     if (!reference) {
@@ -27,7 +27,7 @@ export async function GetCitations(referenceId: string, styleChoice: string, loc
 
     let referenceCslJson = await CSLBibModel.findById(referenceId)
     const cslJson = referenceCslJson.cslJson
-
+    cslJson[0].refId = reference._id
     return cslJson;
 
     // // Create a Cite instance with the references' cslJson data

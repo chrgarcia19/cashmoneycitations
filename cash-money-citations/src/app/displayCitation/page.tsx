@@ -11,7 +11,7 @@ export default function citationDisplay({
   searchParams: { [key: string]: string | string | undefined }
 }){
   //const referenceId = searchParams.citation;
-  const [citations, setCitations] = useState('');
+  const [citations, setCitations] = useState([Object]);
   const [styleChoice, setStyleChoice] = useState('');
   const [localeChoice, setLocaleChoice] = useState('');
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
@@ -25,14 +25,13 @@ export default function citationDisplay({
           <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
             <thead className='bg-gray-50'>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation Style</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Citation</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copy</th>
               </tr>
               
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              <CitationList citations={citations} setCitations={setCitations} styleChoice={styleChoice} localeChoice={localeChoice} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} />
+              <CitationList citations={citations} setCitations={setCitations} styleChoice={styleChoice} localeChoice={localeChoice} referenceIds={referenceIds} selectedReferenceIds={selectedReferenceIds} setSelectedReferenceIds={setSelectedReferenceIds}/>
             </tbody>
 
           </table>

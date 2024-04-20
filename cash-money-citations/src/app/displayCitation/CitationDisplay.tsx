@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getSpecificReferenceById, getUserReferences } from '@/components/componentActions/actions';
 import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
 import { CreateCitation } from '../[id]/references/view/actions';
-import { DeleteCitation, GetCitations } from './actions';
+import { DeleteCitation, GetRefCSLJson } from './actions';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 const Cite = require('citation-js')
@@ -14,26 +14,8 @@ const { plugins } = require('@citation-js/core')
 import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 
-const options = {
-  replace({ attribs, children }: any) {
-    if (!attribs) {
-      return;
-    }
 
-    if (attribs.id === 'main') {
-      return <h1 style={{ fontSize: 42 }}>{domToReact(children, options)}</h1>;
-    }
-
-    if (attribs.class === 'prettify') {
-      return (
-        <span style={{ color: 'hotpink' }}>
-          {domToReact(children, options)}
-        </span>
-      );
-    }
-  },
-}
-export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [] }: any) {
+export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   const router = useRouter();
   // Fetch initial citation state
   useEffect(() => {
@@ -47,13 +29,34 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
     }
   }, [styleChoice, localeChoice]);
 
+  const newCitations: any[] = [];
+
+  const options = {
+    replace({ attribs, children }: any) {
+      if (!attribs) {
+        return;
+      }
+
+      if (attribs.class === 'csl-entry') {
+        const citation = {
+          _id: attribs["data-csl-entry-id"],
+          data: (
+            <div>
+              {domToReact(children, options)}
+            </div>
+          )
+        };
+        newCitations.push(citation)
+        return citation;
+      }
+    },
+  }
 
   const fetchCitations = async () => {
     // Fetch citations for all referenceIds in parallel
-    const allCitations = await Promise.all(selectedReferenceIds.map(GetCitations));
+    const allCitations = await Promise.all(selectedReferenceIds.map(GetRefCSLJson));
     // Create a Cite instance with the references' cslJson data
     const citation = new Cite(allCitations);
-
     // Create a custom template and style for each specified style/locale
     const templateName = styleChoice;
     const localeName = localeChoice;
@@ -75,30 +78,49 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
         template: templateName,
         lang: localeName,
     });
-// <div data-csl-entry-id="temp_id_" class="csl-entry">
 
-    setCitations(customCitation);
+    parse(customCitation, options);
+
+    const updatedCitations = newCitations.map((newCitation: any) => {
+      // Find the citation in citation.data that matches the _id of newCitation
+      const matchingCitation = citation.data.find((dataCitation: any) => dataCitation.id === newCitation._id);
+      // If a matching citation is found, return a new object that contains the refId
+      if (matchingCitation) {
+        return {
+          ...newCitation,
+          refId: matchingCitation.refId
+        };
+      }
+
+      // If no matching citation is found, return the original newCitation
+      return newCitation;
+    });
+
+
+    setCitations(updatedCitations);
   }
 
   const handleDelete = async (citationId: any) => {
-    // Delete citation from server
-    await DeleteCitation(citationId);
+    const citationToDelete = citations.find((citation: any) => citation._id === citationId);
 
     // Remove citation from state
     const updatedCitations = citations.filter((citation: any) => citation._id !== citationId);
     setCitations(updatedCitations);
-    //router.push(`/displayCitation?citation=${referenceId}`);
-    router.refresh();
+
+    // If the citation was found, remove its referenceId from selectedReferenceIds
+    if (citationToDelete) {
+      const updatedSelectedReferences = selectedReferenceIds.filter((referenceId: any) => referenceId !== citationToDelete.refId);
+      setSelectedReferenceIds(updatedSelectedReferences);
+    }
+
   }
+
   return (
     <>
-        {/* {citations?.map((citation: any, index: any) => (
+        {citations?.map((citation: any, index: any) => (
           <tr key={citation._id} className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'}`}>
-            <td className="px-6 py-4 text-center text-sm">
-              {citation.style}
-            </td>
             <td className="px-6 py- text-center text-sm">
-              {citation.CitationData}
+              {citation.data}
             </td>
             <td className="px-6 py-4 text-center">
               <CopyToClipboard citationData={citation.CitationData} />
@@ -107,19 +129,8 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
               </button> 
             </td>
           </tr>
-        ))} */}
-        <tr>
-          <td>
-            {parse(
-              citations, options
-            )},
-          </td>
-        </tr>
-        {/* <tr>
-          <td className="px-6 py-4 text-center text-sm">
-          <div dangerouslySetInnerHTML={{ __html: citations }} />
-          </td>
-        </tr> */}
+        ))}
+
     </>
   );
 }

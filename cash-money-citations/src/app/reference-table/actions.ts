@@ -2,7 +2,7 @@
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "../[id]/references/view/actions";
 
-export async function ExportMultipleReferences(exportType: string, selectedReferenceIds: string[]) {
+export async function ExportMultipleReferences(exportType: string, selectedReferenceIds: any) {
     const references = [];
 
     for (const id of selectedReferenceIds) {

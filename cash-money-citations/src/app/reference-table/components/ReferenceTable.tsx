@@ -76,7 +76,7 @@ export function ReferenceProvider({ children }: any) {
     useEffect(() => {
       localStorage.setItem('selectedReferenceIds', JSON.stringify(selectedReferenceIds));
     }, [selectedReferenceIds]);
-  
+
     return (
       <ReferenceContext.Provider value={{ references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds  }as any}>
         {children}
@@ -231,10 +231,12 @@ export default function ReferenceTable(userRefObject: any) {
 
   // Update currently selected referenceIds
   useEffect(() => {
+
     if (selectedKeys === "all") {
       setSelectedReferenceIds(referenceIds);
-    } else if (selectedKeys instanceof Set) {
+    } else if(selectedKeys instanceof Set) {
       setSelectedReferenceIds(Array.from(selectedKeys));
+
     }
 
   }, [selectedKeys]);
@@ -353,9 +355,15 @@ export default function ReferenceTable(userRefObject: any) {
 
   async function DownloadReferences(exportType: string) {
     let formattedReferences = '';
+    // Retrieve selectedReferences from the localstorage
+    let localStorageRefIds = localStorage.getItem('selectedReferenceIds')
+    if (localStorageRefIds) {
+      localStorageRefIds = JSON.parse(localStorageRefIds)
+    }
     switch (exportType) {
       case 'biblatex':
-          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
           const biblatexBlob = new Blob([formattedReferences], {type: 'application/text'});
 
           // Create a link element
@@ -378,7 +386,7 @@ export default function ReferenceTable(userRefObject: any) {
 
           break;
       case 'bibtex':
-          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
           const bibtexBlob = new Blob([formattedReferences], {type: 'application/text'});
 
           // Create a link element
@@ -400,7 +408,7 @@ export default function ReferenceTable(userRefObject: any) {
           document.body.removeChild(bibtexLink);
           break;
       case 'csljson':
-          formattedReferences = await ExportMultipleReferences(exportType, selectedReferenceIds)
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
           const jsonBlob = new Blob([formattedReferences], {type: 'application/json'});
 
           // Create a link element

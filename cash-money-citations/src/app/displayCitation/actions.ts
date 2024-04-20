@@ -27,7 +27,7 @@ export async function GetRefCSLJson(referenceId: string, styleChoice: string, lo
 
     let referenceCslJson = await CSLBibModel.findById(referenceId)
     const cslJson = referenceCslJson.cslJson
-    cslJson[0].refId = reference._id
+    cslJson[0].refId = reference._id.toString();
     return cslJson;
 
     // // Create a Cite instance with the references' cslJson data
@@ -70,7 +70,7 @@ export async function GetCSLStyle(templateName: string) {
         const styleData = await CSLStyleModel.findOne({
             name: templateName,
         }).exec()
-
+        styleData.toObject();
         return styleData;
     } catch(e) {
         console.log(e)
@@ -86,7 +86,7 @@ export async function GetCSLLocale(localeName: string) {
         const localeData = await CSLLocaleModel.findOne({
             name: localeName,
         }).exec()
-
+        localeData.toObject();
         return localeData;
     } catch(e) {
         console.log(e)

@@ -48,12 +48,12 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag
       image_url: reference.image_url,
       issue: reference.issue,
       api_source: reference.apiSource,
-      tagID: reference.tagID,
+      tagId: reference.tagId,
     };
 
     /*Put the proper data in the tag object*/
     for (let i = 0; i < tags.length; i++){
-      referenceForm.tagID.push(tags[i]._id);
+      referenceForm.tagId.push(tags[i]._id);
     }
 
     /*Send the new data to the API to be modified*/
@@ -85,12 +85,12 @@ export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
   const tagForm = {
       tagName: tag.tagName,
       tagColor: tag.tagColor,
-      referenceID: tag.referenceID,
+      referenceId: tag.referenceId,
   };
 
   /*Put the proper data in the tag object*/
   for (let i = 0; i < refs.length; i++){
-    tagForm.referenceID.push(refs[i]._id);
+    tagForm.referenceId.push(refs[i]._id);
   }
   
   /*Send the new data to the API to be modified*/
@@ -117,13 +117,13 @@ export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
     }
 }
 
-export const handleDelete = async (tagID: string, references: CSLBibInterface[], router: AppRouterInstance) => {
+export const handleDelete = async (tagId: string, references: CSLBibInterface[], router: AppRouterInstance) => {
   for (let i = 0; i < references.length; i++){
-    deleteTagIdFromReference(tagID, references[i]);
+    deleteTagIdFromReference(tagId, references[i]);
   }
   
   try {
-    await fetch(`/api/tags/${tagID}`, {
+    await fetch(`/api/tags/${tagId}`, {
       method: "Delete",
     });
     router.push('/tag-center');
@@ -174,13 +174,13 @@ export async function deleteTagIdFromReference(tagId: string, reference: CSLBibI
     image_url: reference.image_url,
     issue: reference.issue,
     api_source: reference.apiSource,
-    tagID: reference.tagID,
+    tagId: reference.tagId,
   };
 
   /*Find the index of the selected tag*/
-  const index = referenceForm.tagID.indexOf(tagId);
+  const index = referenceForm.tagId.indexOf(tagId);
   /*Splice the index and only remove 1 item*/
-  referenceForm.tagID.splice(index, 1);
+  referenceForm.tagId.splice(index, 1);
 
   /*Send the new data to the API to be modified*/
   try {
@@ -211,13 +211,13 @@ export async function deleteReferenceIdFromTag(referenceId: string, tag: Tag) {
   const tagForm = {
     tagName: tag.tagName,
     tagColor: tag.tagColor,
-    referenceID: tag.referenceID,
+    referenceId: tag.referenceId,
 };
 
   /*Find the index of the selected tag*/
-  const index = tagForm.referenceID.indexOf(referenceId);
+  const index = tagForm.referenceId.indexOf(referenceId);
   /*Splice the index and only remove 1 item*/
-  tagForm.referenceID.splice(index, 1);
+  tagForm.referenceId.splice(index, 1);
 
   /*Send the new data to the API to be modified*/
   try {

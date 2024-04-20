@@ -68,7 +68,7 @@ function ReferenceDetails({ reference }: any) {
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Tags:</label>
-            {reference.tagID.map((id: string) => (
+            {reference.tagId.map((id: string) => (
               <span key={id}>
                 <DisplayTags tagId={id} />
               </span>

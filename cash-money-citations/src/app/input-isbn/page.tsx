@@ -98,13 +98,14 @@ function InputISBN() {
     };
 
     const addToDB = async (item: any) => {
+        console.log(item)
         let i = 0;
         let authorArray = [];
         let newContributor: Contributor = {
             role: "",
-            firstName: "",
-            lastName: "",
-            middleName: "",
+            given: "",
+            family: "",
+            middle: "",
             suffix: ""
         };
         let contributors = new Array<Contributor>();
@@ -137,9 +138,9 @@ function InputISBN() {
                 //Acquire data from if/else statements, throw it into the contributor field
                 newContributor = {
                     role: "Author",
-                    firstName: firstName,
-                    lastName: lastName,
-                    middleName: middleI,
+                    given: firstName,
+                    family: lastName,
+                    middle: middleI,
                     suffix: ""
                 };
                 contributors.push(newContributor);
@@ -148,9 +149,9 @@ function InputISBN() {
         else {
             newContributor = {
                 role: "Author",
-                firstName: "Unknown",
-                lastName: "Unknown",
-                middleName: "",
+                given: "Unknown",
+                family: "Unknown",
+                middle: "",
                 suffix: ""
             };
             contributors.push(newContributor);
@@ -192,17 +193,19 @@ function InputISBN() {
         else {
             publisher = "Unknown";
         }
-        console.log(day + month + year);
+        
+
         
         let isbnReference: any = {
-            type: "book",
+            type: item.volumeInfo.printType.toLowerCase(),
             title: item.volumeInfo.title,
             contributors: contributors,
             publisher: publisher,
-            year_published: year,
-            day_published: day,
-            month_published: month,
-            isbn: staticSearchVal,
+            yearPublished: year,
+            dayPublished: day,
+            monthPublished: month,
+            "number-of-pages": item.volumeInfo.pageCount,
+            ISBN: staticSearchVal,
             image_url: imageLink,
         };
         

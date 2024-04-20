@@ -6,8 +6,9 @@ import SideBar from "@/components/SideBar";
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
-    title: 'Home',
-    description: 'CashMoneyCitations'
+    title: 'Cash Money Citations',
+    description: 'CashMoneyCitations',
+    icons: 'cashmoneycitations_logo.png'
 }
 
 export default async function RootLayout({
@@ -21,7 +22,9 @@ export default async function RootLayout({
                 <NavBar />
                 <SideBar />
                 <div className="content">
-                    <AuthProvider>{children}</AuthProvider>
+                    <AuthProvider>
+                            {children}
+                    </AuthProvider>
                 </div>
 
                 <footer className="fixed left-32 bottom-0 right-0 w-screen px-20 py-4 text-center text-sm text-gray-500 bg-gray-200">

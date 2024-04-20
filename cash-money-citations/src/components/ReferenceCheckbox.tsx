@@ -228,7 +228,6 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 {countSelected(isChecked) > 1 ? multiMenu(getSelectedID(isChecked), getSelectedRef(isChecked)) : ""}
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
-                <td className="border border-slate-600 text-center">{reference.type}</td>
                 <td className="border border-slate-600 text-center">
                     {reference.tagId.map((id: string) => (
                         <Suspense>
@@ -236,14 +235,18 @@ export const Checkbox = ({ references, tags }: IProps) => {
                         </Suspense>
                     ))}
                 </td>
+                <td className="border border-slate-600 text-center">{monthConversion(reference.monthPublished)} {reference.dayPublished}, {reference.yearPublished}</td>
                 <td className="border border-slate-600 text-center">{reference.title}</td>   
-                <td className="border border-slate-600 text-center">          
-                {reference.contributors.map((contributor: any) => (
-                    <div key={contributor._id}>{contributor.firstName} {contributor.middleName} {contributor.lastName} {contributor.suffix}</div> 
-                ))}
-                </td>
                 <td className="border border-slate-600 text-center">
-                    {monthConversion(reference.month_published)} {reference.day_published}, {reference.year_published}</td>
+                    {reference.contributors.slice(0, 3).map((contributor: any) => {
+                       return <div key={contributor._id}>{contributor.given}</div>
+                    })}
+                    {reference.contributors.length > 3 ?
+                        <div>And {reference.contributors.length - 3} more</div> 
+                        : ""
+                    }
+                </td>
+                <td className="border border-slate-600 text-center">{reference.type}</td>
                 </tr>
             ))}
         </>

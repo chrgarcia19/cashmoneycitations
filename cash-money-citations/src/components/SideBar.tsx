@@ -6,6 +6,8 @@ import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
 import { FaBook } from "react-icons/fa";
 import { FaBarcode } from "react-icons/fa";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMusic } from "react-icons/fa";
 import { getServerAuthSession } from "@/lib/auth";
 
 export default async function SideBar(){
@@ -51,6 +53,14 @@ export default async function SideBar(){
                   </li>
                   <li>
                      <Link 
+                        href="/search"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <FaMagnifyingGlass />
+                        <span className="ms-3">Search</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
                         href="/input-doi"
                         className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
                         <SiDoi />
@@ -71,6 +81,14 @@ export default async function SideBar(){
                         className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
                         <FaBarcode />
                         <span className="ms-3">ISSN Input</span>
+                     </Link>
+                  </li>
+                  <li>
+                     <Link 
+                        href="/input-isrc"
+                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
+                        <FaMusic />
+                        <span className="ms-3">Music Input</span>
                      </Link>
                   </li>
                </ul>

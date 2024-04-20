@@ -22,7 +22,7 @@ export default async function RootLayout({
         <Providers>
           <NavBar />
           <AuthProvider>
-            <div className="bg-gray-100 grid grid-cols-12">
+            <div className="bg-gray-100 dark:bg-gray-800 grid grid-cols-12">
               <div className="col-span-1"><SideBar /></div>
               <div className="col-span-11 mt-32">{children}</div>
             </div>

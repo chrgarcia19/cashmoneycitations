@@ -127,7 +127,7 @@ const SideBarIcon = ({
 }) => (
   <Link href={href}>
     <div className="sidebar-icon group">
-      <div className="text-center text-sm cursor-pointer flex items-center justify-center h-6 w-6 mx-auto group-hover:scale-80 transition-transform duration-200">
+    <div className="text-white p-2 bg-gray-800 dark:bg-gray-900 rounded-full shadow dark:shadow-md hover:bg-green-700 dark:hover:bg-gray-400 transition-all duration-300">
         {icon}
       </div>
       {tooltip && (

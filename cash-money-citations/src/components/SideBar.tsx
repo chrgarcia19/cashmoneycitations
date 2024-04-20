@@ -34,20 +34,20 @@ const Sidebar = () => {
   return (
     <>
     
-    <div className="fixed z-50 flex flex-col items-center text-white transition-all ease-in-out duration-300">
+    <div className="fixed flex flex-col z-20 items-center text-white transition-all ease-in-out duration-30 mr-10">
       {/* Dedicated Toggle Button */}
-      <div className="p-4 mt-[-100px] ml-[-10px]">
+      <div className="p-4">
         <button
           onClick={toggleIcons}
-          className="mb-4 flex items-center  justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+          className="mb-4 flex items-center opacity-0 justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
         >
-          <BsList className="text-xl" size={32} />
+          <BsList className="text-xl" size={40} />
         </button>
       </div>
 
       {/* Icons container, visibility controlled by isOpen state */}
       <div
-        className={`flex mt-[-20px] flex-col items-center transition-all ease-in-out duration-300 ${
+        className={`flex mt-[10px] flex-col items-center transition-all ease-in-out duration-300 ${
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
         }`}
       >
@@ -61,7 +61,6 @@ const Sidebar = () => {
           icon={<MdSpaceDashboard size="20" />}
           tooltip="Dashboard"
         />
-        <Divider />
         <SideBarIcon
           href="/new"
           icon={<HiDocumentAdd size="20" />}
@@ -72,7 +71,7 @@ const Sidebar = () => {
           icon={<FaMusic size="20" />}
           tooltip="Music Input"
         />
-        <Divider />
+        
         <SideBarIcon
           href="/reference-gallery"
           icon={<GrGallery size="20" />}
@@ -83,19 +82,19 @@ const Sidebar = () => {
           icon={<BsTable size="20" />}
           tooltip="Table View"
         />
-        <Divider />
+        
         <SideBarIcon
           href="/tag-center"
           icon={<IoPricetags size="20" />}
           tooltip="Tag Center"
         />
-        <Divider />
+        
         <SideBarIcon
           href="/search"
           icon={<GrGallery size="20" />}
           tooltip="Search"
         />
-        <Divider />
+        
         <SideBarIcon
           href="input-doi"
           icon={<SiDoi size="20" />}

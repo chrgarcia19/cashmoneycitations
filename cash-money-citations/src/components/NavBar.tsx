@@ -10,7 +10,7 @@ export default async function NavBar() {
   const authSession = await getServerAuthSession();
   
   return(
-    <div className="navbar bg-blue-800 fixed top-0 z-50 dark:bg-gray-700" >
+    <div className="navbar bg-blue-800 z-10 fixed top-0 dark:bg-gray-700" >
     <Link className="linkBtn inline-block rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200" href="/">
       <img 
         className="cursor-pointer me-3"

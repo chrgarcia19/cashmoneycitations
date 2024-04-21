@@ -2,7 +2,7 @@
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "../[id]/references/view/actions";
 
-export async function ExportMultipleReferences(exportType: string, selectedReferenceIds: any) {
+export async function ExportMultipleReferences(exportType: string, selectedReferenceIds: any, lang: string) {
     const references = [];
 
     for (const id of selectedReferenceIds) {
@@ -14,19 +14,19 @@ export async function ExportMultipleReferences(exportType: string, selectedRefer
     switch (exportType) {
         case 'biblatex':
             for (const reference of references) {
-                formattedReferences += await GetBibLaTexFile(reference);
+                formattedReferences += await GetBibLaTexFile(reference, lang);
             }
  
             break;
         case 'bibtex':
             for (const reference of references) {
-                formattedReferences += await GetBibTexFile(reference);
+                formattedReferences += await GetBibTexFile(reference, lang);
             }
             break;
         case 'csljson':
             const jsonReferences = [];
             for (const reference of references) {
-                const jsonReference = await GetJSONFile(reference);
+                const jsonReference = await GetJSONFile(reference, lang);
                 jsonReferences.push(jsonReference);
             }
             formattedReferences = JSON.stringify(jsonReferences, null, 2);

@@ -124,11 +124,20 @@ export async function GetBibLaTexFile(referenceId: string, lang: string) {
 
     const citation = new Cite(cslJson);
 
+    // Find locale where name = inputted locale
+    const localeData = await CSLLocaleModel.findOne({
+        name: lang,
+    }).exec()
+
+    const config = plugins.config.get('@csl')
+
+    config.locales.add(lang, localeData?.localeData);
+
     // Create custom citation with user specified style & locale
     const customCitation = citation.format('biblatex', {
         format: 'text',
         template: "biblatex",
-        lang: "en-US",
+        lang: lang,
     });
 
     return customCitation;
@@ -145,7 +154,7 @@ export async function GetBibTexFile(referenceId: string, lang: string) {
     const customCitation = citation.format('bibtex', {
         format: 'text',
         template: "bibtex",
-        lang: "en-US",
+        lang: lang,
     });
 
     return customCitation;
@@ -161,7 +170,7 @@ export async function GetJSONFile(referenceId: string, lang: string) {
     const customCitation = citation.format('data', {
         format: 'object',
         template: "data",
-        lang: "en-US",
+        lang: lang,
     });
 
 

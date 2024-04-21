@@ -23,7 +23,8 @@ import {
   skeleton,
   Tooltip,
   cn,
-  ButtonGroup
+  ButtonGroup,
+  DropdownSection
 } from "@nextui-org/react";
 import {PlusIcon} from "./PlusIcon";
 import {ChevronDownIcon} from "./ChevronDownloadIcon";
@@ -113,7 +114,7 @@ export default function ReferenceTable(userRefObject: any) {
     direction: "ascending",
   });
   const [langSearch, setLangSearch] = useState('');
-  const [localeChoice, setLocaleChoice] = useState<string | null>(null);
+  const [localeChoice, setLocaleChoice] = useState('');
 
   const userRefs = userRefObject.userRefObject;
   type UserReference = typeof userRefs.userRefs[0];
@@ -342,7 +343,7 @@ export default function ReferenceTable(userRefObject: any) {
     setLocaleChoice(newLocaleChoice);
   };
 
-  async function DownloadReferences(exportType: string) {
+  async function DownloadReferences(exportType: string, lang: string) {
     let formattedReferences = '';
     // Retrieve selectedReferences from the localstorage
     let localStorageRefIds = localStorage.getItem('selectedReferenceIds')
@@ -352,7 +353,7 @@ export default function ReferenceTable(userRefObject: any) {
     switch (exportType) {
       case 'biblatex':
           
-          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [], lang)
           const biblatexBlob = new Blob([formattedReferences], {type: 'application/text'});
 
           // Create a link element
@@ -375,7 +376,7 @@ export default function ReferenceTable(userRefObject: any) {
 
           break;
       case 'bibtex':
-          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [], lang)
           const bibtexBlob = new Blob([formattedReferences], {type: 'application/text'});
 
           // Create a link element
@@ -397,7 +398,7 @@ export default function ReferenceTable(userRefObject: any) {
           document.body.removeChild(bibtexLink);
           break;
       case 'csljson':
-          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [])
+          formattedReferences = await ExportMultipleReferences(exportType, localStorageRefIds ? localStorageRefIds : [], lang)
           const jsonBlob = new Blob([formattedReferences], {type: 'application/json'});
 
           // Create a link element
@@ -467,22 +468,47 @@ export default function ReferenceTable(userRefObject: any) {
           <div className="flex justify-end gap-4 items-center p-4">
             <span className="text-default-400 text-small">
               <ButtonGroup variant="flat">
-              <div className="bg-white p-4 mx-auto rounded-lg shadow-lg">
-                  <h2 className="text-2xl font-bold text-black mb-4">Choose a locale</h2>
-                  <input
-                    type="text"
-                    placeholder="Search locales..."
-                    className="mb-4 w-full p-2 text-gray-700 leading-tight"
-                    value={langSearch}
-                    onChange={(e) => setLangSearch(e.target.value)}
-                  />
-                  <div className="overflow-auto max-h-80" style={{ maxHeight: '50vh' }}>
-                    <div className="space-y-2">
+              <Dropdown>
+                  <DropdownTrigger >
+                    {selectedKeys === "all"
+                    ? 
+                    <Button variant="bordered">
+                      Lang <ChevronDownIcon />
+                    </Button>
+
+                    :
+                    (selectedKeys instanceof Set && selectedKeys.size > 0)
+                      ?
+                      <Button variant="bordered">
+                        Lang <ChevronDownIcon />
+                      </Button>
+                      :
+                      <Button isDisabled variant="bordered">
+                        Lang <ChevronDownIcon />
+                      </Button>
+                    }
+
+    
+                  </DropdownTrigger>
+                  <DropdownMenu variant="faded" aria-label="Dropdown menu with description"
+                  topContent={
+                    <input
+                      type="text"
+                      placeholder="Search Languages..."
+                      className="mb-4 w-full p-2 text-gray-700 leading-tight"
+                      value={langSearch}
+                      onChange={(e) => setLangSearch(e.target.value)}
+                    />}
+
+                  >
+                    <DropdownSection
+                      style={{ maxHeight: '200px', overflowY: 'auto' }}
+                    >
                       {filteredLocales.map((locale: any) => (
-                        <div key={locale} className="flex items-center justify-between bg-white p-3 rounded-lg shadow">
+                        <DropdownItem key={locale} className="flex items-center justify-between bg-white rounded-lg shadow">
                           <label htmlFor={`locale-${locale}`} className="flex items-center w-full">
                             <input
-                              id={`locale-${locale._id}`}
+                              id={`locale-${locale}`}
                               type="radio"
                               name="locales"
                               value={locale}
@@ -490,13 +516,16 @@ export default function ReferenceTable(userRefObject: any) {
                               onChange={handleLocaleChoiceChange}
                               className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
                             />
-                            <span className="text-lg text-gray-800 font-medium">{locale}</span>
+                            <span className="text-sm text-gray-800 font-sm">{locale}</span>
                           </label>
-                        </div>
+                        </DropdownItem>
                       ))}
-                    </div>
-                  </div>
-                </div>
+                    </DropdownSection>
+  
+
+                  </DropdownMenu>
+
+                </Dropdown>
                 <Dropdown>
                   <DropdownTrigger >
                     {selectedKeys === "all"
@@ -520,13 +549,13 @@ export default function ReferenceTable(userRefObject: any) {
     
                   </DropdownTrigger>
                   <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                    <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
+                    <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex", localeChoice)}>
                       BibLaTex
                     </DropdownItem>
-                    <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
+                    <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex", localeChoice)}>
                       BibTex
                     </DropdownItem>
-                    <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
+                    <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson", localeChoice)}>
                       CSL-JSON
                     </DropdownItem>
                   </DropdownMenu>

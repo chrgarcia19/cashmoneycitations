@@ -70,8 +70,10 @@ export async function GetCSLStyle(templateName: string) {
         const styleData = await CSLStyleModel.findOne({
             name: templateName,
         }).exec()
-        styleData.toObject();
-        return styleData;
+        let styledataObject = styleData.toObject();
+        styledataObject._id = styledataObject._id.toString();
+
+        return styledataObject;
     } catch(e) {
         console.log(e)
     }
@@ -86,8 +88,10 @@ export async function GetCSLLocale(localeName: string) {
         const localeData = await CSLLocaleModel.findOne({
             name: localeName,
         }).exec()
-        localeData.toObject();
-        return localeData;
+        let localeDataObject = localeData.toObject();
+        localeDataObject._id = localeDataObject._id.toString();
+
+        return localeDataObject;
     } catch(e) {
         console.log(e)
     }

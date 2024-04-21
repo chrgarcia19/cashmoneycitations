@@ -1,14 +1,13 @@
 
 'use client'
 
-import {Card, CardHeader, CardBody, Divider} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, Divider, Link} from "@nextui-org/react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import { Group } from "@/models/Group";
 import ViewGroupReferences from "./viewGroupRefs";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { handleDelete } from "./modifyGroups";
 import { useRouter } from "next/navigation";
-
 
 type Props = {
     group: Group;
@@ -59,8 +58,11 @@ const GroupCard = (props: Props) => {
                             </Button>
                             <Button
                                 color="primary"
-                                className="font-bold text-white">
-                                    Add References
+                                className="font-bold text-white"
+                                href={`/${props.group._id}/groups/edit?id=${encodeURIComponent(props.group._id)}`}
+                                as={Link}
+                                >
+                                    Modify References
                             </Button>
                             <Button
                                 color="warning"

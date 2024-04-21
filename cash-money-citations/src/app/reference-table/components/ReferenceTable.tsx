@@ -25,22 +25,20 @@ import {
   cn
 } from "@nextui-org/react";
 import {PlusIcon} from "./PlusIcon";
-import {VerticalDotsIcon} from "./VerticalDotIcon";
 import {ChevronDownIcon} from "./ChevronDownloadIcon";
 import {SearchIcon} from "./SearchIcon";
 import {columns} from "./data";
 import {capitalize} from "./utils";
-import { getUserReferences } from "@/components/componentActions/actions";
 import DisplayTags from "@/components/DisplayTags";
-let { parse, format } = require('@citation-js/date')
+let { format } = require('@citation-js/date')
 import {Skeleton} from "@nextui-org/react";
-import {EditIcon} from "./EditIcon";
 import {DeleteIcon} from "./DeleteIcon";
-import {EyeIcon} from "./EyeIcon";
 import Link from "next/link";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { useRouter } from "next/navigation";
 import { ExportMultipleReferences } from "../actions";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { TbEditOff, TbEdit } from "react-icons/tb";
 
 const ReferenceContext = createContext({
   references: [],
@@ -293,41 +291,30 @@ export default function ReferenceTable(userRefObject: any) {
         )
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="View">
-              <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/${userRef._id}/references/view`, query: { id: userRef._id} } }>
-                <EyeIcon />
-              </Link>
-            </Tooltip>
-            <Tooltip content="Edit">
-              <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" style={{display: 'grid'}} href={{ pathname: `/${userRef._id}/references/edit`, query: { id: userRef._id} } }>
-                  <EditIcon />
-              </Link>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete">
-              <button className="text-lg text-danger cursor-pointer active:opacity-50"
-                    onClick={() => handleDelete(userRef._id)}>
-                      <DeleteIcon />
-              </button>
-            </Tooltip>
-          </div>
+        <div className="relative flex items-center gap-2">
+          <Tooltip content="View">
+            <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/${userRef._id}/references/view`, query: { id: userRef._id} } }>
+              <BsEye />
+            </Link>
+          </Tooltip>
+          <Tooltip content="Edit">
+            <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" style={{display: 'grid'}} href={{ pathname: `/${userRef._id}/references/edit`, query: { id: userRef._id} } }>
+              <TbEdit />
+            </Link>
+          </Tooltip>
+          <Tooltip color="danger" content="Delete">
+            <button className="text-lg text-danger cursor-pointer active:opacity-50"
+                  onClick={() => handleDelete(userRef._id)}>
+                  <DeleteIcon />
+            </button>
+          </Tooltip>
+        </div>
+
         );
       default:
         return cellValue;
     }
   }, []);
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));

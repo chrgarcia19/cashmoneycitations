@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense, createContext, useContext, useEffect, useState } from "react";
+import React, { Suspense, createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -22,7 +22,8 @@ import {
   SortDescriptor,
   skeleton,
   Tooltip,
-  cn
+  cn,
+  ButtonGroup
 } from "@nextui-org/react";
 import {PlusIcon} from "./PlusIcon";
 import {ChevronDownIcon} from "./ChevronDownloadIcon";
@@ -39,6 +40,7 @@ import { useRouter } from "next/navigation";
 import { ExportMultipleReferences } from "../actions";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { TbEditOff, TbEdit } from "react-icons/tb";
+import { localeLabelSelect } from "./language-selections"
 
 const ReferenceContext = createContext({
   references: [],
@@ -110,6 +112,8 @@ export default function ReferenceTable(userRefObject: any) {
     column: "createdAt",
     direction: "ascending",
   });
+  const [langSearch, setLangSearch] = useState('');
+  const [localeChoice, setLocaleChoice] = useState<string | null>(null);
 
   const userRefs = userRefObject.userRefObject;
   type UserReference = typeof userRefs.userRefs[0];
@@ -135,6 +139,14 @@ export default function ReferenceTable(userRefObject: any) {
 
     return filteredReferences;
   }, [userRefs, filterValue, statusFilter]);
+
+  // useMemo to filter cslStyles based on the searchTerm
+  // This ensures filtering logic is only re-evaluated when cslStyles or searchTerm changes
+  const filteredLocales = useMemo(() => {
+    return localeLabelSelect?.filter((label: string) =>
+      label.toLowerCase().includes(langSearch.toLowerCase())
+    );
+  }, [langSearch]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -162,16 +174,6 @@ export default function ReferenceTable(userRefObject: any) {
           console.error(error);
         }
     };
-
-    async function exportSingleCitation(refId: string) {
-        // Call to server action to create citations & save in DB
-        router.push(`/displayCitation?citation=${refId}`)
-    }
-
-    async function exportMultipleCitation(refIds: string[]) {
-        // Call to server action to create citations & save in DB
-        router.push(`/displayCitation?citation=${refIds}`)
-    }
 
     const handleDeleteMany = async (deleteAll: boolean, idsToDelete: string[]) => {
       if (deleteAll) {
@@ -335,6 +337,11 @@ export default function ReferenceTable(userRefObject: any) {
     setPage(1)
   },[])
 
+  const handleLocaleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newLocaleChoice = e.target.value;
+    setLocaleChoice(newLocaleChoice);
+  };
+
   async function DownloadReferences(exportType: string) {
     let formattedReferences = '';
     // Retrieve selectedReferences from the localstorage
@@ -459,40 +466,73 @@ export default function ReferenceTable(userRefObject: any) {
         </div>
           <div className="flex justify-end gap-4 items-center p-4">
             <span className="text-default-400 text-small">
-              <Dropdown>
-                <DropdownTrigger >
-                  {selectedKeys === "all"
-                  ? 
-                  <Button variant="bordered">
-                    Export All
-                  </Button>
-
-                  :
-                  (selectedKeys instanceof Set && selectedKeys.size > 0)
-                    ?
+              <ButtonGroup variant="flat">
+              <div className="bg-white p-4 mx-auto rounded-lg shadow-lg">
+                  <h2 className="text-2xl font-bold text-black mb-4">Choose a locale</h2>
+                  <input
+                    type="text"
+                    placeholder="Search locales..."
+                    className="mb-4 w-full p-2 text-gray-700 leading-tight"
+                    value={langSearch}
+                    onChange={(e) => setLangSearch(e.target.value)}
+                  />
+                  <div className="overflow-auto max-h-80" style={{ maxHeight: '50vh' }}>
+                    <div className="space-y-2">
+                      {filteredLocales.map((locale: any) => (
+                        <div key={locale} className="flex items-center justify-between bg-white p-3 rounded-lg shadow">
+                          <label htmlFor={`locale-${locale}`} className="flex items-center w-full">
+                            <input
+                              id={`locale-${locale._id}`}
+                              type="radio"
+                              name="locales"
+                              value={locale}
+                              checked={localeChoice === locale}
+                              onChange={handleLocaleChoiceChange}
+                              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
+                            />
+                            <span className="text-lg text-gray-800 font-medium">{locale}</span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <Dropdown>
+                  <DropdownTrigger >
+                    {selectedKeys === "all"
+                    ? 
                     <Button variant="bordered">
-                      Export Selected
+                      Export All
                     </Button>
+
                     :
-                    <Button isDisabled variant="bordered">
-                      Export
-                    </Button>
-                  }
-  
-                </DropdownTrigger>
-                <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                  <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
-                    BibLaTex
-                  </DropdownItem>
-                  <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
-                    BibTex
-                  </DropdownItem>
-                  <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
-                    CSL-JSON
-                  </DropdownItem>
-                </DropdownMenu>
-              
-              </Dropdown>
+                    (selectedKeys instanceof Set && selectedKeys.size > 0)
+                      ?
+                      <Button variant="bordered">
+                        Export Selected
+                      </Button>
+                      :
+                      <Button isDisabled variant="bordered">
+                        Export
+                      </Button>
+                    }
+
+    
+                  </DropdownTrigger>
+                  <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                    <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
+                      BibLaTex
+                    </DropdownItem>
+                    <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
+                      BibTex
+                    </DropdownItem>
+                    <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
+                      CSL-JSON
+                    </DropdownItem>
+                  </DropdownMenu>
+                
+                </Dropdown>
+              </ButtonGroup>
 
 
             </span>
@@ -569,7 +609,9 @@ export default function ReferenceTable(userRefObject: any) {
     userRefs.length,
     hasSearchFilter,
     refLength,
-    selectedKeys
+    selectedKeys,
+    langSearch,
+    localeChoice
   ]);
 
   const bottomContent = React.useMemo(() => {

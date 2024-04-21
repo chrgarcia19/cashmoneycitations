@@ -117,7 +117,7 @@ async function SaveCitationsToDB(refId: string, referenceCslJson: any, styleChoi
         
     
 }
-export async function GetBibLaTexFile(referenceId: string) {
+export async function GetBibLaTexFile(referenceId: string, lang: string) {
     let referenceData = await CSLBibModel.findById(referenceId)
 
     const cslJson = referenceData.cslJson
@@ -134,7 +134,7 @@ export async function GetBibLaTexFile(referenceId: string) {
     return customCitation;
 }
 
-export async function GetBibTexFile(referenceId: string) {
+export async function GetBibTexFile(referenceId: string, lang: string) {
     let referenceData = await CSLBibModel.findById(referenceId)
 
     const cslJson = referenceData.cslJson
@@ -151,7 +151,7 @@ export async function GetBibTexFile(referenceId: string) {
     return customCitation;
 }
 
-export async function GetJSONFile(referenceId: string) {
+export async function GetJSONFile(referenceId: string, lang: string) {
     let referenceData = await CSLBibModel.findById(referenceId)
 
     const cslJson = referenceData.cslJson

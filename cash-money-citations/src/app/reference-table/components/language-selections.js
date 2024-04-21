@@ -1,0 +1,1 @@
+export const localeLabelSelect = ['ar-ZA', 'ar', 'bg-BG']

@@ -430,18 +430,18 @@ export default function ReferenceTable(userRefObject: any) {
 }
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 my-[2.5%] max-h-[80%]">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by title..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
-          <div className="flex gap-3">
+          <div className="flex gap-3 p-4">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
@@ -468,56 +468,97 @@ export default function ReferenceTable(userRefObject: any) {
                 Add Reference
               </Button>
             </Link>
-            <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/displayCitation`}}>
-              <Button color="primary" endContent={<PlusIcon />}>
-                Bibliography
-              </Button>
-            </Link>
-            <Dropdown>
-              <DropdownTrigger >
-                <Button variant="bordered">
-                  Export
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-                <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
-                  BibLaTex
-                </DropdownItem>
-                <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
-                  BibTex
-                </DropdownItem>
-                <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
-                  CSL-JSON
-                </DropdownItem>
-              </DropdownMenu>
-              
-            </Dropdown>
           </div>
         </div>
+          <div className="flex justify-end gap-4 items-center p-4">
+            <span className="text-default-400 text-small">
+              <Dropdown>
+                <DropdownTrigger >
+                  {selectedKeys === "all"
+                  ? 
+                  <Button variant="bordered">
+                    Export All
+                  </Button>
+
+                  :
+                  (selectedKeys instanceof Set && selectedKeys.size > 0)
+                    ?
+                    <Button variant="bordered">
+                      Export Selected
+                    </Button>
+                    :
+                    <Button isDisabled variant="bordered">
+                      Export
+                    </Button>
+                  }
+  
+                </DropdownTrigger>
+                <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
+                  <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex")}>
+                    BibLaTex
+                  </DropdownItem>
+                  <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex")}>
+                    BibTex
+                  </DropdownItem>
+                  <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson")}>
+                    CSL-JSON
+                  </DropdownItem>
+                </DropdownMenu>
+              
+              </Dropdown>
+
+
+            </span>
+            <span className="text-default-400 text-small">
+              {selectedKeys === "all"
+                ?
+                <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/displayCitation`}}>
+                  <Button color="primary" endContent={<PlusIcon />}>
+                    Bibliography with all
+                  </Button>
+                </Link>
+                :
+                (selectedKeys instanceof Set && selectedKeys.size > 0)
+                  ?
+                  <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/displayCitation`}}>
+                    <Button color="primary" endContent={<PlusIcon />}>
+                      Bibliography with selected
+                    </Button>
+                  </Link>
+                  :
+                  <Link className="text-lg text-default-400 cursor-pointer active:opacity-50" href={{ pathname: `/displayCitation`}}>
+                    <Button isDisabled color="primary" endContent={<PlusIcon />}>
+                      Bibliography
+                    </Button>
+                  </Link>
+                }
+
+              </span>
+              <span className="text-default-400 text-small">
+              {selectedKeys === "all"
+                ?
+                <Button color="danger" onClick={() => handleDeleteMany(true, [])}>
+                  <DeleteIcon />
+                  Delete All
+                </Button>
+                :
+                (selectedKeys instanceof Set && selectedKeys.size > 0)
+                  ?
+                  <Button color="danger" onClick={() => handleDeleteMany(false, Array.from(selectedKeys as Set<React.Key>).map(String))}>
+                    <DeleteIcon />
+                    Delete Selected
+                  </Button>
+                  :
+                  <Button isDisabled color="danger">
+                    <DeleteIcon />
+                    Delete Selected
+                  </Button>
+              }
+
+            </span>
+          </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">{refLength} Total References</span>
-          <span>
-          {selectedKeys === "all"
-            ?
-            <Button color="danger" onClick={() => handleDeleteMany(true, [])}>
-              <DeleteIcon />
-              Delete All
-            </Button>
-            :
-            (selectedKeys instanceof Set && selectedKeys.size > 0)
-              ?
-              <Button color="danger" onClick={() => handleDeleteMany(false, Array.from(selectedKeys as Set<React.Key>).map(String))}>
-                <DeleteIcon />
-                Delete Selected
-              </Button>
-              :
-              <Button isDisabled color="danger">
-                <DeleteIcon />
-                Delete Selected
-              </Button>
-          }
-
-          </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select

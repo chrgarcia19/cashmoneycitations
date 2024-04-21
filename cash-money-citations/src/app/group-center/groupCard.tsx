@@ -1,9 +1,10 @@
 
 'use client'
 
-import {Card, CardHeader, CardBody} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, Divider} from "@nextui-org/react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import { Group } from "@/models/Group";
+import ViewGroupReferences from "./viewGroupRefs";
 
 
 type Props = {
@@ -35,13 +36,31 @@ const GroupCard = (props: Props) => {
                         <ModalContent>
                             <>
                             <ModalHeader className="flex flex-col gap-1">
-                            
+                                Group Contents - {props.group.groupName}:
                             </ModalHeader>
+                            <Divider />
                             <ModalBody>
-                        
+                                {props.group.referenceId.map((id: string, index: number) => (
+                                    <ViewGroupReferences key={index} referenceId={id}/>
+                                ))}
                             </ModalBody>
+                            <Divider />
                             <ModalFooter>
-                                
+                                <Button
+                                    color="danger"
+                                    className="font-bold text-white">
+                                        Delete Group
+                                </Button>
+                                <Button
+                                    color="primary"
+                                    className="font-bold text-white">
+                                        Add References
+                                </Button>
+                                <Button
+                                    color="warning"
+                                    className="font-bold text-white">
+                                        Create Bibliography
+                                </Button>
                             </ModalFooter>
                             </>
                         </ModalContent>

@@ -47,11 +47,11 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
     
         if (forNewGroup) {
           handleNewGroup(form, userId);
-          router.push("/");
+          router.push("/group-center");
           router.refresh();
         } else {
           editGroup(form, id);
-          router.push("/");
+          router.push("/group-center");
           router.refresh();
         }
     };
@@ -97,6 +97,7 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                             <ModalFooter>
                             <Button
                                 type="submit"
+                                onClick={onOpenChange}
                                 color="success"
                                 className="font-bold text-white hover:bg-green-900">
                                 Submit

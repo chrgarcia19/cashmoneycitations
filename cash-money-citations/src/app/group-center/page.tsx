@@ -6,14 +6,15 @@ import GroupCard from "./groupCard";
 import { Group } from "@/models/Group";
 import CreateCard from "./createGroup";
 import GroupLibrary from "./groupLibrary";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 
-export default async function GroupCenter() {
-
+const GroupCenter = async () => {
+    
     const session = await getServerSession(authConfig);
     const userId = session?.user?.id ?? '';
 
     const groups = await getUserGroups(userId);
-    const references = await getUserReferences(userId);
+    const references = await getUserReferences(userId) ?? new Array<CSLBibInterface>();
 
     const groupLibrary = await getGroups();
 
@@ -30,7 +31,7 @@ export default async function GroupCenter() {
             <div className="flex items-center justify-center pl-5 pt-10 pr-5">
                 <div className="flex flex-wrap gap-4">
                     {groups?.map((group: Group) => (
-                        <GroupCard key={group._id} group={group} />
+                        <GroupCard key={group._id} group={group} references={references} />
                     ))}
                     <CreateCard formId={"create-group"} groupForm={groupData} />
                     <GroupLibrary groups={groupLibrary} />
@@ -39,3 +40,5 @@ export default async function GroupCenter() {
         </>
     )
 }
+
+export default GroupCenter;

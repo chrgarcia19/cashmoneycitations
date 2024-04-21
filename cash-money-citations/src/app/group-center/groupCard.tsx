@@ -5,14 +5,20 @@ import {Card, CardHeader, CardBody, Divider} from "@nextui-org/react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import { Group } from "@/models/Group";
 import ViewGroupReferences from "./viewGroupRefs";
+import { CSLBibInterface } from "@/models/CSLBibTex";
+import { handleDelete } from "./modifyGroups";
+import { useRouter } from "next/navigation";
 
 
 type Props = {
     group: Group;
+    references: CSLBibInterface[];
 }
 
 const GroupCard = (props: Props) => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+    const router = useRouter();
 
     return (
         <>  
@@ -47,7 +53,8 @@ const GroupCard = (props: Props) => {
                         <ModalFooter>
                             <Button
                                 color="danger"
-                                className="font-bold text-white">
+                                className="font-bold text-white"
+                                onClick={() => handleDelete(props.group._id, props.references, router)}>
                                     Delete Group
                             </Button>
                             <Button
@@ -57,7 +64,8 @@ const GroupCard = (props: Props) => {
                             </Button>
                             <Button
                                 color="warning"
-                                className="font-bold text-white">
+                                className="font-bold text-white"
+                                >
                                     Create Bibliography
                             </Button>
                         </ModalFooter>

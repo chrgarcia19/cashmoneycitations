@@ -12,25 +12,27 @@ type Props = {
 const GroupLibrary = (props: Props) => {
 
     type UserGroup = typeof props.groups[0];
-    const [groups, setGroups] = useState<Group[]>([]);
+
+    const [userOwnedGroups, setUserOwnedGroups] = useState<Group[]>([]);
 
     useEffect(() => {
-        async function getUserOwnedReferences(){
+        async function getUserOwnedGroups(){
             const userId = session?.user?.id;
             if (userId){
-                const userOwnedGroupsData = await getUserGroups(session?.user?.id ?? '');
+                const userOwnedGroupsData = await getUserGroups(userId);
                 setUserOwnedGroups(userOwnedGroupsData ?? []);
             } else {
                 setUserOwnedGroups([]);
             } 
-        }
+        };
+        getUserOwnedGroups();
     }, []);
 
     const { data: session } = useSession();
 
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-    const [userOwnedGroups, setUserOwnedGroups] = useState<Group[]>([]);
+    
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
 
@@ -57,7 +59,7 @@ const GroupLibrary = (props: Props) => {
                     </div>
                 );
             case "userOwnedGroups":
-                const isUserOwned = userOwnedGroups.some(group => group._id === userGroup._id);
+                const isUserOwned = userOwnedGroups.some(group => group._id !== userGroup._id);
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-small capitalize">{isUserOwned ? "Yes" : "No"}</p>
@@ -118,7 +120,7 @@ const GroupLibrary = (props: Props) => {
                                     <TableColumn key="groupName">GROUP NAME</TableColumn>
                                     <TableColumn key="userOwnedGroups">YOUR GROUP?</TableColumn>
                                 </TableHeader>
-                                <TableBody items={props.groups}>
+                                <TableBody items={items}>
                                     {(item: Group) => (
                                         <TableRow key={item._id}>
                                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

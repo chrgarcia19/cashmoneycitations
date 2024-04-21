@@ -1,7 +1,9 @@
 'use client'
+import { getUserGroups } from "@/components/componentActions/groupActions";
 import { Group } from "@/models/Group";
-import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure } from "@nextui-org/react";
-import { useMemo, useState } from "react";
+import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import React, { Key, useCallback, useEffect, useMemo, useState } from "react";
 
 type Props = {
     groups: Group[];
@@ -9,7 +11,26 @@ type Props = {
 
 const GroupLibrary = (props: Props) => {
 
+    type UserGroup = typeof props.groups[0];
+    const [groups, setGroups] = useState<Group[]>([]);
+
+    useEffect(() => {
+        async function getUserOwnedReferences(){
+            const userId = session?.user?.id;
+            if (userId){
+                const userOwnedGroupsData = await getUserGroups(session?.user?.id ?? '');
+                setUserOwnedGroups(userOwnedGroupsData ?? []);
+            } else {
+                setUserOwnedGroups([]);
+            } 
+        }
+    }, []);
+
+    const { data: session } = useSession();
+
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+    const [userOwnedGroups, setUserOwnedGroups] = useState<Group[]>([]);
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
 
@@ -25,7 +46,25 @@ const GroupLibrary = (props: Props) => {
         return props.groups.slice(start, end);
     }, [page, props.groups]);
 
-    console.log(JSON.stringify(selectedKeys));
+    const renderCell = useCallback((userGroup: UserGroup, columnKey: Key) => {
+        const cellValue = userGroup[columnKey as keyof UserGroup];
+        switch (columnKey){
+            case "groupName":
+                const groupName = userGroup.groupName;
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-small capitalize">{groupName}</p>
+                    </div>
+                );
+            case "userOwnedGroups":
+                const isUserOwned = userOwnedGroups.some(group => group._id === userGroup._id);
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-small capitalize">{isUserOwned ? "Yes" : "No"}</p>
+                    </div>
+                );
+        }
+    }, []);
 
     return (
         <>
@@ -77,14 +116,19 @@ const GroupLibrary = (props: Props) => {
                                 >
                                 <TableHeader>
                                     <TableColumn key="groupName">GROUP NAME</TableColumn>
-                                    <TableColumn key="owned">YOUR GROUP?</TableColumn>
+                                    <TableColumn key="userOwnedGroups">YOUR GROUP?</TableColumn>
                                 </TableHeader>
-                                <TableBody items={items}>
-                                    {(item) => (
+                                <TableBody items={props.groups}>
+                                    {(item: Group) => (
+                                        <TableRow key={item._id}>
+                                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                        </TableRow>
+                                    )}
+                                    {/*(item) => (
                                     <TableRow key={item.groupName}>
                                         {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
                                     </TableRow>
-                                    )}
+                                    )*/}
                                 </TableBody>
                             </Table>
                             </ModalBody>

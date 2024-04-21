@@ -58,7 +58,7 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
 
     return (
         <>
-            <Card>
+            <Card className="me-3">
                 <CardHeader>
                     <h4 className="font-bold">Create a New Group</h4>
                 </CardHeader>

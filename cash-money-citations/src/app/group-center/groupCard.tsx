@@ -16,58 +16,56 @@ const GroupCard = (props: Props) => {
 
     return (
         <>  
-            <div className="me-3">
-                <Card>
-                    <CardHeader>
-                        <h4 className="font-bold">{props.group.groupName}</h4>
-                    </CardHeader>
-                    <CardBody>
-                        <Button 
-                            onPress={onOpen} 
-                            color="primary"
-                            className="font-bold text-white">
-                            View Group
-                        </Button>
-                    <Modal 
-                        isOpen={isOpen} 
-                        onOpenChange={onOpenChange}
-                        placement="top-center"
-                    >
-                        <ModalContent>
-                            <>
-                            <ModalHeader className="flex flex-col gap-1">
-                                Group Contents - {props.group.groupName}:
-                            </ModalHeader>
-                            <Divider />
-                            <ModalBody>
-                                {props.group.referenceId.map((id: string, index: number) => (
-                                    <ViewGroupReferences key={index} referenceId={id}/>
-                                ))}
-                            </ModalBody>
-                            <Divider />
-                            <ModalFooter>
-                                <Button
-                                    color="danger"
-                                    className="font-bold text-white">
-                                        Delete Group
-                                </Button>
-                                <Button
-                                    color="primary"
-                                    className="font-bold text-white">
-                                        Add References
-                                </Button>
-                                <Button
-                                    color="warning"
-                                    className="font-bold text-white">
-                                        Create Bibliography
-                                </Button>
-                            </ModalFooter>
-                            </>
-                        </ModalContent>
-                    </Modal>
-                    </CardBody>
-                </Card>
-            </div>
+            <Card className="me-3">
+                <CardHeader>
+                    <h4 className="font-bold">{props.group.groupName}</h4>
+                </CardHeader>
+                <CardBody>
+                    <Button 
+                        onPress={onOpen} 
+                        color="primary"
+                        className="font-bold text-white">
+                        View Group
+                    </Button>
+                <Modal 
+                    isOpen={isOpen} 
+                    onOpenChange={onOpenChange}
+                    placement="top-center"
+                >
+                    <ModalContent>
+                        <>
+                        <ModalHeader className="flex flex-col gap-1">
+                            Group Contents - {props.group.groupName}:
+                        </ModalHeader>
+                        <Divider />
+                        <ModalBody>
+                            {props.group.referenceId.map((id: string, index: number) => (
+                                <ViewGroupReferences key={index} referenceId={id}/>
+                            ))}
+                        </ModalBody>
+                        <Divider />
+                        <ModalFooter>
+                            <Button
+                                color="danger"
+                                className="font-bold text-white">
+                                    Delete Group
+                            </Button>
+                            <Button
+                                color="primary"
+                                className="font-bold text-white">
+                                    Add References
+                            </Button>
+                            <Button
+                                color="warning"
+                                className="font-bold text-white">
+                                    Create Bibliography
+                            </Button>
+                        </ModalFooter>
+                        </>
+                    </ModalContent>
+                </Modal>
+                </CardBody>
+            </Card>
         </>
     );
 }

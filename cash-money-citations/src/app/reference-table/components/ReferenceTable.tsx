@@ -28,7 +28,7 @@ import {PlusIcon} from "./PlusIcon";
 import {VerticalDotsIcon} from "./VerticalDotIcon";
 import {ChevronDownIcon} from "./ChevronDownloadIcon";
 import {SearchIcon} from "./SearchIcon";
-import {columns, statusOptions} from "./data";
+import {columns} from "./data";
 import {capitalize} from "./utils";
 import { getUserReferences } from "@/components/componentActions/actions";
 import DisplayTags from "@/components/DisplayTags";
@@ -132,11 +132,6 @@ export default function ReferenceTable(userRefObject: any) {
     if (hasSearchFilter) {
       filteredReferences = filteredReferences.filter((user) =>
         user.title[0].toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredReferences = filteredReferences.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
       );
     }
 
@@ -450,27 +445,6 @@ export default function ReferenceTable(userRefObject: any) {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
                   Columns
                 </Button>
               </DropdownTrigger>
@@ -588,12 +562,6 @@ export default function ReferenceTable(userRefObject: any) {
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
-            Previous
-          </Button>
-          <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
-            Next
-          </Button>
         </div>
       </div>
     );

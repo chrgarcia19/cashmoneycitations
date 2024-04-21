@@ -8,9 +8,9 @@ const columns = [
   {name: "TYPE", uid: "type", sortable: true},
 ];
 
-const statusOptions = [
-  {name: "Active", uid: "active"},
-  {name: "Paused", uid: "paused"},
-];
+// const statusOptions = [
+//   {name: "Active", uid: "active"},
+//   {name: "Paused", uid: "paused"},
+// ];
 
-export {columns, statusOptions};
+export {columns};

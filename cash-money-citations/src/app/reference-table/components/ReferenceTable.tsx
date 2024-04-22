@@ -97,7 +97,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "datePublished", "contributors", "createdAt", "actions", "tags"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "yearPublished", "contributors", "createdAt", "actions", "tags"];
 
 
 export default function ReferenceTable(userRefObject: any) {
@@ -246,11 +246,13 @@ export default function ReferenceTable(userRefObject: any) {
             {cellValue}
           </div>
         );
-      case "datePublished":
-        const date = format(userRef.cslJson[0].issued);
+      case "yearPublished":
+        let datePublished = format(userRef.cslJson[0].issued);
+        datePublished = new Date(datePublished);
+        datePublished = datePublished.getFullYear();
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{date}</p>
+            <p className="text-bold text-small capitalize">{datePublished}</p>
           </div>
         );
       case "contributors":

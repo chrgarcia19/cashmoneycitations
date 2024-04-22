@@ -1,6 +1,6 @@
 const columns = [
   {name: "TITLE", uid: "title", sortable: true},
-  {name: "DATE PUBLISHED", uid: "datePublished", sortable: true},
+  {name: "YEAR PUBLISHED", uid: "yearPublished", sortable: true},
   {name: "CONTRIBUTORS", uid: "contributors", sortable: true},
   {name: "TAGS", uid: "tags", sortable: true},
   {name: "DATE CREATED", uid: "createdAt", sortable: true},

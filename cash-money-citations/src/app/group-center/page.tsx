@@ -31,7 +31,7 @@ const GroupCenter = async () => {
             <div className="flex items-center justify-center pl-5 pt-10 pr-5">
                 <div className="flex flex-wrap gap-4">
                     {groups?.map((group: Group) => (
-                        <GroupCard key={group._id} group={group} references={references} />
+                        <GroupCard key={group._id} group={group} references={references} referenceIds={group.referenceId} />
                     ))}
                     <CreateCard formId={"create-group"} groupForm={groupData} />
                     <GroupLibrary groups={groupLibrary} />

@@ -22,7 +22,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
       fetchReference();
     }, []);
   
-  const fetchReference = () => {  
+  const fetchReference = async () => {  
     const referenceArr = new Array<CSLBibInterface>();  
     props.referenceIds.map(async (id: any) => {
         const referenceData = await getSpecificReferenceById(id);  
@@ -152,7 +152,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
                         <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                         <TableColumn key="type">TYPE</TableColumn>
                     </TableHeader>
-                    <TableBody items={items}>
+                    <TableBody items={references}>
                         {(item: { _id: string }) => (
                             <TableRow key={item._id}>
                                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

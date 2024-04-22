@@ -86,6 +86,10 @@ const GroupLibrary = (props: Props) => {
                     isOpen={isOpen} 
                     onOpenChange={onOpenChange}
                     placement="top-center"
+                    backdrop="blur"
+                    radius="lg"
+                    shadow="lg"
+                    scrollBehavior="inside"
                 >
                     <ModalContent>
                         <>

@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { editGroup, handleNewGroup } from "@/components/componentActions/groupActions";
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 
 interface GroupData {
     groupName: string;
@@ -88,6 +88,10 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                                 isOpen={isOpen} 
                                 onOpenChange={onOpenChange}
                                 placement="top-center"
+                                backdrop="blur"
+                                radius="lg"
+                                shadow="lg"
+                                scrollBehavior="inside"
                             >
                                 <ModalContent>
                                     <>

@@ -7,7 +7,16 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Dashboard from "@/components/Dashboard";
 
+
+
 export default function Home() {
+
+  interface FormData {
+    name: string;
+    email: string;
+    message: string;
+  }
+
   const { data: session, status } = useSession(); // Use useSession to access the session
   const [formData, setFormData] = useState({
     name: "",
@@ -41,19 +50,27 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    const formPayload = JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+    });
+  
     try {
       const response = await fetch("/api/message", {
         method: "POST",
-        body: "hello",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: formPayload,
       });
       const data = await response.json();
       console.log(data, "data");
-
+  
       if (data.success) {
         setResponseMessage("Message sent successfully!");
-        // Optionally reset form here
-        // Reset form here
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", message: "" }); // Reset form on success
       } else {
         setResponseMessage("Failed to send message. Please try again.");
       }
@@ -64,7 +81,8 @@ export default function Home() {
       setIsSubmitting(false);
     }
   };
-
+  
+  
   return (
     <>
       
@@ -213,7 +231,7 @@ export default function Home() {
               placeholder="Your Message"
               value={formData.message}
               onChange={handleChange}
-              className="px-4 py-3 pb-32 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
+              className="px-4 py-3 pb-32 rounded-lg border border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
             ></textarea>
             <button
               type="submit"
@@ -225,7 +243,7 @@ export default function Home() {
           </form>
         </div>
       </div>
-      {responseMessage && <p className="mt-4 text-gray-900 dark:text-gray-100">{responseMessage}</p>}
+      {responseMessage && <p className="mt-4 text-gray-900 dark:text-white">{responseMessage}</p>}
     </div>
   </main>
 </div>

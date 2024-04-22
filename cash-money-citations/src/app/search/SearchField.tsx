@@ -87,6 +87,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
       if (userId){
         const userOwnedRefsData = await getUserReferences(userId);
         setUserOwnedRefs(userOwnedRefsData ?? []);
+        console.log(userOwnedRefs)
       }
       else {
         setUserOwnedRefs([]);
@@ -95,8 +96,6 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     };
     initialGetRefs();
   }, [])
-
-  console.log(userOwnedRefs);
   
   return (
     <div className="flex flex-col items-center h-screen mb-8 pb-20 absolute-bottom">

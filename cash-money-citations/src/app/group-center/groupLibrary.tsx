@@ -1,9 +1,11 @@
 'use client'
 import { getSpecificUserById } from "@/components/componentActions/actions";
+import { getSpecificGroupById, getUserGroups, handleNewGroup } from "@/components/componentActions/groupActions";
 import { Group } from "@/models/Group";
-import { Users } from "@/models/User";
-import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection } from "@nextui-org/react";
+import { MdLibraryAdd } from "react-icons/md";
+import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { Key, useCallback, useEffect, useMemo, useState } from "react";
 
 type Props = {
@@ -12,22 +14,25 @@ type Props = {
 
 const GroupLibrary = (props: Props) => {
 
+    const router = useRouter();
     const { data: session } = useSession();
 
-    const [ownedGroups, setOwnedGroups] = useState<String[]>([]);
+    const [userOwnedGroups, setUserOwnedGroups] = useState<Group[]>([]);
 
     useEffect(() => {
-        async function getSpecificUser(){
-            const userId = session?.user?.id;
-            const userFromId = await getSpecificUserById(userId);
-            const groupsArr = new Array<String>();
-            for (let i = 0; i < userFromId.ownedGroups.length; i++){
-                groupsArr.push(userFromId.ownedGroups[i]);
-            }
-            setOwnedGroups(groupsArr);
-        }
-    getSpecificUser();    
+        getSpecificUser();    
     }, []);
+
+    async function getSpecificUser(){
+        const userId = session?.user?.id;
+        const userFromId = await getSpecificUserById(userId);
+        if (userFromId._id){
+            const userOwnedGroupsData = await getUserGroups(userFromId._id);
+            setUserOwnedGroups(userOwnedGroupsData ?? []);
+        } else {
+            setUserOwnedGroups([]);
+        }
+    };
     
     const userGroups = props.groups;
     type UserGroup = typeof userGroups[0];   
@@ -49,7 +54,6 @@ const GroupLibrary = (props: Props) => {
     }, [page, props.groups]);
 
     const renderCell = useCallback((userGroup: UserGroup, columnKey: Key) => {
-        const cellValue = userGroup[columnKey as keyof UserGroup];
         switch (columnKey){
             case "groupName":
                 const groupName = userGroup.groupName;
@@ -59,17 +63,43 @@ const GroupLibrary = (props: Props) => {
                     </div>
                 );
             case "userOwnedGroups":
-                let isUserOwned = false;
-                console.log(cellValue);
-                //const isUserOwned = ownedGroups.some((id) => id == userGroup._id);
+                const isUserOwned = userOwnedGroups.some((group: Group) => group._id == userGroup._id);
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-small capitalize">{isUserOwned ? "Yes" : "No"}</p>
                     </div>
                 );
+            case "actions":
+                return (
+                    <div className="flex flex-col">
+                        <Tooltip content="Add Group to List">
+                            <Button
+                                color="success"
+                                size="sm"
+                                className="cursor-pointer active:opacity-50"
+                                onClick={async() => handleSubmit(userGroup)}
+                                onPress={onOpenChange}
+                                >
+                                    <MdLibraryAdd />
+                            </Button>
+                        </Tooltip>
+                    </div>
+                );
         }
-    }, []);
+    }, [userOwnedGroups, onOpenChange]);
 
+    const handleSubmit = async (group: Group) => {
+        try {
+            const groupWithoutId = {...group, 
+                _id: undefined };
+            console.log(groupWithoutId);
+            handleNewGroup(groupWithoutId, session?.user?.id);
+            router.push("/group-center");
+            router.refresh();
+        } catch (error) {
+            console.log(JSON.stringify(error));
+        }
+    };
 
     return (
         <>
@@ -89,6 +119,7 @@ const GroupLibrary = (props: Props) => {
                     isOpen={isOpen} 
                     onOpenChange={onOpenChange}
                     placement="top-center"
+                    size="xl"
                     backdrop="blur"
                     radius="lg"
                     shadow="lg"
@@ -99,7 +130,6 @@ const GroupLibrary = (props: Props) => {
                         <ModalHeader className="flex flex-col gap-1">
                             Add From the Group Library
                         </ModalHeader>
-                        <form>
                             <ModalBody>
                             <Table 
                                 aria-label="Example table with custom cells, pagination and sorting"
@@ -119,16 +149,16 @@ const GroupLibrary = (props: Props) => {
                                 classNames={{
                                     wrapper: "min-h-[222px]",
                                 }}
-                                selectionMode="multiple"
                                 selectedKeys={selectedKeys}
                                 onSelectionChange={setSelectedKeys}
                                 >
                                 <TableHeader>
                                     <TableColumn key="groupName">GROUP NAME</TableColumn>
                                     <TableColumn key="userOwnedGroups">YOUR GROUP?</TableColumn>
+                                    <TableColumn key="actions">ACTIONS</TableColumn>
                                 </TableHeader>
                                 <TableBody items={items}>
-                                    {(item: { _id: string }) => (
+                                    {(item: Group) => (
                                         <TableRow key={item._id}>
                                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
@@ -137,15 +167,7 @@ const GroupLibrary = (props: Props) => {
                             </Table>
                             </ModalBody>
                             <ModalFooter>
-                            <Button
-                                type="submit"
-                                onClick={onOpenChange}
-                                color="success"
-                                className="font-bold text-white hover:bg-green-900">
-                                Submit
-                            </Button>
                             </ModalFooter>
-                        </form>
                         </>
                     </ModalContent>
                 </Modal>

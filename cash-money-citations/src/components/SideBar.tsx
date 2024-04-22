@@ -5,16 +5,15 @@ import Link from "next/link";
 import { BsTable, BsList } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
-import { SiDoi } from "react-icons/si";
 import { IoPricetags } from "react-icons/io5";
-import { FaHome, FaBook, FaBarcode } from "react-icons/fa";
+import { FaHome, FaBook, FaBarcode, FaArrowDown } from "react-icons/fa";
 import { FaMusic } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
-// import { getServerAuthSession } from "@/lib/auth";
 
+// import { getServerAuthSession } from "@/lib/auth";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // State to manage icons visibility
@@ -61,17 +60,14 @@ const Sidebar = () => {
           icon={<MdSpaceDashboard size="20" />}
           tooltip="Dashboard"
         />
+
+        <Divider />
+
         <SideBarIcon
           href="/new"
           icon={<HiDocumentAdd size="20" />}
           tooltip="Add Reference"
-        />
-        <SideBarIcon
-          href="/input-isrc"
-          icon={<FaMusic size="20" />}
-          tooltip="Music Input"
-        />
-        
+        />      
         <SideBarIcon
           href="/reference-gallery"
           icon={<GrGallery size="20" />}
@@ -83,11 +79,14 @@ const Sidebar = () => {
           tooltip="Table View"
         />
         
+
         <SideBarIcon
           href="/tag-center"
           icon={<IoPricetags size="20" />}
           tooltip="Tag Center"
         />
+        
+        <Divider />
         
         <SideBarIcon
           href="/search"
@@ -96,19 +95,9 @@ const Sidebar = () => {
         />
         
         <SideBarIcon
-          href="input-doi"
-          icon={<SiDoi size="20" />}
-          tooltip="DOI Input"
-        />
-        <SideBarIcon
-          href="input-isbn"
-          icon={<FaBook size="20" />}
-          tooltip="ISBN Input"
-        />
-        <SideBarIcon
-          href="input-isbn"
-          icon={<FaBarcode size="20" />}
-          tooltip="ISSN Input"
+          href="/input"
+          icon={<FaArrowDown size="20" />}
+          tooltip="Input"
         />
       </div>
     </div>

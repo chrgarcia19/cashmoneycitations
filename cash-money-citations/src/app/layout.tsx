@@ -4,6 +4,8 @@ import NavBar from "../components/NavBar";
 import { AuthProvider } from "./Providers";
 import SideBar from "../components/SideBar";
 import Providers from "./Providers";
+import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
+
 
 // Manages <head> HTML elements for built in SEO support
 export const metadata: Metadata = {
@@ -21,17 +23,18 @@ export default async function RootLayout({
       <body>
         <Providers>
           <NavBar />
-          
           <AuthProvider>
+            <ReferenceProvider>
             <div className="bg-gray-100 dark:bg-gray-800 grid grid-cols-12">
               <div className="col-span-1"><SideBar /></div>
               <div className="col-span-11 mt-32">{children}</div>
             </div>
+            </ReferenceProvider>
           </AuthProvider>
 
           {/* <IconSidebar/> */}
 
-          <footer className="w-full px-4 py-4 text-center text-sm bg-gray-200 sm:px-6 md:px-20 dark:bg-gray-700 text-white">
+          <footer className="w-full px-4 py-4 text-center text-sm bg-gray-400 sm:px-6 md:px-20 dark:bg-gray-700 text-white">
             <p>
               Citation Styles created with help from the
               <a

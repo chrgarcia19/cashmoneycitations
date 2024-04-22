@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { UploadBibModal } from "@/app/input-bibtex/components/Modal";
 import { CSLGeneralFields } from "@/models/CSLBibTex";
 import { UploadJSONModal } from "@/app/input-json/components/Modal";
+import React from "react";
 
 export enum EntryType {
   Article = "article",
@@ -285,7 +286,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
-        <div className="w-3/5 bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+        <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
           <div className="p-6">
             <div className="text-center">
               {forNewReference ? (

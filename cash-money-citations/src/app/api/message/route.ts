@@ -1,10 +1,10 @@
 // import type { NextApiRequest, NextApiResponse } from 'next';
 // import dbConnect from '../../../utils/dbConnect';
-// import Message from '../../../models/MessageModel';
+// import Message from '../../../models/MessageModel'  
 
-import dbConnect from "@/utils/dbConnect";
+import dbConnect from "../../../utils/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
-
+import Message from '../../../models/MessageModel'  
 // export async function POST(req: NextApiRequest, res: NextApiResponse) {
 //   await dbConnect();
 //   console.log(req.body, "req`")
@@ -30,10 +30,12 @@ export async function POST(request: NextRequest) {
   await dbConnect();
   
   const req = await request.json();
-
   try {
-    // THIS POST REQUEST IS A PLACEHOLDER IN ORDER TO GET THE PROJECT TO BUILD
-    return NextResponse.json({ success: true, data: req }, { status: 201});
+
+    const message = await Message.create(
+      req,
+    )
+    return NextResponse.json({ success: true, data: message }, { status: 201});
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 400 });
   }

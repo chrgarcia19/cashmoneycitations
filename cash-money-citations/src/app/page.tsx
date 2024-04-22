@@ -41,19 +41,26 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    const formPayload = JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+    });
+  
     try {
       const response = await fetch("/api/message", {
         method: "POST",
-        body: "hello",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: formPayload,
       });
       const data = await response.json();
-      console.log(data, "data");
-
+  
       if (data.success) {
         setResponseMessage("Message sent successfully!");
-        // Optionally reset form here
-        // Reset form here
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", message: "" }); // Reset form on success
       } else {
         setResponseMessage("Failed to send message. Please try again.");
       }
@@ -64,7 +71,7 @@ export default function Home() {
       setIsSubmitting(false);
     }
   };
-
+  
   return (
     <>
       

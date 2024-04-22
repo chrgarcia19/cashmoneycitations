@@ -11,10 +11,7 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Se
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
 import { useSession } from "next-auth/react";
-import User from "@/models/User";
-import CSLBibModel from "@/models/CSLBibTex";
 import {getUserReferences} from '../../../../components/componentActions/actions';
-import mongoose from "mongoose";
 
 const fetcher = (url: string) =>
 fetch(url)

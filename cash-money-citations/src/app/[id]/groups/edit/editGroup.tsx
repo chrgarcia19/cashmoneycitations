@@ -36,7 +36,7 @@ export default function EditGroup(props: Props){
                 <div className="flex justify-center items-center w-full flex-col pt-5">
                 <Tabs aria-label="Tag Options" variant="solid">
                     <Tab key="add" title="Add References to Group">
-                        <AddReferenceToGroup references={props.references} />
+                        <AddReferenceToGroup references={props.references} group={group} />
                     </Tab>
                     <Tab key="remove" title="Remove References from Group">
                         <RemoveReferenceFromGroup referenceIds={group.referenceId} />

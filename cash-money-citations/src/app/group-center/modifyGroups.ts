@@ -40,15 +40,15 @@ export async function applyGroupsToReference(reference: CSLBibInterface, groups:
       }
 }
 
-export async function applyReferencesToGroup(group: Group, references: CSLBibInterface[]){
+export async function applyReferencesToGroup(group: Group, referenceIds: string[]){
     /*Create the form*/
     const groupForm = {
         referenceId: group.referenceId,
     }
 
     /*Put the reference ids in the group*/
-    for (let i = 0; i < references.length; i++){
-        groupForm.referenceId.push(references[i]._id);
+    for (let i = 0; i < referenceIds.length; i++){
+        groupForm.referenceId.push(referenceIds[i]);
     }
 
     /*Send the modified data to the API to be updated*/

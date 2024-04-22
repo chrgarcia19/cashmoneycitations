@@ -14,6 +14,7 @@ const GuestAccess: React.FC = () => {
     });
 
     if (response.ok) {
+      console.log(response, "response")
       const data = await response.json();
       sessionStorage.setItem('guestToken', data.guestToken);
       setStatus('Guest session active. You have limited access.');

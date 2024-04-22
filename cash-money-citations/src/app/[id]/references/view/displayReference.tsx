@@ -10,6 +10,9 @@ import { Tag } from "@/models/Tag";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem} from "@nextui-org/react";
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
+import { useSession } from "next-auth/react";
+import {getUserReferences} from '../../../../components/componentActions/actions';
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import React, { Suspense, createContext, useContext } from "react";
 import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
 
@@ -71,19 +74,31 @@ function ReferenceDetails({ reference }: any) {
       </span>
 
       <span className="block h-auto rounded-lg">
-          <label className="font-bold">Tags:</label>
+        <label className="font-bold">Tags:</label>
+        {reference.tagID &&
+          <div>
             {reference.tagID.map((id: string) => (
               <span key={id}>
                 <DisplayTags tagId={id} />
               </span>
             ))}
+          </div>
+        }
+            
       </span>
 
       <span className="block h-auto rounded-lg">
-          <label className="font-bold">Contributors:</label>
-          {reference.contributors.map((contributor: any) => (
-            <div key={contributor._id}>{contributor.suffix}{contributor.given} {contributor.middle} {contributor.family}<br></br></div>
-          ))}
+        <label className="font-bold">Contributors:</label>
+        {reference.contributors &&
+          <div>
+            {
+              reference.contributors.map((contributor: any) => (
+                <div key={contributor._id}>{contributor.suffix}{contributor.given} {contributor.middle} {contributor.family}<br></br></div>
+              ))
+            }
+          </div>
+        }
+          
       </span>
       <span className="block h-auto rounded-lg">
           <label className="font-bold">Publisher:</label>
@@ -107,9 +122,15 @@ function ReferenceDetails({ reference }: any) {
   )
 }
 
-function ReferenceActions({ onEdit, onDelete, onExport }: any) {
+function ReferenceActions({ onEdit, onDelete, onExport, onShare }: any) {
   return (
     <div>
+      <Button
+      className={`m-2 linkBtn inline-block bg-gradient-to-r from-cyan-400 to-cyan-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+      onClick={onShare}
+    >
+      <span>Share</span>
+    </Button>
       <Button
       className={`m-2 linkBtn inline-block bg-gradient-to-r from-green-400 to-green-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
       onClick={onEdit}
@@ -132,11 +153,74 @@ function ReferenceActions({ onEdit, onDelete, onExport }: any) {
   )
 }
 
+function GuestActions({ onShare, onAdd }: any) {
+  return (
+    <div>
+      <Button
+        className={`m-2 linkBtn inline-block bg-gradient-to-r from-cyan-400 to-cyan-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+        onClick={onShare}
+      >
+        <span>Share</span>
+      </Button>
+      <Button
+        className={`m-2 linkBtn inline-block bg-gradient-to-r from-slate-400 to-slate-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200`}
+        onClick={onAdd}
+      >
+        <span>Add to your list</span>
+      </Button>
+
+    </div>
+  )
+}
+
+function NoUserActions({ onShare }: any) {
+  return (
+    <div>
+      <Button
+        className={`m-2 linkBtn inline-block bg-gradient-to-r from-cyan-400 to-cyan-700 py-3 px-6 rounded-full font-bold text-white tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 me-2`}
+        onClick={onShare}
+      >
+        <span>Share</span>
+      </Button>
+    </div>
+  )
+}
+
 const ViewReference = () => {
+    const { data: session } = useSession();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
     const [referenceId, setReferenceId] = useState(id);
+    const [userOwned, setUserOwned] = useState(false);
+    const [notLoggedIn, setNotLoggedIn] = useState(false);
+
+    useEffect(() => {
+      async function setIsUserOwned() {
+        const userId = session?.user?.id ?? '';
+        if (userId === '') {
+          setNotLoggedIn(true);
+          setUserOwned(false);
+        }
+        else {
+          try {
+            const refs = await getUserReferences(userId);
+            if (refs) {
+              for (let i = 0; i < refs.length; i++) {
+                if (refs[i]._id === id) {
+                  setUserOwned(true);
+                }
+              }
+            }
+          }
+          catch (error) {
+            setUserOwned(false);
+          }
+        }
+      }
+      setIsUserOwned();
+    }, []);
+    
     const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds }  = useReferenceContext();
 
     const handleDelete = async () => {
@@ -156,11 +240,27 @@ const ViewReference = () => {
       router.refresh();
     }
 
+    async function shareLink() {
+      await navigator.clipboard.writeText(location.href);
+      alert('Copied to clipboard!');
+    }
+
+    async function addToList(item: any) {
+      // Ensure item includes an ID field
+      const itemWithId = { ...item, _id: undefined }; // Set _id to undefined to let MongoDB generate a new ID
+      //Handling issues with tags
+      const itemWithoutTags = { ...itemWithId, tags: [] };
+      console.log(itemWithoutTags);
+      HandleManualReference(itemWithoutTags, session?.user?.id)
+      router.push("/reference-table");
+      router.refresh();
+    }
+
     const {
         data: reference,
         error,
         isLoading,
-      } = useSWR(id ? `/api/references/${id}` : null, fetcher);
+      } = useSWR(id ? `/api/reference/${id}` : null, fetcher);
 
       
     if (error) return <p>Failed to load</p>;
@@ -172,7 +272,6 @@ const ViewReference = () => {
       router.push(`/${reference._id}/references/edit?id=${encodeURIComponent(reference._id)}`);
     };
 
-
     return(
       <Card className="min-w-[40%] max-w-[60%] ">
 
@@ -183,9 +282,23 @@ const ViewReference = () => {
           <CardBody>
             <ReferenceDetails reference={reference} />
             <Divider/>
-            <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
-            <Divider/>
-            <ExportReferenceData referenceId={reference._id} referenceIds={selectedReferenceIds}/>
+            {userOwned ? (
+            <div>
+              <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} onShare={shareLink} />
+              <Divider />
+              <ExportReferenceData referenceId={reference._id} />
+            </div>
+            ) : (
+              <div>
+                <GuestActions onShare={shareLink} onAdd={() => addToList(reference)}/>
+              </div>
+            )}
+            {!userOwned && !notLoggedIn && (
+              <div>
+                <NoUserActions onShare={shareLink} />
+              </div>
+            )}
+
           </CardBody>
       </Card>
 

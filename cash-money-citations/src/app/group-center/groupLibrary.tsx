@@ -1,38 +1,38 @@
 'use client'
-import { getUserGroups } from "@/components/componentActions/groupActions";
+import { getSpecificUserById } from "@/components/componentActions/actions";
 import { Group } from "@/models/Group";
+import { Users } from "@/models/User";
 import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import React, { Key, useCallback, useEffect, useMemo, useState } from "react";
 
 type Props = {
-    groups: Group[];
+    groups: any[];
 }
 
 const GroupLibrary = (props: Props) => {
 
-    type UserGroup = typeof props.groups[0];
-
-    const [userOwnedGroups, setUserOwnedGroups] = useState<Group[]>([]);
-
-    useEffect(() => {
-        async function getUserOwnedGroups(){
-            const userId = session?.user?.id;
-            if (userId){
-                const userOwnedGroupsData = await getUserGroups(userId);
-                setUserOwnedGroups(userOwnedGroupsData ?? []);
-            } else {
-                setUserOwnedGroups([]);
-            } 
-        };
-        getUserOwnedGroups();
-    }, []);
-
     const { data: session } = useSession();
 
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const [ownedGroups, setOwnedGroups] = useState<String[]>([]);
 
+    useEffect(() => {
+        async function getSpecificUser(){
+            const userId = session?.user?.id;
+            const userFromId = await getSpecificUserById(userId);
+            const groupsArr = new Array<String>();
+            for (let i = 0; i < userFromId.ownedGroups.length; i++){
+                groupsArr.push(userFromId.ownedGroups[i]);
+            }
+            setOwnedGroups(groupsArr);
+        }
+    getSpecificUser();    
+    }, []);
     
+    const userGroups = props.groups;
+    type UserGroup = typeof userGroups[0];   
+
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
 
@@ -59,7 +59,9 @@ const GroupLibrary = (props: Props) => {
                     </div>
                 );
             case "userOwnedGroups":
-                const isUserOwned = userOwnedGroups.some(group => group._id !== userGroup._id);
+                let isUserOwned = false;
+                console.log(cellValue);
+                //const isUserOwned = ownedGroups.some((id) => id == userGroup._id);
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-small capitalize">{isUserOwned ? "Yes" : "No"}</p>
@@ -67,6 +69,7 @@ const GroupLibrary = (props: Props) => {
                 );
         }
     }, []);
+
 
     return (
         <>
@@ -125,16 +128,11 @@ const GroupLibrary = (props: Props) => {
                                     <TableColumn key="userOwnedGroups">YOUR GROUP?</TableColumn>
                                 </TableHeader>
                                 <TableBody items={items}>
-                                    {(item: Group) => (
+                                    {(item: { _id: string }) => (
                                         <TableRow key={item._id}>
                                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
                                     )}
-                                    {/*(item) => (
-                                    <TableRow key={item.groupName}>
-                                        {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-                                    </TableRow>
-                                    )*/}
                                 </TableBody>
                             </Table>
                             </ModalBody>

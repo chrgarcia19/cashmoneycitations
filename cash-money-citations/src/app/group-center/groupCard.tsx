@@ -65,7 +65,6 @@ const GroupCard = (props: Props) => {
 
     const renderCell = useCallback((userRef: UserReference, columnKey: React.Key) => {
         const cellValue = userRef[columnKey as keyof UserReference];
-        console.log(cellValue);
         switch (columnKey) {
           case "title":
             return (

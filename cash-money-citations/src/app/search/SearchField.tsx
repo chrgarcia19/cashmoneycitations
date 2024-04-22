@@ -95,6 +95,8 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     };
     initialGetRefs();
   }, [])
+
+  console.log(userOwnedRefs);
   
   return (
     <div className="flex flex-col items-center h-screen mb-8 pb-20 absolute-bottom">

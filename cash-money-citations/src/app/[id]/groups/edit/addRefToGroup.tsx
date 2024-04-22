@@ -2,7 +2,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button, Divider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { applyReferencesToGroup } from "@/app/group-center/modifyGroups";
+import { applyGroupToReferences, applyReferencesToGroup } from "@/app/group-center/modifyGroups";
 import { Group } from "@/models/Group";
 let { format } = require('@citation-js/date')
 
@@ -97,9 +97,21 @@ const AddReferenceToGroup = (props: Props) => {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
       e.preventDefault();
       const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
+      console.log(JSON.stringify(refs.length));
       
-      for (let i = 0; i < refs.length; i ++){
-        await applyReferencesToGroup(props.group, refs);
+      /*Adding Reference IDs to a group*/
+      for (let i = 0; i < refs.length; i++){
+        await applyReferencesToGroup(props.group, refs[i]);
+      }
+
+      /*Add Group IDs to each references*/
+      for (let i = 0; i < props.references.length; i++){
+        for (let j = 0; j < refs.length; j++){
+          if (props.references[i]._id == refs[j]){
+            await applyGroupToReferences(props.references[i], props.group);
+          }
+        }
+        
       }
 
       router.push("/group-center");

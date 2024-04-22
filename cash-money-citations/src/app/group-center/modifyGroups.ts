@@ -5,16 +5,14 @@ import { Group } from "@/models/Group";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { mutate } from "swr";
 
-export async function applyGroupsToReference(reference: CSLBibInterface, groups: Group[]){
+export async function applyGroupToReferences(reference: CSLBibInterface, group: Group){
     /*Create the form*/
     const referenceForm = {
         groupId: reference.groupId,
     };
 
     /*Put the group id in the reference*/
-    for (let i = 0; i < groups.length; i++){
-        referenceForm.groupId.push(groups[i]._id);
-    }
+    referenceForm.groupId.push(group._id);
 
     /*Send the modified data to the API to be updated*/
     try {
@@ -40,16 +38,14 @@ export async function applyGroupsToReference(reference: CSLBibInterface, groups:
       }
 }
 
-export async function applyReferencesToGroup(group: Group, referenceIds: string[]){
+export async function applyReferencesToGroup(group: Group, referenceIds: string){
     /*Create the form*/
     const groupForm = {
         referenceId: group.referenceId,
     }
 
     /*Put the reference ids in the group*/
-    for (let i = 0; i < referenceIds.length; i++){
-        groupForm.referenceId.push(referenceIds[i]);
-    }
+    groupForm.referenceId.push(referenceIds);
 
     /*Send the modified data to the API to be updated*/
     try {

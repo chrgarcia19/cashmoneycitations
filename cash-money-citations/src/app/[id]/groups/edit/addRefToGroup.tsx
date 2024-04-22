@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useMemo, useState } from "react";
-import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, Selection, Chip, ChipProps, Button, Divider } from "@nextui-org/react";
-import { CSLBibInterface } from "@/models/CSLBibTex";
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button, Divider } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 let { format } = require('@citation-js/date')
 
 type Props = {
@@ -9,6 +9,8 @@ type Props = {
 }
 
 const AddReferenceToGroup = (props: Props) => {
+
+    const router = useRouter();
 
     const userRefs = props.references;
     type UserReference = typeof userRefs[0];
@@ -84,13 +86,21 @@ const AddReferenceToGroup = (props: Props) => {
         
       }, []);
 
-    function handleSubmit(){
+    function handleBack(){
+      router.push("/group-center");
+      router.refresh();
+    }
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+      e.preventDefault();
       console.log(JSON.stringify(selectedKeys));
+
+
     }
 
     return (
         <>
-              <form id="add-references-to-groups">
+              <form id="add-references-to-groups" onSubmit={async (e) => await handleSubmit(e)}>
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -127,13 +137,22 @@ const AddReferenceToGroup = (props: Props) => {
                     </TableBody>
                 </Table>
                 <Divider />
-                <Button
-                    color="success"
-                    type="submit"
-                    onClick={() => handleSubmit()}
-                    >
-                    Add References to Group
-                </Button>
+                <div className="flex justify-end gap-4">
+                  <Button
+                      color="primary"
+                      className="font-bold text-white"
+                      onClick={() => handleBack()}
+                      >
+                      Back to Groups
+                  </Button>
+                  <Button
+                      color="success"
+                      type="submit"
+                      className="font-bold text-white"
+                      >
+                      Add References to Group
+                  </Button>
+                </div> 
               </form>
         </>
     )

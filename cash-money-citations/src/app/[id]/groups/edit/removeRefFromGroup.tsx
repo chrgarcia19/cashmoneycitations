@@ -3,16 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
+import { useRouter } from "next/navigation";
 let { format } = require('@citation-js/date')
 
 type Props = {
     referenceIds: String[];
-    selected: string[];
-    setSelected: any;
 }
 
 const RemoveReferenceFromGroup = (props: Props) => {
 
+  const router = useRouter();
     const [references, setReferences] = useState<any[]>([]);
 
     useEffect(() => {
@@ -71,9 +71,18 @@ const RemoveReferenceFromGroup = (props: Props) => {
         }
       }, []);
 
+      function handleBack(){
+        router.push("/group-center");
+        router.refresh();
+      }
+  
+      function handleSubmit(){
+        console.log(JSON.stringify(selectedKeys));
+      }
+
     return (
         <>
-            <div className="flex items-center justify-center">
+            <form id="remove-references-to-groups">
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -108,7 +117,24 @@ const RemoveReferenceFromGroup = (props: Props) => {
                         )}
                     </TableBody>
                 </Table>
-            </div>
+                <div className="flex justify-end gap-4">
+                  <Button
+                      color="primary"
+                      className="font-bold text-white p-5"
+                      onClick={() => handleBack()}
+                      >
+                      Back to Groups
+                  </Button>
+                  <Button
+                      color="danger"
+                      type="submit"
+                      className="font-bold text-white p-5"
+                      onClick={() => handleSubmit()}
+                      >
+                      Remove References to Group
+                  </Button>
+                </div>
+            </form>
         </>
     )
 }

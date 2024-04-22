@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import LoginForm from "../../components/LoginForm";
+import React from "react";
 
 const NewLogin = async () => {
 

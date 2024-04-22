@@ -5,7 +5,7 @@ import MyAnimationComponent from "../components/MyAnimationComponent";
 import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Dashboard from "@/components/Dashboard";
+import Dashboard from "../components/Dashboard";
 
 export default function Home() {
   const { data: session, status } = useSession(); // Use useSession to access the session

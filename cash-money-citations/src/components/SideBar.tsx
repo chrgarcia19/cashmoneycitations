@@ -13,7 +13,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
-import { getServerAuthSession } from "@/lib/auth";
+// import { getServerAuthSession } from "@/lib/auth";
 
 
 const Sidebar = () => {

@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Metadata } from "next";
 import NavBar from "../components/NavBar";
 import { AuthProvider } from "./Providers";
-import SideBar from "@/components/SideBar";
+import SideBar from "../components/SideBar";
 import Providers from "./Providers";
 
 // Manages <head> HTML elements for built in SEO support

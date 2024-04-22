@@ -259,7 +259,7 @@ export default function ReferenceTable(userRefObject: any) {
         return (
           <>
               {userRef.contributors.slice(0, 3).map((contributor: any) => {
-                  return <Chip className="capitalize" color={statusColorMap[userRef.status]} size="sm" variant="flat" key={contributor._id}>{contributor.given}</Chip>
+                  return <Chip className="capitalize" color={statusColorMap[userRef.status]} size="sm" variant="flat" key={contributor._id}>{contributor.family}</Chip>
               })}
               {userRef.contributors.length > 3 ?
                   <div>And {userRef.contributors.length - 3} more</div> 

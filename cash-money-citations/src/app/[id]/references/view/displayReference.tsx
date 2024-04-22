@@ -13,6 +13,8 @@ import DisplayTags from "@/components/DisplayTags";
 import { useSession } from "next-auth/react";
 import {getUserReferences} from '../../../../components/componentActions/actions';
 import { HandleManualReference } from "@/components/componentActions/citationActions";
+import React, { Suspense, createContext, useContext } from "react";
+import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -219,6 +221,8 @@ const ViewReference = () => {
       setIsUserOwned();
     }, []);
     
+    const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds }  = useReferenceContext();
+
     const handleDelete = async () => {
         try {
           await fetch(`/api/references/${reference._id}`, {
@@ -268,42 +272,42 @@ const ViewReference = () => {
       router.push(`/${reference._id}/references/edit?id=${encodeURIComponent(reference._id)}`);
     };
 
-    
-  return (
-    <Card className="min-w-[40%] max-w-[60%] ">
-      <CardHeader>
-        {reference.title}
-      </CardHeader>
-      <Divider />
-      <CardBody>
-        <ReferenceDetails reference={reference} />
-        <Divider />
-        {userOwned ? (
-          <div>
-            <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} onShare={shareLink} />
-            <Divider />
-            <ExportReferenceData referenceId={reference._id} />
-          </div>
-        ) : (
-          <div>
-            <GuestActions onShare={shareLink} onAdd={() => addToList(reference)}/>
-          </div>
-        )}
-        {!userOwned && !notLoggedIn && (
-          <div>
-            <NoUserActions onShare={shareLink} />
-          </div>
-        )}
+    return(
+      <Card className="min-w-[40%] max-w-[60%] ">
+
+          <CardHeader>
+            {reference.title}
+          </CardHeader>
+          <Divider/>
+          <CardBody>
+            <ReferenceDetails reference={reference} />
+            <Divider/>
+            {userOwned ? (
+            <div>
+              <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} onShare={shareLink} />
+              <Divider />
+              <ExportReferenceData referenceId={reference._id} />
+            </div>
+            ) : (
+              <div>
+                <GuestActions onShare={shareLink} onAdd={() => addToList(reference)}/>
+              </div>
+            )}
+            {!userOwned && !notLoggedIn && (
+              <div>
+                <NoUserActions onShare={shareLink} />
+              </div>
+            )}
+
           </CardBody>
       </Card>
 
     )
 }
 
-export function ExportReferenceData({ referenceId }: any){
+export function ExportReferenceData({ referenceId, referenceIds }: any){
   const [reference, setReference] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
-  
   // Fetch initial citation state
   useEffect(() => {
     fetchReference();
@@ -322,7 +326,7 @@ export function ExportReferenceData({ referenceId }: any){
     switch (downloadFormat) {
       case 'json':
         const getJSON = async() => {
-          const json = await GetJSONFile(referenceId);
+          const json = await GetJSONFile(referenceId, 'en-US');
           return json;
         }
         formattedReference = await getJSON();
@@ -352,7 +356,7 @@ export function ExportReferenceData({ referenceId }: any){
         break;
       case 'bibtex':
         const getBibTex = async() => {
-          const bibtex = await GetBibTexFile(referenceId);
+          const bibtex = await GetBibTexFile(referenceId,'en-US');
           return bibtex;
         }
         formattedReference = await getBibTex();
@@ -383,7 +387,7 @@ export function ExportReferenceData({ referenceId }: any){
       case 'biblatex':
         // Format the reference as BibTex or BibLaTex
         const getBibLaTex = async() => {
-          const bibLaTex = await GetBibLaTexFile(referenceId);
+          const bibLaTex = await GetBibLaTexFile(referenceId, 'en-US');
           return bibLaTex;
         }
         formattedReference = await getBibLaTex();

@@ -10,6 +10,8 @@ import { Tag } from "@/models/Tag";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem} from "@nextui-org/react";
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
+import React, { Suspense, createContext, useContext } from "react";
+import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -135,7 +137,8 @@ const ViewReference = () => {
     const id = searchParams.get('id');
     const router = useRouter();
     const [referenceId, setReferenceId] = useState(id);
-    
+    const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds }  = useReferenceContext();
+
     const handleDelete = async () => {
         try {
           await fetch(`/api/references/${reference._id}`, {
@@ -182,17 +185,16 @@ const ViewReference = () => {
             <Divider/>
             <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} />
             <Divider/>
-            <ExportReferenceData referenceId={reference._id}/>
+            <ExportReferenceData referenceId={reference._id} referenceIds={selectedReferenceIds}/>
           </CardBody>
       </Card>
 
     )
 }
 
-export function ExportReferenceData({ referenceId }: any){
+export function ExportReferenceData({ referenceId, referenceIds }: any){
   const [reference, setReference] = useState(Object);
   const [downloadFormat, setDownloadFormat] = useState('txt');
-  
   // Fetch initial citation state
   useEffect(() => {
     fetchReference();

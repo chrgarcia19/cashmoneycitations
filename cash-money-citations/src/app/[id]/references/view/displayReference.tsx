@@ -213,7 +213,7 @@ export function ExportReferenceData({ referenceId, referenceIds }: any){
     switch (downloadFormat) {
       case 'json':
         const getJSON = async() => {
-          const json = await GetJSONFile(referenceId);
+          const json = await GetJSONFile(referenceId, 'en-US');
           return json;
         }
         formattedReference = await getJSON();
@@ -243,7 +243,7 @@ export function ExportReferenceData({ referenceId, referenceIds }: any){
         break;
       case 'bibtex':
         const getBibTex = async() => {
-          const bibtex = await GetBibTexFile(referenceId);
+          const bibtex = await GetBibTexFile(referenceId,'en-US');
           return bibtex;
         }
         formattedReference = await getBibTex();
@@ -274,7 +274,7 @@ export function ExportReferenceData({ referenceId, referenceIds }: any){
       case 'biblatex':
         // Format the reference as BibTex or BibLaTex
         const getBibLaTex = async() => {
-          const bibLaTex = await GetBibLaTexFile(referenceId);
+          const bibLaTex = await GetBibLaTexFile(referenceId, 'en-US');
           return bibLaTex;
         }
         formattedReference = await getBibLaTex();

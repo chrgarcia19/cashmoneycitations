@@ -21,6 +21,7 @@ export default async function RootLayout({
       <body>
         <Providers>
           <NavBar />
+          
           <AuthProvider>
             <div className="bg-gray-100 dark:bg-gray-800 grid grid-cols-12">
               <div className="col-span-1"><SideBar /></div>

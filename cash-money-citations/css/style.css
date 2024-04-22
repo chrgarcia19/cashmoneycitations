@@ -1,6 +1,39 @@
+/* styles/globals.css */
+/* styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-color: #0070f3; /* Fallback theme */
+  --background-color: #fff;
+  --text-color: #000;
+}
+
+.theme-light {
+  --primary-color: #0070f3;
+  --background-color: #ffffff;
+  --text-color: #333333;
+}
+
+.theme-dark {
+  --primary-color: #ffffff;
+  --background-color: #333333;
+  --text-color: #ffffff;
+}
+
+.theme-cool {
+  --primary-color: #0ea5e9;
+  --background-color: #f0f9ff;
+  --text-color: #1e293b;
+}
+
+.theme-warm {
+  --primary-color: #ea580c;
+  --background-color: #ffedd5;
+  --text-color: #7f1d1d;
+}
+
 
 
 * {

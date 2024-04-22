@@ -66,15 +66,6 @@ const AddReferenceToGroup = (props: Props) => {
                   }
               </>
             );
-          case "createdAt":
-              let dateCreated = userRef.createdAt;
-              dateCreated = new Date(dateCreated);
-              dateCreated = dateCreated.toLocaleString('en-US');
-              return (
-                <div className="flex flex-col">
-                  <p className="text-bold text-small capitalize">{dateCreated}</p>
-                </div>
-              );
           case "type":
             return (
               <>
@@ -97,7 +88,6 @@ const AddReferenceToGroup = (props: Props) => {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
       e.preventDefault();
       const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
-      console.log(JSON.stringify(refs.length));
       
       /*Adding Reference IDs to a group*/
       for (let i = 0; i < refs.length; i++){
@@ -120,7 +110,9 @@ const AddReferenceToGroup = (props: Props) => {
 
     return (
         <>
-              <form id="add-references-to-groups" onSubmit={async (e) => await handleSubmit(e)}>
+              <form id="add-references-to-groups" 
+                className="w-full"
+                onSubmit={async (e) => await handleSubmit(e)}>
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -137,7 +129,7 @@ const AddReferenceToGroup = (props: Props) => {
                         </div>
                     }
                     classNames={{
-                        wrapper: "min-h-[222px]",
+                        wrapper: "min-h-[80%] min-w-[80%]",
                     }}
                     selectionMode="multiple"
                     selectedKeys={selectedKeys}
@@ -146,6 +138,7 @@ const AddReferenceToGroup = (props: Props) => {
                     <TableHeader>
                         <TableColumn key="title">TITLE</TableColumn>
                         <TableColumn key="contributors">CONTRIBUTORS</TableColumn>
+                        <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                         <TableColumn key="type">TYPE</TableColumn>
                     </TableHeader>
                     <TableBody items={items}>

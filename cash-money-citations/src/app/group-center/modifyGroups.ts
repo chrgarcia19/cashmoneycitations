@@ -1,8 +1,10 @@
 'use client'
 
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Group } from "@/models/Group";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useEffect, useState } from "react";
 import { mutate } from "swr";
 
 export async function applyGroupToReferences(reference: CSLBibInterface, group: Group){

@@ -38,7 +38,7 @@ function toObjectRecursive(doc: any) {
   return doc;
 }
 
-export async function getSpecificGroupById(id: string | string[] | undefined) {
+export async function getSpecificGroupById(id: String | String[] | string | string[] | undefined) {
   try {
     let result = await Group.findById(id);
 

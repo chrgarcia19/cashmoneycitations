@@ -4,27 +4,32 @@ import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, Tabl
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { useRouter } from "next/navigation";
+import { deleteGroupIdFromReference, deleteReferenceIdFromGroup } from "@/app/group-center/modifyGroups";
+import { Group } from "@/models/Group";
 let { format } = require('@citation-js/date')
 
 type Props = {
-    referenceIds: String[];
+    referenceIds: string[];
+    group: Group;
 }
 
 const RemoveReferenceFromGroup = (props: Props) => {
-
+  
   const router = useRouter();
-    const [references, setReferences] = useState<any[]>([]);
+  const [references, setReferences] = useState<any[]>([]);
 
-    useEffect(() => {
-        fetchReference();
-      }, []);
-    
-    const fetchReference = async () => {    
-        props.referenceIds.map(async (id: any) => {
-            const referenceData = await getSpecificReferenceById(id);  
-            setReferences(referenceData);
-        })
-    }
+  useEffect(() => {
+      fetchReference();
+    }, []);
+  
+  const fetchReference = () => {  
+    const referenceArr = new Array<CSLBibInterface>();  
+    props.referenceIds.map(async (id: any) => {
+        const referenceData = await getSpecificReferenceById(id);  
+        referenceArr.push(referenceData);
+    });
+    setReferences(referenceArr);
+  }
 
     const userRefs = references;
     type UserReference = typeof userRefs[0];
@@ -58,6 +63,25 @@ const RemoveReferenceFromGroup = (props: Props) => {
                 {cellValue}
               </div>
             );
+          case "datePublished":
+            const date = format(userRef.cslJson[0].issued);
+            return (
+              <div className="flex flex-col">
+                <p className="text-bold text-small capitalize">{date}</p>
+              </div>
+            );
+          case "contributors":
+            return (
+              <>
+                  {userRef.contributors.slice(0, 3).map((contributor: any) => {
+                      return <Chip className="capitalize" color={statusColorMap[userRef.status]} size="sm" variant="flat" key={contributor._id}>{contributor.given} {contributor.family}</Chip>
+                  })}
+                  {userRef.contributors.length > 3 ?
+                      <div>And {userRef.contributors.length - 3} more</div> 
+                      : ""
+                  }
+              </>
+            );
           case "type":
             return (
               <>
@@ -76,13 +100,30 @@ const RemoveReferenceFromGroup = (props: Props) => {
         router.refresh();
       }
   
-      function handleSubmit(){
-        console.log(JSON.stringify(selectedKeys));
+      async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+        e.preventDefault();
+        const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
+
+        /*Remove the Reference IDs from the grouo */
+        for (let i = 0; i < refs.length; i++){
+          await deleteReferenceIdFromGroup(refs[i], props.group);
+        }
+        
+        /*Remove GroupIDs from each reference*/
+        for (let i = 0; i < references.length; i++){
+          await deleteGroupIdFromReference(props.group._id, references[i]);
+        }
+
+        router.push("/group-center");
+        router.refresh();
       }
 
     return (
         <>
-            <form id="remove-references-to-groups">
+            <form id="remove-references-to-groups" 
+              className="w-full"
+              onSubmit={async (e) => await handleSubmit(e)}
+              >
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -99,7 +140,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
                         </div>
                     }
                     classNames={{
-                        wrapper: "min-h-[222px]",
+                        wrapper: "min-h-[80%] min-w-[80%]",
                     }}
                     selectionMode="multiple"
                     selectedKeys={selectedKeys}
@@ -107,6 +148,8 @@ const RemoveReferenceFromGroup = (props: Props) => {
                     >
                     <TableHeader>
                         <TableColumn key="title">TITLE</TableColumn>
+                        <TableColumn key="contributors">CONTRIBUTORS</TableColumn>
+                        <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                         <TableColumn key="type">TYPE</TableColumn>
                     </TableHeader>
                     <TableBody items={items}>
@@ -116,6 +159,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
                             </TableRow>
                         )}
                     </TableBody>
+                    
                 </Table>
                 <div className="flex justify-end gap-4">
                   <Button
@@ -129,7 +173,6 @@ const RemoveReferenceFromGroup = (props: Props) => {
                       color="danger"
                       type="submit"
                       className="font-bold text-white p-5"
-                      onClick={() => handleSubmit()}
                       >
                       Remove References to Group
                   </Button>

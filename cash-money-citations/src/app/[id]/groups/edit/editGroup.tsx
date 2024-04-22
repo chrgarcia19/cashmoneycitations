@@ -17,7 +17,6 @@ const fetcher = (url: string) =>
     .then((json) => json.data);
 
 export default function EditGroup(props: Props){
-
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const {
@@ -30,6 +29,7 @@ export default function EditGroup(props: Props){
     if (isLoading) return <p>Loading...</p>;
     if (!group) return null;
 
+
     return (
         <>  
             <h1 className="font-bold text-3xl flex items-center justify-center pt-10">Modify Group - {group.groupName}</h1>
@@ -39,7 +39,7 @@ export default function EditGroup(props: Props){
                         <AddReferenceToGroup references={props.references} group={group} />
                     </Tab>
                     <Tab key="remove" title="Remove References from Group">
-                        <RemoveReferenceFromGroup referenceIds={group.referenceId} />
+                            <RemoveReferenceFromGroup referenceIds={group.referenceId} group={group} />
                     </Tab>
                 </Tabs>
                 </div>            

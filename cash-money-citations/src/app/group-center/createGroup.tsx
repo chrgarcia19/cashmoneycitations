@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { editGroup, handleNewGroup } from "@/components/componentActions/groupActions";
-import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 
 interface GroupData {
     groupName: string;
@@ -56,31 +56,76 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
         }
     };
 
+    function handleBack(){
+        router.push("/group-center");
+        router.refresh();
+      }
+
     return (
         <>
             <Card className="me-3">
-                <CardHeader>
-                    <h4 className="font-bold">Create a New Group</h4>
+                <CardHeader className="flex items-center justify-center">
+                    {forNewGroup && (
+                        <h4 className="font-bold">Create a New Group</h4>
+                    ) || (
+                        <h4 className="font-bold">Edit Group Name</h4>
+                    )}
+                    
                 </CardHeader>
+                {!forNewGroup && (
+                    <Divider />
+                )}
                 <CardBody>
-                    <Button 
-                        onPress={onOpen} 
-                        color="success" 
-                        className="font-bold text-white">
-                        Create Group
-                    </Button>
-                <Modal 
-                    isOpen={isOpen} 
-                    onOpenChange={onOpenChange}
-                    placement="top-center"
-                >
-                    <ModalContent>
+                    {forNewGroup && (
                         <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            Create a New Group
-                        </ModalHeader>
-                        <form id={formId} onSubmit={handleSubmit}>
-                            <ModalBody>
+                            <Button 
+                                onPress={onOpen} 
+                                color="success" 
+                                className="font-bold text-white">
+                                Create Group
+                            </Button>
+                            <Modal 
+                                isOpen={isOpen} 
+                                onOpenChange={onOpenChange}
+                                placement="top-center"
+                            >
+                                <ModalContent>
+                                    <>
+                                    <ModalHeader className="flex flex-col gap-1">
+                                        Create a New Group
+                                    </ModalHeader>
+                                    <form id={formId} onSubmit={handleSubmit}>
+                                        <ModalBody>
+                                            <label 
+                                                htmlFor="groupName"
+                                                className="font-bold">
+                                                    Group Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="groupName"
+                                                onChange={handleChange}
+                                                value={form.groupName}
+                                                required
+                                            />
+                                        </ModalBody>
+                                        <ModalFooter>
+                                        <Button
+                                            type="submit"
+                                            onClick={onOpenChange}
+                                            color="success"
+                                            className="font-bold text-white hover:bg-green-900">
+                                            Submit
+                                        </Button>
+                                        </ModalFooter>
+                                    </form>
+                                    </>
+                                </ModalContent>
+                            </Modal>
+                        </>
+                    ) || (
+                        <>
+                            <form id={formId} onSubmit={handleSubmit}>
                                 <label 
                                     htmlFor="groupName"
                                     className="font-bold">
@@ -93,20 +138,24 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                                     value={form.groupName}
                                     required
                                 />
-                            </ModalBody>
-                            <ModalFooter>
-                            <Button
-                                type="submit"
-                                onClick={onOpenChange}
-                                color="success"
-                                className="font-bold text-white hover:bg-green-900">
-                                Submit
-                            </Button>
-                            </ModalFooter>
-                        </form>
+                                <div className="flex justify-end gap-4">
+                                    <Button
+                                        color="primary"
+                                        className="font-bold text-white p-5"
+                                        onClick={() => handleBack()}
+                                        >
+                                        Back to Groups
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        color="success"
+                                        className="font-bold text-white hover:bg-green-900">
+                                        Submit
+                                    </Button>
+                                </div>
+                            </form>
                         </>
-                    </ModalContent>
-                </Modal>
+                    )}
                 </CardBody>
             </Card>
         </>

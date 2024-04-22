@@ -1,16 +1,32 @@
 'use client'
-import { useCallback, useMemo, useState } from "react";
-import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, Selection, Chip, ChipProps, Button, Divider } from "@nextui-org/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
 import { CSLBibInterface } from "@/models/CSLBibTex";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 let { format } = require('@citation-js/date')
 
 type Props = {
-    references: any[];
+    referenceIds: String[];
+    selected: string[];
+    setSelected: any;
 }
 
-const AddReferenceToGroup = (props: Props) => {
+const RemoveReferenceFromGroup = (props: Props) => {
 
-    const userRefs = props.references;
+    const [references, setReferences] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetchReference();
+      }, []);
+    
+    const fetchReference = async () => {    
+        props.referenceIds.map(async (id: any) => {
+            const referenceData = await getSpecificReferenceById(id);  
+            setReferences(referenceData);
+        })
+    }
+
+    const userRefs = references;
     type UserReference = typeof userRefs[0];
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -18,14 +34,14 @@ const AddReferenceToGroup = (props: Props) => {
     const [page, setPage] = useState(1);
     const rowsPerPage = 6;
 
-    const pages = Math.ceil(props.references.length / rowsPerPage);
+    const pages = Math.ceil(references.length / rowsPerPage);
 
     const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        return props.references.slice(start, end);
-    }, [page, props.references]);
+        return references.slice(start, end);
+    }, [page, references]);
 
     const statusColorMap: Record<string, ChipProps["color"]> = {
         active: "success",
@@ -42,34 +58,6 @@ const AddReferenceToGroup = (props: Props) => {
                 {cellValue}
               </div>
             );
-          case "datePublished":
-            const date = format(userRef.cslJson[0].issued);
-            return (
-              <div className="flex flex-col">
-                <p className="text-bold text-small capitalize">{date}</p>
-              </div>
-            );
-          case "contributors":
-            return (
-              <>
-                  {userRef.contributors.slice(0, 3).map((contributor: any) => {
-                      return <Chip className="capitalize" color={statusColorMap[userRef.status]} size="sm" variant="flat" key={contributor._id}>{contributor.given} {contributor.family}</Chip>
-                  })}
-                  {userRef.contributors.length > 3 ?
-                      <div>And {userRef.contributors.length - 3} more</div> 
-                      : ""
-                  }
-              </>
-            );
-          case "createdAt":
-              let dateCreated = userRef.createdAt;
-              dateCreated = new Date(dateCreated);
-              dateCreated = dateCreated.toLocaleString('en-US');
-              return (
-                <div className="flex flex-col">
-                  <p className="text-bold text-small capitalize">{dateCreated}</p>
-                </div>
-              );
           case "type":
             return (
               <>
@@ -81,16 +69,11 @@ const AddReferenceToGroup = (props: Props) => {
           default:
             return cellValue;
         }
-        
       }, []);
-
-    function handleSubmit(){
-      console.log(JSON.stringify(selectedKeys));
-    }
 
     return (
         <>
-              <form id="add-references-to-groups">
+            <div className="flex items-center justify-center">
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -115,7 +98,6 @@ const AddReferenceToGroup = (props: Props) => {
                     >
                     <TableHeader>
                         <TableColumn key="title">TITLE</TableColumn>
-                        <TableColumn key="contributors">CONTRIBUTORS</TableColumn>
                         <TableColumn key="type">TYPE</TableColumn>
                     </TableHeader>
                     <TableBody items={items}>
@@ -126,17 +108,9 @@ const AddReferenceToGroup = (props: Props) => {
                         )}
                     </TableBody>
                 </Table>
-                <Divider />
-                <Button
-                    color="success"
-                    type="submit"
-                    onClick={() => handleSubmit()}
-                    >
-                    Add References to Group
-                </Button>
-              </form>
+            </div>
         </>
     )
 }
 
-export default AddReferenceToGroup;
+export default RemoveReferenceFromGroup;

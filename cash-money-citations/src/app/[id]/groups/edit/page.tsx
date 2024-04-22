@@ -12,7 +12,7 @@ export default async function GetReferencesForGroups(){
 
     return (
         <>
-            <EditGroup references={references} />
+            <EditGroup references={references}/>
         </>
     )
     

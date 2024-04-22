@@ -2,6 +2,7 @@ import LinkBtn from "@/components/LinkBtn";
 import Image from 'next/image';
 import cmcLogo from '../../public/cashmoneycitations_logo.png';
 import Link from "next/link";
+import GuestAccess from "@/components/GuestAccess";
 
 export default function HomePage() {
   return(
@@ -19,6 +20,9 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+
+          <GuestAccess />
+          
           <div className="card w-96 bg-slate-200 shadow-xl">
             <figure className="px-10 pt-10">
               <img src="https://avatars.githubusercontent.com/u/93625102?v=4" alt="GitHub Icon" className="rounded-xl" />

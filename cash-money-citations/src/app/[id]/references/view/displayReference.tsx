@@ -11,8 +11,10 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Se
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
 import { useSession } from "next-auth/react";
-import dbConnect from "@/utils/dbConnect";
+import User from "@/models/User";
 import CSLBibModel from "@/models/CSLBibTex";
+import {getUserReferences} from '../../../../components/componentActions/actions';
+import mongoose from "mongoose";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -151,7 +153,7 @@ function ReferenceActions({ onEdit, onDelete, onExport, onShare }: any) {
   )
 }
 
-function guestActions({ onShare }: any) {
+function GuestActions({ onShare }: any) {
   return (
     <div>
       <Button
@@ -170,6 +172,27 @@ const ViewReference = () => {
     const id = searchParams.get('id');
     const router = useRouter();
     const [referenceId, setReferenceId] = useState(id);
+    const [userOwned, setUserOwned] = useState(false);
+
+    useEffect(() => {
+      async function setIsUserOwned() {
+        const userId = session?.user?.id ?? '';
+        try {
+          const refs = await getUserReferences(userId);
+          if (refs) {
+            for (let i = 0; i < refs.length; i++) {
+              if (refs[i]._id === id) {
+                setUserOwned(true);
+              }
+            }
+          }
+        }
+        catch (error) {
+          setUserOwned(false);
+        }
+      }
+      setIsUserOwned();
+    }, []);
     
     const handleDelete = async () => {
         try {
@@ -220,9 +243,18 @@ const ViewReference = () => {
           <CardBody>
             <ReferenceDetails reference={reference} />
             <Divider/>
-            <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} onShare={shareLink}/>
-            <Divider/>
-            <ExportReferenceData referenceId={reference._id}/>
+            {userOwned ? (
+              <div>
+                <ReferenceActions onEdit={handleEdit} onDelete={handleDelete} onExport={exportCitation} onShare={shareLink}/>
+                <Divider/>
+                <ExportReferenceData referenceId={reference._id}/>
+              </div>
+            ) : (
+              <div>
+                <GuestActions onShare={shareLink}/>
+              </div>
+            )}
+            
           </CardBody>
       </Card>
 

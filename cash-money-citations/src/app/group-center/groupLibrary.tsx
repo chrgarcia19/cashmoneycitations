@@ -1,6 +1,6 @@
 'use client'
 import { getSpecificUserById } from "@/components/componentActions/actions";
-import { getSpecificGroupById, getUserGroups, handleNewGroup } from "@/components/componentActions/groupActions";
+import { getUserGroups, handleNewGroup } from "@/components/componentActions/groupActions";
 import { Group } from "@/models/Group";
 import { MdLibraryAdd } from "react-icons/md";
 import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection, Tooltip } from "@nextui-org/react";
@@ -92,7 +92,6 @@ const GroupLibrary = (props: Props) => {
         try {
             const groupWithoutId = {...group, 
                 _id: undefined };
-            console.log(groupWithoutId);
             handleNewGroup(groupWithoutId, session?.user?.id);
             router.push("/group-center");
             router.refresh();

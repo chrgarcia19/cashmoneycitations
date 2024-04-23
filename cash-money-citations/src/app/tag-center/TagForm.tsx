@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MouseEventHandler, useState } from "react";
-import { editTag, handleNewTag } from "../componentActions/tagActions";
+import { editTag, handleNewTag } from "../../components/componentActions/tagActions";
 import { Button } from "@nextui-org/react";
 
 interface TagData {
@@ -21,7 +21,6 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
     const searchParams = useSearchParams();
     const { data: session } = useSession();
     const router = useRouter();
-    const contentType = "application/json";
 
     const [form, setForm] = useState({
         tagName: tagForm.tagName,
@@ -125,7 +124,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
                     onClick={() => backToTagCenter()}
                     color="primary"
                     className="font-bold text-white hover:bg-blue-900">
-                      Close
+                      Back to Tags
                   </Button>
                   <Button
                     type="submit"

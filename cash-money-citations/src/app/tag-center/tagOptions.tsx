@@ -3,7 +3,6 @@
 import {Tabs, Tab} from "@nextui-org/react";
 import ModifyTag from "./modifyTag";
 import { useRouter } from "next/navigation";
-import { ApplyTagsToRef } from "../../components/tagComponents/applyTagsToRef";
 import TagLibrary from "./tagLibrary";
 
 type Props = {
@@ -23,7 +22,6 @@ const TagOptions = async (props: Props) => {
                         <ModifyTag tags={props.tags} router={router} references={props.references} />
                     </Tab>
                     <Tab key="library" title="Tag Library">
-                        {/*<ApplyTagsToRef tags={props.tags} references={props.references} />*/}
                         <TagLibrary tags={props.allTags} />
                     </Tab>
                 </Tabs>

@@ -5,16 +5,14 @@ import { Tag } from "@/models/Tag";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { mutate } from "swr";
 
-export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag[]){
+export async function applyTagToReference(reference: CSLBibInterface, tag: Tag){
     /*Create the form*/
     const referenceForm = {
       tagId: reference.tagId,
     };
 
     /*Put the proper data in the tag object*/
-    for (let i = 0; i < tags.length; i++){
-      referenceForm.tagId.push(tags[i]._id);
-    }
+    referenceForm.tagId.push(tag._id);
 
     /*Send the new data to the API to be modified*/
     try {
@@ -36,20 +34,18 @@ export async function applyTagsToReference(reference: CSLBibInterface, tags: Tag
   
         mutate(`/api/references/${reference._id}`, data, true); // Update the local data without a revalidation
       } catch (error) {
-
+        console.log(JSON.stringify(error));
       }
 }
 
-export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
+export async function applyReferenceToTag (tag: Tag, refId: string) {
   /*Create the form*/
   const tagForm = {
       referenceId: tag.referenceId,
   };
 
   /*Put the proper data in the tag object*/
-  for (let i = 0; i < refs.length; i++){
-    tagForm.referenceId.push(refs[i]._id);
-  }
+  tagForm.referenceId.push(refId);
   
   /*Send the new data to the API to be modified*/
   try {
@@ -71,7 +67,7 @@ export async function applyReferencesToTag (tag: Tag, refs: CSLBibInterface[]) {
 
       mutate(`/api/tags/${tag._id}`, data, true); // Update the local data without a revalidation
     } catch (error) {
-
+      console.log(JSON.stringify(error));
     }
 }
 
@@ -128,8 +124,6 @@ export async function deleteTagIdFromReference(tagId: string, reference: CSLBibI
 export async function deleteReferenceIdFromTag(referenceId: string, tag: Tag) {
   /*Create the form*/
   const tagForm = {
-    tagName: tag.tagName,
-    tagColor: tag.tagColor,
     referenceId: tag.referenceId,
 };
 

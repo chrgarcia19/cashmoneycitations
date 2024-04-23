@@ -1,5 +1,5 @@
 import {Card, CardHeader, CardBody, Divider, Chip} from "@nextui-org/react";
-import TagForm from "../../components/tagComponents/TagForm";
+import TagForm from "./TagForm";
 import Link from "next/link";
 import { handleDelete } from "@/app/tag-center/tagActions";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";

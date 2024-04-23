@@ -8,7 +8,7 @@ import { FilterCslStyleNames } from "./actions";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import {useAsyncList} from "@react-stately/data";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
-import { List } from "react-virtualized";
+import { FixedSizeList as List } from "react-window";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -137,15 +137,12 @@ function ModalCSLSelect() {
     },
   });
 
-  const renderRow = ({ index, key, style }: any) => (
+  const Row = ({ index, key, style }: any) => (
     <div key={key} className="post">
       <h3>{`${(list.items[index] as { title: string }).title}`}</h3>
     </div>
   )
 
-  const style = {
-    position: "flex"
-  }
 
 //   async function fetchCslNames() {
 //     const names = await FilterCslStyleNames();
@@ -182,15 +179,18 @@ function ModalCSLSelect() {
               <>
                 <ModalHeader className="flex flex-col gap-1">Select Citation Styles</ModalHeader>
                 <ModalBody className="flex items-center">
-                  <List
-                  width={1000}
-                  height={700}
-                  rowRenderer={renderRow}
-                  rowCount={list.items.length}
-                  rowHeight={120}
-                  >
+                  <div className="flex items-center">
+                    <List
+                      width={400}
+                      height={300}
+                      itemCount={list.items.length}
+                      itemSize={120}
+                    >
+                      {Row}
 
-                  </List>
+                    </List>
+                  </div>
+
 
                   {/* <div>
                   <input

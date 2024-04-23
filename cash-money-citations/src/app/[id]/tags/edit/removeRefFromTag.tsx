@@ -1,21 +1,37 @@
 'use client'
-import { useCallback, useMemo, useState } from "react";
-import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button, Divider } from "@nextui-org/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
+import { CSLBibInterface } from "@/models/CSLBibTex";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { useRouter } from "next/navigation";
 import { Tag } from "@/models/Tag";
-import { applyReferenceToTag, applyTagToReferences } from "@/app/tag-center/tagActions";
+import { deleteReferenceIdFromTag, deleteTagIdFromReference } from "@/app/tag-center/tagActions";
 let { format } = require('@citation-js/date')
 
 type Props = {
-    references: any[];
+    referenceIds: string[];
     tag: Tag;
 }
 
-const AddReferenceToTag = (props: Props) => {
+const RemoveReferenceFromTag = (props: Props) => {
+  
+  const router = useRouter();
+  const [references, setReferences] = useState<any[]>([]);
 
-    const router = useRouter();
+  useEffect(() => {
+      fetchReference();
+    }, []);
+  
+  const fetchReference = async () => {  
+    const referenceArr = new Array<CSLBibInterface>();  
+    props.referenceIds.map(async (id: any) => {
+        const referenceData = await getSpecificReferenceById(id);  
+        referenceArr.push(referenceData);
+    });
+    setReferences(referenceArr);
+  }
 
-    const userRefs = props.references;
+    const userRefs = references;
     type UserReference = typeof userRefs[0];
 
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -23,14 +39,14 @@ const AddReferenceToTag = (props: Props) => {
     const [page, setPage] = useState(1);
     const rowsPerPage = 6;
 
-    const pages = Math.ceil(props.references.length / rowsPerPage);
+    const pages = Math.ceil(references.length / rowsPerPage);
 
     const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        return props.references.slice(start, end);
-    }, [page, props.references]);
+        return references.slice(start, end);
+    }, [page, references]);
 
     const statusColorMap: Record<string, ChipProps["color"]> = {
         active: "success",
@@ -77,41 +93,37 @@ const AddReferenceToTag = (props: Props) => {
           default:
             return cellValue;
         }
-        
       }, []);
 
-    function handleBack(){
-      router.push("/tag-center");
-      router.refresh();
-    }
-
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
-      e.preventDefault();
-      const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
-    
-      /*Adding Reference IDs to a tag*/
-      for (let i = 0; i < refs.length; i++){
-        await applyReferenceToTag(props.tag, refs[i]);
+      function handleBack(){
+        router.push("/tag-center");
+        router.refresh();
       }
+  
+      async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
+        e.preventDefault();
+        const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-      /*Add Tag IDs to each references*/
-      for (let i = 0; i < props.references.length; i++){
-        for (let j = 0; j < refs.length; j++){
-          if (props.references[i]._id == refs[j]){
-            await applyTagToReferences(props.references[i], props.tag);
-          }
+        /*Remove the Reference IDs from the tag */
+        for (let i = 0; i < refs.length; i++){
+          await deleteReferenceIdFromTag(refs[i], props.tag);
         }
         
-      }
+        /*Remove TagIDs from each reference*/
+        for (let i = 0; i < references.length; i++){
+          await deleteTagIdFromReference(props.tag._id, references[i]);
+        }
 
-      router.push("/tag-center");
-      router.refresh();
-    }
+        router.push("/tag-center");
+        router.refresh();
+      }
 
     return (
         <>
-              <form id="add-references-to-tags" 
-                onSubmit={async (e) => await handleSubmit(e)}>
+            <form id="remove-references-to-tags" 
+              className="w-full"
+              onSubmit={async (e) => await handleSubmit(e)}
+              >
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"
                     bottomContent={
@@ -147,27 +159,27 @@ const AddReferenceToTag = (props: Props) => {
                             </TableRow>
                         )}
                     </TableBody>
+                    
                 </Table>
-                <Divider />
                 <div className="flex justify-end gap-4">
                   <Button
                       color="primary"
-                      className="font-bold text-white"
+                      className="font-bold text-white p-5"
                       onClick={() => handleBack()}
                       >
                       Back to Tags
                   </Button>
                   <Button
-                      color="success"
+                      color="danger"
                       type="submit"
-                      className="font-bold text-white"
+                      className="font-bold text-white p-5"
                       >
-                      Add References to Tag
+                      Remove References to Tag
                   </Button>
-                </div> 
-              </form>
+                </div>
+            </form>
         </>
     )
 }
 
-export default AddReferenceToTag;
+export default RemoveReferenceFromTag;

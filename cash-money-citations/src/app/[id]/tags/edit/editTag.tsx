@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import AddReferenceToTag from "./addRefToTag";
 import { CSLBibInterface } from "@/models/CSLBibTex";
+import RemoveReferenceFromTag from "./removeRefFromTag";
 
 type Props = {
     references: CSLBibInterface[];
@@ -67,7 +68,7 @@ export default function EditTag(props: Props){
                     <AddReferenceToTag references={props.references} tag={tag} />
                 </Tab>
                 <Tab key="remove" title="Remove References from Tag">
-        
+                    <RemoveReferenceFromTag referenceIds={tag.referenceId} tag={tag} />
                 </Tab>
             </Tabs>
             </div> 

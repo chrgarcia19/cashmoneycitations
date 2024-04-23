@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { useRouter } from "next/navigation";
@@ -104,7 +104,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
         e.preventDefault();
         const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-        /*Remove the Reference IDs from the grouo */
+        /*Remove the Reference IDs from the group */
         for (let i = 0; i < refs.length; i++){
           await deleteReferenceIdFromGroup(refs[i], props.group);
         }
@@ -152,7 +152,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
                         <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                         <TableColumn key="type">TYPE</TableColumn>
                     </TableHeader>
-                    <TableBody items={references}>
+                    <TableBody items={items}>
                         {(item: { _id: string }) => (
                             <TableRow key={item._id}>
                                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

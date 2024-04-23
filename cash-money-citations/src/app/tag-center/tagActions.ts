@@ -5,7 +5,7 @@ import { Tag } from "@/models/Tag";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { mutate } from "swr";
 
-export async function applyTagToReference(reference: CSLBibInterface, tag: Tag){
+export async function applyTagToReferences(reference: CSLBibInterface, tag: Tag){
     /*Create the form*/
     const referenceForm = {
       tagId: reference.tagId,

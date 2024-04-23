@@ -35,6 +35,16 @@
 }
 
 
+html, body {
+  /* height: 100%; */
+  
+
+}
+
+body.dark {
+  --bg-color: #303030; /* Dark mode background */
+}
+
 
 * {
   font-family: "Open Sans", sans-serif;

@@ -34,6 +34,7 @@ const ThemeSwitcher = () => {
       >
         <FaMoon className="text-lg"/> Dark
       </button>
+      
     </div>
   );
 };

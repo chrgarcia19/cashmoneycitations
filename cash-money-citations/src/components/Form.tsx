@@ -285,7 +285,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
+      <div className="flex mt-10 justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
         <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
           <div className="p-6">
             <div className="text-center">

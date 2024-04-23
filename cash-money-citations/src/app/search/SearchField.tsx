@@ -97,7 +97,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
   }, [])
   
   return (
-    <div className="flex flex-col items-center h-screen mb-8 pb-20 absolute-bottom">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
       <div className="flex flex-col max-w-md mx-auto w-96">
         <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div className="relative">

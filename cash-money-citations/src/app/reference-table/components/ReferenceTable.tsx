@@ -279,7 +279,7 @@ export default function ReferenceTable(userRefObject: any) {
       case "tags":
         return (
           <>
-            {userRef.tagID.map((id: string) => (
+            {userRef.tagId.map((id: string) => (
               <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
                 <DisplayTags key={id} tagId={id} />
               </Suspense>

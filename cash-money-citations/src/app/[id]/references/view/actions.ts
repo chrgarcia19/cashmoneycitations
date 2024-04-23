@@ -11,6 +11,9 @@ import dbConnect from "@/utils/dbConnect";
 import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
+import UserStyleList from "@/models/UserStyleList";
+import { authConfig } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
 export async function CreateCitation(referenceId: any, styleChoice: string, localeChoice: string) {
 
@@ -177,10 +180,13 @@ export async function GetJSONFile(referenceId: string, lang: string) {
     return customCitation[0];
 }
 
-export async function GetAllCslStyleNames() {
+export async function FilterCslStyleNames(styleName: string) {
     await dbConnect();
 
-    const result = await CSLStyleModel.find({}, { title: 1}); // Only returning title from the CSL style
+    const result = await CSLStyleModel.find({
+        title: { $regex: new RegExp(styleName, "i") }
+    }
+    ); // Only returning title from the CSL style
     const styles = result.map((doc) => {
         const style = JSON.parse(JSON.stringify(doc));
         return style;

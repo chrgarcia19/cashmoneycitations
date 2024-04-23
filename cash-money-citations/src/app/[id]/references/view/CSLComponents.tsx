@@ -4,8 +4,11 @@ import { ChevronDownIcon } from "@/app/reference-table/components/ChevronDownloa
 import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/react";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { GetAllCslStyleNames } from "./actions";
+import { FilterCslStyleNames } from "./actions";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+import {useAsyncList} from "@react-stately/data";
+import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
+import { List } from "react-virtualized";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -26,7 +29,6 @@ interface SelectionCSLLocaleProps {
 export function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
 const [styleChoice, setStyleChoice] = useState('');
 const [styleSearch, setStyleSearch] = useState('');
-const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
 const {
     data: cslStyles,
@@ -34,7 +36,7 @@ const {
     isLoading,
 } = useSWR(`/api/csl/styles`, fetcher);
 
-  // Update styleChoise when styleChoice changes
+  // Update styleChoice when styleChoice changes
   useEffect(() => {
       if (cslStyles && cslStyles.length > 0) {
           const firstStyle = cslStyles[0].name;
@@ -42,6 +44,8 @@ const {
           onStyleChoiceChange(firstStyle);
       }
   }, [cslStyles, onStyleChoiceChange]);
+
+
 
 // useMemo to filter cslStyles based on the searchTerm
 // This ensures filtering logic is only re-evaluated when cslStyles or searchTerm changes
@@ -60,11 +64,6 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStyleChoice(styleChoice);
     onStyleChoiceChange(styleChoice);
 };
-
-const GetCslNames = async() => {
-  await GetAllCslStyleNames();
-}
-
 
 return (
   <div className="flex gap-4">
@@ -114,48 +113,130 @@ return (
 
       </DropdownMenu>
     </Dropdown>
+    <ModalCSLSelect />
 
-    <Button className="self-end px-2 py-1 text-sm" onPress={onOpen}>
-            More Styles
-    </Button>
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+    
   </div>
   );
+}
+
+function ModalCSLSelect() {
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [cslNames, setCslNames] = useState<any[]>([]);
+  const [cslSearch, setCslSearch] = useState('');
+
+  let list = useAsyncList({
+    async load({signal, filterText = ''}) {
+      console.log("1")
+      let res = await FilterCslStyleNames(filterText);
+      let json = await res;
+
+      return {
+        items: json,
+      };
+    },
+  });
+
+  const renderRow = ({ index, key, style }: any) => (
+    <div key={key} className="post">
+      <h3>{`${(list.items[index] as { title: string }).title}`}</h3>
+    </div>
+  )
+
+  const style = {
+    position: "flex"
+  }
+
+//   async function fetchCslNames() {
+//     const names = await FilterCslStyleNames();
+//     setCslNames(names);
+// }
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     fetchCslNames();
+  //   }
+
+  // }, [isOpen]);
+
+  // useMemo to filter cslStyles based on the searchTerm
+  // This ensures filtering logic is only re-evaluated when cslStyles or searchTerm changes
+  // const filteredCslStyles = useMemo(() => {
+  //   return cslNames?.filter((cslStyle: { name: string; }) =>
+  //     cslStyle.name.toLowerCase().includes(cslSearch.toLowerCase())
+  //   );
+  // }, [cslNames, cslSearch]);
+  return (
+    <>
+      <Button className="self-end px-2 py-1 text-sm" onPress={onOpen}>
+              More Styles
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} 
+      backdrop="transparent"
+      radius="lg"
+      size="3xl"
+      shadow="lg"
+      scrollBehavior="inside">
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">Select Citation Styles</ModalHeader>
+                <ModalBody className="flex items-center">
+                  <List
+                  width={1000}
+                  height={700}
+                  rowRenderer={renderRow}
+                  rowCount={list.items.length}
+                  rowHeight={120}
+                  >
+
+                  </List>
+
+                  {/* <div>
+                  <input
+                    type="text"
+                    placeholder="Search Styles..."
+                    className="mb-4 w-full p-2 text-gray-700 leading-tight"
+                    value={cslSearch}
+                    onChange={(e) => setCslSearch(e.target.value)}
+                  />
+                  </div>
+
+                  {filteredCslStyles.map((name: any) => (
+                      <div key={name._id}>{name.title}</div>
+                  ))} */}
+                  {/* <Autocomplete
+                    className="max-w-s"
+                    inputValue={list.filterText}
+                    isLoading={list.isLoading}
+                    items={list.items}
+                    label="Select a character"
+                    placeholder="Type to search..."
+                    variant="bordered"
+                    onInputChange={list.setFilterText}
+                  >
+                    {(item: any) => (
+                      <AutocompleteItem key={item.title} className="capitalize">
+                        {item.title}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete> */}
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button color="primary" onPress={onClose}>
+                    Action
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+    </>
+  )
 }
 
 

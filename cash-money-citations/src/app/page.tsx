@@ -78,7 +78,7 @@ export default function Home() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
   <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
     {/* Hero Section */}
-    <div className="flex w-full max-w-4xl flex-wrap items-center justify-around bg-white dark:bg-gray-800 shadow-md dark:shadow-xl rounded-lg p-8 mt-32 border border-gray-200 dark:border-gray-700">
+    <div className="flex w-full max-w-4xl flex-wrap items-center justify-around bg-white dark:bg-gray-700 shadow-md dark:shadow-xl rounded-lg p-8 mt-32 border border-gray-200 dark:border-gray-700">
       <div className="m-4 flex flex-1 flex-col items-center">
         <Image
           src={cmcLogo}
@@ -116,19 +116,19 @@ export default function Home() {
         Why Choose Us?
       </h3>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-6 bg-white dark:bg-gray-800 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="p-6 bg-white dark:bg-gray-700 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Fast & Easy</h4>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             Generate citations quickly with our user-friendly interface.
           </p>
         </div>
-        <div className="p-6 bg-white dark:bg-gray-800 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="p-6 bg-white dark:bg-gray-700 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Accurate</h4>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             Ensure the accuracy of your references with our comprehensive database.
           </p>
         </div>
-        <div className="p-6 bg-white dark:bg-gray-800 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="p-6 bg-white dark:bg-gray-700 shadow-md dark:shadow-xl rounded-lg border border-gray-200 dark:border-gray-700">
           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Free to Use</h4>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             Access our citation tools completely free of charge.
@@ -140,7 +140,7 @@ export default function Home() {
     {/* GitHub Repository Section */}
     <div className="mt-10 w-full max-w-4xl flex justify-around items-stretch space-x-4">
       {/* Card for View Repository */}
-      <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg dark:shadow-xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="flex-1 bg-white dark:bg-gray-700 shadow-lg dark:shadow-xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <img
           src="https://avatars.githubusercontent.com/u/93625102?v=4"
           alt="Repository Image"
@@ -162,7 +162,7 @@ export default function Home() {
       </div>
 
       {/* Card for Project Roadmap */}
-      <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg dark:shadow-xl rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="flex-1 bg-white dark:bg-gray-700 shadow-lg dark:shadow-xl rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <img
           src="https://github.blog/wp-content/uploads/2020/07/87728232-766b4a80-c777-11ea-8f81-1d468fc360ab.png?fit=1200%2C630"
           alt="Roadmap Image"
@@ -185,7 +185,7 @@ export default function Home() {
     </div>
 
     {/* Contact Section */}
-    <div className="my-10 w-full max-w-7xl mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-8">
+    <div className="my-10 w-full max-w-7xl mx-auto bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-8">
       <h3 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
         Contact Us
       </h3>
@@ -204,7 +204,7 @@ export default function Home() {
               placeholder="Your Name"
               value={formData.name}
               onChange={handleChange}
-              className="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
+              className="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
             />
             <input
               type="email"
@@ -212,7 +212,7 @@ export default function Home() {
               placeholder="Your Email"
               value={formData.email}
               onChange={handleChange}
-              className="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
+              className="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
             />
             <textarea
               name="message"
@@ -220,7 +220,7 @@ export default function Home() {
               placeholder="Your Message"
               value={formData.message}
               onChange={handleChange}
-              className="px-4 py-3 pb-32 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
+              className="px-4 py-3 pb-32 rounded-lg border border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 w-full transition ease-in-out duration-150"
             ></textarea>
             <button
               type="submit"

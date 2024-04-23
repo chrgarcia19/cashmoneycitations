@@ -91,7 +91,7 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
               <input
                   type="text"
                   name="tagName"
-                  className="w-3/5"
+                  className="w-3/5 dark:text-white"
                   onChange={handleChange}
                   value={form.tagName}
                   required

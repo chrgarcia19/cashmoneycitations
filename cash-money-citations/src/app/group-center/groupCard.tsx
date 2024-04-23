@@ -7,9 +7,10 @@ import { Group } from "@/models/Group";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { handleDelete } from "./modifyGroups";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
-let { format } = require('@citation-js/date')
+let { format } = require('@citation-js/date');
+import { useReferenceContext } from "../reference-table/components/ReferenceTable";
 
 type Props = {
     group: Group;
@@ -19,6 +20,8 @@ type Props = {
 
 const GroupCard = (props: Props) => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+    const { referenceIds, setReferenceIds, setSelectedReferenceIds } = useReferenceContext();
 
     const router = useRouter();
 
@@ -36,9 +39,6 @@ const GroupCard = (props: Props) => {
         });
         setReferences(referenceArr);
     }
-
-    //console.log(references);
-
 
     const userRefs = references;
     type UserReference = typeof userRefs[0];
@@ -104,6 +104,18 @@ const GroupCard = (props: Props) => {
         }
         
       }, []);
+
+    // Update currently selected referenceIds
+    useEffect(() => {
+
+        if (selectedKeys === "all") {
+            setReferenceIds(props.referenceIds);
+            setSelectedReferenceIds(referenceIds);
+        } else if (selectedKeys instanceof Set) {
+            setSelectedReferenceIds(Array.from(selectedKeys));
+        }
+
+    }, [selectedKeys]);
 
     return (
         <>  
@@ -191,6 +203,8 @@ const GroupCard = (props: Props) => {
                             <Button
                                 color="warning"
                                 className="font-bold text-white"
+                                href={`/displayCitation`}
+                                as={Link}
                                 >
                                     Create Bibliography
                             </Button>

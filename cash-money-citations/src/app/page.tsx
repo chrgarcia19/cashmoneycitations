@@ -1,8 +1,9 @@
-import LinkBtn from "@/components/LinkBtn";
+import LinkBtn from "../components/LinkBtn";
 import Image from 'next/image';
 import cmcLogo from '../../public/cashmoneycitations_logo.png';
 import Link from "next/link";
-import GuestAccess from "@/components/GuestAccess";
+import GuestAccess from "../components/GuestAccess";
+import React from "react";
 
 export default function HomePage() {
   return(

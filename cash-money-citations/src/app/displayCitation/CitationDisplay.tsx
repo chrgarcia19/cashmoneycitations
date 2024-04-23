@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getSpecificReferenceById } from '@/components/componentActions/actions';
 import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
-import { CreateCitation } from '../[id]/references/view/actions';
+import { CreateCitation, GetAllCslStyleNames } from '../[id]/references/view/actions';
 import { DeleteCitation, GetRefCSLJson } from './actions';
 import React from 'react';
 const Cite = require('citation-js')
@@ -230,6 +230,7 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     document.body.appendChild(element);
     element.click();
   }
+
 
   return (
     <>

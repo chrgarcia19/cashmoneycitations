@@ -176,3 +176,15 @@ export async function GetJSONFile(referenceId: string, lang: string) {
 
     return customCitation[0];
 }
+
+export async function GetAllCslStyleNames() {
+    await dbConnect();
+
+    const result = await CSLStyleModel.find({}, { title: 1}); // Only returning title from the CSL style
+    const styles = result.map((doc) => {
+        const style = JSON.parse(JSON.stringify(doc));
+        return style;
+    });
+
+    return styles;
+}

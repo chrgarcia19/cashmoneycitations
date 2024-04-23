@@ -107,9 +107,8 @@ const GroupCard = (props: Props) => {
 
     // Update currently selected referenceIds
     useEffect(() => {
-
+        setReferenceIds(props.referenceIds);
         if (selectedKeys === "all") {
-            setReferenceIds(props.referenceIds);
             setSelectedReferenceIds(referenceIds);
         } else if (selectedKeys instanceof Set) {
             setSelectedReferenceIds(Array.from(selectedKeys));

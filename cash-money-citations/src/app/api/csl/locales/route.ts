@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   
   try {
     
-    const cslStyleData = await CSLLocaleModel.find(); /* find all the data in our database */
+    const cslStyleData = await CSLLocaleModel.find({}, { name: 1, _id: 1 }); /* find all the data in our database */
     let cslStyleDataObjects = cslStyleData.map(doc => {
       let object = doc.toObject();
       object._id = object._id.toString();

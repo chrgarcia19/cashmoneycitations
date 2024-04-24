@@ -14,7 +14,7 @@ import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
-import {Spinner} from "@nextui-org/react";
+import {Divider, Spinner} from "@nextui-org/react";
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -231,17 +231,19 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     element.click();
   }
 
+
   return (
     <>
       {alert.message && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ type: '', message: '' })} />}    
       <div className='center-content'>
       <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
         <div className='flex flex-col'>
-          <label htmlFor='styleChoice' className='mb-2 font-bold text-lg'>Citation Style</label>
-          <SelectionCSL onStyleChoiceChange={setStyleChoice}/>
+          <label htmlFor='styleChoice' className='mb-2 font-bold text-lg underline'>Citation Style: </label>
+          <SelectionCSL onStyleChoiceChange={setStyleChoice} currentStyle={styleChoice}/>
         </div>
+        <Divider orientation='vertical'/>
         <div className='flex flex-col'>
-          <label htmlFor='localeChoice' className='mb-2 font-bold text-lg'>Language</label>
+          <label htmlFor='localeChoice' className='mb-2 font-bold text-lg underline'>Language: </label>
           <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
         </div>
         <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>

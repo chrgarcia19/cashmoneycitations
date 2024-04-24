@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { CitationChoice, DeleteCitationDisplay, CitationList } from './CitationDisplay';
+import { CitationChoice, CitationList } from './CitationDisplay';
 import { useReferenceContext } from '../reference-table/components/ReferenceTable';
 
 export default function citationDisplay({
@@ -13,7 +13,7 @@ export default function citationDisplay({
   //const referenceId = searchParams.citation;
   const [citations, setCitations] = useState([Object]);
   const [styleChoice, setStyleChoice] = useState('');
-  const [localeChoice, setLocaleChoice] = useState('');
+  const [localeChoice, setLocaleChoice] = useState('en-US');
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
 
   return (

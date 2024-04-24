@@ -72,7 +72,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                                 onChange={() => tagCheckHandler(index)}
                             />
                             </td>
-                            <td className="border border-slate-600 dark:text-white">
+                            <td className="border border-slate-600 dark:text-black">
                                 {tag.tagName}
                             </td>
                         </tr>

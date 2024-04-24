@@ -7,6 +7,7 @@ import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { IoPricetags } from "react-icons/io5";
 import { FaHome, FaBook, FaBarcode, FaArrowDown } from "react-icons/fa";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdSpaceDashboard, MdGroup } from "react-icons/md";
 import { useSession } from "next-auth/react";
 
@@ -16,9 +17,8 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // State to manage icons visibility
   const { data: session, status } = useSession(); // Use useSession to access the session
 
-
   // Toggle function to show/hide icons
-  const toggleIcons = () =>  setIsOpen(!isOpen);
+  const toggleIcons = () => setIsOpen(!isOpen);
 
   // Check if the user is logged in
   // Render null if not authenticated to hide the sidebar
@@ -26,83 +26,81 @@ const Sidebar = () => {
     return null;
   }
 
-
   return (
     <>
-    
-    <div className="fixed flex flex-col z-20 items-center text-white transition-all ease-in-out duration-30 mr-10">
-      {/* Dedicated Toggle Button */}
-      <div className="p-4">
-        <button
-          onClick={toggleIcons}
-          className="mb-4 flex items-center opacity-0 justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+      <div className="fixed flex flex-col z-20 items-center text-white transition-all ease-in-out duration-30 mr-10">
+        {/* Dedicated Toggle Button */}
+        <div className="p-4">
+          <button
+            onClick={toggleIcons}
+            className="mb-4 flex items-center opacity-0 justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+          >
+            <BsList className="text-xl" size={40} />
+          </button>
+        </div>
+
+        {/* Icons container, visibility controlled by isOpen state */}
+        <div
+          className={`flex mt-[10px] flex-col items-center transition-all ease-in-out duration-300 ${
+            isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
+          }`}
         >
-          <BsList className="text-xl" size={40} />
-        </button>
+          <SideBarIcon href="/" icon={<FaHome size="20" />} tooltip="Home" />
+          <SideBarIcon
+            href="/dashboard"
+            icon={<MdSpaceDashboard size="20" />}
+            tooltip="Dashboard"
+          />
+
+          <Divider />
+
+          <SideBarIcon
+            href="/new"
+            icon={<HiDocumentAdd size="20" />}
+            tooltip="Add Reference"
+          />
+          <SideBarIcon
+            href="/reference-gallery"
+            icon={<GrGallery size="20" />}
+            tooltip="Gallery View"
+          />
+          <SideBarIcon
+            href="/reference-table"
+            icon={<BsTable size="20" />}
+            tooltip="Table View"
+          />
+
+<Divider />
+
+          <SideBarIcon
+            href="/tag-center"
+            icon={<IoPricetags size="20" />}
+            tooltip="Tag Center"
+          />
+
+          <SideBarIcon
+            href="/group-center"
+            icon={<MdGroup size="20" />}
+            tooltip="Group Center"
+          />
+       
+
+
+          <Divider />
+
+          <SideBarIcon
+            href="/search"
+            icon={<FaMagnifyingGlass size="20" />}
+            tooltip="Search"
+          />
+
+          <SideBarIcon
+            href="/input"
+            icon={<FaArrowDown size="20" />}
+            tooltip="Input"
+          />
+        </div>
       </div>
-
-      {/* Icons container, visibility controlled by isOpen state */}
-      <div
-        className={`flex mt-[10px] flex-col items-center transition-all ease-in-out duration-300 ${
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
-        }`}
-      >
-         <SideBarIcon
-          href="/"
-          icon={<FaHome size="20" />}
-          tooltip="Home"
-        />
-         <SideBarIcon
-          href="/dashboard"
-          icon={<MdSpaceDashboard size="20" />}
-          tooltip="Dashboard"
-        />
-
-        <Divider />
-
-        <SideBarIcon
-          href="/new"
-          icon={<HiDocumentAdd size="20" />}
-          tooltip="Add Reference"
-        />      
-        <SideBarIcon
-          href="/reference-gallery"
-          icon={<GrGallery size="20" />}
-          tooltip="Gallery View"
-        />
-        <SideBarIcon
-          href="/reference-table"
-          icon={<BsTable size="20" />}
-          tooltip="Table View"
-        />
-        
-
-        <SideBarIcon
-          href="/tag-center"
-          icon={<IoPricetags size="20" />}
-          tooltip="Tag Center"
-        />
-        
-        <Divider />
-        
-        <SideBarIcon
-          href="/search"
-          icon={<GrGallery size="20" />}
-          tooltip="Search"
-        />
-        
-        <SideBarIcon
-          href="/input"
-          icon={<FaArrowDown size="20" />}
-          tooltip="Input"
-        />
-         <SideBarIcon
-          href="/group-center"
-          icon={<MdGroup size="20" />}
-          tooltip="Group Center"
-        />
-      </div>
-    </div>
     </>
   );
 };
@@ -118,7 +116,7 @@ const SideBarIcon = ({
 }) => (
   <Link href={href}>
     <div className="sidebar-icon group">
-    <div className="text-white p-2 bg-gray-800 dark:bg-gray-900 rounded-full shadow dark:shadow-md hover:bg-green-700 dark:hover:bg-gray-400 transition-all duration-300">
+      <div className="text-white p-2 bg-gray-800 dark:bg-gray-900 rounded-full shadow dark:shadow-md hover:bg-green-700 dark:hover:bg-gray-400 transition-all duration-300">
         {icon}
       </div>
       {tooltip && (
@@ -130,6 +128,8 @@ const SideBarIcon = ({
   </Link>
 );
 
-const Divider = () => <hr className="my-2 border-gray-700 w-full dark:border-white" />;
+const Divider = () => (
+  <hr className="my-2 border-gray-700 w-full dark:border-white" />
+);
 
 export default Sidebar;

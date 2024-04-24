@@ -3,8 +3,9 @@
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { editGroup, handleNewGroup } from "@/components/componentActions/groupActions";
+import { editGroup, handleNewGroup } from "../../components/componentActions/groupActions";
 import { Button, Card, CardBody, CardHeader, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import React from "react";
 
 interface GroupData {
     groupName: string;
@@ -64,11 +65,11 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
     return (
         <>
             <Card className="me-3">
-                <CardHeader className="flex items-center justify-center">
+                <CardHeader className="flex items-center justify-center ">
                     {forNewGroup && (
-                        <h4 className="font-bold">Create a New Group</h4>
+                        <h4 className="font-bold dark:text-white">Create a New Group</h4>
                     ) || (
-                        <h4 className="font-bold">Edit Group Name</h4>
+                        <h4 className="font-bold dark:text-white">Edit Group Name</h4>
                     )}
                     
                 </CardHeader>
@@ -95,14 +96,14 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                             >
                                 <ModalContent>
                                     <>
-                                    <ModalHeader className="flex flex-col gap-1">
+                                    <ModalHeader className="flex flex-col gap-1 dark:text-white">
                                         Create a New Group
                                     </ModalHeader>
                                     <form id={formId} onSubmit={handleSubmit}>
                                         <ModalBody>
                                             <label 
                                                 htmlFor="groupName"
-                                                className="font-bold">
+                                                className="font-bold dark:text-white">
                                                     Group Name
                                             </label>
                                             <input
@@ -111,6 +112,7 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                                                 onChange={handleChange}
                                                 value={form.groupName}
                                                 required
+                                                className="dark:text-white"
                                             />
                                         </ModalBody>
                                         <ModalFooter>
@@ -132,7 +134,7 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                             <form id={formId} onSubmit={handleSubmit}>
                                 <label 
                                     htmlFor="groupName"
-                                    className="font-bold">
+                                    className="font-bold dark:text-white">
                                         Group Name
                                 </label>
                                 <input
@@ -141,6 +143,7 @@ const CreateCard = ({formId, groupForm, forNewGroup = true} : Props) => {
                                     onChange={handleChange}
                                     value={form.groupName}
                                     required
+                                    className="dark:text-white"
                                 />
                                 <div className="flex justify-end gap-4">
                                     <Button

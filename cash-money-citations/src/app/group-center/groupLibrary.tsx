@@ -126,7 +126,7 @@ const GroupLibrary = (props: Props) => {
                 >
                     <ModalContent>
                         <>
-                        <ModalHeader className="flex flex-col gap-1">
+                        <ModalHeader className="flex flex-col gap-1 dark:text-white">
                             Add From the Group Library
                         </ModalHeader>
                             <ModalBody>
@@ -156,9 +156,9 @@ const GroupLibrary = (props: Props) => {
                                     <TableColumn key="userOwnedGroups">YOUR GROUP?</TableColumn>
                                     <TableColumn key="actions">ACTIONS</TableColumn>
                                 </TableHeader>
-                                <TableBody items={items}>
+                                <TableBody items={items} >
                                     {(item: Group) => (
-                                        <TableRow key={item._id}>
+                                        <TableRow className="dark:text-white" key={item._id}>
                                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
                                     )}

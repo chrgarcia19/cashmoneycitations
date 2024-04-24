@@ -10,6 +10,7 @@ import {useAsyncList} from "@react-stately/data";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { FixedSizeList as List, areEqual } from "react-window";
 import memoize from 'memoize-one';
+import { UpdateUserStyleList } from "@/app/displayCitation/actions";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -126,6 +127,11 @@ function ModalCSLSelect() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [cslSelect, setCslSelect] = useState<string[]>([]);
 
+
+  const saveNewStyleList = async(cslSelect: string[] ) => {
+    await UpdateUserStyleList(cslSelect);
+  }
+
   let list = useAsyncList({
     async load({signal, filterText = ''}) {
       let res = await FilterCslStyleNames(filterText);
@@ -170,25 +176,6 @@ function ModalCSLSelect() {
   const itemData = createItemData(list.items);
 
 
-//   async function fetchCslNames() {
-//     const names = await FilterCslStyleNames();
-//     setCslNames(names);
-// }
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     fetchCslNames();
-  //   }
-
-  // }, [isOpen]);
-
-  // useMemo to filter cslStyles based on the searchTerm
-  // This ensures filtering logic is only re-evaluated when cslStyles or searchTerm changes
-  // const filteredCslStyles = useMemo(() => {
-  //   return cslNames?.filter((cslStyle: { name: string; }) =>
-  //     cslStyle.name.toLowerCase().includes(cslSearch.toLowerCase())
-  //   );
-  // }, [cslNames, cslSearch]);
   return (
     <>
       <Button className="self-end px-2 py-1 text-sm" onPress={onOpen}>
@@ -232,44 +219,14 @@ function ModalCSLSelect() {
 
                   </div>
 
-
-                  {/* <div>
-                  <input
-                    type="text"
-                    placeholder="Search Styles..."
-                    className="mb-4 w-full p-2 text-gray-700 leading-tight"
-                    value={cslSearch}
-                    onChange={(e) => setCslSearch(e.target.value)}
-                  />
-                  </div>
-
-                  {filteredCslStyles.map((name: any) => (
-                      <div key={name._id}>{name.title}</div>
-                  ))} */}
-                  {/* <Autocomplete
-                    className="max-w-s"
-                    inputValue={list.filterText}
-                    isLoading={list.isLoading}
-                    items={list.items}
-                    label="Select a character"
-                    placeholder="Type to search..."
-                    variant="bordered"
-                    onInputChange={list.setFilterText}
-                  >
-                    {(item: any) => (
-                      <AutocompleteItem key={item.title} className="capitalize">
-                        {item.title}
-                      </AutocompleteItem>
-                    )}
-                  </Autocomplete> */}
                 </ModalBody>
 
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Action
+                  <Button color="primary" onPress={() => { saveNewStyleList(cslSelect); onClose(); }}>
+                    Save
                   </Button>
                 </ModalFooter>
               </>

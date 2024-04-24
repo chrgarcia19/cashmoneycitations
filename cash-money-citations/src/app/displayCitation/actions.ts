@@ -12,6 +12,9 @@ import dbConnect from "@/utils/dbConnect";
 import CSLStyleModel from "@/models/CSLStyle";
 import CSLLocaleModel from "@/models/CSLLocale";
 import CitationModel from "@/models/Citation";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
+import UserStyleList from "@/models/UserStyleList";
 
 export async function DeleteCitation(citationId: string) {
     await CitationModel.findOneAndDelete({ _id: citationId });
@@ -94,6 +97,25 @@ export async function GetCSLLocale(localeName: string) {
         return localeDataObject;
     } catch(e) {
         console.log(e)
+    }
+
+}
+
+export async function UpdateUserStyleList(newStyles: string[]) {
+
+    await dbConnect();
+
+    try {
+        const session = await getServerSession(authConfig);
+        const userId = session?.user?.id ?? '';
+    
+        const userStyles = await UserStyleList.updateOne({
+          userId: userId},
+          { $push: { defaultStyles: { $each: newStyles }}}
+        );
+    
+    } catch(e) {
+        console.error(e);
     }
 
 }

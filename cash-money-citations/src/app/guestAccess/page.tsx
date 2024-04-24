@@ -51,12 +51,12 @@ const page = () => {
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">Welcome, Guest! Here are some features you can use:</p>
           <div className="grid grid-cols-2 gap-4 mt-4">
             {/* List of Links styled as cards */}
-            <CardLink href="/feature1" text="Feature 1" />
-            <CardLink href="/feature2" text="Feature 2" />
-            <CardLink href="/feature3" text="Feature 3" />
-            <CardLink href="/feature4" text="Feature 4" />
-            <CardLink href="/feature5" text="Feature 5" />
-            <CardLink href="/feature6" text="Feature 6" />
+            <CardLink href="" text="Manually add references" />
+            <CardLink href="" text="Input references from external sources" />
+            <CardLink href="" text="View your generated references" />
+            <CardLink href="" text="Create your own bibliography" />
+            <CardLink href="" text="Export to BibTeX & JSON" />
+            <CardLink href="" text="Access 2,000 different citation styles" />
           </div>
         </div>
       ) : ''}

@@ -1,14 +1,15 @@
 'use client';
 
 import { ChevronDownIcon } from "@/app/reference-table/components/ChevronDownloadIcon";
-import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/react";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownSection, DropdownItem, Divider } from "@nextui-org/react";
+import { Suspense, memo, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { FilterCslStyleNames } from "./actions";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import {useAsyncList} from "@react-stately/data";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
-import { FixedSizeList as List } from "react-window";
+import { FixedSizeList as List, areEqual } from "react-window";
+import memoize from 'memoize-one';
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -39,7 +40,7 @@ const {
   // Update styleChoice when styleChoice changes
   useEffect(() => {
       if (cslStyles && cslStyles.length > 0) {
-          const firstStyle = cslStyles[0].name;
+          const firstStyle = cslStyles[0].title; // Sets the default citation style
           setStyleChoice(firstStyle);
           onStyleChoiceChange(firstStyle);
       }
@@ -50,8 +51,8 @@ const {
 // useMemo to filter cslStyles based on the searchTerm
 // This ensures filtering logic is only re-evaluated when cslStyles or searchTerm changes
 const filteredStyles = useMemo(() => {
-  return cslStyles?.filter((cslStyle: { name: string; }) =>
-    cslStyle.name.toLowerCase().includes(styleSearch.toLowerCase())
+  return cslStyles?.filter((cslStyle: { title: string; }) =>
+    cslStyle.title.toLowerCase().includes(styleSearch.toLowerCase())
   );
 }, [cslStyles, styleSearch]);
 
@@ -87,6 +88,7 @@ return (
           placeholder="Search Styles..."
           className="mb-4 w-full p-2 text-gray-700 leading-tight"
           value={styleSearch}
+          
           onChange={(e) => setStyleSearch(e.target.value)}
         />}
       >
@@ -100,12 +102,12 @@ return (
                   id={`locale-${style._id}`}
                   type="radio"
                   name="styles"
-                  value={style.name}
-                  checked={styleChoice.includes(style.name)}
+                  value={style.title}
+                  checked={styleChoice.includes(style.title)}
                   onChange={handleStyleChoiceChange}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
                 />
-                <span className="text-sm text-gray-800 font-sm">{style.name}</span>
+                <span className="text-sm text-gray-800 font-sm">{style.title}</span>
               </label>
             </DropdownItem>
           ))}
@@ -122,12 +124,10 @@ return (
 
 function ModalCSLSelect() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const [cslNames, setCslNames] = useState<any[]>([]);
-  const [cslSearch, setCslSearch] = useState('');
+  const [cslSelect, setCslSelect] = useState<string[]>([]);
 
   let list = useAsyncList({
     async load({signal, filterText = ''}) {
-      console.log("1")
       let res = await FilterCslStyleNames(filterText);
       let json = await res;
 
@@ -137,11 +137,37 @@ function ModalCSLSelect() {
     },
   });
 
-  const Row = ({ index, key, style }: any) => (
-    <div key={key} className="post">
-      <h3>{`${(list.items[index] as { title: string }).title}`}</h3>
-    </div>
-  )
+  const Row = memo(({ data, index, style }: any) => {
+
+    const { items } = data;
+    const item = items[index];
+
+    return (
+      <div
+        style={style}
+      >
+        <span>
+          {item.title}
+
+        </span>
+        <Button onPress={() => setCslSelect([...cslSelect, item.title])}>
+          Add
+        </Button>
+        <Divider />
+
+      </div>
+
+    )
+
+  }, areEqual);
+
+  
+  const createItemData = memoize((items) => ({
+    items,
+  }));
+
+
+  const itemData = createItemData(list.items);
 
 
 //   async function fetchCslNames() {
@@ -179,16 +205,31 @@ function ModalCSLSelect() {
               <>
                 <ModalHeader className="flex flex-col gap-1">Select Citation Styles</ModalHeader>
                 <ModalBody className="flex items-center">
-                  <div className="flex items-center">
-                    <List
-                      width={400}
-                      height={300}
-                      itemCount={list.items.length}
-                      itemSize={120}
-                    >
-                      {Row}
+                  <div className="flex flex-col items-center">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Search Styles..."
+                        className="mb-4 w-full p-2 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded"
+                        value={list.filterText}
+                        onChange={(e) => list.setFilterText(e.target.value)}
 
-                    </List>
+                      />
+                    </div>
+                    <div className="flex flex-col items-center bg-white p-4 rounded-lg shadow-lg">
+                      <List
+                        width={600}
+                        height={300}
+                        itemCount={list.items.length}
+                        itemData={itemData}
+                        itemSize={50}
+                      >
+                        {Row}
+
+                      </List>
+                    </div>
+
+
                   </div>
 
 
@@ -252,7 +293,7 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     // Update localeChoice when localeData changes
     useEffect(() => {
         if (localeData && localeData.length > 0) {
-            const firstLocale = localeData[0].name;
+            const firstLocale = localeData[12].name; // Sets the default value for the lang
             setLocaleChoice(firstLocale);
             onLocaleChoiceChange(firstLocale);
         }
@@ -269,7 +310,7 @@ export function SelectionLocale({ onLocaleChoiceChange }: SelectionCSLLocaleProp
     };
     
     return (
-      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' onChange={handleLocaleChoiceChange}>
+      <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' defaultValue='en-US' onChange={handleLocaleChoiceChange}>
         {localeData.map((locale: any) => (
           <option key={locale._id} value={locale.name}>
             {locale.name}

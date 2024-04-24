@@ -185,7 +185,8 @@ export async function FilterCslStyleNames(styleName: string) {
 
     const result = await CSLStyleModel.find({
         title: { $regex: new RegExp(styleName, "i") }
-    }
+    },
+    'title _id'
     ); // Only returning title from the CSL style
     const styles = result.map((doc) => {
         const style = JSON.parse(JSON.stringify(doc));

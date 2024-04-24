@@ -61,7 +61,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                 </thead>
                 <tbody>
                     {tags.map((tag: Tag, index: any) => (
-                        <tr className="bg-green-100 hover:bg-zinc-400" key={tag._id}>
+                        <tr className="bg-green-100 hover:bg-zinc-400 " key={tag._id}>
                             <td className="border border-slate-600">
                             <input 
                                 type="checkbox"
@@ -72,7 +72,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                                 onChange={() => tagCheckHandler(index)}
                             />
                             </td>
-                            <td className="border border-slate-600">
+                            <td className="border border-slate-600 dark:text-white">
                                 {tag.tagName}
                             </td>
                         </tr>
@@ -104,7 +104,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                                 onChange={() => refCheckHandler(index)}
                             />
                             </td>
-                            <td className="border border-slate-600">
+                            <td className="border border-slate-600 dark:text-black">
                                 {reference.title}
                             </td>
                         </tr>

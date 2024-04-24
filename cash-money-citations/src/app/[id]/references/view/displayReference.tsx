@@ -316,12 +316,12 @@ export function ExportReferenceData({ referenceId, referenceIds }: any){
 
   return (
     <>
-      <form onSubmit={downloadReference} className='flex items-center space-x-2'>
+      <form onSubmit={downloadReference} className='flex items-center space-x-2 '>
         <Select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} label="Select Export Type" className='max-w-[45%] p-1 rounded-md'>
           {/* <option value='txt'>TXT</option> */}
-          <SelectItem key='json' value='json'>JSON</SelectItem>
-          <SelectItem key='bibtex' value='bibtex'>BibTex</SelectItem>
-          <SelectItem key='biblatex' value='biblatex'>BibLaTex</SelectItem>
+          <SelectItem key='json' value='json' className="dark:text-white">JSON</SelectItem>
+          <SelectItem key='bibtex' value='bibtex' className="dark:text-white">BibTex</SelectItem>
+          <SelectItem key='biblatex' value='biblatex' className="dark:text-white">BibLaTex</SelectItem>
           {/* <option value='csv'>CSV</option> */}
         </Select>
         <Button type='submit' disabled={!downloadFormat} className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download reference'>

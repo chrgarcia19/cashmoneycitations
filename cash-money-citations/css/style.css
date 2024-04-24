@@ -419,3 +419,10 @@ text-white hover:text-white
   --tw-text-opacity: 1;
   color: rgb(109 40 217 var(--tw-text-opacity)); /* dark purple text */
 }
+
+
+/*  */
+
+.nextui-textarea textarea {
+  color: #FFFFFF; /* White text color */
+}

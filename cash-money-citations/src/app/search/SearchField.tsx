@@ -87,6 +87,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
       if (userId){
         const userOwnedRefsData = await getUserReferences(userId);
         setUserOwnedRefs(userOwnedRefsData ?? []);
+        console.log(userOwnedRefs)
       }
       else {
         setUserOwnedRefs([]);

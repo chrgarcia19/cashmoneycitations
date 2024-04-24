@@ -15,7 +15,7 @@ const ModifyTag = (props: Props) => {
     const tagData = {
         tagName: "",
         tagColor: "",
-        referenceID: new Array<String>(),
+        referenceId: new Array<String>(),
     };
 
     return (

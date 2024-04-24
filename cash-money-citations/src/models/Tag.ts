@@ -12,17 +12,17 @@ async function getUserId() {
 export interface Tag extends mongoose.Document {
     tagName: string;
     tagColor: string;
-    referenceID: string[];
+    referenceId: string[];
 }
 
 const TagSchema = new mongoose.Schema<Tag>({
     tagName: {
-      type: String
+      type: String,
     },
     tagColor: {
       type: String,
     },
-    referenceID: {
+    referenceId: {
       type: [String],
     },
 }, {timestamps: true});

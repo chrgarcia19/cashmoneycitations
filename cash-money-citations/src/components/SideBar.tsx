@@ -7,11 +7,8 @@ import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { IoPricetags } from "react-icons/io5";
 import { FaHome, FaBook, FaBarcode, FaArrowDown } from "react-icons/fa";
-import { FaMusic } from "react-icons/fa";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdSpaceDashboard, MdGroup } from "react-icons/md";
 import { useSession } from "next-auth/react";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-
 
 // import { getServerAuthSession } from "@/lib/auth";
 
@@ -99,6 +96,11 @@ const Sidebar = () => {
           icon={<FaArrowDown size="20" />}
           tooltip="Input"
         />
+         <SideBarIcon
+          href="/group-center"
+          icon={<MdGroup size="20" />}
+          tooltip="Group Center"
+        />
       </div>
     </div>
     </>
@@ -128,6 +130,6 @@ const SideBarIcon = ({
   </Link>
 );
 
-const Divider = () => <hr className="my-2 border-gray-700 w-full" />;
+const Divider = () => <hr className="my-2 border-gray-700 w-full dark:border-white" />;
 
 export default Sidebar;

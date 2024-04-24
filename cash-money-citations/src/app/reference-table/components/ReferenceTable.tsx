@@ -42,6 +42,7 @@ import { ExportMultipleReferences } from "../actions";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { TbEditOff, TbEdit } from "react-icons/tb";
 import { localeLabelSelect } from "./language-selections"
+import DisplayGroups from "@/components/DisplayGroups";
 
 const ReferenceContext = createContext({
   references: [],
@@ -97,7 +98,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["title", "yearPublished", "contributors", "createdAt", "actions", "tags"];
+const INITIAL_VISIBLE_COLUMNS = ["title", "yearPublished", "contributors", "createdAt", "actions", "tags", "groups"];
 
 
 export default function ReferenceTable(userRefObject: any) {
@@ -279,13 +280,23 @@ export default function ReferenceTable(userRefObject: any) {
       case "tags":
         return (
           <>
-            {userRef.tagID.map((id: string) => (
+            {userRef.tagId.map((id: string) => (
               <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
-                <DisplayTags key={id} tagId={id} />
+                <DisplayTags tagId={id} />
               </Suspense>
             ))}
           </>
         )
+        case "groups":
+          return (
+            <>
+              {userRef.groupId.map((id: string) => (
+                <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
+                  <DisplayGroups groupId={id} />
+                </Suspense>
+              ))}
+            </>
+          )
       case "type":
         return (
           <>

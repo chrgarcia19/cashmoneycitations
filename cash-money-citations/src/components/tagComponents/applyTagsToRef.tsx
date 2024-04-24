@@ -3,7 +3,7 @@
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { useEffect, useState } from "react";
-import {  applyReferencesToTag, applyTagsToReference } from "../../app/tag-center/tagActions";
+import {  applyReferencesToTag, applyTagToReferences } from "../../app/tag-center/tagActions";
 import { useRouter } from "next/navigation";
 import {Card, CardHeader, CardBody, Divider, Chip} from "@nextui-org/react";
 

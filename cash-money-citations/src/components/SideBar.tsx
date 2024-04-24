@@ -8,7 +8,8 @@ import { FaBook } from "react-icons/fa";
 import { FaBarcode } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaMusic } from "react-icons/fa";
-import { getServerAuthSession } from "@/lib/auth";
+import { getServerAuthSession } from "../lib/auth";
+import React from "react";
 
 export default async function SideBar(){
    const authSession = await getServerAuthSession();

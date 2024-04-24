@@ -52,7 +52,7 @@ export default function EditTag(props: Props){
                                     <Divider orientation="vertical" className="m-2"/>
                                     <Chip
                                         variant="flat"
-                                        className="bg-teal-200 me-2 mb-2">
+                                        className="bg-teal-200 me-2 mb-2 dark:text-black">
                                             {tag.tagName}     
                                     </Chip>
                                 </div>

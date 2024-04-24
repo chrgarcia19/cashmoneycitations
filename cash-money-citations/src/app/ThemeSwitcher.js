@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-gray-500 dark:text-gray-300">Current Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+      <span className="text-white dark:text-gray-300">Current Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
       <button 
         className={`p-2 rounded-lg transition-colors duration-300 ${
           theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-gray-200'

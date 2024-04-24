@@ -2,10 +2,14 @@
 // components/GuestAccess.tsx
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FaUser } from 'react-icons/fa';
+import { useSession } from "next-auth/react";
+import { Tooltip } from 'react-tooltip'
 
 const GuestAccess: React.FC = () => {
-  const [status, setStatus] = useState<string>('');
+  const [statusGuest, setStatusGuest] = useState<string>('');
   const router = useRouter();
+  const { data: session, status } = useSession(); // Use useSession to access the session
 
   const handleGuestAccess = async (): Promise<void> => {
     const response = await fetch('/api/guest_session', {
@@ -19,19 +23,27 @@ const GuestAccess: React.FC = () => {
       const guestTokenData = await response.json();
       // console.log(data, "data")
       sessionStorage.setItem('guestToken', guestTokenData.data);
-      setStatus('Guest session active. You have limited access.');
+      setStatusGuest('Guest session active. You have limited access.');
       router.push('/guestAccess');
     } else {
-      setStatus('Failed to initiate guest session.');
+      setStatusGuest('Failed to initiate guest session.');
     }
   };
 
+  if (status === "authenticated") {
+    return null;
+  }
+
+
   return (
     <div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleGuestAccess}>
-        Access as Guest
+      <button className="" onClick={handleGuestAccess}>
+      <FaUser className="text-white text-3xl my-anchor-element" size={34}/>
       </button>
-      <p className="mt-2">{status}</p>
+      <Tooltip anchorSelect=".my-anchor-element" place="top">
+  Guest User
+</Tooltip>
+      {/* <p className="mt-2">{status}</p> */}
     </div>
   );
 };

@@ -1,13 +1,17 @@
 import "../../css/style.css";
 import "../../css/form.css";
 import Link from "next/link";
-import { SignOut } from "@/components/AuthButtons";
-import { getServerAuthSession } from "@/lib/auth";
+import { SignOut } from "../components/AuthButtons";
+import { getServerAuthSession } from "../lib/auth";
+import GuestAccess from '../components/GuestAccess'
 
-import ThemeSwitcher from "@/app/ThemeSwitcher";
+
+import ThemeSwitcher from "../app/ThemeSwitcher";
+import React from "react";
 
 export default async function NavBar() {
   const authSession = await getServerAuthSession();
+  
   
   return(
     <div className="navbar bg-blue-800 z-10 fixed top-0 dark:bg-gray-700" >
@@ -27,6 +31,12 @@ export default async function NavBar() {
     <div className="mx-10">
     <ThemeSwitcher />
     </div>
+
+
+<div className="mr-10 mt-3 cursor-pointer">
+    <GuestAccess />
+    </div>
+   
     
     <div className="flex-none gap-2 pr-4">
       <div className="dropdown dropdown-end">

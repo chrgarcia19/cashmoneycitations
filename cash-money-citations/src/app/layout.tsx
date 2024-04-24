@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import { AuthProvider } from "./Providers";
-import SideBar from "@/components/SideBar";
+import SideBar from "../components/SideBar";
 import Providers from "./Providers";
 import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
 
@@ -17,8 +17,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-800">
         
         <Providers>
-          <NavBar />
           <AuthProvider>
+          <NavBar />
             <ReferenceProvider>
               <main className="flex-grow">
                 <div className="grid grid-cols-12 min-h-full">

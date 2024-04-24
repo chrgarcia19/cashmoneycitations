@@ -27,64 +27,109 @@ const Sidebar = () => {
   }
 
 
-    return (
-      <>
-         <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-64 h-screen pt-32 transition-transform -translate-x-full bg-blue-300 border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-            <div className="h-full px-3 pb-4 overflow-y-auto bg-blue-300 dark:bg-gray-800">
-               {authSession?.user && (
-               <ul className="space-y-2 font-medium">
-                  <li>
-                     <Link 
-                        href="/new"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <HiDocumentAdd />
-                        <span className="ms-3">Add Reference</span>
-                     </Link>
-                  </li>
-                  <li>
-                     <Link 
-                        href="/reference-gallery"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <GrGallery />
-                        <span className="ms-3">Gallery View</span>
-                     </Link>
-                  </li>
-                  <li>
-                     <Link 
-                        href="/reference-table"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <BsTable />
-                        <span className="ms-3">Table View</span>
-                     </Link>
-                  </li>
-                  <li>
-                     <Link 
-                        href="/tag-center"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <IoPricetags />
-                        <span className="ms-3">Tag Center</span>
-                     </Link>
-                  </li>
-                  <li>
-                     <Link 
-                        href="/search"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <FaMagnifyingGlass />
-                        <span className="ms-3">Search</span>
-                     </Link>
-                  </li>
-                  <li>
-                     <Link 
-                        href="/input"
-                        className="flex items-center p-2 text-gray-900 rounded-lg font-bold dark:text-white hover:bg-blue-200 dark:hover:bg-gray-700 group">
-                        <FaArrowDown />
-                        <span className="ms-3">Input</span>
-                     </Link>
-                  </li>
-               </ul>
-               )}
-            </div>
-         </aside> 
-      </>
-    )
-}
+  return (
+    <>
+    
+    <div className="fixed flex flex-col z-20 items-center text-white transition-all ease-in-out duration-30 mr-10">
+      {/* Dedicated Toggle Button */}
+      <div className="p-4">
+        <button
+          onClick={toggleIcons}
+          className="mb-4 flex items-center opacity-0 justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+        >
+          <BsList className="text-xl" size={40} />
+        </button>
+      </div>
+
+      {/* Icons container, visibility controlled by isOpen state */}
+      <div
+        className={`flex mt-[10px] flex-col items-center transition-all ease-in-out duration-300 ${
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0"
+        }`}
+      >
+         <SideBarIcon
+          href="/"
+          icon={<FaHome size="20" />}
+          tooltip="Home"
+        />
+         <SideBarIcon
+          href="/dashboard"
+          icon={<MdSpaceDashboard size="20" />}
+          tooltip="Dashboard"
+        />
+
+        <Divider />
+
+        <SideBarIcon
+          href="/new"
+          icon={<HiDocumentAdd size="20" />}
+          tooltip="Add Reference"
+        />      
+        <SideBarIcon
+          href="/reference-gallery"
+          icon={<GrGallery size="20" />}
+          tooltip="Gallery View"
+        />
+        <SideBarIcon
+          href="/reference-table"
+          icon={<BsTable size="20" />}
+          tooltip="Table View"
+        />
+        
+
+        <SideBarIcon
+          href="/tag-center"
+          icon={<IoPricetags size="20" />}
+          tooltip="Tag Center"
+        />
+        
+        <Divider />
+        
+        <SideBarIcon
+          href="/search"
+          icon={<GrGallery size="20" />}
+          tooltip="Search"
+        />
+        
+        <SideBarIcon
+          href="/input"
+          icon={<FaArrowDown size="20" />}
+          tooltip="Input"
+        />
+         <SideBarIcon
+          href="/group-center"
+          icon={<MdGroup size="20" />}
+          tooltip="Group Center"
+        />
+      </div>
+    </div>
+    </>
+  );
+};
+
+const SideBarIcon = ({
+  href,
+  icon,
+  tooltip,
+}: {
+  href: string;
+  icon: JSX.Element;
+  tooltip?: string;
+}) => (
+  <Link href={href}>
+    <div className="sidebar-icon group">
+    <div className="text-white p-2 bg-gray-800 dark:bg-gray-900 rounded-full shadow dark:shadow-md hover:bg-green-700 dark:hover:bg-gray-400 transition-all duration-300">
+        {icon}
+      </div>
+      {tooltip && (
+        <span className="sidebar-tooltip group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {tooltip}
+        </span>
+      )}
+    </div>
+  </Link>
+);
+
+const Divider = () => <hr className="my-2 border-gray-700 w-full dark:border-white" />;
+
+export default Sidebar;

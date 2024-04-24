@@ -31,11 +31,8 @@
     "html-react-parser": "^5.1.10",
     "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.2",
-<<<<<<< HEAD
     "lottie-web": "^5.12.2",
-=======
     "memoize-one": "^6.0.0",
->>>>>>> main
     "mongoose": "^7.4.2",
     "next": "^14.1.4",
     "next-auth": "^4.24.5",

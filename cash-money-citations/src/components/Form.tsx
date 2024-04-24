@@ -350,8 +350,11 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     handleChange={handleChange}
                   />
                   {(form.type === "article-journal" ||
+                    form.type === "article" ||
+                    form.type === "chapter" ||
                     form.type === "article-magazine" ||
                     form.type === "article-newspaper" ||
+                    form.type === "entry-encyclopedia" ||
                     form.type === "webpage") && (
                     <FormField
                       labelText="Title From Where the Source Came From"
@@ -369,7 +372,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     />
                   </div>
                   {(form.type === "book" ||
-                    form.type === "article-journal") && (
+                    form.type === "article-journal" ||
+                    form.type === "article") && (
                     <FormField
                       labelText="Collection Title (series)"
                       fieldName="collection-title"
@@ -383,8 +387,11 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "book" ||
+                form.type === "chapter" ||
                 form.type === "article-journal" ||
+                form.type === "article" ||
                 form.type === "article-magazine" ||
+                form.type === "entry-encyclopedia" ||
                 form.type === "article-newspaper") && (
                 <>
                   <FormField
@@ -415,7 +422,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "book" ||
+                form.type === "entry-encyclopedia" ||
+                form.type === "chapter" ||
                 form.type === "article-journal" ||
+                form.type === "article" ||
                 form.type === "article-magazine") && (
                 <FormField
                   labelText="Volume"
@@ -438,7 +448,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {form.type === "article-newspaper" && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia") && (
                 <>
                   <FormField
                     labelText="Publisher City"
@@ -459,7 +469,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper") && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia") && (
                 <FormField
                   labelText="Edition"
                   fieldName="edition"
@@ -470,7 +480,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {(form.type === "book" || form.type === "webpage") && (
+              {(form.type === "book" || form.type === "chapter" || form.type === "webpage" || form.type === "entry-encyclopedia") && (
                 <FormField
                   labelText="Publisher"
                   fieldName="publisher"
@@ -513,6 +523,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "article-journal" ||
+                form.type === "article" ||
                 form.type === "article-magazine" ||
                 form.type === "article-newspaper" ||
                 form.type === "webpage") && (
@@ -531,7 +542,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {form.type === "book" && (
+              {form.type === "book" || form.type === "chapter" && (
                 <FormField
                   labelText="International Standard Book Number (ISBN)"
                   fieldName="ISBN"
@@ -543,6 +554,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "article-journal" ||
+                form.type === "article" ||
                 form.type === "article-magazine") && (
                 <FormField
                   labelText="Issue Number"
@@ -554,7 +566,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {form.type === "article-journal" && (
+              {(form.type === "article" ||
+                form.type === "article-journal"
+              ) && (
                 <FormField
                   labelText="Digital Object Identifier (DOI)"
                   fieldName="DOI"
@@ -567,6 +581,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
               {(form.type === "article-journal" ||
                 form.type === "article-magazine" ||
+                form.type === "article" ||
                 form.type === "article-newspaper") && (
                 <FormField
                   labelText="International Standard Serial Number (ISSN)"

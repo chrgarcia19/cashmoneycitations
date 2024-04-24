@@ -68,7 +68,7 @@ export async function GetCSLStyle(templateName: string) {
     try {
         // Find citation style where the name = the selected list
         const styleData = await CSLStyleModel.findOne({
-            name: templateName,
+            title: templateName,
         }).exec()
         let styledataObject = styleData.toObject();
         styledataObject._id = styledataObject._id.toString();

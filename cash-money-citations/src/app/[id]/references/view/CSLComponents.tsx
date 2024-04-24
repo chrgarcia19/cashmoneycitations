@@ -20,6 +20,7 @@ fetch(url)
 interface SelectionCSLProps {
     // Fix the typescript for onStyleChoiceChange was previosly string[]
     onStyleChoiceChange: (styleChoices: any) => void;
+    currentStyle: string;
 }
 
 interface SelectionCSLLocaleProps {
@@ -28,7 +29,7 @@ interface SelectionCSLLocaleProps {
 }
   
 // Maps over CSL Style selection
-export function SelectionCSL({ onStyleChoiceChange }: SelectionCSLProps) {
+export function SelectionCSL({ onStyleChoiceChange, currentStyle }: SelectionCSLProps) {
 const [styleChoice, setStyleChoice] = useState('');
 const [styleSearch, setStyleSearch] = useState('');
 
@@ -79,7 +80,7 @@ return (
     <Dropdown>
       <DropdownTrigger >
         <Button variant="bordered">
-          Citation Styles <ChevronDownIcon />
+          {currentStyle} <ChevronDownIcon />
         </Button>
       </DropdownTrigger>
       <DropdownMenu variant="faded" aria-label="Dropdown menu with description"

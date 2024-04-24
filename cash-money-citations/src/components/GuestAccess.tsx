@@ -1,9 +1,11 @@
 "use client"
 // components/GuestAccess.tsx
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const GuestAccess: React.FC = () => {
   const [status, setStatus] = useState<string>('');
+  const router = useRouter();
 
   const handleGuestAccess = async (): Promise<void> => {
     const response = await fetch('/api/guest_session', {
@@ -18,6 +20,7 @@ const GuestAccess: React.FC = () => {
       // console.log(data, "data")
       sessionStorage.setItem('guestToken', guestTokenData.data);
       setStatus('Guest session active. You have limited access.');
+      router.push('/guestAccess');
     } else {
       setStatus('Failed to initiate guest session.');
     }

@@ -9,12 +9,14 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import {Code} from "@nextui-org/react";
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import ReactCodeMirror from '@uiw/react-codemirror';
+import { zebraStripes } from '@uiw/codemirror-extensions-zebra-stripes';
 
 export function UploadBibModal() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [parsedData, setParsedData] = useState<string[]>([]);
-    const [errors, setErrors] = useState<string[]>([]);
+    const [errors, setErrors] = useState<any[]>([{
+      line: 0
+    }]);
     const [submitResult, setSubmitResult] = useState(false);
     const [value, setValue] = React.useState("console.log('hello world!');");
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -138,6 +140,7 @@ export function UploadBibModal() {
       validateData(parsedData)
     }, [parsedData]);
 
+    console.log(errors)
     return (
     <>
         <Button onPress={onOpen}>Upload Bib(La)Tex</Button>
@@ -189,12 +192,21 @@ export function UploadBibModal() {
                             <CodeMirror
                               value={entry}
                               theme="light"
+                              extensions={[javascript({ jsx: true }),
+                                zebraStripes({
+                                  lineNumber: [errors],
+                                  lightColor:'#aca2ff33',
+                                })
+                              ]}
                               basicSetup={{
                                 lineNumbers:true,
-                                history: true
+                                history: true,
+                                syntaxHighlighting: true,
+                                rectangularSelection: true
                               }
                               }
-            
+                              
+
                               onChange={(value, viewUpdate) => {
                                 handleValueChange(value, index);
                               }}

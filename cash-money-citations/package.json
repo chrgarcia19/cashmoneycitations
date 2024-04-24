@@ -31,6 +31,7 @@
     "html-react-parser": "^5.1.10",
     "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "lottie-web": "^5.12.2",
     "memoize-one": "^6.0.0",
     "mongoose": "^7.4.2",

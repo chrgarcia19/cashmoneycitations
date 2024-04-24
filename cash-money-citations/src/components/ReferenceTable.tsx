@@ -3,6 +3,11 @@ import {getUserReferences} from "./componentActions/actions";
 import { authConfig } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 import { getUserTags } from "./componentActions/tagActions";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Chip, User, Pagination, Selection, ChipProps, SortDescriptor } from "@nextui-org/react";
+
+
+
+
 
 async function ReferenceTable(){
   const session = await getServerSession(authConfig);

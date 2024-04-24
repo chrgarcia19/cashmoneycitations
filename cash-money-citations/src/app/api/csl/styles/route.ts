@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
 
     const cslStyleData = await CSLStyleModel.find({
       title: { $in: CSLTitles }
-    });
+    },
+    { title: 1, _id: 1}
+    );
     
     return NextResponse.json({ success: true, data: cslStyleData, message: id }, { status: 200});
   } catch (error) {

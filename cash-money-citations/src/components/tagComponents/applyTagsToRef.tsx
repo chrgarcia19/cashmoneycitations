@@ -3,7 +3,7 @@
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { useEffect, useState } from "react";
-import {  applyReferencesToTag, applyTagsToReference } from "../../app/tag-center/tagActions";
+import {  applyReferencesToTag, applyTagToReferences } from "../../app/tag-center/tagActions";
 import { useRouter } from "next/navigation";
 import {Card, CardHeader, CardBody, Divider, Chip} from "@nextui-org/react";
 
@@ -61,7 +61,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                 </thead>
                 <tbody>
                     {tags.map((tag: Tag, index: any) => (
-                        <tr className="bg-green-100 hover:bg-zinc-400" key={tag._id}>
+                        <tr className="bg-green-100 hover:bg-zinc-400 " key={tag._id}>
                             <td className="border border-slate-600">
                             <input 
                                 type="checkbox"
@@ -72,7 +72,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                                 onChange={() => tagCheckHandler(index)}
                             />
                             </td>
-                            <td className="border border-slate-600">
+                            <td className="border border-slate-600 dark:text-black">
                                 {tag.tagName}
                             </td>
                         </tr>
@@ -104,7 +104,7 @@ export const ApplyTagsToRef = ({ tags, references }: IProps) => {
                                 onChange={() => refCheckHandler(index)}
                             />
                             </td>
-                            <td className="border border-slate-600">
+                            <td className="border border-slate-600 dark:text-black">
                                 {reference.title}
                             </td>
                         </tr>

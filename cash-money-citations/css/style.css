@@ -1,6 +1,50 @@
+/* styles/globals.css */
+/* styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-color: #0070f3; /* Fallback theme */
+  --background-color: #fff;
+  --text-color: #000;
+}
+
+.theme-light {
+  --primary-color: #0070f3;
+  --background-color: #ffffff;
+  --text-color: #333333;
+}
+
+.theme-dark {
+  --primary-color: #ffffff;
+  --background-color: #333333;
+  --text-color: #ffffff;
+}
+
+.theme-cool {
+  --primary-color: #0ea5e9;
+  --background-color: #f0f9ff;
+  --text-color: #1e293b;
+}
+
+.theme-warm {
+  --primary-color: #ea580c;
+  --background-color: #ffedd5;
+  --text-color: #7f1d1d;
+}
+
+
+html, body {
+  /* height: 100%; */
+  
+
+}
+
+body.dark {
+  --bg-color: #303030; /* Dark mode background */
+}
+
 
 * {
   font-family: "Open Sans", sans-serif;
@@ -225,11 +269,9 @@ li {
 }
 
 .content {
-  margin-left: 256px;
-  margin-bottom: 72px;
-  margin-top: 96px;
-  justify-content: center;
-  align-items: center;
+  /* margin-top: 96px; */
+  /* justify-content: center;
+  align-items: center; */
 }
 
 .center-content{
@@ -327,7 +369,60 @@ taken and modified from DaisyUI*/
 .table :where(.table-pin-row thead tr) {
   position: sticky;
   top: 95px;
-  z-index: 50;
+  z-index: 20;
   --tw-bg-opacity: 1;
   background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+}
+
+/* CSS for the sidebar */
+@layer components {
+
+.sidebar-icon {
+  @apply relative flex items-center justify-center 
+  h-9 w-9 mt-2 mb-2 mx-auto  
+bg-gray-400 hover:bg-green-600 dark:bg-gray-800 
+text-white hover:text-white
+  hover:rounded-xl rounded-3xl
+  transition-all duration-300 ease-linear
+  cursor-pointer shadow-lg ;
+}
+
+.sidebar-tooltip {
+  @apply absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md
+  text-white bg-gray-900 
+  text-xs font-bold 
+  transition-all duration-100 scale-0 origin-left;
+}
+
+.sidebar-hr {
+  @apply bg-gray-200 dark:bg-gray-800 
+  border border-gray-200 dark:border-gray-800 rounded-full
+  mx-2;
+}
+}
+
+/* card styling homepage */
+
+
+/* Styling for themes */
+/* Define theme-specific color schemes */
+.red-theme {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 235 230 var(--tw-bg-opacity)); /* light red background */
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 var(--tw-text-opacity)); /* dark red text */
+}
+
+.purple-theme {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 233 254 var(--tw-bg-opacity)); /* light purple background */
+  --tw-text-opacity: 1;
+  color: rgb(109 40 217 var(--tw-text-opacity)); /* dark purple text */
+}
+
+
+/*  */
+
+.nextui-textarea textarea {
+  color: #FFFFFF; /* White text color */
 }

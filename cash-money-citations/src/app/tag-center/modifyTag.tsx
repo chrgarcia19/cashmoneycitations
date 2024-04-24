@@ -15,19 +15,19 @@ const ModifyTag = (props: Props) => {
     const tagData = {
         tagName: "",
         tagColor: "",
-        referenceID: new Array<String>(),
+        referenceId: new Array<String>(),
     };
 
     return (
         <>
-            <div className="flex justify-center items-center pt-5">
+            <div className="flex justify-center items-center pt-5 ">
                 <Card className="py-4 w-3/4">
                     <CardBody className="overflow-visible py-2">
-                        <div className="flex flex-wrap justify-center items-center">
+                        <div className="flex flex-wrap justify-center items-center ">
                             {props.tags?.map((tag: any, index: any) => (
                                 <Chip key={index} 
                                         variant="flat"
-                                        className="bg-teal-200 me-2 mb-2"
+                                        className="bg-teal-200 me-2 mb-2 dark:text-black"
                                         onClose={() => handleDelete(tag._id, props.references, props.router)}>
                                             <Link href={{ pathname: `/${tag._id}/tags/edit`, query: { id: tag._id}}}>
                                             {tag.tagName}     

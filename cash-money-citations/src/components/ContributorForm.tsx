@@ -59,11 +59,11 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
     <>
     <div className="m-0 justify-center items-center">
       <div className="flex justify-center items-center">
-        <h1 className="font-bold align-middle">Contributor Information (Type, First Name, Middle Name/Initial, Last Name, Suffix)</h1>
+        <h1 className="font-bold align-middle text-gray-800 dark:text-white">Contributor Information (Type, First Name, Middle Name/Initial, Last Name, Suffix)</h1>
       </div>
         {formFields.map((form, index) => (
           <div key={index} className="flex items-center justify-center">
-            <select name="role" className="bg-white border-gray-300 rounded-lg w-1/3 pl-0.5 pr-1 mr-1 h-8 border-t border-r border-l border-b" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
+            <select name="role" className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg w-1/3 pl-0.5 pr-1 mr-1 h-8 border" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
               <option value="" disabled>Role</option>
               <option value="Author">Author</option>
               <option value="Editor">Editor</option>
@@ -75,33 +75,32 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               placeholder='First Name'
               onChange={(event) => handleFormChange(event, index)}
               defaultValue={form.given}
-              className="w-2/4 pr-0.5 mr-0.5" />
+              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
             <input
               name='middle'
               placeholder='Middle Name/Initial'
               onChange={(event) => handleFormChange(event, index)}
               defaultValue={form.middle}
-              className="w-2/4 pr-0.5 mr-0.5" />
+              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
             <input
               name='family'
               placeholder='Last Name'
               onChange={(event) => handleFormChange(event, index)}
               defaultValue={form.family}
-              className="w-2/4 pr-0.5 mr-0.5" />
+              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
             
             <input
               name='suffix'
               placeholder='Suffix'
               onChange={(event) => handleFormChange(event, index)}
               defaultValue={form.suffix}
-              className="w-1/6 pr-0.5 mr-0.5" />
-              <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
+              className="w-1/6 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+            <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-700 dark:hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
           </div>
       ))}
-      <div className='join join-horizontal'>
-        <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg p-1 me-2" onClick={addFields}><BiPlusCircle /></button>
-        <label 
-          className='font-bold label-text text-indigo-600 pt-5'>
+      <div className='flex items-center'>
+        <button type="button" className="text-white bg-indigo-600 hover:bg-indigo-500 dark:hover:bg-indigo-400 rounded-lg p-1 mr-2" onClick={addFields}><BiPlusCircle /></button>
+        <label className='font-bold text-indigo-600 dark:text-indigo-400 pt-5'>
             Add Contributors
         </label>
       </div>        

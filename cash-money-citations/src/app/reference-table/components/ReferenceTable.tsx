@@ -438,7 +438,7 @@ export default function ReferenceTable(userRefObject: any) {
 }
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4 my-[2.5%] max-h-[80%]">
+      <div className="flex flex-col gap-4 my-[2.5%] max-h-[80%] z-[1]">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -707,10 +707,10 @@ export default function ReferenceTable(userRefObject: any) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No references found"} items={references}>
+      <TableBody emptyContent={"No references found"} items={references} >
         {(item: { _id: string }) => (
           <TableRow key={item._id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            {(columnKey) => <TableCell className="dark:text-white">{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>

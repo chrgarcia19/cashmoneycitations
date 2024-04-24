@@ -120,7 +120,7 @@ const GroupCard = (props: Props) => {
         <>  
             <Card className="me-3">
                 <CardHeader>
-                    <h4 className="font-bold">{props.group.groupName}</h4>
+                    <h4 className="font-bold dark:text-white">{props.group.groupName}</h4>
                 </CardHeader>
                 <CardBody>
                     <Button 
@@ -141,7 +141,7 @@ const GroupCard = (props: Props) => {
                 >
                     <ModalContent className="w-full">
                         <>
-                        <ModalHeader className="flex flex-col gap-1">
+                        <ModalHeader className="flex flex-col gap-1 dark:text-white">
                             Group Contents - {props.group.groupName}:
                         </ModalHeader>
                         <Divider />
@@ -177,7 +177,7 @@ const GroupCard = (props: Props) => {
                                 <TableBody items={references}>
                                     {(item: { _id: string }) => (
                                         <TableRow key={item._id}>
-                                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                            {(columnKey) => <TableCell className="dark:text-white">{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
                                     )}
                                 </TableBody>

@@ -7,6 +7,7 @@ import { Group } from "@/models/Group";
 import CreateCard from "./createGroup";
 import GroupLibrary from "./groupLibrary";
 import { CSLBibInterface } from "@/models/CSLBibTex";
+import React from "react";
 
 const GroupCenter = async () => {
     

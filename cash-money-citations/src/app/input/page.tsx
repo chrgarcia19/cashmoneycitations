@@ -57,7 +57,7 @@ function Input () {
 
     return (
         <>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-20">
                 <form className="max-w-md mx-auto w-96" onSubmit={determineInputType}>
                     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                     <div className="relative">

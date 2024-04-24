@@ -38,7 +38,7 @@
     "src/app/api/auth/[...nextauth]/route.ts", 
     "src/components/LoginForm.tsx", 
     "src/components/ReferenceTable.js"
-, "src/app/[id]/view/page.tsx", "src/app/[id]/view/actions.ts"  ],
+, "src/app/[id]/view/page.tsx", "src/app/[id]/view/actions.ts", "src/components/sidebar-components/Sidebar.tsx", "src/app/Providers.js"  ],
   "exclude": [
     "node_modules"
   ]

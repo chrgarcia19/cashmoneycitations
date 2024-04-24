@@ -21,6 +21,7 @@ const FormField = (props: Props) => {
                 name={props.fieldName}
                 onChange={props.handleChange}
                 placeholder={props.fieldPlaceholder}
+                className="dark:text-white"
                 > 
             </input>
         </>

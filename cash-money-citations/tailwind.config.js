@@ -8,10 +8,16 @@ module.exports = {
   "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {},
-  },
+  theme: { 
+    extend: {
+      colors: {
+        'theme-red': 'var(--theme-red)',
+        'theme-purple': 'var(--theme-purple)',
+      },
+    },
+    },
   darkMode: "class",
+  variants: {},
   plugins: [nextui(), require("daisyui")],
   daisyui: {
     themes: true,

@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* styles/globals.css */
+:root {
+    --theme-red: #ff0000; /* Example red shade */
+    --theme-purple: #800080; /* Example purple shade */
+  }
+  
+  .light {
+    --theme-text: #000000; /* Light mode text color */
+    --theme-bg: #ffffff; /* Light mode background */
+  }
+  
+  .dark {
+    --theme-text: #ffffff;
+    --theme-bg: #333333;
+  }
+  
+  .red {
+    --theme-text: #ffffff;
+    --theme-bg: var(--theme-red);
+  }
+  
+  .purple {
+    --theme-text: #ffffff;
+    --theme-bg: var(--theme-purple);
+  }
+  
+  body {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+  }
+  

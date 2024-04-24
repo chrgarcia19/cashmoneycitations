@@ -56,7 +56,7 @@ const TagLibrary = (props: Props) => {
                                         <h4 className="flex items-center justify-center font-bold underline pb-1">Tag</h4>
                                         <Chip key={tag._id} 
                                             variant="flat"
-                                            className="bg-teal-200 me-2 mb-2">
+                                            className="bg-teal-200 me-2 mb-2 dark:text-black">
                                                 {tag.tagName}     
                                         </Chip>
                                     </div>                      
@@ -67,7 +67,7 @@ const TagLibrary = (props: Props) => {
                             </CardBody>
                             <Divider />
                             <CardFooter className="flex items-center justify-center flex-col">
-                                    <Tooltip content="Add Tag to List">
+                                    <Tooltip content="Add Tag to List" className="dark:text-white">
                                         <Button
                                             color="success"
                                             size="md"

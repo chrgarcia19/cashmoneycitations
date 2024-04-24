@@ -2,9 +2,9 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { mutate } from "swr";
-import { editTag, handleNewTag } from "../componentActions/tagActions";
+import { MouseEventHandler, useState } from "react";
+import { editTag, handleNewTag } from "../../components/componentActions/tagActions";
+import { Button } from "@nextui-org/react";
 
 interface TagData {
     tagName: string;
@@ -21,7 +21,6 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
     const searchParams = useSearchParams();
     const { data: session } = useSession();
     const router = useRouter();
-    const contentType = "application/json";
 
     const [form, setForm] = useState({
         tagName: tagForm.tagName,
@@ -83,23 +82,60 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         }
     };
 
+    const backToTagCenter = () => {
+      router.push("/tag-center");
+      router.refresh();
+    }
+
     return (
       <>    
         <div className="flex justify-center items-center">
           <form id={formID} onSubmit={handleSubmit}>
-            <div className="join join-horizontal">
+            {forNewTag && (
+              <div className="join join-horizontal">
               <input
                   type="text"
                   name="tagName"
-                  className="w-3/5"
+                  className="w-3/4"
                   onChange={handleChange}
                   value={form.tagName}
                   required
               /> 
-              <button type="submit" className="btn btn-sm bg-green-500 hover:bg-green-900 text-white">
+              <Button
+                type="submit"
+                color="success"
+                size="sm"
+                className="font-bold text-white hover:bg-green-900">
                   Submit
-              </button>
-            </div>    
+              </Button>
+            </div> 
+            )}
+            {!forNewTag && (
+              <>
+                <input
+                  type="text"
+                  name="tagName"
+                  onChange={handleChange}
+                  value={form.tagName}
+                  required
+                />
+                <div className="flex gap-2 items-center">
+                  <Button
+                    onClick={() => backToTagCenter()}
+                    color="primary"
+                    className="font-bold text-white hover:bg-blue-900">
+                      Back to Tags
+                  </Button>
+                  <Button
+                    type="submit"
+                    color="success"
+                    className="font-bold text-white hover:bg-green-900">
+                      Submit
+                  </Button>
+                </div> 
+              </>
+            )}
+
           </form>  
         </div>
       </>

@@ -75,16 +75,13 @@ function ReferenceDetails({ reference }: any) {
 
       <span className="block h-auto rounded-lg">
         <label className="font-bold">Tags:</label>
-        {reference.tagID &&
+        {reference.tagId &&
           <div>
-            {reference.tagID.map((id: string) => (
-              <span key={id}>
-                <DisplayTags tagId={id} />
-              </span>
+            {reference.tagId.map((id: string) => (
+              <DisplayTags key={id} tagId={id} />
             ))}
           </div>
-        }
-            
+        }  
       </span>
 
       <span className="block h-auto rounded-lg">

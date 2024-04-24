@@ -1,14 +1,13 @@
 'use client'
 
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { useEffect, useState } from "react";
-import { getSpecificReferenceById } from "../componentActions/actions";
-
 
 type Props = {
     referenceId: any;
 }
 
-const ViewReference = (props: Props) => {
+const ViewGroupReferences = (props: Props) => {
     
     const [references, setReferences] = useState(Object);
 
@@ -28,4 +27,4 @@ const ViewReference = (props: Props) => {
     );
 }
 
-export default ViewReference;
+export default ViewGroupReferences;

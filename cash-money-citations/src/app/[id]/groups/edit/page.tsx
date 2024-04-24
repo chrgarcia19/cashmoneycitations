@@ -1,10 +1,10 @@
 import { getUserReferences } from "@/components/componentActions/actions";
 import { authConfig } from "@/lib/auth";
-import { CSLBibInterface } from "@/models/CSLBibTex";
 import { getServerSession } from "next-auth";
-import EditTag from "./editTag";
+import EditGroup from "./editGroup";
+import { CSLBibInterface } from "@/models/CSLBibTex";
 
-export default async function GetReferencesForTags(){
+export default async function GetReferencesForGroups(){
     const session = await getServerSession(authConfig);
     const userId = session?.user?.id ?? '';
 
@@ -12,7 +12,7 @@ export default async function GetReferencesForTags(){
 
     return (
         <>
-            <EditTag references={references} />
+            <EditGroup references={references}/>
         </>
     )
     

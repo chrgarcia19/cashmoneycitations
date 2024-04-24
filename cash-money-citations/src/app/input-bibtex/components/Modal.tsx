@@ -5,8 +5,10 @@ import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { ParseBibTexUpload, SaveBibFileToDb } from "./BibFileUpload";
 import {BibLatexParser} from "biblatex-csl-converter"
 import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 
 export function UploadBibModal() {
+  const {theme} = useTheme()
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [parsedData, setParsedData] = useState<string[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
@@ -147,7 +149,7 @@ export function UploadBibModal() {
           <ModalContent className="h-[90%]">
             {(onClose) => (
               <>
-                <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex flex-wrap gap-4 items-center dark:text-white">
                   <ModalHeader className="flex flex-col gap-1 self-end">Bib(La)Tex Input</ModalHeader>
                   <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
                       Upload .Bib File
@@ -173,6 +175,8 @@ export function UploadBibModal() {
                             minRows={12}
                             value={entry}
                             onValueChange={(newValue) => handleValueChange(newValue, index)}
+                            
+                            style={{color: theme === "dark" ? "white" : "black" }}
                           />
                           <Button onClick={() => handleDelete(index)}>Delete</Button>
                         </div>

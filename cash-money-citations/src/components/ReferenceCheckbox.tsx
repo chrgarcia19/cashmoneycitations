@@ -229,7 +229,7 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 {countSelected(isChecked) == 0 ? "" : ""}
                 </td>
                 <td className="border border-slate-600 text-center">
-                    {reference.tagID.map((id: string) => (
+                    {reference.tagId.map((id: string) => (
                         <Suspense>
                             <DisplayTags key={id} tagId={id} />
                         </Suspense>

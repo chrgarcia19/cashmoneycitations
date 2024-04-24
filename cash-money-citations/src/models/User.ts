@@ -13,6 +13,7 @@ export interface Users extends mongoose.Document {
     }],
     ownedReferences: [string],
     ownedTags: [string],
+    ownedGroups: [string],
     ownedCitations: [string],
 }
 
@@ -72,6 +73,7 @@ const UserSchema = new mongoose.Schema<Users>({
     }],
     ownedReferences: [String],
     ownedTags: [String],
+    ownedGroups: [String],
     ownedCitations: [String],
 }, {timestamps: true});
 

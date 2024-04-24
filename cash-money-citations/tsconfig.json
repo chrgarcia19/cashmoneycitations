@@ -39,8 +39,11 @@
     "src/components/LoginForm.tsx", 
     "src/components/ReferenceTable.js",
     "src/app/profile/[id]/components/UserProfile.tsx",
-    "src/lib/auth.ts"
-  ],
+    "src/lib/auth.ts",
+    "src/app/[id]/view/page.tsx", 
+    "src/app/[id]/view/actions.ts", 
+    "src/components/sidebar-components/Sidebar.tsx", 
+    "src/app/Providers.js"],
   "exclude": [
     "node_modules"
   ]

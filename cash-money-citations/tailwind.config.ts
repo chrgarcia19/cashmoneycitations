@@ -10,6 +10,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      extend: {
+        colors: {
+          purple: '#6D28D9',
+          red: '#EF4444',
+        }
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

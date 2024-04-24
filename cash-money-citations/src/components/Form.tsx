@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { Contributor } from "@/models/Contributor";
@@ -9,97 +9,96 @@ import FormField from "./FormField";
 import DatePicker from "./DatePicker";
 import ContributorForm from "./ContributorForm";
 import { useSession } from "next-auth/react";
-import { UploadBibModal } from "@/app/input-bibtex/components/Modal"; 
+import { UploadBibModal } from "@/app/input-bibtex/components/Modal";
 import { CSLGeneralFields } from "@/models/CSLBibTex";
 import { UploadJSONModal } from "@/app/input-json/components/Modal";
-
+import React from "react";
 
 export enum EntryType {
-  Article = 'article',
-  Book = 'book',
-  Chapter = 'chapter',
-  ArticleJournal = 'article-journal',
-  ArticleMagazine = 'article-magazine',
-  ArticleNewspaper = 'article-newspaper',
-  Bill = 'bill',
-  Broadcast = 'broadcast',
-  Classic = 'classic',
-  Collection = 'collection',
-  Dataset = 'dataset',
-  Document = 'document',
-  Entry = 'entry',
-  EntryDictionary = 'entry-dictionary',
-  EntryEncyclopedia = 'entry-encyclopedia',
-  Event = 'event',
-  Figure = 'figure',
-  Graphic = 'graphic',
-  Hearing = 'hearing',
-  Interview = 'interview',
-  LegalCase = 'legal_case',
-  Legislation = 'legislation',
-  Manuscript = 'manuscript',
-  Map = 'map',
-  MotionPicture = 'motion_picture',
-  MusicalScore = 'musical_score',
-  Pamphlet = 'pamphlet',
-  PaperConference = 'paper-conference',
-  Patent = 'patent',
-  Performance = 'performance',
-  Periodical = 'periodical',
-  PersonalCommunication = 'personal_communication',
-  Post = 'post',
-  PostWeblog = 'post-weblog',
-  Regulation = 'regulation',
-  Report = 'report',
-  Review = 'review',
-  ReviewBook = 'review-book',
-  Software = 'software',
-  Song = 'song',
-  Speech = 'speech',
-  Standard = 'standard',
-  Thesis = 'thesis',
-  Treaty = 'treaty',
-  Webpage = 'webpage'
+  Article = "article",
+  Book = "book",
+  Chapter = "chapter",
+  ArticleJournal = "article-journal",
+  ArticleMagazine = "article-magazine",
+  ArticleNewspaper = "article-newspaper",
+  Bill = "bill",
+  Broadcast = "broadcast",
+  Classic = "classic",
+  Collection = "collection",
+  Dataset = "dataset",
+  Document = "document",
+  Entry = "entry",
+  EntryDictionary = "entry-dictionary",
+  EntryEncyclopedia = "entry-encyclopedia",
+  Event = "event",
+  Figure = "figure",
+  Graphic = "graphic",
+  Hearing = "hearing",
+  Interview = "interview",
+  LegalCase = "legal_case",
+  Legislation = "legislation",
+  Manuscript = "manuscript",
+  Map = "map",
+  MotionPicture = "motion_picture",
+  MusicalScore = "musical_score",
+  Pamphlet = "pamphlet",
+  PaperConference = "paper-conference",
+  Patent = "patent",
+  Performance = "performance",
+  Periodical = "periodical",
+  PersonalCommunication = "personal_communication",
+  Post = "post",
+  PostWeblog = "post-weblog",
+  Regulation = "regulation",
+  Report = "report",
+  Review = "review",
+  ReviewBook = "review-book",
+  Software = "software",
+  Song = "song",
+  Speech = "speech",
+  Standard = "standard",
+  Thesis = "thesis",
+  Treaty = "treaty",
+  Webpage = "webpage",
 }
 
-
 export interface ReferenceFormData extends CSLGeneralFields {
-  id: string | string[] | undefined,
-  type: string,
+  id: string | string[] | undefined;
+  type: string;
   /* Geographical location of archive (Will be converted into archive-place) */
-  "archive-place": string,
-  archivePlaceCity: string,
-  archivePlaceCountry: string,
+  "archive-place": string;
+  archivePlaceCity: string;
+  archivePlaceCountry: string;
   /* Geographical location of event (Will be converted into event-place) */
-  "event-place": string,
-  eventPlaceCity: string,
-  eventPlaceCountry: string,
+  "event-place": string;
+  eventPlaceCity: string;
+  eventPlaceCountry: string;
   /* Geographical location of Original publisher place (Will be converted into original-publisher-place) */
-  "original-publisher-place": string,
-  origPubPlaceCity: string,
-  origPubPlaceCountry: string,
+  "original-publisher-place": string;
+  origPubPlaceCity: string;
+  origPubPlaceCountry: string;
   /* Geographical location of the current publisher place (Will be converted into publisher-place) */
-  "publisher-place": string,
-  publisherPlaceCity: string,
-  publisherPlaceCountry: string,
-  monthPublished: string,
-  yearPublished: string,
-  dayPublished: string,
-  monthEvent: string,
-  yearEvent: string,
-  dayEvent: string,
-  monthAccessed: string,
-  yearAccessed: string,
-  dayAccessed: string,
-  monthAvailable: string,
-  yearAvailable: string,
-  dayAvailable: string,
-  monthOriginal: string,
-  yearOriginal: string,
-  dayOriginal: string,
-  monthSubmitted: string,
-  yearSubmitted: string,
-  daySubmitted: string,
+  "publisher-place": string;
+  publisherPlaceCity: string;
+  publisherPlaceCountry: string;
+  monthPublished: string;
+  yearPublished: string;
+  dayPublished: string;
+  monthEvent: string;
+  yearEvent: string;
+  dayEvent: string;
+  monthAccessed: string;
+  yearAccessed: string;
+  dayAccessed: string;
+  monthAvailable: string;
+  yearAvailable: string;
+  dayAvailable: string;
+  monthOriginal: string;
+  yearOriginal: string;
+  dayOriginal: string;
+  monthSubmitted: string;
+  yearSubmitted: string;
+  daySubmitted: string;
   contributors: Contributor[];
   running_time: string;
   format: string;
@@ -147,13 +146,13 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     "number-of-volumes": referenceForm?.["number-of-volumes"] ?? undefined, // Total # of volumes
     edition: referenceForm?.edition ?? undefined,
     /* Date Fields */
-    monthPublished: referenceForm?.monthPublished ?? '', // Date published
-    yearPublished: referenceForm?.yearPublished ?? '', // Date published
-    dayPublished: referenceForm?.dayPublished ?? '', // Date published
-    monthAccessed: referenceForm?.monthAccessed ?? '', // Date accessed
-    yearAccessed: referenceForm?.yearAccessed ?? '', // Date accessed
-    dayAccessed: referenceForm?.dayAccessed ?? '', // Date accessed
-    monthEvent: referenceForm?.monthEvent ?? '', // Date of event
+    monthPublished: referenceForm?.monthPublished ?? "", // Date published
+    yearPublished: referenceForm?.yearPublished ?? "", // Date published
+    dayPublished: referenceForm?.dayPublished ?? "", // Date published
+    monthAccessed: referenceForm?.monthAccessed ?? "", // Date accessed
+    yearAccessed: referenceForm?.yearAccessed ?? "", // Date accessed
+    dayAccessed: referenceForm?.dayAccessed ?? "", // Date accessed
+    monthEvent: referenceForm?.monthEvent ?? "", // Date of event
     yearEvent: referenceForm?.yearEvent ?? undefined, // Date of event
     dayEvent: referenceForm?.dayEvent ?? undefined, // Date of event
     monthAvailable: referenceForm?.monthAvailable ?? undefined, // Date available
@@ -199,7 +198,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     "chapter-number": referenceForm?.["chapter-number"] ?? undefined,
     "citation-number": referenceForm?.["citation-number"] ?? undefined,
     "collection-number": referenceForm?.["collection-number"] ?? undefined,
-    "first-reference-note-number": referenceForm?.["first-reference-note-number"] ?? undefined,
+    "first-reference-note-number":
+      referenceForm?.["first-reference-note-number"] ?? undefined,
     issue: referenceForm?.issue ?? undefined,
     locator: referenceForm?.locator ?? undefined,
     number: referenceForm?.number ?? undefined,
@@ -207,7 +207,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     "part-number": referenceForm?.["part-number"] ?? undefined,
     "printing-number": referenceForm?.["printing-number"] ?? undefined,
     "supplement-number": referenceForm?.["supplement-number"] ?? undefined,
-    version: referenceForm?.version ?? undefined,    
+    version: referenceForm?.version ?? undefined,
     section: referenceForm?.section ?? undefined,
     contributors: referenceForm?.contributors ?? new Array<Contributor>(),
     editor: referenceForm?.editor ?? undefined,
@@ -226,22 +226,23 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     api_source: referenceForm?.api_source ?? undefined,
   });
 
-
   /*Set the type so the form is not blank*/
-  if (!form.type){
+  if (!form.type) {
     form.type = "article";
   }
 
-    //Handling contributor stuff
-    const updateFormData = (newData: Array<any>) => {
-      setForm({
-        ...form,
-        contributors: newData,
-      });
-    };
+  //Handling contributor stuff
+  const updateFormData = (newData: Array<any>) => {
+    setForm({
+      ...form,
+      contributors: newData,
+    });
+  };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const target = e.target;
     const value = target.value;
@@ -264,18 +265,18 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errs = formValidate();
-    const id = searchParams.get('id')
+    const id = searchParams.get("id");
     const userId = session?.user?.id;
 
     if (Object.keys(errs).length === 0) {
-      if (forNewReference){
+      if (forNewReference) {
         HandleManualReference(form, userId);
-        // router.push("reference-table");
-        // router.refresh();
+        router.push("reference-table");
+        router.refresh();
       } else {
         EditReference(form, id);
-        // router.push("reference-table");
-        // router.refresh();
+        router.push("reference-table");
+        router.refresh();
       }
     } else {
       setErrors({ errs });
@@ -284,176 +285,317 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-        <div className="center-content">
-          <div className="bg-gray-100 w-2/5 rounded-xl pb-5">
-            <div className="flex justify-center items-center">
-              {forNewReference && (
+      <div className="flex mt-10 justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
+        <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
+          <div className="p-6">
+            <div className="text-center">
+              {forNewReference ? (
                 <div>
-                  <h1 className="text-2xl align-middle pt-5">Add Reference</h1>
+                  <h1 className="text-2xl mb-5 font-bold text-gray-800 dark:text-white">
+                    Add Reference
+                  </h1>
+                  <div className="flex flex-row justify-center">
+                  <div className="mx-5">
                   <UploadBibModal />
+                  </div>
+                  <div className="mx-5">
                   <UploadJSONModal />
+                  </div>
+                  </div>
                 </div>
-              )}
-              {!forNewReference && (
-                <h1 className="text-2xl align-middle pt-5">Edit Reference</h1>
+              ) : (
+                <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+                  Edit Reference
+                </h1>
               )}
             </div>
-            <br/>
-            <form id={formId} onSubmit={handleSubmit}>
-                {forNewReference && (
-                  <select id="reference-select-entrytype" 
-                  name="type" 
+
+            <form
+              id={formId}
+              onSubmit={handleSubmit}
+              className="space-y-6 mt-6"
+            >
+              {forNewReference && (
+                <select
+                  id="reference-select-entrytype"
+                  name="type"
                   defaultValue={form.type}
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                  className="block w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-gray-800 dark:text-white"
+                >
                   {Object.values(EntryType).map((value) => (
                     <option key={value} value={value}>
                       {value}
                     </option>
                   ))}
                 </select>
-                )}
+              )}
 
-                {/*Image URL Field for References*/}
-                {form.type && (
-                  <FormField labelText={"Image URL (Optional)"} fieldName={"image_url"} fieldValue={form.image_url} fieldType={"url"} fieldPlaceholder={"Image URL"} handleChange={handleChange} />
-                )}
-
-                {/*Title field*/}
-                {form.type && (
-                  <FormField labelText={"Title"} fieldName={"title"} fieldValue={form.title} fieldType={"text"} fieldPlaceholder={"Title"} handleChange={handleChange} />
-                )}
-
-                {/*Container Title Field*/}
-                {/*Will need to make a case for book titles since container-title covers jounrals, books, and more */}
-                {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper"
-                  || form.type == "webpage") && (
-                  <FormField labelText={"Title From Where the Source Came From"} fieldName={"container-title"} fieldValue={form["container-title"]} fieldType={"text"} fieldPlaceholder={"Title From Where the Source Came From"} handleChange={handleChange} />
-                )}
-
-                {/*Contributors Field*/}
-                {form.type && (
+              {form.type && (
+                <>
+                  <FormField
+                    labelText="Image URL (Optional)"
+                    fieldName="image_url"
+                    fieldValue={form.image_url}
+                    fieldType="url"
+                    fieldPlaceholder="Image URL"
+                    handleChange={handleChange}
+                  />
+                  <FormField
+                    labelText="Title"
+                    fieldName="title"
+                    fieldValue={form.title}
+                    fieldType="text"
+                    fieldPlaceholder="Title"
+                    handleChange={handleChange}
+                  />
+                  {(form.type === "article-journal" ||
+                    form.type === "article-magazine" ||
+                    form.type === "article-newspaper" ||
+                    form.type === "webpage") && (
+                    <FormField
+                      labelText="Title From Where the Source Came From"
+                      fieldName="container-title"
+                      fieldValue={form["container-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Source Title"
+                      handleChange={handleChange}
+                    />
+                  )}
                   <div className="flex items-center justify-center pt-5">
-                    <ContributorForm updateFormData={updateFormData} contributors={form.contributors}/>
+                    <ContributorForm
+                      updateFormData={updateFormData}
+                      contributors={form.contributors}
+                    />
                   </div>
-                )}
+                  {(form.type === "book" ||
+                    form.type === "article-journal") && (
+                    <FormField
+                      labelText="Collection Title (series)"
+                      fieldName="collection-title"
+                      fieldValue={form["collection-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Series"
+                      handleChange={handleChange}
+                    />
+                  )}
+                </>
+              )}
 
-                {/*CollectionTitle Field*/}
-                {(form.type == "book" || form.type == "article-journal") && (
-                  <FormField labelText={"Collection Title (series)"} fieldName={"collection-title"} fieldValue={form["collection-title"]} fieldType={"text"} fieldPlaceholder={"Series"} handleChange={handleChange} />
-                )}
+              {(form.type === "book" ||
+                form.type === "article-journal" ||
+                form.type === "article-magazine" ||
+                form.type === "article-newspaper") && (
+                <>
+                  <FormField
+                    labelText="Number of Pages"
+                    fieldName="number-of-pages"
+                    fieldValue={form["number-of-pages"]}
+                    fieldType="number"
+                    fieldPlaceholder="Number of Pages"
+                    handleChange={handleChange}
+                  />
+                  <FormField
+                    labelText="Page Range"
+                    fieldName="page"
+                    fieldValue={form["page"]}
+                    fieldType="number"
+                    fieldPlaceholder="Page range"
+                    handleChange={handleChange}
+                  />
+                  <FormField
+                    labelText="First page in range"
+                    fieldName="page-first"
+                    fieldValue={form["page-first"]}
+                    fieldType="number"
+                    fieldPlaceholder="First Page in range"
+                    handleChange={handleChange}
+                  />
+                </>
+              )}
 
-                {/*Amount of Pages Field*/}
-                {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
-                  || form.type == "article-newspaper") && (
-                  <FormField labelText={"Number of Pages"} fieldName={"number-of-pages"} fieldValue={form["number-of-pages"]} fieldType={"number"} fieldPlaceholder={"Number of Pages"} handleChange={handleChange} />
-                )}
+              {(form.type === "book" ||
+                form.type === "article-journal" ||
+                form.type === "article-magazine") && (
+                <FormField
+                  labelText="Volume"
+                  fieldName="volume"
+                  fieldValue={form.volume}
+                  fieldType="number"
+                  fieldPlaceholder="Volume"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Page Range Field*/}
-                {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine"
-                  || form.type == "article-newspaper") && (
-                  <div>
-                    <FormField labelText={"Page Range"} fieldName={"page"} fieldValue={form["page"]} fieldType={"number"} fieldPlaceholder={"Page range"} handleChange={handleChange} />
-                    {/*First page in range*/}
-                    <FormField labelText={"First page in range"} fieldName={"page-first"} fieldValue={form["page-first"]} fieldType={"number"} fieldPlaceholder={"First Page in range"} handleChange={handleChange} />
-                  </div>
-                )}
+              {form.type === "book" && (
+                <FormField
+                  labelText="Number of Volumes"
+                  fieldName="number-of-volumes"
+                  fieldValue={form["number-of-volumes"]}
+                  fieldType="text"
+                  fieldPlaceholder="Number of Volumes"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Volume Field*/}
-                {(form.type == "book" || form.type == "article-journal" || form.type == "article-magazine") && (
-                  <FormField labelText={"Volume"} fieldName={"volume"} fieldValue={form.volume} fieldType={"number"} fieldPlaceholder={"Volume"} handleChange={handleChange} />
-                )}
+              {form.type === "article-newspaper" && (
+                <>
+                  <FormField
+                    labelText="Publisher City"
+                    fieldName="publisherPlaceCity"
+                    fieldValue={form.publisherPlaceCity}
+                    fieldType="text"
+                    fieldPlaceholder="Publisher City"
+                    handleChange={handleChange}
+                  />
+                  <FormField
+                    labelText="Publisher Country"
+                    fieldName="publisherPlaceCountry"
+                    fieldValue={form.publisherPlaceCountry}
+                    fieldType="text"
+                    fieldPlaceholder="Publisher Country"
+                    handleChange={handleChange}
+                  />
+                </>
+              )}
 
-                {/*Number of Volumes Field*/}
-                {(form.type == "book") && (
-                  <FormField labelText={"Number of Volumes"} fieldName={"number-of-volumes"} fieldValue={form["number-of-volumes"]} fieldType={"text"} fieldPlaceholder={"Number of Volumes"} handleChange={handleChange} />
-                )}
+              {(form.type === "book" || form.type === "article-newspaper") && (
+                <FormField
+                  labelText="Edition"
+                  fieldName="edition"
+                  fieldValue={form.edition}
+                  fieldType="text"
+                  fieldPlaceholder="Edition"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Publisher Location Field*/}
-                {(form.type == "article-newspaper") && (
-                  <div>
-                    <FormField labelText={"Publisher City"} fieldName={"publisherPlaceCity"} fieldValue={form.publisherPlaceCity} fieldType={"text"} fieldPlaceholder={"Publisher City"} handleChange={handleChange} />
-                    <FormField labelText={"Publisher Country"} fieldName={"publisherPlaceCountry"} fieldValue={form.publisherPlaceCountry} fieldType={"text"} fieldPlaceholder={"Publisher Country"} handleChange={handleChange} />
-                  </div>
-                )}
+              {(form.type === "book" || form.type === "webpage") && (
+                <FormField
+                  labelText="Publisher"
+                  fieldName="publisher"
+                  fieldValue={form.publisher}
+                  fieldType="text"
+                  fieldPlaceholder="Publisher"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Edition Field*/}
-                {(form.type == "book" || form.type == "article-newspaper") && (
-                  <FormField labelText={"Edition"} fieldName={"edition"} fieldValue={form.edition} fieldType={"text"} fieldPlaceholder={"Edition"} handleChange={handleChange} />
-                )}
+              {form.type && (
+                <DatePicker
+                  masterLabelText="Date Published (Month, Day, Year)"
+                  labelText={["Month", "Day", "Year"]}
+                  fieldName={[
+                    "monthPublished",
+                    "dayPublished",
+                    "yearPublished",
+                  ]}
+                  fieldValue={[
+                    form.monthPublished,
+                    form.dayPublished,
+                    form.yearPublished,
+                  ]}
+                  fieldType="text"
+                  fieldPlaceholder="Pick a Date"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Publisher Field*/}
-                {(form.type == "book" || form.type == "webpage") && (
-                  <FormField labelText={"Publisher"} fieldName={"publisher"} fieldValue={form.publisher} fieldType={"text"} fieldPlaceholder={"Publisher"} handleChange={handleChange} />
-                )}
+              {form.type && (
+                <FormField
+                  labelText="Source Accessed By URL "
+                  fieldName="URL"
+                  fieldValue={form.URL}
+                  fieldType="url"
+                  fieldPlaceholder="Source Accessed By URL"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Date Published Field*/}
-                {form.type && (
-                  <DatePicker masterLabelText={"Date Published (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["monthPublished", "dayPublished", "yearPublished"]} fieldValue={[form.monthPublished, form.dayPublished, form.yearPublished]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
-                )}
+              {(form.type === "article-journal" ||
+                form.type === "article-magazine" ||
+                form.type === "article-newspaper" ||
+                form.type === "webpage") && (
+                <DatePicker
+                  masterLabelText="Date Accessed (Month, Day, Year)"
+                  labelText={["Month", "Day", "Year"]}
+                  fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
+                  fieldValue={[
+                    form.monthAccessed,
+                    form.dayAccessed,
+                    form.yearAccessed,
+                  ]}
+                  fieldType="text"
+                  fieldPlaceholder="Pick a Date"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*URL Accessed Field*/}
-                {form.type && (
-                  <FormField labelText={"Source Accessed By URL "} fieldName={"URL"} fieldValue={form.URL} fieldType={"url"} fieldPlaceholder={"Source Accessed By URL"} handleChange={handleChange} />
-                )}
+              {form.type === "book" && (
+                <FormField
+                  labelText="International Standard Book Number (ISBN)"
+                  fieldName="ISBN"
+                  fieldValue={form.ISBN}
+                  fieldType="text"
+                  fieldPlaceholder="ISBN"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Date Accessed Field*/}
-                {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper"
-                  || form.type == "webpage") && (
-                  <DatePicker masterLabelText={"Date Accessed (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]} fieldValue={[form.monthAccessed, form.dayAccessed, form.yearAccessed]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
-                )}
+              {(form.type === "article-journal" ||
+                form.type === "article-magazine") && (
+                <FormField
+                  labelText="Issue Number"
+                  fieldName="number"
+                  fieldValue={form.number}
+                  fieldType="number"
+                  fieldPlaceholder="Issue Number"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*ISBN Field*/}
-                {(form.type == "book") && (
-                  <FormField labelText={"International Standard Book Number (ISBN)"} fieldName={"ISBN"} fieldValue={form.ISBN} fieldType={"text"} fieldPlaceholder={"ISBN"} handleChange={handleChange} />
-                )}
+              {form.type === "article-journal" && (
+                <FormField
+                  labelText="Digital Object Identifier (DOI)"
+                  fieldName="DOI"
+                  fieldValue={form.DOI}
+                  fieldType="text"
+                  fieldPlaceholder="DOI"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*Issue Field*/}
-                {(form.type == "article-journal" || form.type == "article-magazine") && (
-                  <FormField labelText={"Issue Number"} fieldName={"number"} fieldValue={form.number} fieldType={"number"} fieldPlaceholder={"Issue Number"} handleChange={handleChange} />
-                )}
-        
-                {/*DOI Field*/}
-                {(form.type == "article-journal") && (
-                  <FormField labelText={"Digital Object Identifier (DOI)"} fieldName={"DOI"} fieldValue={form.DOI} fieldType={"text"} fieldPlaceholder={"DOI"} handleChange={handleChange} />
-                )}
+              {(form.type === "article-journal" ||
+                form.type === "article-magazine" ||
+                form.type === "article-newspaper") && (
+                <FormField
+                  labelText="International Standard Serial Number (ISSN)"
+                  fieldName="ISSN"
+                  fieldValue={form.ISSN}
+                  fieldType="text"
+                  fieldPlaceholder="ISSN"
+                  handleChange={handleChange}
+                />
+              )}
 
-                {/*ISSN Field*/}
-                {(form.type == "article-journal" || form.type == "article-magazine" || form.type == "article-newspaper") && (
-                  <FormField labelText={"International Standard Serial Number (ISSN)"} fieldName={"ISSN"} fieldValue={form.ISSN} fieldType={"text"} fieldPlaceholder={"ISSN"} handleChange={handleChange} />
-                )}
-
-                {/*Fields that may need added in the future     
-                <FormField labelText={"Annotation"} fieldName={"annote"} fieldValue={form.annote} fieldType={"text"} fieldPlaceholder={"Annotation"} handleChange={handleChange} />
-                <FormField labelText={"Chapter"} fieldName={"chapter"} fieldValue={form.chapter} fieldType={"text"} fieldPlaceholder={"Chapter"} handleChange={handleChange} />
-                <FormField labelText={"Editor"} fieldName={"editor"} fieldValue={form.editor} fieldType={"text"} fieldPlaceholder={"Editor"} handleChange={handleChange} />
-                <FormField labelText={"Publisher Type"} fieldName={"howpublished"} fieldValue={form.howpublished} fieldType={"text"} fieldPlaceholder={"Publisher Type"} handleChange={handleChange} />
-                <FormField labelText={"Institution"} fieldName={"institution"} fieldValue={form.institution} fieldType={"text"} fieldPlaceholder={"Institution"} handleChange={handleChange} />
-                <DatePicker masterLabelText={"Date Event Occurred (Month, Day, Year)"} labelText={["Month", "Day", "Year"]} fieldName={["month_event", "day_event", "year_event"]} fieldValue={[form.month_event, form.day_event, form.year_event]} fieldType={"text"} fieldPlaceholder={"Pick a Year"} handleChange={handleChange} />
-                <FormField labelText={"Note"} fieldName={"note"} fieldValue={form.note} fieldType={"text"} fieldPlaceholder={"Note"} handleChange={handleChange} />
-                <FormField labelText={"Organization"} fieldName={"organization"} fieldValue={form.organization} fieldType={"text"} fieldPlaceholder={"Organization"} handleChange={handleChange} />
-                <FormField labelText={"School"} fieldName={"school"} fieldValue={form.school} fieldType={"text"} fieldPlaceholder={"School"} handleChange={handleChange} />
-                <FormField labelText={"Type"} fieldName={"type"} fieldValue={form.type} fieldType={"text"} fieldPlaceholder={"Type"} handleChange={handleChange} />
-                <FormField labelText={"Running Time"} fieldName={"running_time"} fieldValue={form.running_time} fieldType={"text"} fieldPlaceholder={"Running Time"} handleChange={handleChange} />
-                <FormField labelText={"Format"} fieldName={"format"} fieldValue={form.format} fieldType={"text"} fieldPlaceholder={"Format"} handleChange={handleChange} />
-                */}
-
-
-
-
-                <button
-                  type="submit" 
-                  className="btn bg-green-500 hover:bg-green-900 text-white">
-                  Submit
-                </button> 
-              </form>
-              <p>{message}</p>
-              <div>
+              <button
+                type="submit"
+                className="mt-5 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Submit
+              </button>
+            </form>
+            <p className="text-center text-red-500">{message}</p>
+            <ul className="list-disc pl-5">
               {Object.keys(errors).map((err, index) => (
-                  <li key={index}>{err}</li>
+                <li key={index} className="text-red-500">
+                  {err}
+                </li>
               ))}
-              </div>
-            </div>
+            </ul>
           </div>
+        </div>
+      </div>
     </>
   );
 };

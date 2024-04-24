@@ -60,7 +60,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
 
             alert("You have successfully logged in.");
 
-            router.replace("/");
+            router.replace("/dashboard");
 
             // To initiate the getServerSession() to generate dynamic NavBar
             router.refresh();
@@ -72,7 +72,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
 
 
     return (
-        <div className='relative w-full h-screen bg-zinc-700'>
+        <div className='relative w-full h-screen bg-gray-100 dark:bg-gray-800'>
         <div className='flex justify-center items-center h-full'>
             
             <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>

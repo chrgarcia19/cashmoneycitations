@@ -5,6 +5,7 @@ import User from "@/models/User";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from 'next-auth/providers/google';
+import { initializeUserStyleList } from "@/components/componentActions/actions";
 
 export const authConfig: NextAuthOptions = ({
   providers: [
@@ -74,22 +75,29 @@ export const authConfig: NextAuthOptions = ({
             accounts: [{ provider: account?.provider, providerAccountId: account?.id }],
             ownedReferences: [],
           })
+
+          // Initialize citation style list
+          await initializeUserStyleList(dbUser._id);
   
         }
       
       return Promise.resolve(true)
     },
-    async jwt({token, account,  trigger, user, session }) {
+    async jwt({token, account, trigger, user, session }) {
+
+      if (trigger === "signUp") {
+
+      }
 
       if (account?.type == 'oauth') {
         const oauthDbId = await User.findOne({
           email: token.email, 
         })
-
         token.id = oauthDbId.id;
         token.sub = oauthDbId.id;
       }
 
+      
 
       
       if (trigger === "update" && session) {
@@ -105,7 +113,7 @@ export const authConfig: NextAuthOptions = ({
     async session({session, token }) {
       if (token && session.user) {
         session.user.role = token.role;
-        session.user.id = token.id;
+        session.user.id = token.sub ?? token.id;
         session.user.image = token.image;
       }
       return session;

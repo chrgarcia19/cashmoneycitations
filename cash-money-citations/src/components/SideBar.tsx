@@ -70,7 +70,7 @@ const Sidebar = () => {
             tooltip="Table View"
           />
 
-<Divider />
+          <Divider />
 
           <SideBarIcon
             href="/tag-center"
@@ -83,8 +83,6 @@ const Sidebar = () => {
             icon={<MdGroup size="20" />}
             tooltip="Group Center"
           />
-       
-
 
           <Divider />
 

@@ -177,7 +177,7 @@ const GroupCard = (props: Props) => {
                                 <TableBody items={references}>
                                     {(item: { _id: string }) => (
                                         <TableRow key={item._id}>
-                                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                            {(columnKey) => <TableCell className="dark:text-white">{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
                                     )}
                                 </TableBody>

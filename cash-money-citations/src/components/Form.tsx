@@ -361,6 +361,40 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       handleChange={handleChange}
                     />
                   )}
+
+                  {(form.type === "motion_picture") && (
+                    <FormField
+                      labelText="Medium"
+                      fieldName="medium"
+                      fieldValue={form.medium}
+                      fieldType="text"
+                      fieldPlaceholder="Medium"
+                      handleChange={handleChange}
+                    />
+                  )}
+
+                  {(form.type === "motion_picture") && (
+                    <FormField
+                      labelText="Type"
+                      fieldName="genre"
+                      fieldValue={form.genre}
+                      fieldType="text"
+                      fieldPlaceholder="Genre"
+                      handleChange={handleChange}
+                    />
+                  )}
+
+                  {(form.type === "motion_picture") && (
+                    <FormField
+                      labelText="Running Time"
+                      fieldName="dimensions"
+                      fieldValue={form.dimensions}
+                      fieldType="text"
+                      fieldPlaceholder="Running Time"
+                      handleChange={handleChange}
+                    />
+                  )}
+
                   {(form.type === "article-journal" ||
                     form.type === "article" ||
                     form.type === "chapter" ||
@@ -369,7 +403,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     form.type === "entry-encyclopedia" ||
                     form.type === "entry-dictionary" ||
                     form.type === "entry" ||
-                    form.type === "webpage") && (
+                    form.type === "webpage" ||
+                    form.type === "map" ||
+                    form.type === "motion_picture") && (
                     <FormField
                       labelText="Title From Where the Source Came From"
                       fieldName="container-title"
@@ -379,6 +415,40 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       handleChange={handleChange}
                     />
                   )}
+
+                  {(form.type === "bill") && (
+                      <FormField
+                        labelText="Code"
+                        fieldName="container-title"
+                        fieldValue={form["container-title"]}
+                        fieldType="text"
+                        fieldPlaceholder="Source Title"
+                        handleChange={handleChange}
+                      />
+                    )}
+
+                    {(form.type === "bill") && (
+                      <FormField
+                        labelText="Legislative Body"
+                        fieldName="authority"
+                        fieldValue={form.authority}
+                        fieldType="text"
+                        fieldPlaceholder="Legislative Body"
+                        handleChange={handleChange}
+                      />
+                    )}
+
+                      {(form.type === "bill") && (
+                      <FormField
+                        labelText="Session of Congress"
+                        fieldName="chapter-number"
+                        fieldValue={form['chapter-number']}
+                        fieldType="number"
+                        fieldPlaceholder="Ex. 100"
+                        handleChange={handleChange}
+                      />
+                    )}
+
                   <div className="flex items-center justify-center pt-5">
                     <ContributorForm
                       updateFormData={updateFormData}
@@ -387,7 +457,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   </div>
                   {(form.type === "book" ||
                     form.type === "article-journal" ||
-                    form.type === "article") && (
+                    form.type === "article" ||
+                    form.type === "map") && (
                     <FormField
                       labelText="Collection Title (series)"
                       fieldName="collection-title"
@@ -408,7 +479,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "entry-encyclopedia" ||
                 form.type === "entry-dictionary" ||
                 form.type === "entry" ||
-                form.type === "article-newspaper") && (
+                form.type === "article-newspaper" ||
+                form.type === "bill" ||
+                form.type === "map") && (
                 <>
                   <FormField
                     labelText="Number of Pages"
@@ -444,7 +517,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "chapter" ||
                 form.type === "article-journal" ||
                 form.type === "article" ||
-                form.type === "article-magazine") && (
+                form.type === "article-magazine" ||
+                form.type === "bill" ||
+                form.type === "map") && (
                 <FormField
                   labelText="Volume"
                   fieldName="volume"
@@ -467,7 +542,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia" || form.type === "entry-dictionary" ||
-                form.type === "entry"
+                form.type === "entry" || form.type === "map"
               ) && (
                 <>
                   <FormField
@@ -489,7 +564,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry") && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" || form.type === "map") && (
                 <FormField
                   labelText="Edition"
                   fieldName="edition"
@@ -500,15 +575,15 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {(form.type === "book" || form.type === "chapter" || form.type === "webpage" || form.type === "entry-dictionary" || form.type === "entry" || form.type === "entry-encyclopedia") && (
+              {form.type && (
                 <FormField
-                  labelText="Publisher"
-                  fieldName="publisher"
-                  fieldValue={form.publisher}
-                  fieldType="text"
-                  fieldPlaceholder="Publisher"
-                  handleChange={handleChange}
-                />
+                labelText="Publisher"
+                fieldName="publisher"
+                fieldValue={form.publisher}
+                fieldType="text"
+                fieldPlaceholder="Publisher"
+                handleChange={handleChange}
+              />
               )}
 
               {form.type && (

@@ -1,3 +1,5 @@
+import Form from "./Form";
+
 type Props = {
     /*[0] for month
       [1] for day
@@ -75,7 +77,8 @@ const DatePicker = (props: Props) => {
                     <div className="label">
                         <span className="label-text text-gray-800 dark:text-white">{props.labelText[2]}</span>
                     </div>
-                    <input
+                    {props.masterLabelText === "Date Published (Month, Day, Year)" ? (
+                        <input
                         className="input input-bordered w-full max-w-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
                         placeholder={props.fieldPlaceholder}
                         type={props.fieldType}
@@ -84,6 +87,17 @@ const DatePicker = (props: Props) => {
                         onChange={props.handleChange}
                         required 
                     />
+                    ) : (
+                        <input
+                        className="input input-bordered w-full max-w-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600"
+                        placeholder={props.fieldPlaceholder}
+                        type={props.fieldType}
+                        defaultValue={props.fieldValue[2]}
+                        name={props.fieldName[2]}
+                        onChange={props.handleChange}
+                    />
+                    )}
+                    
                 </div>
             </div> 
         </>

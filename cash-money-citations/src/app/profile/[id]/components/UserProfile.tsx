@@ -115,10 +115,11 @@ const Profile = () => {
                     password: passwordChange
                 },
             };
-        
+                    
             update(newSession);
         }
 
+        router.push("/");
         router.refresh();
     }
 

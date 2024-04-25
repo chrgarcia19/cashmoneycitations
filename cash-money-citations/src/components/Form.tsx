@@ -349,12 +349,26 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldPlaceholder="Title"
                     handleChange={handleChange}
                   />
+
+                  {(form.type === "entry" ||
+                    form.type === "entry-dictionary") && (
+                    <FormField
+                      labelText="Number"
+                      fieldName="number"
+                      fieldValue={form.number}
+                      fieldType="text"
+                      fieldPlaceholder="Number"
+                      handleChange={handleChange}
+                    />
+                  )}
                   {(form.type === "article-journal" ||
                     form.type === "article" ||
                     form.type === "chapter" ||
                     form.type === "article-magazine" ||
                     form.type === "article-newspaper" ||
                     form.type === "entry-encyclopedia" ||
+                    form.type === "entry-dictionary" ||
+                    form.type === "entry" ||
                     form.type === "webpage") && (
                     <FormField
                       labelText="Title From Where the Source Came From"
@@ -392,6 +406,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "article" ||
                 form.type === "article-magazine" ||
                 form.type === "entry-encyclopedia" ||
+                form.type === "entry-dictionary" ||
+                form.type === "entry" ||
                 form.type === "article-newspaper") && (
                 <>
                   <FormField
@@ -423,6 +439,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
               {(form.type === "book" ||
                 form.type === "entry-encyclopedia" ||
+                form.type === "entry-dictionary" ||
+                form.type === "entry" ||
                 form.type === "chapter" ||
                 form.type === "article-journal" ||
                 form.type === "article" ||
@@ -437,7 +455,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {form.type === "book" && (
+              {form.type === "book" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" && (
                 <FormField
                   labelText="Number of Volumes"
                   fieldName="number-of-volumes"
@@ -448,7 +466,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia") && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia" || form.type === "entry-dictionary" ||
+                form.type === "entry"
+              ) && (
                 <>
                   <FormField
                     labelText="Publisher City"
@@ -469,7 +489,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia") && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry") && (
                 <FormField
                   labelText="Edition"
                   fieldName="edition"
@@ -480,7 +500,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {(form.type === "book" || form.type === "chapter" || form.type === "webpage" || form.type === "entry-encyclopedia") && (
+              {(form.type === "book" || form.type === "chapter" || form.type === "webpage" || form.type === "entry-dictionary" || form.type === "entry" || form.type === "entry-encyclopedia") && (
                 <FormField
                   labelText="Publisher"
                   fieldName="publisher"
@@ -521,28 +541,22 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   handleChange={handleChange}
                 />
               )}
+              
+              <DatePicker
+                masterLabelText="Date Accessed (Month, Day, Year)"
+                labelText={["Month", "Day", "Year"]}
+                fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
+                fieldValue={[
+                  form.monthAccessed,
+                  form.dayAccessed,
+                  form.yearAccessed,
+                ]}
+                fieldType="text"
+                fieldPlaceholder="Pick a Date"
+                handleChange={handleChange}
+              />
 
-              {(form.type === "article-journal" ||
-                form.type === "article" ||
-                form.type === "article-magazine" ||
-                form.type === "article-newspaper" ||
-                form.type === "webpage") && (
-                <DatePicker
-                  masterLabelText="Date Accessed (Month, Day, Year)"
-                  labelText={["Month", "Day", "Year"]}
-                  fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
-                  fieldValue={[
-                    form.monthAccessed,
-                    form.dayAccessed,
-                    form.yearAccessed,
-                  ]}
-                  fieldType="text"
-                  fieldPlaceholder="Pick a Date"
-                  handleChange={handleChange}
-                />
-              )}
-
-              {form.type === "book" || form.type === "chapter" && (
+              {form.type === "book" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" && (
                 <FormField
                   labelText="International Standard Book Number (ISBN)"
                   fieldName="ISBN"

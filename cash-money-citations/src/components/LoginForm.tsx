@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { FaGithubSquare } from "react-icons/fa";
 import {FcGoogle} from 'react-icons/fc'
 import { IconContext } from "react-icons";
+import PasswordField from './PasswordFormField';
+import FormField from './FormField';
 
 interface LoginData {
     username: string;
@@ -96,23 +98,37 @@ const LoginForm = ({formId, loginForm}: Props) => {
                     
                 </div>
                 <div className='flex flex-col mb-4'>
-                    <label>Username</label>
+                    <FormField 
+                        required={true} 
+                        labelText={'Username'} 
+                        fieldName={'username'} 
+                        fieldValue={username} 
+                        fieldType={'text'} 
+                        fieldPlaceholder={'Enter your username'} 
+                        handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setUsername(e.target.value)} />
+                    {/*<label>Username</label>
                     <input 
                     className='border relative bg-gray-100 p-2'
                     type="text" 
                     value={username}
                     name='username'
                     onChange={(e) => setUsername(e.target.value)}
-                    />
+    />*/}
                 </div>
                 <div className='flex flex-col '>
-                    <label>Password</label>
+                    <PasswordField 
+                        labelText={'Password'} 
+                        fieldName={'password'} 
+                        fieldValue={password} 
+                        fieldPlaceholder={"Enter your password"} 
+                        handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setPassword(e.target.value)} />
+                    {/*<label>Password</label>
                     <input 
                     className='border relative bg-gray-100 p-2' 
                     type="password" 
                     value={password}
                     name='password'
-                    onChange={(e) => setPassword(e.target.value)}/>
+onChange={(e) => setPassword(e.target.value)}/>*/}
                 </div>
                 <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
     

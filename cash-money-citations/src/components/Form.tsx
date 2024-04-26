@@ -472,7 +472,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.publisher}
                   fieldType="text"
                   fieldPlaceholder="Publisher"
-                  handleChange={handleChange} required={false}                />
+                  handleChange={handleChange} 
+                  required={true}/>
               )}
 
               {form.type && (

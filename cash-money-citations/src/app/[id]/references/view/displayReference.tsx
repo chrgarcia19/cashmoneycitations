@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
 import { Tag } from "@/models/Tag";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem, useDisclosure} from "@nextui-org/react";
 import { getSpecificTagById } from "@/components/componentActions/tagActions";
 import DisplayTags from "@/components/DisplayTags";
 import { useSession } from "next-auth/react";
@@ -15,6 +15,7 @@ import {getUserReferences} from '../../../../components/componentActions/actions
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import React, { Suspense, createContext, useContext } from "react";
 import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
+import DeletePopup from "@/components/DeletePopup";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -191,6 +192,7 @@ const ViewReference = () => {
     const [referenceId, setReferenceId] = useState(id);
     const [userOwned, setUserOwned] = useState(false);
     const [notLoggedIn, setNotLoggedIn] = useState(false);
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     useEffect(() => {
       async function setIsUserOwned() {
@@ -221,14 +223,18 @@ const ViewReference = () => {
     const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds }  = useReferenceContext();
 
     const handleDelete = async () => {
-        try {
-          await fetch(`/api/references/${reference._id}`, {
-            method: "Delete",
-          });
-          router.push('/');
-          router.refresh();
-        } catch (error) {
-        }
+        const deleteConfirm = confirm("Are you sure you want to delete this reference?");
+        if (deleteConfirm){
+          try {
+            await fetch(`/api/references/${reference._id}`, {
+              method: "Delete",
+            });
+            router.push('/');
+            router.refresh();
+          } catch (error) {
+            console.log(error);
+          }
+        }       
     };
 
     async function exportCitation() {

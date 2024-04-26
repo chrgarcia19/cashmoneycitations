@@ -6,6 +6,8 @@ import { ParseBibTexUpload, SaveBibFileToDb } from "./BibFileUpload";
 import {BibLatexParser} from "biblatex-csl-converter"
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import {Chip} from "@nextui-org/react";
+import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
 
 export function UploadBibModal() {
   const {theme} = useTheme()
@@ -149,12 +151,25 @@ export function UploadBibModal() {
           <ModalContent className="h-[90%]">
             {(onClose) => (
               <>
-                <div className="flex flex-wrap gap-4 items-center dark:text-white">
-                  <ModalHeader className="flex flex-col gap-1 self-end">Bib(La)Tex Input</ModalHeader>
-                  <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
-                      Upload .Bib File
-                  </Button>
+                <div className="flex flex-wrap gap-4 items-center">
+                  <ModalHeader className="flex flex-col gap-4"><Chip className="justify-start" color="primary" size="lg" radius="sm" variant="flat"
+                  classNames={{
+                    base: "bg-stone-200",
+                    content: "text-lg tracking-wide text-zinc-950"
+                  }}
+                  >Bib(La)Tex Input</Chip></ModalHeader>
+                  <div className="flex justify-end gap-8 p-4">
+                    <div>
+                      <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
+                          Upload .Bib File
+                      </Button>
+                    </div>
+                    <div>
+                      <Button onClick={handleAddEntry}>Add Bib(La)TeX Manually</Button>
+                    </div>
+                  </div>
                 </div>
+
                 <input
                   type="file"
                   accept=".bib"
@@ -162,28 +177,24 @@ export function UploadBibModal() {
                   onChange={handleFileChange}
                   ref={fileInputRef}
                 />
-                
                 <ModalBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                   <div>
-                    <Button onClick={handleAddEntry}>Add Entry</Button>
-
-                      {parsedData.map((entry, index) => (
-                        <div className="flex items-end" key={index}>
-                          <Textarea
-                            label={`Entry ${index + 1}`}
-                            variant="bordered"
-                            minRows={12}
-                            value={entry}
-                            onValueChange={(newValue) => handleValueChange(newValue, index)}
-                            
-                            style={{color: theme === "dark" ? "white" : "black" }}
-                          />
-                          <Button onClick={() => handleDelete(index)}>Delete</Button>
-                        </div>
-                      ))}
-                      {errors.map((error, index) => (
-                        <span key={index} className="error">{error}</span>
-                      ))}
+                    {parsedData.map((entry, index) => (
+                      <div className="flex items-end" key={index}>
+                        <Textarea
+                          label={<button className="justify-self-end" onClick={() => handleDelete(index)}><BiSolidTrash></BiSolidTrash></button>
+                          }
+                          variant="bordered"
+                          minRows={12}
+                          value={entry}
+                          onValueChange={(newValue) => handleValueChange(newValue, index)}
+                          style={{color: theme === "dark" ? "white" : "black" }}
+                        />
+                      </div>
+                    ))}
+                    {errors.map((error, index) => (
+                      <span key={index} className="error">{error}</span>
+                    ))}
                   </div>
 
                 </ModalBody>

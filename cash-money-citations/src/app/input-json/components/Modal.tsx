@@ -1,5 +1,5 @@
 'use client'
-import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure, Chip} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -165,12 +165,41 @@ export function UploadJSONModal() {
           <ModalContent className="h-[90%]">
             {(onClose) => (
               <>
+
+{/* 
+                  <div className="flex justify-end gap-8 p-4">
+                    <div>
+                      <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
+                          Upload .Bib File
+                      </Button>
+                    </div>
+                    <div>
+                      <Button onClick={handleAddEntry}>Add Entry</Button>
+                    </div>
+                  </div>
+                </div> */}
                 <div className="flex flex-wrap gap-4 items-center">
-                  <ModalHeader className="flex flex-col gap-1 self-end">JSON Input</ModalHeader>
-                  <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
-                      Upload JSON File
-                  </Button>
+                  <ModalHeader className="flex flex-col gap-4"><Chip className="justify-start" color="primary" size="lg" radius="sm" variant="flat"
+                    classNames={{
+                      base: "bg-stone-200",
+                      content: "text-lg tracking-wide text-zinc-950"
+                    }}
+                  >JSON Input</Chip></ModalHeader>
+
+                  <div className="flex justify-end gap-8 p-4">
+                    <div>
+                      <Button size="md" className="right-0" color="primary" variant="shadow" onPress={handleButtonClick}>
+                          Upload JSON File
+                      </Button>
+                    </div>
+                    <div>
+                      <Button onClick={handleAddEntry}>Add JSON Manually</Button>
+
+                    </div>
+                  </div>
+
                 </div>
+  
                 <input
                   type="file"
                   accept=".json"
@@ -181,7 +210,6 @@ export function UploadJSONModal() {
                 
                 <ModalBody className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                   <div>
-                    <Button onClick={handleAddEntry}>Add Entry</Button>
 
                       {parsedData.map((entry, index) => (
                         <div className="flex items-end" key={index}>

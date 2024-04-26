@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { CitationChoice, CitationList } from './CitationDisplay';
 import { useReferenceContext } from '../reference-table/components/ReferenceTable';
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
 
 export default function citationDisplay({
   params,

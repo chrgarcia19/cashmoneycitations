@@ -115,6 +115,7 @@ export const authConfig: NextAuthOptions = ({
         session.user.role = token.role;
         session.user.id = token.sub ?? token.id;
         session.user.image = token.image;
+        session.user.accountType = token.accountType;
       }
       return session;
     }

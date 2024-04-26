@@ -62,6 +62,8 @@ const Profile = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const router = useRouter();
+
+    const sessionData = useSession();
     
     const { data, error, isLoading } = useSWR(id ? `/api/auth/getUser/${id}` : null, fetcher);
 
@@ -196,10 +198,14 @@ const Profile = () => {
                             value={selected}
                             onValueChange={setSelected}
                         >
-                            <Checkbox value="updateUsername">Update Username</Checkbox>
-                            <Checkbox value="updateEmail">Update Email</Checkbox>
-                            <Checkbox value="updatePassword">Update Password</Checkbox>
-                        </CheckboxGroup>   
+                            {sessionData.data?.user?.accountType != "oauth" && (
+                                <>
+                                    <Checkbox value="updateUsername">Update Username</Checkbox>
+                                    <Checkbox value="updateEmail">Update Email</Checkbox>
+                                    <Checkbox value="updatePassword">Update Password</Checkbox>
+                                </>
+                            )}
+                        </CheckboxGroup>
                         {selected.includes("updateUsername") && (
                             <>
                                 <ChangeField

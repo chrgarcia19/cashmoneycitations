@@ -13,20 +13,6 @@ type Props = {
 const FormField = (props: Props) => {
     return (
         <>
-            {/*<label
-                className="font-bold"
-                htmlFor={props.fieldName}>
-            {props.labelText}
-            </label>
-            <input
-                type={props.fieldType}
-                value={props.fieldValue}
-                name={props.fieldName}
-                onChange={props.handleChange}
-                placeholder={props.fieldPlaceholder}
-                className="dark:text-white"
-                > 
-    </input>*/}
             {props.required && (
                 <Input
                     isRequired

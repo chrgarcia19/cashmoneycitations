@@ -563,10 +563,10 @@ export default function ReferenceTable(userRefObject: any) {
                   </DropdownTrigger>
                   <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                     <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex", localeChoice)}>
-                      BibLaTex
+                      BibLaTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex", localeChoice)}>
-                      BibTex
+                      BibTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson", localeChoice)}>
                       CSL-JSON

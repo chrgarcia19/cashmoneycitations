@@ -82,7 +82,7 @@ export function UploadBibModal() {
           }
           
         } catch(e) {
-          setErrors(['Invalid BibTex Data']);
+          setErrors(['Invalid BibTeX Data']);
         }
       }
     };
@@ -136,7 +136,7 @@ export function UploadBibModal() {
 
     return (
     <>
-        <Button onPress={onOpen}>Upload Bib(La)Tex</Button>
+        <Button onPress={onOpen}>Upload Bib(La)TeX</Button>
         <Modal
           isOpen={isOpen} 
           onOpenChange={onOpenChange}
@@ -198,7 +198,7 @@ export function UploadBibModal() {
                 {submitResult &&
                   <div role="alert" className="alert alert-success">
                     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <span>Bib(La)Tex references have been successfully added.</span>
+                    <span>Bib(La)TeX references have been successfully added.</span>
                   </div>
                 }
               </>

@@ -176,6 +176,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     "citation-label": referenceForm?.["citation-label"] ?? undefined,
     dimensions: referenceForm?.dimensions ?? undefined,
     division: referenceForm?.division ?? undefined,
+    event: referenceForm?.event ?? undefined,
     genre: referenceForm?.genre ?? undefined,
     jurisdiction: referenceForm?.jurisdiction ?? undefined,
     keyword: referenceForm?.keyword ?? undefined,
@@ -350,6 +351,22 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     handleChange={handleChange}
                   />
 
+                  {form.type !== "software" && (
+                    <>
+                      <label
+                        className="font-bold"
+                        htmlFor={"abstract"}>
+                        Abstract
+                      </label>
+                      <textarea
+                        value={form.abstract}
+                        name={"abstract"}
+                        onChange={handleChange}
+                        placeholder={"Abstract"}
+                        className="dark:text-white">
+                      </textarea>
+                    </>
+                  )}
                   {(form.type === "entry" ||
                     form.type === "entry-dictionary") && (
                     <FormField
@@ -395,6 +412,39 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     />
                   )}
 
+                  {(form.type === "review") && (
+                    <FormField
+                      labelText="Reviewed Genre"
+                      fieldName="reviewed-genre"
+                      fieldValue={form["reviewed-genre"]}
+                      fieldType="text"
+                      fieldPlaceholder="Reviewed Genre"
+                      handleChange={handleChange}
+                    />
+                  )}
+
+                  {(form.type === "review") && (
+                    <FormField
+                      labelText="Reviewed Title"
+                      fieldName="reviewed-title"
+                      fieldValue={form["reviewed-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Reviewed Title"
+                      handleChange={handleChange}
+                    />
+                  )}
+
+                  {(form.type === "software") && (
+                    <FormField
+                      labelText="Version"
+                      fieldName="version"
+                      fieldValue={form.version}
+                      fieldType="text"
+                      fieldPlaceholder="Version"
+                      handleChange={handleChange}
+                    />
+                  )}
+
                   {(form.type === "article-journal" ||
                     form.type === "article" ||
                     form.type === "chapter" ||
@@ -405,7 +455,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     form.type === "entry" ||
                     form.type === "webpage" ||
                     form.type === "map" ||
-                    form.type === "motion_picture") && (
+                    form.type === "motion_picture" ||
+                    form.type === "paper-conference" ||
+                    form.type === "software" ||
+                    form.type === "review") && (
                     <FormField
                       labelText="Title From Where the Source Came From"
                       fieldName="container-title"
@@ -458,7 +511,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   {(form.type === "book" ||
                     form.type === "article-journal" ||
                     form.type === "article" ||
-                    form.type === "map") && (
+                    form.type === "map" ||
+                    form.type === "paper-conference" ||
+                    form.type === "review") && (
                     <FormField
                       labelText="Collection Title (series)"
                       fieldName="collection-title"
@@ -471,6 +526,39 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Conference Name"
+                  fieldName="event"
+                  fieldValue={form.event}
+                  fieldType="text"
+                  fieldPlaceholder="Conference Name"
+                  handleChange={handleChange}
+                />
+              )}
+
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Location (City)"
+                  fieldName="eventPlaceCity"
+                  fieldValue={form.eventPlaceCity}
+                  fieldType="text"
+                  fieldPlaceholder="City"
+                  handleChange={handleChange}
+                />
+              )}
+
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Location (Country)"
+                  fieldName="eventPlaceCountry"
+                  fieldValue={form.eventPlaceCountry}
+                  fieldType="text"
+                  fieldPlaceholder="Country"
+                  handleChange={handleChange}
+                />
+              )}
+
               {(form.type === "book" ||
                 form.type === "chapter" ||
                 form.type === "article-journal" ||
@@ -481,7 +569,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "entry" ||
                 form.type === "article-newspaper" ||
                 form.type === "bill" ||
-                form.type === "map") && (
+                form.type === "map" ||
+                form.type === "paper-conference" ||
+                form.type === "review") && (
                 <>
                   <FormField
                     labelText="Number of Pages"
@@ -519,7 +609,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "article" ||
                 form.type === "article-magazine" ||
                 form.type === "bill" ||
-                form.type === "map") && (
+                form.type === "map" ||
+                form.type === "paper-conference" ||
+                form.type === "review") && (
                 <FormField
                   labelText="Volume"
                   fieldName="volume"
@@ -542,7 +634,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia" || form.type === "entry-dictionary" ||
-                form.type === "entry" || form.type === "map"
+                form.type === "entry" || form.type === "map" || form.type === "paper-conference"
               ) && (
                 <>
                   <FormField
@@ -564,7 +656,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" || form.type === "map") && (
+              {(form.type === "book" || form.type === "paper-conference" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" || form.type === "map") && (
                 <FormField
                   labelText="Edition"
                   fieldName="edition"
@@ -575,7 +667,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 />
               )}
 
-              {form.type && (
+              {form.type && form.type !== "personal_communication" && (
                 <FormField
                 labelText="Publisher"
                 fieldName="publisher"
@@ -644,7 +736,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
               {(form.type === "article-journal" ||
                 form.type === "article" ||
-                form.type === "article-magazine") && (
+                form.type === "article-magazine" ||
+                form.type === "review") && (
                 <FormField
                   labelText="Issue Number"
                   fieldName="number"

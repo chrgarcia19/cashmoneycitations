@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
+import { ClientSafeProvider, LiteralUnion, getProviders, signIn, useSession } from 'next-auth/react'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import { FaGithubSquare } from "react-icons/fa";
@@ -34,6 +34,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
 
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/';
+
 
     
 
@@ -122,7 +123,6 @@ const LoginForm = ({formId, loginForm}: Props) => {
                     </div>
                 )}
     
-                <p className='flex gap-3 ml-2 mr-1 mb-1 mt-4'><input className='w-6 h-6' type="checkbox"/>Remember Me</p>
                 <Link className="bg-white p-2 text-center mt-8" href={"/login/register"}>Not a member? Sign up now</Link>
             </form>
         </div>

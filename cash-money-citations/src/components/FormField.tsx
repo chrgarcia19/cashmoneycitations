@@ -1,3 +1,5 @@
+import { Input } from "@nextui-org/react";
+
 type Props = {
     labelText: string,
     fieldName: string,
@@ -10,7 +12,7 @@ type Props = {
 const FormField = (props: Props) => {
     return (
         <>
-            <label
+            {/*<label
                 className="font-bold"
                 htmlFor={props.fieldName}>
             {props.labelText}
@@ -23,7 +25,19 @@ const FormField = (props: Props) => {
                 placeholder={props.fieldPlaceholder}
                 className="dark:text-white"
                 > 
-            </input>
+    </input>*/}
+            <Input
+                name={props.fieldName}
+                type={props.fieldType}
+                label={props.labelText}
+                labelPlacement="outside"
+                placeholder={props.fieldPlaceholder}
+                value={props.fieldValue}
+                onChange={props.handleChange}
+                radius="full"
+                className="dark:text-white"
+                >
+            </Input>
         </>
     )
 }

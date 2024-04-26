@@ -66,7 +66,11 @@ export default async function NavBar() {
                 <Link href="/admin">Admin</Link>
               )}
           </li>
-          <li><a>Settings</a></li>
+          <li>
+              {authSession?.user?.accountType !== "oauth" && (
+                <Link href={{ pathname: `/profile/${authSession?.user?.id}`, query: { id: authSession?.user?.id} }}>Settings </Link>
+              )}
+          </li>
           <li>
               {/* Checks to see if the user is logged in */}
               {authSession?.user && (

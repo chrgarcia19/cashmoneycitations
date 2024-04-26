@@ -23,7 +23,7 @@ const PasswordField = (props: Props) => {
                 isRequired
                 name={props.fieldName}
                 endContent={
-                    <button className="focus:outline-none my-0" type="button" onClick={toggleVisibility}>
+                    <button className="focus:outline-none my-0 mx-2" type="button" onClick={toggleVisibility}>
                         {isVisible ? (
                             <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
                         ) : (

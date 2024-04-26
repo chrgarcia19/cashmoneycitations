@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "./componentActions/actions";
 import { EmailInUseError } from "./EmailInUseError";
+import FormField from "./FormField";
+import PasswordField from "./PasswordFormField";
+import { Button } from "@nextui-org/react";
 
 interface RegistrationData {
     username: string;
@@ -11,6 +14,7 @@ interface RegistrationData {
     lastName: string; 
     email: string;
     password: string;
+    verifyPassword: string;
 }
 
 interface Error {
@@ -19,6 +23,7 @@ interface Error {
     lastName?: string;
     email?: string;
     password?: string;
+    verifyPassword?: string;
 }
 
 type Props = {
@@ -39,6 +44,7 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         lastName: registrationForm.lastName,
         email: registrationForm.email,
         password: registrationForm.password,
+        verifyPassword: registrationForm.verifyPassword,
     });
 
 
@@ -62,6 +68,8 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         if (!form.lastName){ err.lastName = "A last name is required!"};
         if (!form.email){ err.email = "An email is required!"};
         if (!form.password){ err.password = "A password is required!"};
+        if (!form.verifyPassword){ err.verifyPassword = "Please verify your password!"};
+        if (form.password !== form.verifyPassword){err.verifyPassword = "Passwords do not match!"};
         return err;
     }
 
@@ -88,70 +96,60 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
     return (
         <>
         <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
-            <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white p-8">
+            <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white dark:bg-zinc-600 p-8">
                 {emailInUse && <EmailInUseError />}
-            <h2 className='text-4xl font-bold text-center py-4 text-green-600'>Register</h2>
-                <div className="flex flex-col mb-4">
-                <label className="capitalize">Username:</label>
-                <input
-                    name="username" 
-                    className="border p-2 w-full bg-gray-100"
-                    type="text"
-                    value={form.username}
-                    onChange={handleChange}
-                    placeholder="Username"
-                />
-                </div>
+            <h2 className='text-4xl font-bold text-center py-4 text-green-600 dark:text-green-500'>Register</h2>
+                <FormField 
+                    required={true} 
+                    labelText={"Username:"} 
+                    fieldName={"username"} 
+                    fieldValue={form.username} 
+                    fieldType={"text"} 
+                    fieldPlaceholder={"Username"} 
+                    handleChange={handleChange} />
 
-                <div className="flex flex-col mb-4">
-                <label className="capitalize">First Name:</label>
-                <input
-                    name="firstName" 
-                    className="border p-2 w-full bg-gray-100"
-                    type="text"
-                    value={form.firstName}
-                    onChange={handleChange}
-                    placeholder="First Name"
-                />
-                </div>
+                <FormField 
+                    required={true} 
+                    labelText={"First Name:"} 
+                    fieldName={"firstName"} 
+                    fieldValue={form.firstName} 
+                    fieldType={"text"} 
+                    fieldPlaceholder={"First Name"} 
+                    handleChange={handleChange} />
 
-                <div className="flex flex-col mb-4">
-                <label className="capitalize">Last Name:</label>
-                <input
-                    name="lastName" 
-                    className="border p-2 w-full bg-gray-100"
-                    type="text"
-                    value={form.lastName}
-                    onChange={handleChange}
-                    placeholder="Last Name"
-                />
-                </div>
+                <FormField 
+                    required={true} 
+                    labelText={"Last Name:"} 
+                    fieldName={"lastName"} 
+                    fieldValue={form.lastName} 
+                    fieldType={"text"} 
+                    fieldPlaceholder={"Last Name"} 
+                    handleChange={handleChange} />
 
-                <div className="flex flex-col mb-4">
-                <label className="capitalize">Email:</label>
-                <input
-                    name="email" 
-                    className="border p-2 w-full bg-gray-100"
-                    type="text"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                />
-                </div>
+                <FormField 
+                    required={true} 
+                    labelText={"Email Address:"} 
+                    fieldName={"email"} 
+                    fieldValue={form.email} 
+                    fieldType={"text"} 
+                    fieldPlaceholder={"Email Address"} 
+                    handleChange={handleChange} />
 
-                <div className="flex flex-col mb-4">
-                <label className="capitalize">Password:</label>
-                <input
-                    name="password" 
-                    className="border p-2 w-full bg-gray-100"
-                    type="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                />
-                </div>
+                <PasswordField 
+                    labelText={"Password: "} 
+                    fieldName={"password"} 
+                    fieldValue={form.password} 
+                    fieldPlaceholder={"Password"} 
+                    handleChange={handleChange} />
 
-                <button type="submit" className="w-full py-3 mt-8 bg-green-600 hover:bg-green-500 relative text-white">Sign Up</button>
+                <PasswordField 
+                    labelText={"Verify Password: "} 
+                    fieldName={"verifyPassword"} 
+                    fieldValue={form.verifyPassword} 
+                    fieldPlaceholder={"Verify Password"} 
+                    handleChange={handleChange} />
+
+                <Button type="submit" color="success" className="text-white font-bold text-lg w-full py-3 mt-8">Sign Up</Button>
             </form>
         <div>
             <p>{message}</p>

@@ -1,13 +1,12 @@
 'use client'
 import React, { startTransition, useState } from "react";
 import useSWR from "swr";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Image, Button, Checkbox} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Image, Button, Checkbox, CheckboxGroup} from "@nextui-org/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
-import { FaArrowAltCircleDown } from "react-icons/fa";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowAltCircleDown, FaUser } from "react-icons/fa";
+import { FiUserCheck } from "react-icons/fi";
 
 
 const fetcher = (url: string) =>
@@ -20,17 +19,21 @@ const ChangeField = ({ label, type, name, onFormSubmit, value, handleTextInputCh
     <form method="PUT" onSubmit={onFormSubmit} className="p-2">
         <label htmlFor={name}>New {label}:</label>
         <input 
+            className="dark: text-white"
             type={type} 
             id={name} 
             name={name} 
             value={value} 
             onChange={handleTextInputChange}/>
-        <Button
-            type="submit" 
-            color="success" 
-            endContent={<IoMdCheckmarkCircleOutline />}>
-            Update {label}
-        </Button>
+        <div className="flex justify-end">
+            <Button
+                type="submit" 
+                color="success"
+                endContent={<FiUserCheck />}>
+                Update {label}
+            </Button>
+        </div>
+        
         {/*<button type="submit">Change {label}</button>*/}
     </form>
 )
@@ -41,10 +44,9 @@ const DeleteProfile = ({handleDeleteUser}: any) => (
             type="submit"
             color="danger" 
             variant="bordered" 
-            startContent={<FaRegTrashCan />}>
-            Delete user
+            startContent={<FaUser />}>
+            Delete User
         </Button>
-        {/*<button type="submit">Delete Profile</button>*/}
     </form>
 )
 
@@ -55,6 +57,7 @@ const Profile = () => {
     const [newPassword, setNewPassword] = useState('');
     const [isFetching, setIsFetching] = useState(false);
     const { data: session, update } = useSession();
+    const [selected, setSelected] = useState([""]);
     
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
@@ -149,16 +152,6 @@ const Profile = () => {
         setter(e.target.value);
     }
 
-    /*const [isVisibleOldPass, setIsVisibleOldPass] = useState(false);
-    const [isVisibleNewPass, setIsVisibleNewPass] = useState(false);
-    const [isVisibleRePass, setIsVisibleRePass] = useState(false);
-    const [isSelected, setIsSelected] = useState(false);
-
-    const toggleVisibilityOldPass = () => setIsVisibleOldPass(!isVisibleOldPass);
-    const toggleVisibilityNewPass = () => setIsVisibleNewPass(!isVisibleNewPass);
-    const toggleVisibilityRePass = () => setIsVisibleRePass(!isVisibleRePass);
-    const toggleChecked = () => setIsSelected(!isSelected);*/
-
     return (
         <>
             <div className="flex items-center justify-center pt-5">
@@ -169,8 +162,8 @@ const Profile = () => {
                         </h2>                        
                     </CardHeader>
                     <Divider/>
-                    <CardBody>
-                    <div className="flex flex-col">
+                    <CardBody className="flex items-center justify-center">
+                        <div className="flex flex-col">
                             <p className="text-md font-bold">Here are your profile details:</p>
                             <p className="text-sm ml-6">Role: {data.role}</p>
                             <p className="text-sm ml-6">First Name: {data.firstName}</p>
@@ -179,7 +172,7 @@ const Profile = () => {
                         </div>
                     </CardBody>
                     <Divider/>
-                    <CardFooter>
+                    <CardFooter className="flex items-center justify-center">
                         <FaArrowAltCircleDown />
                             <div className="ms-4 me-4">
                                 Change your profile below
@@ -190,37 +183,57 @@ const Profile = () => {
             </div>
             <div className="flex items-center justify-center pt-5">
                 <Card className="w-1/4">
-                    <CardHeader className="flex gap-3">
+                    <CardHeader className="flex gap-3 items-center justify-center">
                         <div className="flex flex-col">
-                            <h4 className="font-bold text-lg">Edit Profile</h4>
+                            <h2 className="font-bold text-2xl">Edit Profile</h2>
                         </div>
                     </CardHeader>
                     <Divider/>
                     <CardBody>
-                    <ChangeField 
-                        label="Username" 
-                        type="text" 
-                        name="newUsername" 
-                        onFormSubmit={handleUpdateUser} 
-                        value={newUsername} 
-                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewUsername)}/>
-                    <Divider/>
-                    <ChangeField 
-                        label="Email" 
-                        type="email" 
-                        name="newEmail" 
-                        onFormSubmit={handleUpdateUser} 
-                        value={newEmail} 
-                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewEmail)}/>
-                    </CardBody>
-                    <Divider/>
-                    <ChangeField 
-                        label="Password" 
-                        type="password" 
-                        name="newPassword" 
-                        onFormSubmit={handleUpdateUser} 
-                        value={newPassword} 
-                        handleTextInputChange={(e: any) => handleTextInputChange(e, setNewPassword)}/>
+                        <CheckboxGroup
+                            label="Select Profile Options to Update"
+                            color="primary"
+                            value={selected}
+                            onValueChange={setSelected}
+                        >
+                            <Checkbox value="updateUsername">Update Username</Checkbox>
+                            <Checkbox value="updateEmail">Update Email</Checkbox>
+                            <Checkbox value="updatePassword">Update Password</Checkbox>
+                        </CheckboxGroup>   
+                        {selected.includes("updateUsername") && (
+                            <>
+                                <ChangeField
+                                    label="Username"
+                                    type="text"
+                                    name="newUsername"
+                                    onFormSubmit={handleUpdateUser}
+                                    value={newUsername}
+                                    handleTextInputChange={(e: any) => handleTextInputChange(e, setNewUsername)} />
+                            </>
+                        )}
+                        {selected.includes("updateEmail") && (
+                            <>
+                                <ChangeField 
+                                    label="Email" 
+                                    type="email" 
+                                    name="newEmail" 
+                                    onFormSubmit={handleUpdateUser} 
+                                    value={newEmail} 
+                                    handleTextInputChange={(e: any) => handleTextInputChange(e, setNewEmail)}/>
+                            </>
+                        )}
+                        {selected.includes("updatePassword") && (
+                            <>
+                                <ChangeField 
+                                    label="Password" 
+                                    type="password" 
+                                    name="newPassword" 
+                                    onFormSubmit={handleUpdateUser} 
+                                    value={newPassword} 
+                                    handleTextInputChange={(e: any) => handleTextInputChange(e, setNewPassword)}/>
+                            </>
+                        )}
+                    </CardBody>                
                     <Divider/>
                     <CardFooter>
                         <DeleteProfile handleDeleteUser={handleDeleteUser}/>

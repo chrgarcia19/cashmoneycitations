@@ -23,7 +23,7 @@ const PasswordField = (props: Props) => {
                 isRequired
                 name={props.fieldName}
                 endContent={
-                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                    <button className="focus:outline-none my-0" type="button" onClick={toggleVisibility}>
                         {isVisible ? (
                             <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
                         ) : (
@@ -39,7 +39,7 @@ const PasswordField = (props: Props) => {
                 onChange={props.handleChange}
                 description={`Enter the ${props.fieldPlaceholder}`}
                 radius="lg"
-                className="pt-4"
+                className="pt-2"
                 classNames={{
                     label: "font-bold text-lg text-black/50 dark:text-white/90",
                     input: [

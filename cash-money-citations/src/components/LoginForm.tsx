@@ -10,6 +10,7 @@ import {FcGoogle} from 'react-icons/fc'
 import { IconContext } from "react-icons";
 import PasswordField from './PasswordFormField';
 import FormField from './FormField';
+import { Button } from '@nextui-org/react';
 
 interface LoginData {
     username: string;
@@ -77,8 +78,8 @@ const LoginForm = ({formId, loginForm}: Props) => {
         <div className='relative w-full h-screen bg-gray-100 dark:bg-gray-800'>
         <div className='flex justify-center items-center h-full'>
             
-            <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-8'>
-                <h2 className='text-4xl font-bold text-center py-4'>Cash Money Citations</h2>
+            <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white dark:bg-gray-600 p-8'>
+                <h2 className='text-4xl font-bold text-center py-4 dark:bg-gray-600 dark:text-white'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
                     <IconContext.Provider value={{ color: 'black', className: ''}}>
                         <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('github', { callbackUrl })}>
@@ -106,40 +107,31 @@ const LoginForm = ({formId, loginForm}: Props) => {
                         fieldType={'text'} 
                         fieldPlaceholder={'Enter your username'} 
                         handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setUsername(e.target.value)} />
-                    {/*<label>Username</label>
-                    <input 
-                    className='border relative bg-gray-100 p-2'
-                    type="text" 
-                    value={username}
-                    name='username'
-                    onChange={(e) => setUsername(e.target.value)}
-    />*/}
                 </div>
-                <div className='flex flex-col '>
+                <div className='flex flex-col items-center'>
                     <PasswordField 
                         labelText={'Password'} 
                         fieldName={'password'} 
                         fieldValue={password} 
                         fieldPlaceholder={"Enter your password"} 
                         handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setPassword(e.target.value)} />
-                    {/*<label>Password</label>
-                    <input 
-                    className='border relative bg-gray-100 p-2' 
-                    type="password" 
-                    value={password}
-                    name='password'
-onChange={(e) => setPassword(e.target.value)}/>*/}
                 </div>
-                <button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>
+                <Button
+                    type="submit"
+                    color='success'
+                    className='text-lg text-white w-full py-3 mt-8'>
+                        Sign In
+                </Button>
+                {/*<button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>*/}
     
                 {error && (
                     <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
                         {error}
                     </div>
                 )}
-    
-                <p className='flex gap-3 ml-2 mr-1 mb-1 mt-4'><input className='w-6 h-6' type="checkbox"/>Remember Me</p>
-                <Link className="bg-white p-2 text-center mt-8" href={"/login/register"}>Not a member? Sign up now</Link>
+                <br />
+                <br />
+                <Link className="bg-white dark:bg-gray-600 dark:text-white p-2 text-center" href={"/login/register"}>Not a member? Sign up now</Link>
             </form>
         </div>
         </div>

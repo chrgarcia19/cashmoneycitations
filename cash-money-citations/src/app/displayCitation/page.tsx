@@ -27,7 +27,7 @@ return (
 
         <div className=''>
           {
-            selectedReferenceIds.length === 0 &&
+            selectedReferenceIds?.length === 0 &&
             <div className="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded relative" role="alert">
               <div className='flex justify-between items-center'>
                 <div>

@@ -25,7 +25,7 @@ return (
     <div className='center-content'>
       <div className='flex flex-row items-start w-screen'>
 
-        <div className='px-20'>
+        <div className=''>
           {
             selectedReferenceIds.length === 0 &&
             <div className="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded relative" role="alert">

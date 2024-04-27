@@ -11,6 +11,7 @@ import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { FixedSizeList as List, areEqual } from "react-window";
 import memoize from 'memoize-one';
 import { UpdateUserStyleList } from "@/app/displayCitation/actions";
+import { useRouter } from "next/navigation";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -37,6 +38,7 @@ const [isRemoving, setIsRemoving] = useState(false);
 const [removeError, setRemoveError] = useState('');
 const [saveError, setSaveError] = useState('');
 
+const router = useRouter();
 const {
     data: cslStyles,
     error,
@@ -81,6 +83,8 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 const removeFromStyleList = async(styleChoice: string) => {
   try {
     await UpdateUserStyleList(styleChoice, true);
+    setIsRemoving(false);
+    router.refresh()
   } catch (e) {
     setRemoveError(`Error removing style: ${e}`);
     console.error(e)
@@ -90,9 +94,9 @@ const removeFromStyleList = async(styleChoice: string) => {
 return (
   <div className="flex gap-4">
     {saveError || removeError}
-    <Dropdown>
+    <Dropdown isDisabled={isRemoving}>
       <DropdownTrigger >
-        <Button variant="bordered">
+        <Button variant="bordered" disabled={isRemoving}>
           {currentStyle} <ChevronDownIcon />
         </Button>
       </DropdownTrigger>
@@ -124,7 +128,7 @@ return (
                />
                <span className="text-sm text-gray-800 font-sm">{style.title}</span>
              </div>
-              <Button color="danger" onPress={() => { removeFromStyleList(style.title); }}>
+              <Button color="danger" onPress={() => { setIsRemoving(true); removeFromStyleList(style.title); }}>
                 Delete
               </Button>
               </label>
@@ -135,8 +139,6 @@ return (
       </DropdownMenu>
     </Dropdown>
     <ModalCSLSelect />
-
-    
   </div>
   );
 }

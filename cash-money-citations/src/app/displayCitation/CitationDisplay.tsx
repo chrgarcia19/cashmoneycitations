@@ -14,7 +14,8 @@ import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
-import {Divider, Spinner} from "@nextui-org/react";
+import {Button, Divider, Spinner} from "@nextui-org/react";
+import {Select, SelectItem} from "@nextui-org/react";
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -231,6 +232,11 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     element.click();
   }
 
+  const selectDownloadOptions = [
+    {label: "Text File (TXT)", value: 'txt'},
+    {label: "CSV File (CSV)", value: 'csv'},
+  ]
+
 
   return (
     <>
@@ -246,19 +252,21 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
           <label htmlFor='localeChoice' className='mb-2 font-bold text-lg underline'>Language: </label>
           <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
         </div>
-        <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
+        <Button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
           {isLoading ? 
             <Spinner label="saving..." color="warning" labelColor="warning"/>
             : 'Save Citations'}
-        </button>
-        <form onSubmit={downloadCitations} className='flex items-center space-x-2'>
-        <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
-          <option value='txt'>TXT</option>
-          <option value='csv'>CSV</option>
-        </select>
-        <button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
-          Download Citations
-        </button>
+        </Button>
+        <form onSubmit={downloadCitations} className='m-0 p-0'>
+          <Select value={downloadFormat} defaultSelectedKeys={["txt"]} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
+            {selectDownloadOptions.map((option: any) => (
+              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+            ))}
+
+          </Select>
+          <Button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
+            Download Citations
+          </Button>
         </form>
       </div>
       {error && <p className='text-red-500'>{error}</p>}

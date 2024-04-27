@@ -110,22 +110,24 @@ return (
           style={{ maxHeight: '200px', overflowY: 'auto' }}
         >
           {filteredStyles.map((style: any) => (
-            <DropdownItem key={style._id} className="flex items-center justify-between bg-white rounded-lg shadow">
-              <label htmlFor={`locale-${style._id}`} className="flex items-center w-full">
-                <input
-                  id={`locale-${style._id}`}
-                  type="radio"
-                  name="styles"
-                  value={style.title}
-                  checked={styleChoice.includes(style.title)}
-                  onChange={handleStyleChoiceChange}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
-                />
-                <span className="text-sm text-gray-800 font-sm">{style.title}</span>
-                <Button color="danger" onPress={() => { removeFromStyleList(style.title); }}>
-                    Delete
-                </Button>
-                </label>
+           <DropdownItem key={style._id} className="flex items-center justify-between bg-white rounded-lg shadow">
+           <label htmlFor={`locale-${style._id}`} className="flex justify-between items-center w-full">
+             <div className="flex items-center">
+               <input
+                 id={`locale-${style._id}`}
+                 type="radio"
+                 name="styles"
+                 value={style.title}
+                 checked={styleChoice.includes(style.title)}
+                 onChange={handleStyleChoiceChange}
+                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
+               />
+               <span className="text-sm text-gray-800 font-sm">{style.title}</span>
+             </div>
+              <Button color="danger" onPress={() => { removeFromStyleList(style.title); }}>
+                Delete
+              </Button>
+              </label>
             </DropdownItem>
           ))}
         </DropdownSection>

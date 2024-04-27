@@ -37,8 +37,13 @@
     ".next/types/**/*.ts",
     "src/app/api/auth/[...nextauth]/route.ts", 
     "src/components/LoginForm.tsx", 
-    "src/components/ReferenceTable.js"
-, "src/app/[id]/view/page.tsx", "src/app/[id]/view/actions.ts", "src/components/sidebar-components/Sidebar.tsx", "src/app/Providers.js"  ],
+    "src/components/ReferenceTable.js",
+    "src/app/profile/[id]/components/UserProfile.tsx",
+    "src/lib/auth.ts",
+    "src/app/[id]/view/page.tsx", 
+    "src/app/[id]/view/actions.ts", 
+    "src/components/sidebar-components/Sidebar.tsx", 
+    "src/app/Providers.js"],
   "exclude": [
     "node_modules"
   ]

@@ -7,8 +7,9 @@ import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
 
 // Manages <head> HTML elements for built-in SEO support
 export const metadata = {
-  title: "Home",
-  description: "CashMoneyCitations",
+  title: 'Cash Money Citations',
+  description: 'CashMoneyCitations',
+  icons: 'cashmoneycitations_logo.png'
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

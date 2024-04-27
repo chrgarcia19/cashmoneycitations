@@ -33,6 +33,10 @@ export function SelectionCSL({ onStyleChoiceChange, currentStyle }: SelectionCSL
 const [styleChoice, setStyleChoice] = useState('');
 const [styleSearch, setStyleSearch] = useState('');
 
+const [isRemoving, setIsRemoving] = useState(false);
+const [removeError, setRemoveError] = useState('');
+const [saveError, setSaveError] = useState('');
+
 const {
     data: cslStyles,
     error,
@@ -63,17 +67,29 @@ if (isLoading) return <p>Loading...</p>;
 if (!cslStyles) return null;
 
 const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  try {
     const styleChoice = e.target.value;
     setStyleChoice(styleChoice);
     onStyleChoiceChange(styleChoice);
+  } catch(e) {
+    setSaveError(`Error selecting style: ${e}`);
+    console.error(e)
+  }
+
 };
 
 const removeFromStyleList = async(styleChoice: string) => {
-  await UpdateUserStyleList(styleChoice, true);
+  try {
+    await UpdateUserStyleList(styleChoice, true);
+  } catch (e) {
+    setRemoveError(`Error removing style: ${e}`);
+    console.error(e)
+  }
 }
 
 return (
   <div className="flex gap-4">
+    {saveError || removeError}
     <Dropdown>
       <DropdownTrigger >
         <Button variant="bordered">
@@ -126,7 +142,10 @@ return (
 function ModalCSLSelect() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [cslSelect, setCslSelect] = useState<string[]>([]);
-
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [removeError, setRemoveError] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   const saveNewStyleList = async(cslSelect: string[] ) => {
     await UpdateUserStyleList(cslSelect, false);

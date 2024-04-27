@@ -169,27 +169,22 @@ function ModalCSLSelect() {
   });
 
   const Row = memo(({ data, index, style }: any) => {
-
     const { items } = data;
     const item = items[index];
-
+  
     return (
-      <div
-        style={style}
-      >
-        <span>
-          {item.title}
-
-        </span>
-        <Button onPress={() => setCslSelect([...cslSelect, item.title])}>
-          Add
-        </Button>
+      <div style={{...style, position: 'relative'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <span style={{ flexGrow: 1 }}>
+            {item.title}
+          </span>
+          <Button className="py-2" onPress={() => setCslSelect([...cslSelect, item.title])}>
+            Add
+          </Button>
+        </div>
         <Divider />
-
       </div>
-
     )
-
   }, areEqual);
 
   
@@ -237,7 +232,6 @@ function ModalCSLSelect() {
                         itemSize={50}
                       >
                         {Row}
-
                       </List>
                     </div>
 

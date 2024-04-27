@@ -101,7 +101,7 @@ export async function GetCSLLocale(localeName: string) {
 
 }
 
-export async function UpdateUserStyleList(newStyles: string[]) {
+export async function UpdateUserStyleList(newStyles: string[] | string, removeStyle: boolean) {
 
     await dbConnect();
 
@@ -109,10 +109,19 @@ export async function UpdateUserStyleList(newStyles: string[]) {
         const session = await getServerSession(authConfig);
         const userId = session?.user?.id ?? '';
     
-        const userStyles = await UserStyleList.updateOne({
-          userId: userId},
-          { $push: { defaultStyles: { $each: newStyles }}}
-        );
+        if (removeStyle == false) {
+            await UserStyleList.updateOne({
+                userId: userId},
+                { $push: { defaultStyles: { $each: newStyles }}}
+            );
+        } else {
+            
+            await UserStyleList.updateOne({
+                userId: userId},
+                { $pull: { defaultStyles: newStyles}}
+            );
+        }
+
     
     } catch(e) {
         console.error(e);

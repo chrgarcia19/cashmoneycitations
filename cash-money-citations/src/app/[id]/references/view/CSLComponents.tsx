@@ -68,15 +68,12 @@ const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onStyleChoiceChange(styleChoice);
 };
 
+const removeFromStyleList = async(styleChoice: string) => {
+  await UpdateUserStyleList(styleChoice, true);
+}
+
 return (
   <div className="flex gap-4">
-    {/* <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={styleChoice} onChange={handleStyleChoiceChange}>
-      {cslStyles.map((cslStyle: any) => (
-        <option key={cslStyle._id} value={cslStyle.name}>
-          {cslStyle.title}
-        </option>
-      ))}
-    </select> */}
     <Dropdown>
       <DropdownTrigger >
         <Button variant="bordered">
@@ -90,7 +87,6 @@ return (
           placeholder="Search Styles..."
           className="mb-4 w-full p-2 text-gray-700 leading-tight"
           value={styleSearch}
-          
           onChange={(e) => setStyleSearch(e.target.value)}
         />}
       >
@@ -110,7 +106,10 @@ return (
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
                 />
                 <span className="text-sm text-gray-800 font-sm">{style.title}</span>
-              </label>
+                <Button color="danger" onPress={() => { removeFromStyleList(style.title); }}>
+                    Delete
+                </Button>
+                </label>
             </DropdownItem>
           ))}
         </DropdownSection>
@@ -130,8 +129,10 @@ function ModalCSLSelect() {
 
 
   const saveNewStyleList = async(cslSelect: string[] ) => {
-    await UpdateUserStyleList(cslSelect);
+    await UpdateUserStyleList(cslSelect, false);
   }
+
+
 
   let list = useAsyncList({
     async load({signal, filterText = ''}) {

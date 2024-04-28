@@ -30,7 +30,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="fixed flex flex-col top-0 z-40 items-center text-white transition-all ease-in-out duration-30 px-6">
+      <div className="fixed flex flex-col top-0 items-center text-white transition-all ease-in-out duration-30 px-0">
         {/* Dedicated Toggle Button */}
         <div>
           <button

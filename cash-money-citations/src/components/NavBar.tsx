@@ -23,7 +23,10 @@ export default async function NavBar() {
       
       <NavbarBrand>
         {authSession?.user && (
-          <SideBar />
+          <>
+            <SideBar />
+            <span className="flex ml-24 self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">Cash Money Citations</span>
+          </>
         ) || (      
           <>
             <Link className="linkBtn inline-block gap-4 rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"

@@ -5,11 +5,10 @@ import { SignOut } from "../components/AuthButtons";
 import { getServerAuthSession } from "../lib/auth";
 import GuestAccess from '../components/GuestAccess'
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Image} from "@nextui-org/react";
-import ThemeSwitcher from "../app/ThemeSwitcher";
 import React from "react";
-import { IoMdArrowDropdown } from "react-icons/io";
 import SideBar from "./SideBar";
 import AvatarDropdown from "./AvatarDropdown";
+import ThemeSwitcher from "../app/ThemeSwitcher";
 
 export default async function NavBar() {
   const authSession = await getServerAuthSession() ?? undefined;
@@ -18,7 +17,7 @@ export default async function NavBar() {
     <Navbar 
       isBordered 
       maxWidth="full"
-      className="bg-primary"
+      className="bg-primary dark:bg-blue-900"
       >
       
       <NavbarBrand>
@@ -43,6 +42,7 @@ export default async function NavBar() {
         )}
       </NavbarBrand>
       <NavbarContent as="div" justify="end">
+          <ThemeSwitcher />
           <AvatarDropdown session={authSession}/>
       </NavbarContent>
     </Navbar>

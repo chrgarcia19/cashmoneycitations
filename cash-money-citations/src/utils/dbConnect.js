@@ -25,4 +25,21 @@ async function connectDb() {
   connection.isConnected = db.connections[0].readyState;
 }
 
+async function getDBStatistics() {
+  if (!connection.isConnected) {
+    // throw new Error('No database connection');
+    const db = await mongoose.connect(dbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    connection.isConnected = db.connections[0].readyState;
+  }
+  
+  // Get database stats
+  const stats = await mongoose.connection.db.stats();
+
+  return stats;
+}
+
+export { getDBStatistics }
 export default connectDb;

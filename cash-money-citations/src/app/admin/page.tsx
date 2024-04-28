@@ -15,7 +15,7 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 import os from "os";
-import { DisplayServerStatistics } from "./components/admin-dashboard";
+import { DisplayServerStatistics, DisplayCollectionStatistics } from "./components/admin-dashboard";
 
 const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
@@ -197,7 +197,7 @@ export const HeroSectionAdminHeader = () => {
             accusantium doloremque.
           </p>
           <DisplayServerStatistics />
-
+          <DisplayCollectionStatistics />
           <a
             href="/"
             aria-label="Scroll down"

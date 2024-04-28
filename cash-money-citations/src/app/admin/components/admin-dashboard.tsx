@@ -2,7 +2,10 @@
 import { useRouter } from 'next/navigation';
 import router from 'next/router';
 import React, { startTransition, useEffect, useState } from 'react';
-import { GetDatabaseStatus } from '../adminActions';
+import { GetCollectionStats, GetDatabaseStatus } from '../adminActions';
+import {Card, CardBody, CardHeader, CardFooter, Button} from '@nextui-org/react';
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
+import {Select, SelectSection, SelectItem} from "@nextui-org/react";
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState<string[]>([]);
@@ -57,6 +60,82 @@ export default function AdminDashboardClient() {
     );
 };
 
+type CollectionStatisticObject = {
+    ns: { label: string, value: string} // Namespace
+    localTime: { label: string, value: Date }
+    size: { label: string, value: number }
+    avgObjSize: { label: string, value: number }
+    storageSize: { label: string, value: number }
+    freeStorageSize: { label: string, value: number }
+    totalSize: { label: string, value: number }
+    count: { label: string, value: number } // Amount of documents in collection
+}
+
+export const DisplayCollectionStatistics = () => {
+    const [collStats, setCollStats] = useState<CollectionStatisticObject | {}>({});
+    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Collections"]));
+
+    const selectedValue = React.useMemo(
+      () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+      [selectedKeys]
+    );
+
+    useEffect(() => {
+        const fetchCollStats = async() => {
+            const stats = await GetCollectionStats('cslbibmodels');
+            setCollStats(stats as CollectionStatisticObject);
+        }
+
+        fetchCollStats();
+    }, [])
+
+
+    return (
+        <div>
+            <Card className='flex flex-col items-center justify-center'>
+            <CardHeader className='w-full text-center justify-between items-center'>
+                <h2 className='text-lg '>Database Collection Information</h2>
+                <div className='justify-end'>
+                    <Select className=''>
+                        <SelectItem key={"citations"}>
+                            Citations
+                        </SelectItem>
+                    </Select>
+                </div>
+            </CardHeader>
+
+            <CardBody className='w-full'>
+                <div>
+                <Table className='mx-auto'>
+                    <TableHeader>
+                    <TableColumn>Field</TableColumn>
+                    <TableColumn>Value</TableColumn>
+                    </TableHeader>
+                    <TableBody>
+                    {Object.entries(collStats).map(([key, value]) => (
+                        <TableRow key={key}>
+                        <TableCell>{value.label}</TableCell>
+                        <TableCell>{String(value.value)}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+                </div>
+            </CardBody>
+
+            <CardFooter className='w-full text-center'>
+                <div>
+                <p>
+                    This is a footer
+                </p>
+                </div>
+            </CardFooter>
+            </Card>
+        </div>
+    )
+
+}
+
 type DBStatisticObject = {
     db: string,
     objects: number,
@@ -110,5 +189,5 @@ export const DisplayServerStatistics = () => {
         </div>
       </div>
     );
-  };
+};
   

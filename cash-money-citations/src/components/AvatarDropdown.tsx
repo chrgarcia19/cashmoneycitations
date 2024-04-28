@@ -24,23 +24,51 @@ export default function AvatarDropdown(props: Props){
       <>
         <Dropdown placement="bottom-end" className="dark:text-white">
           <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="secondary"
-              size="lg"
-              src={props.session?.user?.image ?? undefined}
-              showFallback
-            />
+            {props.session?.user?.role === "admin" && (
+              <Avatar
+                isBordered
+                as="button"
+                className="transition-transform"
+                color="danger"
+                size="lg"
+                src={props.session?.user?.image ?? undefined}
+                showFallback
+              />
+            ) || props.session?.user?.role === "user" && (
+              <Avatar
+                isBordered
+                as="button"
+                className="transition-transform"
+                color="primary"
+                size="lg"
+                src={props.session?.user?.image ?? undefined}
+                showFallback
+              />
+            ) || (
+              <Avatar
+                isBordered
+                as="button"
+                className="transition-transform"
+                color="default"
+                size="lg"
+                src={props.session?.user?.image ?? undefined}
+                showFallback
+              />
+            )}
           </DropdownTrigger>
           <DropdownMenu 
             aria-label="Profile Actions" 
             variant="flat"
             disabledKeys={disabled}>
             <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{props.session?.user?.email}</p>
+              {props.session?.user && (
+                <>
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{props.session?.user?.email}</p>
+                </>
+              ) || (
+                <p className="font-semibold">Not signed in</p>
+              )}
             </DropdownItem>
             <DropdownItem key="login" color="success" href="/login">
               Login

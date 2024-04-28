@@ -23,7 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <ReferenceProvider>
               <main className="flex-grow">
                 <div className="grid grid-cols-12 min-h-full">
-                  <div className="col-span-1 bg-gray-100 dark:bg-gray-800"><SideBar /></div>
+                  {/*<div className="col-span-1 bg-gray-100 dark:bg-gray-800"><SideBar /></div>*/}
                   <div className="col-span-11 p-4 mt-16">{children}</div>
                 </div>
               </main>

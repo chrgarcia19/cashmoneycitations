@@ -9,6 +9,7 @@ import CSLBibModel, { CSLGeneralFields } from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
 import { RedirectType, redirect } from "next/navigation";
 import User from "@/models/User";
+import { LogCMCError } from "./logActions"
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -272,8 +273,8 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
             user.ownedReferences = [...user.ownedReferences, referenceId];
             await user.save();
         }
-    } catch(e) {
-        console.error(e);
+    } catch(e: any) {
+        LogCMCError("USER", e);
     }
 }
 
@@ -328,8 +329,8 @@ export async function HandleManualReference(form: any, userId: any) {
         // Sorts through the contributor array of objects and assigns them properly
         await HandleContributors(form);
         const bibResponse = await CSLBibModel.create(form);
-        await AddRef2User(userId, bibResponse._id);
 
+        await AddRef2User(userId, bibResponse._id);
         const cslJson = {
             id: bibResponse._id,
             type: bibResponse.type,
@@ -420,7 +421,6 @@ export async function HandleManualReference(form: any, userId: any) {
 
         return true;
       } catch (error) {
-        console.error(error)
         return false;
       }
 

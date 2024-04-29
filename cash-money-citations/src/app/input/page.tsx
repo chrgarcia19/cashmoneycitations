@@ -5,6 +5,7 @@ import InputISBN from "@/components/InputISBN";
 import InputISSN from "@/components/InputISSN";
 import InputMusic from "@/components/InputMusic";
 import { useState } from "react";
+import { ErrorBoundary } from "../error/boundary/errorBoundary";
 
 function Input () {
     const [searchVal, setSearchVal] = useState<string>("");
@@ -57,6 +58,7 @@ function Input () {
 
     return (
         <>
+        <ErrorBoundary>
             <div className="flex flex-col mt-20">
                 <form className="max-w-md mx-auto w-96" onSubmit={determineInputType}>
                     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -82,6 +84,8 @@ function Input () {
                 {issn && <InputISSN searchVal={searchVal} reload={reloadNestedComponent} />}
                 {music && <InputMusic searchVal={searchVal} reload={reloadNestedComponent} />}
             </div>
+        </ErrorBoundary>
+
         </>
     )
 }

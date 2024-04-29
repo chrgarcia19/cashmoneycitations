@@ -12,13 +12,13 @@ export default function AvatarDropdown(props: Props){
     const hideAdmin = (props.session?.user?.role !== "admin" ? true : false);
     const hideLogin = (props.session?.user ? true : false);
     const hideLogout = (!props.session?.user ? true : false);
+    const hideSettings = (!props.session?.user ? true : false);
 
     let disabled = new Array();
     if (hideAdmin) {disabled.push("admin")}
     if (hideLogin) {disabled.push("login")}
     if (hideLogout) {disabled.push("logout")}
-  
-    console.log(disabled)
+    if (hideSettings) {disabled.push("settings")}
 
     return (
       <>

@@ -285,9 +285,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-      <div className="flex mt-10 justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
+      <div className="flex mt-10 w-full justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
         <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
-          <div className="p-6">
+          <div className="flex flex-col p-6">
             <div className="text-center">
               {forNewReference ? (
                 <div>
@@ -339,16 +339,16 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form.image_url}
                     fieldType="url"
                     fieldPlaceholder="Image URL"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="Title"
                     fieldName="title"
                     fieldValue={form.title}
                     fieldType="text"
                     fieldPlaceholder="Title"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={true}/>
                   {(form.type === "article-journal" ||
                     form.type === "article-magazine" ||
                     form.type === "article-newspaper" ||
@@ -359,8 +359,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldValue={form["container-title"]}
                       fieldType="text"
                       fieldPlaceholder="Source Title"
-                      handleChange={handleChange}
-                    />
+                      handleChange={handleChange} 
+                      required={true}/>
                   )}
                   <div className="flex items-center justify-center pt-5">
                     <ContributorForm
@@ -376,8 +376,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldValue={form["collection-title"]}
                       fieldType="text"
                       fieldPlaceholder="Series"
-                      handleChange={handleChange}
-                    />
+                      handleChange={handleChange} 
+                      required={false}/>
                   )}
                 </>
               )}
@@ -393,24 +393,24 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form["number-of-pages"]}
                     fieldType="number"
                     fieldPlaceholder="Number of Pages"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="Page Range"
                     fieldName="page"
                     fieldValue={form["page"]}
                     fieldType="number"
                     fieldPlaceholder="Page range"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="First page in range"
                     fieldName="page-first"
                     fieldValue={form["page-first"]}
                     fieldType="number"
                     fieldPlaceholder="First Page in range"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}                  />
                 </>
               )}
 
@@ -423,8 +423,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.volume}
                   fieldType="number"
                   fieldPlaceholder="Volume"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {form.type === "book" && (
@@ -434,8 +433,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form["number-of-volumes"]}
                   fieldType="text"
                   fieldPlaceholder="Number of Volumes"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {form.type === "article-newspaper" && (
@@ -446,16 +444,14 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form.publisherPlaceCity}
                     fieldType="text"
                     fieldPlaceholder="Publisher City"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} required={false}                  />
                   <FormField
                     labelText="Publisher Country"
                     fieldName="publisherPlaceCountry"
                     fieldValue={form.publisherPlaceCountry}
                     fieldType="text"
                     fieldPlaceholder="Publisher Country"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} required={false}                  />
                 </>
               )}
 
@@ -466,8 +462,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.edition}
                   fieldType="text"
                   fieldPlaceholder="Edition"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "book" || form.type === "webpage") && (
@@ -477,8 +472,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.publisher}
                   fieldType="text"
                   fieldPlaceholder="Publisher"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} 
+                  required={true}/>
               )}
 
               {form.type && (
@@ -508,8 +503,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.URL}
                   fieldType="url"
                   fieldPlaceholder="Source Accessed By URL"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article-journal" ||
@@ -538,8 +532,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.ISBN}
                   fieldType="text"
                   fieldPlaceholder="ISBN"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article-journal" ||
@@ -550,8 +543,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.number}
                   fieldType="number"
                   fieldPlaceholder="Issue Number"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {form.type === "article-journal" && (
@@ -561,8 +553,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.DOI}
                   fieldType="text"
                   fieldPlaceholder="DOI"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article-journal" ||
@@ -574,8 +565,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.ISSN}
                   fieldType="text"
                   fieldPlaceholder="ISSN"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               <button

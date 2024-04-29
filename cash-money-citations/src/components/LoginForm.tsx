@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn } from 'next-auth/react'
+import { ClientSafeProvider, LiteralUnion, getProviders, signIn, useSession } from 'next-auth/react'
 import { redirect, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
 import { FaGithubSquare } from "react-icons/fa";
@@ -37,6 +37,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
 
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/';
+
 
     
 

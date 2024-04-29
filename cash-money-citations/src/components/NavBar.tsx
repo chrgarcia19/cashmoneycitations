@@ -17,7 +17,7 @@ export default async function NavBar() {
     <Navbar 
       isBordered 
       maxWidth="full"
-      className="bg-primary dark:bg-blue-900"
+      className="bg-primary dark:bg-blue-900 p-0.5"
       >
       
       <NavbarBrand>

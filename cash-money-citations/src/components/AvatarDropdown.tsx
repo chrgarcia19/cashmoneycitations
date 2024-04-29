@@ -39,7 +39,7 @@ export default function AvatarDropdown(props: Props){
                 isBordered
                 as="button"
                 className="transition-transform"
-                color="primary"
+                color="success"
                 size="lg"
                 src={props.session?.user?.image ?? undefined}
                 showFallback

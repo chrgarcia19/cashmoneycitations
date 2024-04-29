@@ -119,10 +119,13 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             abstract: item.abstract,
             apiSource: item.source
         };
-
-        HandleManualReference(doiReference, session?.user?.id)
-        router.push("/reference-table");
-        router.refresh();
+        try {
+            HandleManualReference(doiReference, session?.user?.id)
+        } catch(e) {
+            console.error(e);
+        }
+        //router.push("/reference-table");
+        //router.refresh();
     }
 
     const columns = [
@@ -160,8 +163,7 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
           case "action":
             return (
               <div className="relative flex justify-end items-center gap-2">
-                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
-
+                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(doi)}>Add to list</button>
               </div>
             );
           default:

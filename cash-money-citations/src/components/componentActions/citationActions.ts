@@ -269,12 +269,17 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
 
     try {
         const user = await User.findById(userId);
+        const valid = user.validateSync();
+        console.log(valid.errors.properties.message)
+        console.log(valid.errors.properties.path)
+
         if (user) {
             user.ownedReferences = [...user.ownedReferences, referenceId];
             await user.save();
         }
     } catch(e: any) {
         LogCMCError("USER", e);
+        return 
     }
 }
 

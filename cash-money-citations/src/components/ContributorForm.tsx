@@ -3,6 +3,7 @@
 import { Contributor } from '@/models/Contributor';
 import React, { useState, useEffect } from 'react';
 import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
+import FormField from './FormField';
 
 interface ContributorFormProps {
   updateFormData: (newData: Contributor[]) => void;
@@ -70,7 +71,39 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               <option value="Translator">Translator</option>
               <option value="Compiler">Compiler</option>
             </select>
-            <input
+            <FormField 
+              required={false} 
+              labelText={'First Name'} 
+              fieldName={'given'} 
+              fieldValue={form.given} 
+              fieldType={'text'} 
+              fieldPlaceholder={'First Name'} 
+              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
+            <FormField 
+              required={false} 
+              labelText={'Middle Name'} 
+              fieldName={'middle'} 
+              fieldValue={form.middle} 
+              fieldType={'text'} 
+              fieldPlaceholder={'Middle Name'} 
+              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
+            <FormField 
+              required={true} 
+              labelText={'Last name'} 
+              fieldName={'family'} 
+              fieldValue={form.family} 
+              fieldType={'text'} 
+              fieldPlaceholder={'Last Name'} 
+              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
+            <FormField 
+              required={false} 
+              labelText={'Suffix'} 
+              fieldName={'suffix'} 
+              fieldValue={form.suffix} 
+              fieldType={'text'} 
+              fieldPlaceholder={'Suffix'} 
+              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
+            {/*<input
               name='given'
               placeholder='First Name'
               onChange={(event) => handleFormChange(event, index)}
@@ -94,7 +127,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               placeholder='Suffix'
               onChange={(event) => handleFormChange(event, index)}
               defaultValue={form.suffix}
-              className="w-1/6 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+        className="w-1/6 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />*/}
             <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-700 dark:hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
           </div>
       ))}

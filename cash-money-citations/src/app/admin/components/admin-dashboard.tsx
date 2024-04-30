@@ -229,7 +229,7 @@ export const DisplayCMCLogs = () => {
     }, []);
 
     return (
-        <div className="overflow-auto max-h-96">
+        <div className="overflow-auto max-h-96 mt-8 mb-8">
             <table className="w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>

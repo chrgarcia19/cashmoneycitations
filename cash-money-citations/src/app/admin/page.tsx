@@ -201,6 +201,7 @@ export const HeroSectionAdminHeader = () => {
           </p>
           <DisplayServerStatistics />
           <DisplayCollectionStatistics />
+          <h2 className='font-bold text-3xl p-2'>Logs</h2>
           <DisplayCMCLogs />
           <a
             href="/"

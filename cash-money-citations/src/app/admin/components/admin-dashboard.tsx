@@ -2,10 +2,11 @@
 import { useRouter } from 'next/navigation';
 import router from 'next/router';
 import React, { startTransition, useEffect, useState } from 'react';
-import { GetCollectionStats, GetDatabaseStatus } from '../adminActions';
+import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus } from '../adminActions';
 import {Card, CardBody, CardHeader, CardFooter, Button} from '@nextui-org/react';
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
 import {Select, SelectSection, SelectItem} from "@nextui-org/react";
+import { LogCMCError } from '@/components/componentActions/logActions';
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState<string[]>([]);
@@ -145,10 +146,14 @@ type DBStatisticObject = {
 
 export const DisplayServerStatistics = () => {
     const [serverStats, setServerStats] = useState<DBStatisticObject | {}>({});
+    const [serverStatus, setServerStatus] = useState(false);
 
     useEffect(() => {
       const fetchServerStats = async () => {
         const stats = await GetDatabaseStatus();
+        if (stats) {
+            setServerStatus(true);
+        }
         setServerStats(stats);
       };
   
@@ -160,8 +165,20 @@ export const DisplayServerStatistics = () => {
     }
   
     return (
-      <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-        <div className="grid grid-cols-2 row-gap-8 md:grid-cols-4">
+      <div className="px-2 py-8 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-12 lg:px-4 lg:py-8">
+        <h6 className="grid grid-cols-2 row-gap-8 md:grid-cols-5">
+            <div className='text-center'>
+                {serverStatus ?
+                    <h6 className='text-xl font-bold text-deep-purple-accent-400' >
+                        <p className='font-bold'>Database is online.</p>
+                    </h6>
+                :
+                    <h6 className='text-xl font-bold text-deep-purple-accent-400'>
+                        Main database is offline.
+                    </h6>
+                }
+
+            </div>
         <div className="text-center">
             <h6 className="text-3xl font-bold text-deep-purple-accent-400">
                 {(serverStats as DBStatisticObject).db}
@@ -186,8 +203,70 @@ export const DisplayServerStatistics = () => {
             </h6>
             <p className="font-bold">Total Database size</p>
           </div>
-        </div>
+        </h6>
       </div>
     );
 };
-  
+
+
+export const DisplayCMCLogs = () => {
+    const [logs, setLogs] = useState<any[]>([]);
+
+    // Simulate fetching logs
+    useEffect(() => {
+        const fetchLogs = async () => {
+            // Replace this with actual API call
+            const fetchedLogs = await GetCMCLogs();
+            if (fetchedLogs) {
+                setLogs(fetchedLogs);
+            } else {
+                LogCMCError("WARNING", "DATABASE", `Failed to retrieve logs. Date: ${Date.now()}`)
+                console.error('Failed to retrieve logs.');
+            }
+        };
+
+        fetchLogs();
+    }, []);
+
+    return (
+        <div className="overflow-auto max-h-96">
+            <table className="w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Log Type
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Log Body
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date Created
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody className="bg-white divide-y divide-gray-200">
+                    {logs.map((log, index) => (
+                        <tr key={index}>
+                            <td className="px-6 py-4 text-sm whitespace-wrap">
+                                {log.logType}
+                            </td>
+                            <td className="px-6 py-4 text-sm whitespace-wrap">
+                                {log.priority}
+                            </td>
+                            <td className="px-6 py-4 text-sm whitespace-wrap">
+                                {log.data}
+                            </td>
+                            <td className="px-6 py-4 text-sm whitespace-wrap">
+                                {log.createdAt}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};

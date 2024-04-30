@@ -1,7 +1,7 @@
 import React from "react";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
-import AdminDashboardClient from "./components/admin-dashboard";
+import AdminDashboardClient, { DisplayCMCLogs } from "./components/admin-dashboard";
 import ImportCSLStyles from "./components/ImportCSLStyles";
 import GetUsers from "./components/GetUsers";
 import { getServerSession } from "next-auth";
@@ -128,6 +128,9 @@ export default async function AdminDashboard() {
       <div className="center-content">
         <div className="flex flex-col">
           <div className="bg-white rounded-lg p-6">
+
+          </div>
+          <div className="bg-white rounded-lg p-6">
             <GetUsers currentUser={currentUserEmail} />
             {/* <SessionInfo /> */}
             {/* <AdminDashboardClient /> */}
@@ -198,6 +201,7 @@ export const HeroSectionAdminHeader = () => {
           </p>
           <DisplayServerStatistics />
           <DisplayCollectionStatistics />
+          <DisplayCMCLogs />
           <a
             href="/"
             aria-label="Scroll down"

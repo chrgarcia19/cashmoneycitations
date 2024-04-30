@@ -290,9 +290,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
   return (
     <>
-      <div className="flex mt-10 justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
+      <div className="flex mt-10 w-full justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 dark:text-white">
         <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
-          <div className="p-6">
+          <div className="flex flex-col p-6">
             <div className="text-center">
               {forNewReference ? (
                 <div>
@@ -344,8 +344,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form.image_url}
                     fieldType="url"
                     fieldPlaceholder="Image URL"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="Title"
                     fieldName="title"
@@ -607,8 +607,8 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldValue={form["collection-title"]}
                       fieldType="text"
                       fieldPlaceholder="Series"
-                      handleChange={handleChange}
-                    />
+                      handleChange={handleChange} 
+                      required={false}/>
                   )}
                 </>
               )}
@@ -671,24 +671,24 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form["number-of-pages"]}
                     fieldType="number"
                     fieldPlaceholder="Number of Pages"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="Page Range"
                     fieldName="page"
                     fieldValue={form["page"]}
                     fieldType="number"
                     fieldPlaceholder="Page range"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}/>
                   <FormField
                     labelText="First page in range"
                     fieldName="page-first"
                     fieldValue={form["page-first"]}
                     fieldType="number"
                     fieldPlaceholder="First Page in range"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} 
+                    required={false}                  />
                 </>
               )}
 
@@ -712,8 +712,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.volume}
                   fieldType="number"
                   fieldPlaceholder="Volume"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {form.type === "book" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "song" || form.type === "hearing" && (
@@ -723,8 +722,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form["number-of-volumes"]}
                   fieldType="text"
                   fieldPlaceholder="Number of Volumes"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia" || form.type === "entry-dictionary" ||
@@ -738,16 +736,14 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form.publisherPlaceCity}
                     fieldType="text"
                     fieldPlaceholder="Publisher City"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} required={false}                  />
                   <FormField
                     labelText="Publisher Country"
                     fieldName="publisherPlaceCountry"
                     fieldValue={form.publisherPlaceCountry}
                     fieldType="text"
                     fieldPlaceholder="Publisher Country"
-                    handleChange={handleChange}
-                  />
+                    handleChange={handleChange} required={false}                  />
                 </>
               )}
 
@@ -758,8 +754,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.edition}
                   fieldType="text"
                   fieldPlaceholder="Edition"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {form.type && form.type !== "personal_communication" && form.type !== "legal_case" && (
@@ -800,8 +795,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.URL}
                   fieldType="url"
                   fieldPlaceholder="Source Accessed By URL"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
               
               <DatePicker
@@ -825,8 +819,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.ISBN}
                   fieldType="text"
                   fieldPlaceholder="ISBN"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article-journal" ||
@@ -840,8 +833,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.number}
                   fieldType="number"
                   fieldPlaceholder="Issue Number"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article" ||
@@ -853,8 +845,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.DOI}
                   fieldType="text"
                   fieldPlaceholder="DOI"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               {(form.type === "article-journal" ||
@@ -867,8 +858,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldValue={form.ISSN}
                   fieldType="text"
                   fieldPlaceholder="ISSN"
-                  handleChange={handleChange}
-                />
+                  handleChange={handleChange} required={false}                />
               )}
 
               <button

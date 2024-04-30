@@ -15,6 +15,8 @@ enum Priority {
     Critival = "CRITICAL",
     Warning = "WARNING",
     Information = "INFORMATION",
+    Success = "SUCCESS",
+    Failed = "FAILED",
 }
 
 const CMCLog = new Schema ({

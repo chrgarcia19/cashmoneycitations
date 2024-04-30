@@ -81,6 +81,8 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         if (Object.keys(errs).length === 0) {
             
             const createUserResponse = await createUser(form);
+            LogCMCError("SUCCESS", "USER", `New User Created: ${createUserResponse?.message}`)
+
             if (createUserResponse?.exists) {
                 setEmailInUse(true);
             } else {
@@ -88,9 +90,8 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
                 router.push('/');
             }
 
-           
         } else {
-            LogCMCError("WARNING", "USER", "REGISTRATION ERROR WITH SUBMISSION")
+            LogCMCError("FAILED", "USER", "REGISTRATION ERROR WITH SUBMISSION")
             setErrors( { errs });
         }
     };

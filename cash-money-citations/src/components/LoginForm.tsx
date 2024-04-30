@@ -64,6 +64,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
             }
 
             alert("You have successfully logged in.");
+            LogCMCError("SUCCESS", "USER", `User: ${username} has logged in at: ${Date.now()}`)
 
             router.replace("/dashboard");
 

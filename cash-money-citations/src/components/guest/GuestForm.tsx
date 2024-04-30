@@ -293,13 +293,17 @@ const GuestForm = ({ formId, referenceForm, forNewReference = true }: Props) => 
         const errs = formValidate();
     
         if (Object.keys(errs).length === 0) {
-          localStorage.setItem('referenceData', JSON.stringify(form));
+          const referencesString = localStorage.getItem('references');
+          let references = referencesString? JSON.parse(referencesString) : [];
+          references.push(form);
+          localStorage.setItem('references', JSON.stringify(references));
           setMessage('Reference saved successfully!');
           // Optional: Clear form or navigate the user away
+          router.push("/guest/referenceTable")
         } else {
           setErrors(errs);
         }
-    };
+      }
   
     return (
       <>
@@ -618,4 +622,3 @@ const GuestForm = ({ formId, referenceForm, forNewReference = true }: Props) => 
   };
   
   export default GuestForm;
-  

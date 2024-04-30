@@ -19,9 +19,10 @@ const GuestReferenceTable = () => {
   const [references, setReferences] = useState<ReferenceData[]>([]);
 
   useEffect(() => {
-    const loadedData = localStorage.getItem('referenceData');
+    const loadedData = localStorage.getItem('references');
+    console.log('loadedData:', loadedData);
     if (loadedData) {
-      setReferences([JSON.parse(loadedData)]);
+      setReferences(JSON.parse(loadedData));
     }
   }, []);
 

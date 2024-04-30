@@ -9,7 +9,17 @@ enum CMCLogType {
     CslStyle = "CSLSTYLE",
 }
 
+enum Priority {
+    Critival = "CRITICAL",
+    Warning = "WARNING",
+    Information = "INFORMATION",
+}
+
 const CMCLog = new Schema ({
+    priority: {
+        type: String,
+        enum: Priority
+    },
     name: String,
     logType: {
         type: String,

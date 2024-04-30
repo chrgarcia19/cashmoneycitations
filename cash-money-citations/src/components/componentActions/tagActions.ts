@@ -4,17 +4,24 @@ import Tag from "@/models/Tag";
 import User from "@/models/User";
 import dbConnect from "@/utils/dbConnect";
 import mongoose from "mongoose";
+import { LogCMCError } from "./logActions";
 
 export async function getTags() {
     await dbConnect();
   
-    const result = await Tag.find({});
-    const tags = result.map((doc) => {
-      const tag = JSON.parse(JSON.stringify(doc));
-      return tag;
-    });
-  
-    return tags;
+    try {
+      const result = await Tag.find({});
+      const tags = result.map((doc) => {
+        const tag = JSON.parse(JSON.stringify(doc));
+        return tag;
+      });
+    
+      return tags;
+    } catch(e: any) {
+      LogCMCError("WARNING", "TAG", e);
+      console.error(e);
+    }
+
 }
 
 
@@ -49,8 +56,9 @@ export async function getSpecificTagById(id: string | string[] | undefined) {
     } else {
       return false;
     }
-  } catch(error) {
-    console.error(error)
+  } catch(e: any) {
+    LogCMCError("WARNING", "TAG", e);
+    console.error(e)
   }
 }
 
@@ -71,7 +79,8 @@ export async function getUserTags(userId: string) {
       });
     
       return tags;
-    } catch(e) {
+    } catch(e: any) {
+      LogCMCError("WARNING", "TAG", e);
       console.error(e);
     }
   }
@@ -85,7 +94,8 @@ export async function getUserTags(userId: string) {
         user.ownedTags = [...user.ownedTags, tagId];
         await user.save();
       }
-    } catch (e) {
+    } catch (e: any) {
+      LogCMCError("WARNING", "TAG", e);
       console.error(e);
     }
   } 
@@ -97,7 +107,8 @@ export async function getUserTags(userId: string) {
       const tagResponse = await Tag.create(form);
 
       await addTagToUser(userId, tagResponse._id);
-    } catch (e){
+    } catch (e: any) {
+      LogCMCError("WARNING", "TAG", e);
       console.error(e);
     }
   }
@@ -109,7 +120,8 @@ export async function getUserTags(userId: string) {
       await Tag.findByIdAndUpdate(id, form, {
         new: true,
         runValidators: true,});
-    } catch (e){
+    } catch (e: any) {
+      LogCMCError("WARNING", "TAG", e);
       console.error(e);
     }
   }

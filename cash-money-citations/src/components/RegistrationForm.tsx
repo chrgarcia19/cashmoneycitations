@@ -7,6 +7,7 @@ import { EmailInUseError } from "./EmailInUseError";
 import FormField from "./FormField";
 import PasswordField from "./PasswordFormField";
 import { Button } from "@nextui-org/react";
+import { LogCMCError } from "./componentActions/logActions";
 
 interface RegistrationData {
     username: string;
@@ -89,6 +90,7 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
 
            
         } else {
+            LogCMCError("WARNING", "USER", "REGISTRATION ERROR WITH SUBMISSION")
             setErrors( { errs });
         }
     };

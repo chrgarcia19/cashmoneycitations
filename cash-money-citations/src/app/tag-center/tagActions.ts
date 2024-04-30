@@ -1,5 +1,6 @@
 'use client'
 
+import { LogCMCError } from "@/components/componentActions/logActions";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { Tag } from "@/models/Tag";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -33,7 +34,8 @@ export async function applyTagToReferences(reference: CSLBibInterface, tag: Tag)
         const { data } = await res.json();
   
         mutate(`/api/references/${reference._id}`, data, true); // Update the local data without a revalidation
-      } catch (error) {
+      } catch (error: any) {
+        LogCMCError("WARNING", 'TAG', error);
         console.log(JSON.stringify(error));
       }
 }
@@ -66,7 +68,8 @@ export async function applyReferenceToTag (tag: Tag, refId: string) {
       const { data } = await res.json();
 
       mutate(`/api/tags/${tag._id}`, data, true); // Update the local data without a revalidation
-    } catch (error) {
+    } catch (error: any) {
+      LogCMCError("WARNING", 'TAG', error);
       console.log(JSON.stringify(error));
     }
 }
@@ -82,7 +85,9 @@ export const handleDelete = async (tagId: string, references: CSLBibInterface[],
     });
     router.push('/tag-center');
     router.refresh();
-  } catch (error) {
+  } catch (error: any) {
+    LogCMCError("WARNING", 'TAG', error);
+    console.error(error);
   }
 };
 
@@ -116,8 +121,9 @@ export async function deleteTagIdFromReference(tagId: string, reference: CSLBibI
     const { data } = await res.json();
 
     mutate(`/api/references/${reference._id}`, data, true); // Update the local data without a revalidation
-  } catch (error) {
-    console.log("Reference not modified!");
+  } catch (error: any) {
+    LogCMCError("WARNING", 'TAG', error);
+    console.error("Reference not modified!");
   } 
 }
 
@@ -151,7 +157,8 @@ export async function deleteReferenceIdFromTag(referenceId: string, tag: Tag) {
     const { data } = await res.json();
 
     mutate(`/api/tags/${tag._id}`, data, true); // Update the local data without a revalidation
-  } catch (error) {
-    console.log("Tag not modified!");
+  } catch (error: any) {
+    LogCMCError("WARNING", 'TAG', error);
+    console.error("Tag not modified!");
   } 
 }

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell, getKeyValue} from "@nextui-org/react";
+import { LogCMCError } from "./componentActions/logActions";
 
 interface InputDOIProps {
     searchVal: string;
@@ -121,7 +122,8 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
         };
         try {
             HandleManualReference(doiReference, session?.user?.id)
-        } catch(e) {
+        } catch(e: any) {
+            LogCMCError("INFORMATION", "REFERENCE", e);
             console.error(e);
         }
         //router.push("/reference-table");

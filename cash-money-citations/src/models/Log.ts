@@ -4,9 +4,11 @@ enum CMCLogType {
     User = "USER",
     DataBase = "DATABASE",
     NextJsServer = "NEXTJSSERVER",
-    Refernce = "REFERENCE",
+    Reference = "REFERENCE",
     Citation = "CITATION",
     CslStyle = "CSLSTYLE",
+    Group = "GROUP",
+    Tag = "TAG"
 }
 
 enum Priority {

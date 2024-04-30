@@ -141,8 +141,9 @@ export async function CreateCslFromBibTex(bibData: string, userId: string | unde
         InitializeCslJson(CSLBibTexDocument.id, result);
 
         return true;
-    } catch(error) {
-        console.error(error)
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
+        console.error(error);
         return false;
     }
 }
@@ -179,7 +180,8 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
 
         return true;
 
-    } catch(error) {
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
         console.error(error)
         return false;
     }
@@ -188,7 +190,8 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
 export async function InitializeCslJson(_id: string, cslJson: object) {
     try {
         await CSLBibModel.findByIdAndUpdate(_id, { cslJson: cslJson })
-    } catch(error) {
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
         console.error(error)
     }
 }
@@ -269,7 +272,6 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
 
     try {
         const user = await User.findById(userId);
-        const valid = user.validateSync();
 
         if (user) {
             user.ownedReferences = [...user.ownedReferences, referenceId];
@@ -423,7 +425,8 @@ export async function HandleManualReference(form: any, userId: any) {
         await HandleInitialFormat(cslJson);
 
         return true;
-      } catch (error) {
+      } catch (error: any) {
+        LogCMCError("REFERENCE", "USER", error);
         return false;
       }
 

@@ -4,17 +4,23 @@ import Group from "@/models/Group";
 import User from "@/models/User";
 import dbConnect from "@/utils/dbConnect";
 import mongoose from "mongoose";
+import { LogCMCError } from "./logActions";
 
 export async function getGroups() {
     await dbConnect();
-  
-    const result = await Group.find({});
-    const groups = result.map((doc) => {
-      const group = JSON.parse(JSON.stringify(doc));
-      return group;
-    });
-  
-    return groups;
+
+    try {
+      const result = await Group.find({});
+      const groups = result.map((doc) => {
+        const group = JSON.parse(JSON.stringify(doc));
+        return group;
+      });
+    
+      return groups;
+    } catch(e: any) {
+      LogCMCError("WARNING", "GROUP", e);
+      console.error(e);
+    }
 }
 
 
@@ -49,8 +55,9 @@ export async function getSpecificGroupById(id: String | String[] | string | stri
     } else {
       return false;
     }
-  } catch(error) {
-    console.error(error)
+  } catch(e: any) {
+    LogCMCError("WARNING", "DATABASE", e);
+    console.error(e)
   }
 }
 
@@ -71,7 +78,8 @@ export async function getUserGroups(userId: string) {
       });
     
       return groups;
-    } catch(e) {
+    } catch(e: any) {
+      LogCMCError("INFORMATION", "DATABASE", e);
       console.error(e);
     }
   }
@@ -85,7 +93,8 @@ export async function getUserGroups(userId: string) {
         user.ownedGroups = [...user.ownedGroups, groupId];
         await user.save();
       }
-    } catch (e) {
+    } catch (e: any) {
+      LogCMCError("WARNING", "DATABASE", e);
       console.error(e);
     }
   } 
@@ -97,7 +106,8 @@ export async function getUserGroups(userId: string) {
       const groupResponse = await Group.create(form);
 
       await addGroupToUser(userId, groupResponse._id);
-    } catch (e){
+    } catch (e: any){
+      LogCMCError("WARNING", "GROUP", e);
       console.error(e);
     }
   }
@@ -109,7 +119,8 @@ export async function getUserGroups(userId: string) {
       await Group.findByIdAndUpdate(id, form, {
         new: true,
         runValidators: true,});
-    } catch (e){
+    } catch (e: any){
+      LogCMCError("WARNING", "DATABASE", e);
       console.error(e);
     }
   }

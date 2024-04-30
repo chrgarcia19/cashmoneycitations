@@ -2,6 +2,7 @@
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex"
 import { HandleInitialFormat, HandleContributors } from "@/components/componentActions/citationActions"
+import { LogCMCError } from "./logActions";
 
 export async function EditReference(form: any, id: any) {
     await dbConnect();
@@ -17,7 +18,8 @@ export async function EditReference(form: any, id: any) {
         await CSLBibModel.findByIdAndUpdate(id, form, {
         new: true,
         runValidators: true,})
-    } catch(error) {
-        console.error(error)
+    } catch(e: any) {
+        LogCMCError("WARNING", "REFERENCE", e)
+        console.error(e);
     }
 }

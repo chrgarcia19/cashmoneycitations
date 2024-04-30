@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import {jwtDecode} from 'jwt-decode';
+import { LogCMCError } from '@/components/componentActions/logActions';
 
 interface DecodedToken {
   guest: boolean;
@@ -21,8 +22,9 @@ export const useAccessControl = () => {
           setIsGuest(decoded.guest);
           setHasAccess(true);
         }
-      } catch (error) {
-        console.error('Error decoding token:', error);
+      } catch (e: any) {
+        LogCMCError("WARNING", "USER", e);
+        console.error('Error decoding token:', e);
       }
     }
   }, []);

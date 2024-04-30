@@ -3,7 +3,7 @@ import "../../css/form.css";
 import Link from "next/link";
 import { SignOut } from "../components/AuthButtons";
 import { getServerAuthSession } from "../lib/auth";
-import GuestAccess from '../components/GuestAccess'
+import GuestAccess from './guest/GuestAccess'
 
 
 import ThemeSwitcher from "../app/ThemeSwitcher";

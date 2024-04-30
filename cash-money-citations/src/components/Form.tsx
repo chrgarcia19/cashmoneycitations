@@ -353,6 +353,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldType="text"
                     fieldPlaceholder="Title"
                     handleChange={handleChange}
+                    required={true}
                   />
 
                   {form.type !== "software" && (
@@ -384,6 +385,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Number"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -395,6 +397,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Medium"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -406,6 +409,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Genre"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -417,6 +421,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Running Time"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -428,6 +433,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Artwork Size"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -439,6 +445,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Reviewed Genre"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -450,6 +457,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Reviewed Title"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -461,6 +469,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Version"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -486,6 +495,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Source Title"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -497,6 +507,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Publication Title"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -508,6 +519,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Reporter"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -519,6 +531,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="text"
                       fieldPlaceholder="Court"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -530,6 +543,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                         fieldType="text"
                         fieldPlaceholder="Code"
                         handleChange={handleChange}
+                        required={false}
                       />
                     )}
 
@@ -541,6 +555,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="number"
                       fieldPlaceholder="Code Number"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -552,6 +567,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="number"
                       fieldPlaceholder="Committee"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -563,6 +579,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       fieldType="number"
                       fieldPlaceholder="Section"
                       handleChange={handleChange}
+                      required={false}
                     />
                   )}
 
@@ -574,6 +591,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                         fieldType="text"
                         fieldPlaceholder="Legislative Body"
                         handleChange={handleChange}
+                        required={false}
                       />
                     )}
 
@@ -585,6 +603,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                         fieldType="number"
                         fieldPlaceholder="Ex. 100"
                         handleChange={handleChange}
+                        required={false}
                       />
                     )}
 
@@ -621,6 +640,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldType="text"
                   fieldPlaceholder="Conference Name"
                   handleChange={handleChange}
+                  required={false}
                 />
               )}
 
@@ -632,6 +652,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldType="text"
                   fieldPlaceholder="City"
                   handleChange={handleChange}
+                  required={false}
                 />
               )}
 
@@ -643,6 +664,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldType="text"
                   fieldPlaceholder="Country"
                   handleChange={handleChange}
+                  required={false}
                 />
               )}
 
@@ -765,6 +787,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 fieldType="text"
                 fieldPlaceholder="Publisher"
                 handleChange={handleChange}
+                required={false}
               />
               )}
 

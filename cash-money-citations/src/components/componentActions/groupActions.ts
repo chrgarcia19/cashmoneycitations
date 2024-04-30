@@ -15,11 +15,12 @@ export async function getGroups() {
         const group = JSON.parse(JSON.stringify(doc));
         return group;
       });
-    
+
       return groups;
     } catch(e: any) {
       LogCMCError("WARNING", "GROUP", e);
       console.error(e);
+      return [];
     }
 }
 
@@ -58,6 +59,7 @@ export async function getSpecificGroupById(id: String | String[] | string | stri
   } catch(e: any) {
     LogCMCError("WARNING", "DATABASE", e);
     console.error(e)
+    return [''];
   }
 }
 
@@ -81,6 +83,7 @@ export async function getUserGroups(userId: string) {
     } catch(e: any) {
       LogCMCError("INFORMATION", "DATABASE", e);
       console.error(e);
+      return [];
     }
   }
 
@@ -96,6 +99,7 @@ export async function getUserGroups(userId: string) {
     } catch (e: any) {
       LogCMCError("WARNING", "DATABASE", e);
       console.error(e);
+      return "";
     }
   } 
 
@@ -122,5 +126,6 @@ export async function getUserGroups(userId: string) {
     } catch (e: any){
       LogCMCError("WARNING", "DATABASE", e);
       console.error(e);
+      return '';
     }
   }

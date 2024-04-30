@@ -31,6 +31,7 @@ export async function getReferences() {
     } catch(e: any) {
       LogCMCError("CRITICAL", "DATABASE", e);
       console.error(e);
+      return [];
     }
 }
 

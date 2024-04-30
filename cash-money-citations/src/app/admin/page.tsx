@@ -152,7 +152,7 @@ export default async function AdminDashboard() {
 }
 
 
-export const HeroSectionAdminHeader = () => {
+const HeroSectionAdminHeader = () => {
   return (
     <div className="relative bg-deep-purple-accent-400">
       <div className="absolute inset-x-0 bottom-0">

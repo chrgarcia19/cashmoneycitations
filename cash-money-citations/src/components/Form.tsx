@@ -362,7 +362,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                       handleChange={handleChange} 
                       required={true}/>
                   )}
-                  <div className="flex items-center justify-center pt-5">
+                  <div className="flex items-center justify-center">
                     <ContributorForm
                       updateFormData={updateFormData}
                       contributors={form.contributors}

@@ -67,7 +67,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
       </div>
         {formFields.map((form, index) => (
           <div key={index} className="flex items-center justify-center">
-            <select name="role" className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg w-1/3 pl-0.5 pr-1 mr-1 h-8 border" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
+            <select name="role" className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg w-3/4 pl-0.5 pr-1 mr-1 h-8 border" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
               <option value="" disabled>Role</option>
               <option value="Author">Author</option>
               <option value="Editor">Editor</option>
@@ -170,6 +170,7 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
               placeholder='Suffix'
               value={form.suffix}
               onChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)}
+              className='w-1/3'
               classNames={{
                 input: [
                     "bg-transparent",

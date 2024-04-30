@@ -3,8 +3,14 @@
 import {getDBStatistics} from "@/utils/dbConnect";
 import dbConnect from "@/utils/dbConnect";
 import CSLBibModel from "@/models/CSLBibTex";
+import CitationModel from "@/models/Citation";
+import User from "@/models/User";
+import Tag from "@/models/Tag";
+import CSLStyleModel from "@/models/CSLStyle";
+import CSLLocaleModel from "@/models/CSLLocale";
 import CMCLogModel from "@/models/Log";
 import { LogCMCError } from "@/components/componentActions/logActions";
+import Log from "@/models/Log";
 
 export async function GetDatabaseStatus() {
 
@@ -19,10 +25,28 @@ export async function GetCollectionStats(collName: string) {
   
       let collection;
       switch(collName) {
-        case "cslbibmodels":
+        case "references":
           collection = CSLBibModel;
           break;
-        // Add more cases here for other collections
+        case "citations":
+          collection = CitationModel;
+          break;
+        case "users":
+          collection = User;
+          break;
+        case "tags":
+          collection = Tag;
+          break;
+        case "cslstyles":
+          collection = CSLStyleModel;
+          break;
+        case "locales":
+          collection = CSLLocaleModel;
+          break;
+        case "logs":
+          collection = Log;
+          break;
+
       }
   
       if (!collection) {

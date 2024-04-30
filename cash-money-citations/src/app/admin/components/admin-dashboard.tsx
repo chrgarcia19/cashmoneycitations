@@ -74,7 +74,7 @@ type CollectionStatisticObject = {
 
 export const DisplayCollectionStatistics = () => {
     const [collStats, setCollStats] = useState<CollectionStatisticObject | {}>({});
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Collections"]));
+    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["references"]));
 
     const selectedValue = React.useMemo(
       () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
@@ -83,12 +83,16 @@ export const DisplayCollectionStatistics = () => {
 
     useEffect(() => {
         const fetchCollStats = async() => {
-            const stats = await GetCollectionStats('cslbibmodels');
+            const stats = await GetCollectionStats(selectedValue);
             setCollStats(stats as CollectionStatisticObject);
         }
 
         fetchCollStats();
-    }, [])
+    }, [selectedValue])
+
+    const handleSelectChange = (value: any) => {
+        setSelectedKeys(new Set([value.target.value]))
+    }
 
 
     return (
@@ -96,12 +100,30 @@ export const DisplayCollectionStatistics = () => {
             <Card className='flex flex-col items-center justify-center'>
             <CardHeader className='w-full text-center justify-between items-center'>
                 <h2 className='text-lg '>Database Collection Information</h2>
-                <div className='justify-end'>
-                    <Select className=''>
+                    <Select size='sm' className='max-w-xs' onChange={handleSelectChange}>
                         <SelectItem key={"citations"}>
                             Citations
                         </SelectItem>
+                        <SelectItem key={"logs"}>
+                            Logs
+                        </SelectItem>
+                        <SelectItem key={"users"}>
+                            Users
+                        </SelectItem>
+                        <SelectItem key={"references"}>
+                            References
+                        </SelectItem>
+                        <SelectItem key={"locales"}>
+                            Locales
+                        </SelectItem>
+                        <SelectItem key={"cslstyles"}>
+                            CSL Styles
+                        </SelectItem>
+                        <SelectItem key={"tags"}>
+                            tags
+                        </SelectItem>
                     </Select>
+                <div className='flex'>
                 </div>
             </CardHeader>
 
@@ -123,14 +145,6 @@ export const DisplayCollectionStatistics = () => {
                 </Table>
                 </div>
             </CardBody>
-
-            <CardFooter className='w-full text-center'>
-                <div>
-                <p>
-                    This is a footer
-                </p>
-                </div>
-            </CardFooter>
             </Card>
         </div>
     )

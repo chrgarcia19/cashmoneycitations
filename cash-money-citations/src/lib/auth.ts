@@ -64,8 +64,7 @@ export const authConfig: NextAuthOptions = ({
   callbacks: {
     async signIn({ user, account, profile }) {
       await dbConnect();
-      let dbUser = await User.findOne({ email: profile?.email });
-
+      let dbUser = await User.findOne({ email: profile?.email});
         if (!dbUser) {
           dbUser = await User.create({ 
             // Create 1st time user fields (OAuth users)
@@ -80,15 +79,10 @@ export const authConfig: NextAuthOptions = ({
           await initializeUserStyleList(dbUser._id);
   
         }
-      
+
       return Promise.resolve(true)
     },
     async jwt({token, account, trigger, user, session }) {
-
-      if (trigger === "signUp") {
-
-      }
-
       if (account?.type == 'oauth') {
         const oauthDbId = await User.findOne({
           email: token.email, 

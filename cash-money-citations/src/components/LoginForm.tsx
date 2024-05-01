@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
+import { useUserContext } from '../lib/UserContext';
 import Link from 'next/link'
 import { ClientSafeProvider, LiteralUnion, getProviders, signIn, useSession } from 'next-auth/react'
 import { redirect, useSearchParams } from 'next/navigation'

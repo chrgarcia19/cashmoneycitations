@@ -23,7 +23,7 @@ const MostUsedLanguage = () => {
     // }, []);
 
     return (
-        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-6 flex flex-col items-center justify-center transition duration-300 ease-in-out hover:bg-green-200 dark:hover:bg-green-800 hover:shadow-lg">
+        <div className="bg-white dark:bg-gray-700 rounded-lg shadow p-6 flex flex-col items-center justify-center transition duration-300 ease-in-out hover:bg-gray-200 dark:hover:bg-green-800 hover:shadow-lg">
             <FaLanguage className="text-4xl text-blue-500 dark:text-blue-300 mb-4" />
             <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Most Used Language</h2>
             {loading ? (

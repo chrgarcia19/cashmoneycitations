@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getSpecificReferenceById } from '@/components/componentActions/actions';
 import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
+import { SelectionGuestCSL } from '@/components/guest/GuestCSLComponents';
 import { CreateCitation } from '../[id]/references/view/actions';
 import { DeleteCitation, GetRefCSLJson } from './actions';
 import React from 'react';
@@ -15,6 +16,8 @@ import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
 import {Divider, Spinner} from "@nextui-org/react";
+import { useSession } from 'next-auth/react';
+
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -231,6 +234,8 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     element.click();
   }
 
+  const {data: session, status} = useSession();
+
 
   return (
     <>
@@ -239,7 +244,11 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
       <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
         <div className='flex flex-col'>
           <label htmlFor='styleChoice' className='mb-2 font-bold text-lg underline'>Citation Style: </label>
+{status === "authenticated" ?
           <SelectionCSL onStyleChoiceChange={setStyleChoice} currentStyle={styleChoice}/>
+          :
+<SelectionGuestCSL onStyleChoiceChange={setStyleChoice} currentStyle={styleChoice}/>
+        }
         </div>
         <Divider orientation='vertical'/>
         <div className='flex flex-col'>

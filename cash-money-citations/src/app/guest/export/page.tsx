@@ -18,7 +18,7 @@ const ExportReferences: React.FC = () => {
     async function DownloadReferences(exportType: string, lang: string) {
         let formattedReferences = '';
         // Retrieve selectedReferences from the localstorage
-        let localStorageRefIds = localStorage.getItem('selectedReferenceIds')
+        let localStorageRefIds = localStorage.getItem('references')
         if (localStorageRefIds) {
           localStorageRefIds = JSON.parse(localStorageRefIds)
         }

@@ -1,10 +1,9 @@
 import "../../css/style.css";
 import "../../css/form.css";
 import Link from "next/link";
-import { SignOut } from "../components/AuthButtons";
 import { getServerAuthSession } from "../lib/auth";
 import GuestAccess from '../components/GuestAccess'
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Image} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, Image} from "@nextui-org/react";
 import React from "react";
 import SideBar from "./SideBar";
 import AvatarDropdown from "./AvatarDropdown";
@@ -26,7 +25,7 @@ export default async function NavBar() {
             <SideBar />
             <span className="flex ml-24 self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">Cash Money Citations</span>
           </>
-        ) || (      
+        ) || (    
           <>
             <Link className="linkBtn inline-block gap-4 rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200"
               href="/">
@@ -43,6 +42,7 @@ export default async function NavBar() {
       </NavbarBrand>
       <NavbarContent as="div" justify="end">
           <ThemeSwitcher />
+          <GuestAccess />
           <AvatarDropdown session={authSession}/>
       </NavbarContent>
     </Navbar>

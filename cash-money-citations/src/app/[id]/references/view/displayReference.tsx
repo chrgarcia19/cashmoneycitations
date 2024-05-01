@@ -15,7 +15,6 @@ import {getUserReferences} from '../../../../components/componentActions/actions
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import React, { Suspense, createContext, useContext } from "react";
 import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
-import DeletePopup from "@/components/DeletePopup";
 
 const fetcher = (url: string) =>
 fetch(url)

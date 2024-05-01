@@ -2,7 +2,7 @@ import "../../css/style.css";
 import "../../css/form.css";
 import Link from "next/link";
 import { getServerAuthSession } from "../lib/auth";
-import GuestAccess from '../components/GuestAccess'
+import GuestAccess from './GuestAccess'
 import {Navbar, NavbarBrand, NavbarContent, Image} from "@nextui-org/react";
 import React from "react";
 import SideBar from "./SideBar";

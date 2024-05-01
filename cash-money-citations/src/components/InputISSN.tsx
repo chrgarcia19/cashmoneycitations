@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { LogCMCError } from "./componentActions/logActions";
 
 interface InputISSNProps {
     searchVal: string;
@@ -44,7 +45,8 @@ const InputISSN: React.FC<InputISSNProps> = ({ searchVal, reload }) =>  {
                 setData(errorItem);
             }
         }
-        catch {
+        catch (e: any) {
+            LogCMCError("WARNING", "REFERENCE", e);
             setData(errorItem);
         }
         

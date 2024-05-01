@@ -1,5 +1,6 @@
 'use client'
 
+import { LogCMCError } from "@/components/componentActions/logActions";
 import { getUserTags, handleNewTag } from "@/components/componentActions/tagActions";
 import { Tag } from "@/models/Tag"
 import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Selection, Tooltip } from "@nextui-org/react";
@@ -39,7 +40,8 @@ const TagLibrary = (props: Props) => {
             handleNewTag(tagWithoutId, session?.user?.id);
             router.push("/tag-center");
             router.refresh();
-        } catch (error) {
+        } catch (error: any) {
+            LogCMCError("WARNING", 'TAG', error);
             console.log(JSON.stringify(error));
         }
     }

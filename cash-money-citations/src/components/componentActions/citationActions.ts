@@ -9,6 +9,7 @@ import CSLBibModel, { CSLGeneralFields } from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
 import { RedirectType, redirect } from "next/navigation";
 import User from "@/models/User";
+import { LogCMCError } from "./logActions"
 
 // Type map for foreign fields -> native fields. Format [FOREIGN_FIELD: NATIVE_FIELD]
 const typeMap: {[key: string]: string } = {
@@ -140,8 +141,9 @@ export async function CreateCslFromBibTex(bibData: string, userId: string | unde
         InitializeCslJson(CSLBibTexDocument.id, result);
 
         return true;
-    } catch(error) {
-        console.error(error)
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
+        console.error(error);
         return false;
     }
 }
@@ -178,7 +180,8 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
 
         return true;
 
-    } catch(error) {
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
         console.error(error)
         return false;
     }
@@ -187,7 +190,8 @@ export async function CreateCslJsonDocument(automaticInput: any, userId: string 
 export async function InitializeCslJson(_id: string, cslJson: object) {
     try {
         await CSLBibModel.findByIdAndUpdate(_id, { cslJson: cslJson })
-    } catch(error) {
+    } catch(error: any) {
+        LogCMCError("INFORMATION", "REFERENCE", error);
         console.error(error)
     }
 }
@@ -268,12 +272,14 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
 
     try {
         const user = await User.findById(userId);
+
         if (user) {
             user.ownedReferences = [...user.ownedReferences, referenceId];
             await user.save();
         }
-    } catch(e) {
-        console.error(e);
+    } catch(e: any) {
+        LogCMCError("INFORMATION", "USER", e);
+        return 
     }
 }
 
@@ -328,8 +334,8 @@ export async function HandleManualReference(form: any, userId: any) {
         // Sorts through the contributor array of objects and assigns them properly
         await HandleContributors(form);
         const bibResponse = await CSLBibModel.create(form);
-        await AddRef2User(userId, bibResponse._id);
 
+        await AddRef2User(userId, bibResponse._id);
         const cslJson = {
             id: bibResponse._id,
             type: bibResponse.type,
@@ -419,8 +425,8 @@ export async function HandleManualReference(form: any, userId: any) {
         await HandleInitialFormat(cslJson);
 
         return true;
-      } catch (error) {
-        console.error(error)
+      } catch (error: any) {
+        LogCMCError("REFERENCE", "USER", error);
         return false;
       }
 

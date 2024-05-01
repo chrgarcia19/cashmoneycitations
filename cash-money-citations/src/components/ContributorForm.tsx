@@ -4,6 +4,7 @@ import { Contributor } from '@/models/Contributor';
 import React, { useState, useEffect } from 'react';
 import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
 import FormField from './FormField';
+import { Input } from '@nextui-org/react';
 
 interface ContributorFormProps {
   updateFormData: (newData: Contributor[]) => void;
@@ -59,75 +60,138 @@ const ContributorForm: React.FC<ContributorFormProps> = ({ updateFormData, contr
   return (
     <>
     <div className="m-0 justify-center items-center">
-      <div className="flex justify-center items-center">
-        <h1 className="font-bold align-middle text-gray-800 dark:text-white">Contributor Information (Type, First Name, Middle Name/Initial, Last Name, Suffix)</h1>
+      <div className="flex flex-col justify-center items-center p-2">
+        <h1 className="font-bold align-middle text-gray-800 dark:text-white">Contributor Information</h1>
+        <h1 className="font-bold align-middle text-gray-800 dark:text-white">(Type, First Name, Middle Name/Initial, Last Name, Suffix)</h1>
+        
       </div>
         {formFields.map((form, index) => (
           <div key={index} className="flex items-center justify-center">
-            <select name="role" className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg w-1/3 pl-0.5 pr-1 mr-1 h-8 border" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
+            <select name="role" className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg shadow-lg w-3/4 pl-0.5 pr-1 mr-1 h-8 border" defaultValue={form.role} onChange={(event) => handleFormChange(event, index)} required>
               <option value="" disabled>Role</option>
               <option value="Author">Author</option>
               <option value="Editor">Editor</option>
               <option value="Translator">Translator</option>
               <option value="Compiler">Compiler</option>
             </select>
-            <FormField 
-              required={false} 
-              labelText={'First Name'} 
-              fieldName={'given'} 
-              fieldValue={form.given} 
-              fieldType={'text'} 
-              fieldPlaceholder={'First Name'} 
-              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
-            <FormField 
-              required={false} 
-              labelText={'Middle Name'} 
-              fieldName={'middle'} 
-              fieldValue={form.middle} 
-              fieldType={'text'} 
-              fieldPlaceholder={'Middle Name'} 
-              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
-            <FormField 
-              required={true} 
-              labelText={'Last name'} 
-              fieldName={'family'} 
-              fieldValue={form.family} 
-              fieldType={'text'} 
-              fieldPlaceholder={'Last Name'} 
-              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
-            <FormField 
-              required={false} 
-              labelText={'Suffix'} 
-              fieldName={'suffix'} 
-              fieldValue={form.suffix} 
-              fieldType={'text'} 
-              fieldPlaceholder={'Suffix'} 
-              handleChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} />
-            {/*<input
+            <Input
+              type='text'
               name='given'
+              size='sm'
               placeholder='First Name'
-              onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.given}
-              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
-            <input
+              radius="lg"
+              value={form.given}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)} 
+              classNames={{
+                input: [
+                    "bg-transparent",
+                    "text-black/90 dark:text-white/90",
+                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                    "shadow-xl",
+                    "bg-default-200/50",
+                    "dark:bg-default/60",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "dark:hover:bg-default/70",
+                    "group-data-[focused=true]:bg-default-200/50",
+                    "dark:group-data-[focused=true]:bg-default/60",
+                    "!cursor-text",
+                    "px-0"
+                ],
+              }}/> 
+            <Input
+              type='text'
               name='middle'
-              placeholder='Middle Name/Initial'
-              onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.middle}
-              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
-            <input
+              size='sm'
+              radius="lg"
+              placeholder='Middle Name'
+              value={form.middle}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)}
+              classNames={{
+                input: [
+                    "bg-transparent",
+                    "text-black/90 dark:text-white/90",
+                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                    "shadow-xl",
+                    "bg-default-200/50",
+                    "dark:bg-default/60",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "dark:hover:bg-default/70",
+                    "group-data-[focused=true]:bg-default-200/50",
+                    "dark:group-data-[focused=true]:bg-default/60",
+                    "!cursor-text",
+                    "px-0"
+                ],
+              }} />
+            <Input
+              isRequired
+              type='text'
               name='family'
+              size='sm'
+              radius="lg"
               placeholder='Last Name'
-              onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.family}
-              className="w-2/4 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
-            
-            <input
+              value={form.family}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)}
+              classNames={{
+                input: [
+                    "bg-transparent",
+                    "text-black/90 dark:text-white/90",
+                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                    "shadow-xl",
+                    "bg-default-200/50",
+                    "dark:bg-default/60",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "dark:hover:bg-default/70",
+                    "group-data-[focused=true]:bg-default-200/50",
+                    "dark:group-data-[focused=true]:bg-default/60",
+                    "!cursor-text",
+                    "px-0"
+                ],
+              }} />
+            <Input
+              type='text'
               name='suffix'
+              size='sm'
+              radius="lg"
               placeholder='Suffix'
-              onChange={(event) => handleFormChange(event, index)}
-              defaultValue={form.suffix}
-        className="w-1/6 pr-0.5 mr-0.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />*/}
+              value={form.suffix}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => handleFormChange(event, index)}
+              className='w-1/3'
+              classNames={{
+                input: [
+                    "bg-transparent",
+                    "text-black/90 dark:text-white/90",
+                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                ],
+                innerWrapper: "bg-transparent",
+                inputWrapper: [
+                    "shadow-xl",
+                    "bg-default-200/50",
+                    "dark:bg-default/60",
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-200",
+                    "hover:bg-default-200/70",
+                    "dark:hover:bg-default/70",
+                    "group-data-[focused=true]:bg-default-200/50",
+                    "dark:group-data-[focused=true]:bg-default/60",
+                    "!cursor-text",
+                    "px-0"
+                ],
+              }} />   
             <button type="button" className="m-0 text-white bg-red-500 hover:bg-red-700 dark:hover:bg-red-900 rounded-lg text-sm mb-0.5 p-1" onClick={() => removeFields(index)}><BiSolidTrash /></button>
           </div>
       ))}

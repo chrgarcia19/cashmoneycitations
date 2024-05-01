@@ -16,11 +16,10 @@ const ThemeSwitcher = () => {
   }
 
   return (
-    <div className="flex items-center space-x-2">
-      <span className="text-white dark:text-gray-300">Current Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+    <div className="flex items-center space-x-2 p-8">
       <button 
         className={`p-2 rounded-lg transition-colors duration-300 ${
-          theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-gray-200'
+          theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-orange-600 text-gray-200'
         }`}
         onClick={() => setTheme('light')}
       >
@@ -28,7 +27,7 @@ const ThemeSwitcher = () => {
       </button>
       <button 
         className={`p-2 rounded-lg transition-colors duration-300 ${
-          theme === 'dark' ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-gray-200'
+          theme === 'dark' ? 'bg-gray-200 text-gray-800' : 'bg-indigo-800 text-gray-200'
         }`}
         onClick={() => setTheme('dark')}
       >

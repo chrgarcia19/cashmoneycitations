@@ -5,8 +5,8 @@ import MyAnimationComponent from "../components/MyAnimationComponent";
 import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Dashboard from "../components/dashboardComponents/Dashboard";
 import { FaSearch, FaFileExport, FaGlobeAmericas, FaBook, FaBarcode, FaIdBadge, FaKey } from "react-icons/fa";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 export default function Home() {
 
@@ -99,7 +99,8 @@ export default function Home() {
       } else {
         setResponseMessage("Failed to send message. Please try again.");
       }
-    } catch (error) {
+    } catch (error: any) {
+      LogCMCError("WARNING", "USER", error);
       console.error("Error:", error);
       setResponseMessage("An error occurred. Please try again.");
     } finally {

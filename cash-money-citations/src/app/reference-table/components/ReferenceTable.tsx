@@ -43,6 +43,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { TbEditOff, TbEdit } from "react-icons/tb";
 import { localeLabelSelect } from "./language-selections"
 import DisplayGroups from "@/components/DisplayGroups";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 const ReferenceContext = createContext({
   references: [],
@@ -163,6 +164,8 @@ export default function ReferenceTable(userRefObject: any) {
   const router = useRouter();
 
     const handleDelete = async (refID: string) => {
+      const deleteConfirm = confirm("Are you sure you want to delete this reference?");
+      if (deleteConfirm){
         try {
           await fetch(`/api/references/${refID}`, {
             method: "Delete",
@@ -172,44 +175,48 @@ export default function ReferenceTable(userRefObject: any) {
           // Set state to new reference array
           setReferences(newReferences);
           setRefLength(newReferences.length);
-        } catch (error) {
+        } catch (error: any) {
+          LogCMCError("WARNING", 'REFERENCE', error);
           console.error(error);
         }
+      }
     };
 
     const handleDeleteMany = async (deleteAll: boolean, idsToDelete: string[]) => {
-      if (deleteAll) {
-        idsToDelete = referenceIds;
-      }
-
-      let newReferences = [...items]; // Copy the current items
-
-        // Collect all fetch promises in an array
-      const fetchPromises = idsToDelete.map(refID =>
-        fetch(`/api/references/${refID}`, {
-          method: "Delete"
-        })
-      );
-
-      try {
-        // Wait for all fetch requests to complete
-        await Promise.all(fetchPromises);
-
-        // Filter out the items with the given refIDs
-        newReferences = newReferences.filter(item => !idsToDelete.includes(item._id));
-
-        // Set state to new reference array
-        setReferences(newReferences);
-        setRefLength(newReferences.length);
-
-        // Filter out the deleted refIDs from selectedKeys
-        //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
-        setSelectedKeys(new Set([]));
-      } catch (error) {
-        console.error(error);
-      }
-      
-
+      const deleteConfirm = confirm("Are you sure you want to delete these references?");
+      if (deleteConfirm){
+        if (deleteAll) {
+          idsToDelete = referenceIds;
+        }
+  
+        let newReferences = [...items]; // Copy the current items
+  
+          // Collect all fetch promises in an array
+        const fetchPromises = idsToDelete.map(refID =>
+          fetch(`/api/references/${refID}`, {
+            method: "Delete"
+          })
+        );
+  
+        try {
+          // Wait for all fetch requests to complete
+          await Promise.all(fetchPromises);
+  
+          // Filter out the items with the given refIDs
+          newReferences = newReferences.filter(item => !idsToDelete.includes(item._id));
+  
+          // Set state to new reference array
+          setReferences(newReferences);
+          setRefLength(newReferences.length);
+  
+          // Filter out the deleted refIDs from selectedKeys
+          //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
+          setSelectedKeys(new Set([]));
+        } catch (error: any) {
+          LogCMCError("WARNING", 'REFERENCE', error);
+          console.error(error);
+        }
+      }    
     }
 
 
@@ -563,10 +570,10 @@ export default function ReferenceTable(userRefObject: any) {
                   </DropdownTrigger>
                   <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                     <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex", localeChoice)}>
-                      BibLaTex
+                      BibLaTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex", localeChoice)}>
-                      BibTex
+                      BibTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson", localeChoice)}>
                       CSL-JSON

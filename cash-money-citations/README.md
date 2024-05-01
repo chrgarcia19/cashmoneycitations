@@ -8,8 +8,6 @@ This example shows how you can use a MongoDB database to support your Next.js ap
 
 Once you have access to [the environment variables you'll need](#step-2-set-up-environment-variables), deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-mongodb-mongoose&project-name=with-mongodb-mongoose&repository-name=with-mongodb-mongoose&env=MONGODB_URI&envDescription=Required%20to%20connect%20the%20app%20with%20MongoDB&envLink=https://github.com/vercel/next.js/tree/canary/examples/with-mongodb-mongoose%23step-2-set-up-environment-variables)
-
 ## How to use
 
 Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
@@ -28,13 +26,15 @@ pnpm create next-app --example with-mongodb-mongoose with-mongodb-mongoose-app
 
 ## Configuration
 
-### Step 1. Get the connection string of your MongoDB server
+### Step 1. Get information from MongoDB instance
 
-In the case of MongoDB Atlas, it should be a string like this:
-
-```
-mongodb+srv://<username>:<password>@my-project-abc123.mongodb.net/test?retryWrites=true&w=majority
-```
+You will need the following information to form the MongoDB connection string which will connect & authenticate with the database instance:
+- Database Host Name/IP: *Default: 127.0.0.1*
+- Database Port Number: *Default: 27017*
+- Database Name: **cmcData**
+- Database to authenticate with: **admin** (Can be changed after initial setup)
+- Database admin username: **cmcAdmin** (Can be changed after initial setup)
+- Database admin account password: *____*
 
 For more details, follow this [MongoDB Guide](https://docs.mongodb.com/guides/server/drivers/) on how to connect to MongoDB.
 
@@ -48,7 +48,6 @@ cp .env.local.example .env.local
 
 Then set each variable on `.env.local`:
 
-- `MONGODB_URI` should be the MongoDB connection string you got from step 1.
 
 ### Step 3. Run Next.js in development mode
 

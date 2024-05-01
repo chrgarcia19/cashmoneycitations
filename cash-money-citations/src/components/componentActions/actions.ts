@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import CSLBibModel, { CSLBibInterface } from "@/models/CSLBibTex";
 import UserStyleList from '@/models/UserStyleList'; 
 import mongoose from "mongoose";
-import Tag from "@/models/Tag";
+import { LogCMCError } from "./logActions";
 
 interface RegistrationData {
   username: string;
@@ -19,14 +19,20 @@ interface RegistrationData {
 
 export async function getReferences() {
     await dbConnect();
-  
-    const result = await CSLBibModel.find({});
-    const references = result.map((doc) => {
-      const reference = JSON.parse(JSON.stringify(doc));
-      return reference;
-    });
-  
-    return references;
+
+    try {
+      const result = await CSLBibModel.find({});
+      const references = result.map((doc) => {
+        const reference = JSON.parse(JSON.stringify(doc));
+        return reference;
+      });
+    
+      return references;
+    } catch(e: any) {
+      LogCMCError("CRITICAL", "DATABASE", e);
+      console.error(e);
+      return [];
+    }
 }
 
 export async function getUserReferences(userId: string) {
@@ -46,7 +52,8 @@ export async function getUserReferences(userId: string) {
     });
   
     return references;
-  } catch(e) {
+  } catch(e: any) {
+    LogCMCError("INFORMATION", "DATABASE", e);
     console.error(e);
   }
 
@@ -84,8 +91,9 @@ export async function getSpecificReferenceById(id: string | string[] | undefined
     } else {
       return false;
     }
-  } catch(error) {
-    console.error(error)
+  } catch(e: any) {
+    LogCMCError("WARNING", "DATABASE", e);
+    console.error(e);
   }
 }
 
@@ -100,12 +108,14 @@ export async function getSpecificUserById(id: string | string[] | undefined) {
     } else {
       return false;
     }
-  } catch(error) {
-    console.error(error)
+  } catch(e: any) {
+    LogCMCError("WARNING", "DATABASE", e);
+    console.error(e)
   }
 }
 
 export async function initializeUserStyleList(userId: string) {
+  try {
     // Create a new UserStyleList document that references the user
     const userStyleList = new UserStyleList({
       userId: userId,
@@ -121,8 +131,13 @@ export async function initializeUserStyleList(userId: string) {
           "ACM SIGGRAPH",
           "IEEE",
       ]
-  });
-  await userStyleList.save();
+    });
+    await userStyleList.save();
+
+  } catch(e: any) {
+    LogCMCError("WARNING", "DATABASE", e);
+    console.error(e);
+  }
 }
 
 export async function createUser(form: RegistrationData) {
@@ -167,7 +182,9 @@ export async function createUser(form: RegistrationData) {
 
       
       revalidatePath('/');
-  } catch (error) {
+  } catch (e: any) {
+    LogCMCError("WARNING", "DATABASE", e);
+
     return {
       status: 409,
       message: "Unknown user creation error. Please try again."

@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaUser } from 'react-icons/fa';
 import { useSession } from "next-auth/react";
-import { Tooltip } from 'react-tooltip'
+
+import { Avatar, Tooltip } from '@nextui-org/react';
 
 const GuestAccess: React.FC = () => {
   const [statusGuest, setStatusGuest] = useState<string>('');
@@ -37,13 +38,19 @@ const GuestAccess: React.FC = () => {
 
   return (
     <div>
-      <button className="" onClick={handleGuestAccess}>
-      <FaUser className="text-white text-3xl my-anchor-element" size={34}/>
-      </button>
-      <Tooltip anchorSelect=".my-anchor-element" place="top">
-  Guest User
-</Tooltip>
-      {/* <p className="mt-2">{status}</p> */}
+      <Tooltip
+      content="Guest User"
+      className='dark:text-white'>
+        <Avatar
+          isBordered
+          as="button"
+          onClick={handleGuestAccess}
+          className="transition-transform"
+          color="secondary"
+          size="lg"
+          showFallback
+        />
+      </Tooltip>
     </div>
   );
 };

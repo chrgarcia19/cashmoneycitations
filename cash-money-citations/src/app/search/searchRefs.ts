@@ -1,6 +1,7 @@
 "use server"
 import CSLBibModel from "@/models/CSLBibTex";
 import dbConnect from "../../utils/dbConnect";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 export default async function searchRefs(str: string) {
     await dbConnect();
@@ -31,7 +32,8 @@ export default async function searchRefs(str: string) {
             ],
         });
         return JSON.stringify(references);
-    } catch (error) {
+    } catch (error: any) {
+        LogCMCError("WARNING", 'REFERENCE', error);
         console.error("Error searching references:", error);
         throw new Error("An error occurred while searching references.");
     }

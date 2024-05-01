@@ -321,7 +321,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   name="type"
                   defaultValue={form.type}
                   onChange={handleChange}
-                  className="block w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-gray-800 dark:text-white"
+                  className="block w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg focus:outline-none focus:ring-green-500 focus:border-green-500 text-gray-800 dark:text-white"
                 >
                   {Object.values(EntryType).map((value) => (
                     <option key={value} value={value}>
@@ -478,7 +478,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
               {form.type && (
                 <DatePicker
-                  masterLabelText="Date Published (Month, Day, Year)"
+                  masterLabelText="Date Published"
                   labelText={["Month", "Day", "Year"]}
                   fieldName={[
                     "monthPublished",
@@ -511,7 +511,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 form.type === "article-newspaper" ||
                 form.type === "webpage") && (
                 <DatePicker
-                  masterLabelText="Date Accessed (Month, Day, Year)"
+                  masterLabelText="Date Accessed"
                   labelText={["Month", "Day", "Year"]}
                   fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
                   fieldValue={[

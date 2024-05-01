@@ -102,20 +102,24 @@ const RemoveReferenceFromTag = (props: Props) => {
   
       async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
-        const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-        /*Remove the Reference IDs from the tag */
-        for (let i = 0; i < refs.length; i++){
-          await deleteReferenceIdFromTag(refs[i], props.tag);
-        }
-        
-        /*Remove TagIDs from each reference*/
-        for (let i = 0; i < references.length; i++){
-          await deleteTagIdFromReference(props.tag._id, references[i]);
-        }
+        const deleteConfirm = confirm("Are you sure you want to delete this reference from the tag?");
+        if (deleteConfirm){
+          const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-        router.push("/tag-center");
-        router.refresh();
+          /*Remove the Reference IDs from the tag */
+          for (let i = 0; i < refs.length; i++){
+            await deleteReferenceIdFromTag(refs[i], props.tag);
+          }
+          
+          /*Remove TagIDs from each reference*/
+          for (let i = 0; i < references.length; i++){
+            await deleteTagIdFromReference(props.tag._id, references[i]);
+          }
+
+          router.push("/tag-center");
+          router.refresh();
+        }
       }
 
     return (

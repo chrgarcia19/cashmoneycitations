@@ -163,6 +163,8 @@ export default function ReferenceTable(userRefObject: any) {
   const router = useRouter();
 
     const handleDelete = async (refID: string) => {
+      const deleteConfirm = confirm("Are you sure you want to delete this reference?");
+      if (deleteConfirm){
         try {
           await fetch(`/api/references/${refID}`, {
             method: "Delete",
@@ -175,41 +177,43 @@ export default function ReferenceTable(userRefObject: any) {
         } catch (error) {
           console.error(error);
         }
+      }
     };
 
     const handleDeleteMany = async (deleteAll: boolean, idsToDelete: string[]) => {
-      if (deleteAll) {
-        idsToDelete = referenceIds;
-      }
-
-      let newReferences = [...items]; // Copy the current items
-
-        // Collect all fetch promises in an array
-      const fetchPromises = idsToDelete.map(refID =>
-        fetch(`/api/references/${refID}`, {
-          method: "Delete"
-        })
-      );
-
-      try {
-        // Wait for all fetch requests to complete
-        await Promise.all(fetchPromises);
-
-        // Filter out the items with the given refIDs
-        newReferences = newReferences.filter(item => !idsToDelete.includes(item._id));
-
-        // Set state to new reference array
-        setReferences(newReferences);
-        setRefLength(newReferences.length);
-
-        // Filter out the deleted refIDs from selectedKeys
-        //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
-        setSelectedKeys(new Set([]));
-      } catch (error) {
-        console.error(error);
-      }
-      
-
+      const deleteConfirm = confirm("Are you sure you want to delete these references?");
+      if (deleteConfirm){
+        if (deleteAll) {
+          idsToDelete = referenceIds;
+        }
+  
+        let newReferences = [...items]; // Copy the current items
+  
+          // Collect all fetch promises in an array
+        const fetchPromises = idsToDelete.map(refID =>
+          fetch(`/api/references/${refID}`, {
+            method: "Delete"
+          })
+        );
+  
+        try {
+          // Wait for all fetch requests to complete
+          await Promise.all(fetchPromises);
+  
+          // Filter out the items with the given refIDs
+          newReferences = newReferences.filter(item => !idsToDelete.includes(item._id));
+  
+          // Set state to new reference array
+          setReferences(newReferences);
+          setRefLength(newReferences.length);
+  
+          // Filter out the deleted refIDs from selectedKeys
+          //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
+          setSelectedKeys(new Set([]));
+        } catch (error) {
+          console.error(error);
+        }
+      }    
     }
 
 

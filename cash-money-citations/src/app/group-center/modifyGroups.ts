@@ -72,17 +72,21 @@ export async function applyReferencesToGroup(group: Group, referenceIds: string)
 }
 
 export const handleDelete = async (groupId: string, references: CSLBibInterface[], router: AppRouterInstance) => {
-  for (let i = 0; i < references.length; i++){
-    deleteGroupIdFromReference(groupId, references[i]);
-  }
-  
-  try {
-    await fetch(`/api/groups/${groupId}`, {
-      method: "Delete",
-    });
-    router.push('/group-center');
-    router.refresh();
-  } catch (error) {
+  const deleteConfirm = confirm("Are you sure you want to delete this group?");
+  if (deleteConfirm){
+    for (let i = 0; i < references.length; i++){
+      deleteGroupIdFromReference(groupId, references[i]);
+    }
+    
+    try {
+      await fetch(`/api/groups/${groupId}`, {
+        method: "Delete",
+      });
+      router.push('/group-center');
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 

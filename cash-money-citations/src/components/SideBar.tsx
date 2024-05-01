@@ -10,6 +10,8 @@ import { FaHome, FaBook, FaBarcode, FaArrowDown } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdSpaceDashboard, MdGroup } from "react-icons/md";
 import { useSession } from "next-auth/react";
+import { Image } from "@nextui-org/react";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 // import { getServerAuthSession } from "@/lib/auth";
 
@@ -28,14 +30,21 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="fixed flex flex-col z-20 items-center text-white transition-all ease-in-out duration-30 mr-10">
+      <div className="fixed flex flex-col top-0 items-center text-white transition-all ease-in-out duration-30 px-0">
         {/* Dedicated Toggle Button */}
-        <div className="p-4">
+        <div>
           <button
             onClick={toggleIcons}
-            className="mb-4 flex items-center opacity-0 justify-center bg-gray-800 p-3 rounded-full hover:bg-gray-500 transition duration-300 ease-in-out"
+            className="inline-block gap-6 rounded-full tracking-wide shadow-xs hover:shadow-2xl active:shadow-xl transform hover:-translate-y-1 active:translate-y-0 transition duration-200 ease-in-out"
           >
-            <BsList className="text-xl" size={40} />
+            <div className="flex items-center">
+              <Image 
+                src={"cashmoneycitations_logo.png"}
+                alt="Cash Money Citations Logo"
+                width={65}
+              />
+              <IoMdArrowDropdown className="bg-black"/>
+            </div>
           </button>
         </div>
 

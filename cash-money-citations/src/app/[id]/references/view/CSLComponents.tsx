@@ -11,6 +11,7 @@ import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { FixedSizeList as List, areEqual } from "react-window";
 import memoize from 'memoize-one';
 import { UpdateUserStyleList } from "@/app/displayCitation/actions";
+import { useRouter } from "next/navigation";
 
 const fetcher = (url: string) =>
 fetch(url)
@@ -33,6 +34,11 @@ export function SelectionCSL({ onStyleChoiceChange, currentStyle }: SelectionCSL
 const [styleChoice, setStyleChoice] = useState('');
 const [styleSearch, setStyleSearch] = useState('');
 
+const [isRemoving, setIsRemoving] = useState(false);
+const [removeError, setRemoveError] = useState('');
+const [saveError, setSaveError] = useState('');
+
+const router = useRouter();
 const {
     data: cslStyles,
     error,
@@ -63,23 +69,34 @@ if (isLoading) return <p>Loading...</p>;
 if (!cslStyles) return null;
 
 const handleStyleChoiceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  try {
     const styleChoice = e.target.value;
     setStyleChoice(styleChoice);
     onStyleChoiceChange(styleChoice);
+  } catch(e) {
+    setSaveError(`Error selecting style: ${e}`);
+    console.error(e)
+  }
+
 };
+
+const removeFromStyleList = async(styleChoice: string) => {
+  try {
+    await UpdateUserStyleList(styleChoice, true);
+    setIsRemoving(false);
+    router.refresh()
+  } catch (e) {
+    setRemoveError(`Error removing style: ${e}`);
+    console.error(e)
+  }
+}
 
 return (
   <div className="flex gap-4">
-    {/* <select className='p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' value={styleChoice} onChange={handleStyleChoiceChange}>
-      {cslStyles.map((cslStyle: any) => (
-        <option key={cslStyle._id} value={cslStyle.name}>
-          {cslStyle.title}
-        </option>
-      ))}
-    </select> */}
-    <Dropdown>
+    {saveError || removeError}
+    <Dropdown isDisabled={isRemoving}>
       <DropdownTrigger >
-        <Button variant="bordered">
+        <Button variant="bordered" disabled={isRemoving}>
           {currentStyle} <ChevronDownIcon />
         </Button>
       </DropdownTrigger>
@@ -90,7 +107,6 @@ return (
           placeholder="Search Styles..."
           className="mb-4 w-full p-2 text-gray-700 leading-tight"
           value={styleSearch}
-          
           onChange={(e) => setStyleSearch(e.target.value)}
         />}
       >
@@ -98,18 +114,23 @@ return (
           style={{ maxHeight: '200px', overflowY: 'auto' }}
         >
           {filteredStyles.map((style: any) => (
-            <DropdownItem key={style._id} className="flex items-center justify-between bg-white rounded-lg shadow">
-              <label htmlFor={`locale-${style._id}`} className="flex items-center w-full">
-                <input
-                  id={`locale-${style._id}`}
-                  type="radio"
-                  name="styles"
-                  value={style.title}
-                  checked={styleChoice.includes(style.title)}
-                  onChange={handleStyleChoiceChange}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
-                />
-                <span className="text-sm text-gray-800 font-sm">{style.title}</span>
+           <DropdownItem key={style._id} className="flex items-center justify-between bg-white rounded-lg shadow">
+           <label htmlFor={`locale-${style._id}`} className="flex justify-between items-center w-full">
+             <div className="flex items-center">
+               <input
+                 id={`locale-${style._id}`}
+                 type="radio"
+                 name="styles"
+                 value={style.title}
+                 checked={styleChoice.includes(style.title)}
+                 onChange={handleStyleChoiceChange}
+                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2"
+               />
+               <span className="text-sm text-gray-800 font-sm">{style.title}</span>
+             </div>
+              <Button color="danger" onPress={() => { setIsRemoving(true); removeFromStyleList(style.title); }}>
+                Delete
+              </Button>
               </label>
             </DropdownItem>
           ))}
@@ -118,8 +139,6 @@ return (
       </DropdownMenu>
     </Dropdown>
     <ModalCSLSelect />
-
-    
   </div>
   );
 }
@@ -127,11 +146,16 @@ return (
 function ModalCSLSelect() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [cslSelect, setCslSelect] = useState<string[]>([]);
-
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [removeError, setRemoveError] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   const saveNewStyleList = async(cslSelect: string[] ) => {
-    await UpdateUserStyleList(cslSelect);
+    await UpdateUserStyleList(cslSelect, false);
   }
+
+
 
   let list = useAsyncList({
     async load({signal, filterText = ''}) {
@@ -145,27 +169,22 @@ function ModalCSLSelect() {
   });
 
   const Row = memo(({ data, index, style }: any) => {
-
     const { items } = data;
     const item = items[index];
-
+  
     return (
-      <div
-        style={style}
-      >
-        <span>
-          {item.title}
-
-        </span>
-        <Button onPress={() => setCslSelect([...cslSelect, item.title])}>
-          Add
-        </Button>
+      <div style={{...style, position: 'relative'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <span style={{ flexGrow: 1 }}>
+            {item.title}
+          </span>
+          <Button className="py-2" onPress={() => setCslSelect([...cslSelect, item.title])}>
+            Add
+          </Button>
+        </div>
         <Divider />
-
       </div>
-
     )
-
   }, areEqual);
 
   
@@ -213,7 +232,6 @@ function ModalCSLSelect() {
                         itemSize={50}
                       >
                         {Row}
-
                       </List>
                     </div>
 

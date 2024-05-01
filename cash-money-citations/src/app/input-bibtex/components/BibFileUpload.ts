@@ -24,7 +24,7 @@ export const ParseBibTexUpload = async (formData: FormData) => {
         const bibEntries = entries.map(entry => '@' + entry);
         return bibEntries;
     } catch(error) {
-        return "Parsing BibTex File Failed.";
+        return "Parsing BibTeX File Failed.";
     }
 }
 

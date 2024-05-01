@@ -6,6 +6,7 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from 'next-auth/providers/google';
 import { initializeUserStyleList } from "@/components/componentActions/actions";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 export const authConfig: NextAuthOptions = ({
   providers: [
@@ -37,8 +38,9 @@ export const authConfig: NextAuthOptions = ({
           }
 
           return user;
-        } catch (error) {
-          console.log("Error: ", error);
+        } catch (e: any) {
+          LogCMCError("INFORMATION", "USER", e);
+          console.log("Error: ", e);
         }
       },
     }),

@@ -1,12 +1,8 @@
 'use server'
 
-import mongoose from "mongoose";
-const fs = require('fs');
-const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
-const { plugins } = require('@citation-js/core')
 import CSLBibModel from "@/models/CSLBibTex";
 import dbConnect from "@/utils/dbConnect";
 import CSLStyleModel from "@/models/CSLStyle";
@@ -15,6 +11,7 @@ import CitationModel from "@/models/Citation";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
 import UserStyleList from "@/models/UserStyleList";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 export async function DeleteCitation(citationId: string) {
     await CitationModel.findOneAndDelete({ _id: citationId });
@@ -33,37 +30,6 @@ export async function GetRefCSLJson(referenceId: string, styleChoice: string, lo
     cslJson[0].refId = reference._id.toString();
     return cslJson;
 
-    // // Create a Cite instance with the references' cslJson data
-    // const citation = new Cite(allCitations);
-
-    // // Create a custom template and style for each specified style/locale
-    // const templateName = styleChoice;
-    // const localeName = localeChoice;
-
-    // // Find citation style where the name = the selected list
-    // const styleData = await CSLStyleModel.findOne({
-    //     name: templateName,
-    // }).exec()
-
-    // // Find locale where name = inputted locale
-    // const localeData = await CSLLocaleModel.findOne({
-    //     name: localeName,
-    // }).exec()
-
-    // const config = plugins.config.get('@csl')
-    
-    // // Add citation style & locale to Citation.js config
-    // config.templates.add(templateName, styleData?.cslData);
-    // config.locales.add(localeName, localeData?.localeData);
-
-    // // Create custom citation with user specified style & locale
-    // const customCitation = citation.format('bibliography', {
-    //     format: 'text',
-    //     template: templateName,
-    //     lang: localeName,
-    // });
-
-    // return customCitation;
 }
 
 export async function GetCSLStyle(templateName: string) {
@@ -77,7 +43,8 @@ export async function GetCSLStyle(templateName: string) {
         styledataObject._id = styledataObject._id.toString();
 
         return styledataObject;
-    } catch(e) {
+    } catch(e: any) {
+        LogCMCError("WARNING", "CSLSTYLE", e);
         console.log(e)
     }
 
@@ -101,7 +68,7 @@ export async function GetCSLLocale(localeName: string) {
 
 }
 
-export async function UpdateUserStyleList(newStyles: string[]) {
+export async function UpdateUserStyleList(newStyles: string[] | string, removeStyle: boolean) {
 
     await dbConnect();
 
@@ -109,10 +76,19 @@ export async function UpdateUserStyleList(newStyles: string[]) {
         const session = await getServerSession(authConfig);
         const userId = session?.user?.id ?? '';
     
-        const userStyles = await UserStyleList.updateOne({
-          userId: userId},
-          { $push: { defaultStyles: { $each: newStyles }}}
-        );
+        if (removeStyle == false) {
+            await UserStyleList.updateOne({
+                userId: userId},
+                { $push: { defaultStyles: { $each: newStyles }}}
+            );
+        } else {
+            
+            await UserStyleList.updateOne({
+                userId: userId},
+                { $pull: { defaultStyles: newStyles}}
+            );
+        }
+
     
     } catch(e) {
         console.error(e);

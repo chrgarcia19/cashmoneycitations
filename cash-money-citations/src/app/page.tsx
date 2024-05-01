@@ -6,6 +6,7 @@ import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Dashboard from "../components/Dashboard";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 export default function Home() {
   const { data: session, status } = useSession(); // Use useSession to access the session
@@ -64,7 +65,8 @@ export default function Home() {
       } else {
         setResponseMessage("Failed to send message. Please try again.");
       }
-    } catch (error) {
+    } catch (error: any) {
+      LogCMCError("WARNING", "USER", error);
       console.error("Error:", error);
       setResponseMessage("An error occurred. Please try again.");
     } finally {

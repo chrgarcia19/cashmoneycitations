@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
-
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell, getKeyValue} from "@nextui-org/react";
+import { LogCMCError } from "./componentActions/logActions";
 
 interface InputDOIProps {
     searchVal: string;
@@ -119,26 +120,69 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             abstract: item.abstract,
             apiSource: item.source
         };
-
-        HandleManualReference(doiReference, session?.user?.id)
-        router.push("/reference-table");
-        router.refresh();
+        try {
+            HandleManualReference(doiReference, session?.user?.id)
+        } catch(e: any) {
+            LogCMCError("INFORMATION", "REFERENCE", e);
+            console.error(e);
+        }
+        //router.push("/reference-table");
+        //router.refresh();
     }
+
+    const columns = [
+        {
+            key: "DOI",
+            label: "DOI"
+        },
+        {
+            key: "title",
+            label: "Title"
+        },
+        {
+            key: "action",
+            label: "Action"
+        }
+    ]
+
+    const renderCell = React.useCallback((doi: any, columnKey: React.Key) => {
+        const cellValue = doi[columnKey as keyof any];
+    
+        switch (columnKey) {
+          case "DOI":
+            return (
+                <div>
+                    <p className="border-r border-b border-l border-zinc-500 py-2 px-2">{cellValue}</p>
+
+                </div>
+            );
+          case "title":
+            return (
+              <div className="flex flex-col">
+                <p className="text-bold text-small capitalize">{cellValue}</p>
+              </div>
+            );
+          case "action":
+            return (
+              <div className="relative flex justify-end items-center gap-2">
+                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(doi)}>Add to list</button>
+              </div>
+            );
+          default:
+            return cellValue;
+        }
+      }, []);
 
     return (
         <>
             <div className="flex flex-col items-center">
             {tableShown && (
-                <table className="table-auto mt-4 border-solid">
-                <thead className="bg-zinc-700 text-white">
-                  <tr>
-                    <th>DOI</th>
-                    <th>Title</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {data.map(item => (
+                <Table className="table-auto mt-4 border-solid">
+                <TableHeader columns={columns} className="bg-zinc-700 text-white">
+                    {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+                </TableHeader>
+                <TableBody items={data}>
+                    {/* {data.map(item => (
                         <tr key={item.DOI} className="border-b hover:bg-gray-100">
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.DOI}</td>
                             <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title}</td>
@@ -146,9 +190,14 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
                                 <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
                             </td>
                         </tr>
-                    ))}
-                </tbody>
-              </table>
+                    ))} */}
+                    {(item) => (
+                        <TableRow key={item.DOI}>
+                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                        </TableRow>
+                    )}
+                </TableBody>
+              </Table>
             )}
         </div>
         </>

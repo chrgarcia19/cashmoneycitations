@@ -43,6 +43,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { TbEditOff, TbEdit } from "react-icons/tb";
 import { localeLabelSelect } from "./language-selections"
 import DisplayGroups from "@/components/DisplayGroups";
+import { LogCMCError } from "@/components/componentActions/logActions";
 
 const ReferenceContext = createContext({
   references: [],
@@ -174,7 +175,8 @@ export default function ReferenceTable(userRefObject: any) {
           // Set state to new reference array
           setReferences(newReferences);
           setRefLength(newReferences.length);
-        } catch (error) {
+        } catch (error: any) {
+          LogCMCError("WARNING", 'REFERENCE', error);
           console.error(error);
         }
       }
@@ -210,7 +212,8 @@ export default function ReferenceTable(userRefObject: any) {
           // Filter out the deleted refIDs from selectedKeys
           //const newSelectedKeys = new Set([...selectedKeys].filter(key => !refIDs.includes(key)));
           setSelectedKeys(new Set([]));
-        } catch (error) {
+        } catch (error: any) {
+          LogCMCError("WARNING", 'REFERENCE', error);
           console.error(error);
         }
       }    
@@ -567,10 +570,10 @@ export default function ReferenceTable(userRefObject: any) {
                   </DropdownTrigger>
                   <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
                     <DropdownItem key="new" value="biblatex" onClick={e => DownloadReferences("biblatex", localeChoice)}>
-                      BibLaTex
+                      BibLaTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="bibtex" onClick={e => DownloadReferences("bibtex", localeChoice)}>
-                      BibTex
+                      BibTeX
                     </DropdownItem>
                     <DropdownItem key="new" value="csljson" onClick={e => DownloadReferences("csljson", localeChoice)}>
                       CSL-JSON

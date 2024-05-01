@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema<Users>({
         maxlength: [72, "Must be less than 72 characters long, got {VALUE}"],
         required: true,
         unique: true,
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please input a valid email address'],
     },
     password: {
         /* The password of the user */

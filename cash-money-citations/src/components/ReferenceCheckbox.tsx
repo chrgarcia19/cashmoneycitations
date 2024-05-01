@@ -6,6 +6,7 @@ import { Tag } from "@/models/Tag";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { LogCMCError } from "./componentActions/logActions";
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 const { plugins } = require('@citation-js/core')
@@ -57,7 +58,9 @@ export const Checkbox = ({ references, tags }: IProps) => {
           });
           router.push('/reference-table');
           router.refresh();
-        } catch (error) {
+        } catch (error: any) {
+            LogCMCError("INFORMATION", 'REFERENCE', error);
+            console.error(error);
         }
     };
 
@@ -77,7 +80,9 @@ export const Checkbox = ({ references, tags }: IProps) => {
                 await fetch(`/api/references/${refIDs[i]}`, {
                     method: "Delete"
                 });
-            } catch (error) {
+            } catch (error: any) {
+                LogCMCError("INFORMATION", 'REFERENCE', error);
+                console.error(error);
             }
         }
         router.push('/reference-table');

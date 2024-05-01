@@ -14,7 +14,11 @@ import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
-import {Divider, Spinner} from "@nextui-org/react";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
+import {Button, ButtonGroup, Divider, Spinner} from "@nextui-org/react";
+import {Select, SelectItem} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/react";
+import { IoMdDownload } from "react-icons/io";
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -231,36 +235,54 @@ export const CitationChoice = React.memo(({ referenceId, citations, setCitations
     element.click();
   }
 
+  const selectDownloadOptions = [
+    {label: "TXT", value: 'txt'},
+    {label: "CSV", value: 'csv'},
+  ]
+
 
   return (
     <>
       {alert.message && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ type: '', message: '' })} />}    
-      <div className='center-content'>
-      <div className='flex items-center space-x-5 bg-gray-200 p-4 rounded-md'>
-        <div className='flex flex-col'>
-          <label htmlFor='styleChoice' className='mb-2 font-bold text-lg underline'>Citation Style: </label>
-          <SelectionCSL onStyleChoiceChange={setStyleChoice} currentStyle={styleChoice}/>
+      <div className='center-content min-w-[60%]'>
+
+        <div className='flex justify-between space-x-4 bg-gray-200 p-4 rounded-md'>
+          <Card>
+            <CardHeader className='justify-center'>
+              <label htmlFor='styleChoice' className='mb-2 text-center font-bold text-lg'>Citation Style</label>
+            </CardHeader>
+            <CardBody>
+              <SelectionCSL onStyleChoiceChange={setStyleChoice} currentStyle={styleChoice}/>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader className='justify-center'>
+              <label htmlFor='localeChoice' className='mb-2 font-bold text-lg'>Language</label>
+            </CardHeader>
+            <CardBody>
+              <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
+            </CardBody>
+          </Card>
+
+          <Card className='min-w-[25%]'>
+            <CardHeader className='justify-center'>
+              <label className='mb-2 font-bold text-lg'>Download</label>
+
+            </CardHeader>
+            <CardBody className='flex justify-end'>
+              <Select className='max-w-[100%]' value={downloadFormat} defaultSelectedKeys={["txt"]} onChange={event => setDownloadFormat(event.target.value)}>
+                {selectDownloadOptions.map((option: any) => (
+                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                ))}
+              </Select>
+              <Button onClick={downloadCitations} color='success' title='Click to download citations'>
+                <IoMdDownload />
+              </Button>
+            </CardBody>
+          </Card>
+
         </div>
-        <Divider orientation='vertical'/>
-        <div className='flex flex-col'>
-          <label htmlFor='localeChoice' className='mb-2 font-bold text-lg underline'>Language: </label>
-          <SelectionLocale onLocaleChoiceChange={setLocaleChoice}/>
-        </div>
-        <button onClick={() => exportCitation()} className='bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700' title='Click to generate citation' disabled={isLoading}>
-          {isLoading ? 
-            <Spinner label="saving..." color="warning" labelColor="warning"/>
-            : 'Save Citations'}
-        </button>
-        <form onSubmit={downloadCitations} className='flex items-center space-x-2'>
-        <select value={downloadFormat} onChange={event => setDownloadFormat(event.target.value)} className='border p-1 rounded-md'>
-          <option value='txt'>TXT</option>
-          <option value='csv'>CSV</option>
-        </select>
-        <button type='submit' className='bg-green-500 text-white p-2 rounded-md hover:bg-green-700' title='Click to download citations'>
-          Download Citations
-        </button>
-        </form>
-      </div>
       {error && <p className='text-red-500'>{error}</p>}
       </div>
     </>

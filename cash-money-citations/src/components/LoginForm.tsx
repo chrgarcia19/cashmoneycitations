@@ -11,6 +11,7 @@ import { IconContext } from "react-icons";
 import PasswordField from './PasswordFormField';
 import FormField from './FormField';
 import { Button } from '@nextui-org/react';
+import { LogCMCError } from './componentActions/logActions';
 
 interface LoginData {
     username: string;
@@ -63,6 +64,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
             }
 
             alert("You have successfully logged in.");
+            LogCMCError("SUCCESS", "USER", `User: ${username} has logged in at: ${Date.now()}`)
 
             router.replace("/dashboard");
 
@@ -70,6 +72,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
             router.refresh();
         } catch (error: any) {
             setLoading(false);
+            LogCMCError("WARNING", "USER", error);
             console.log(error);
         }
     }

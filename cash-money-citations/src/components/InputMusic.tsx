@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
+import { LogCMCError } from "./componentActions/logActions";
 
 interface InputMusicProps {
     searchVal: string;
@@ -41,7 +42,8 @@ const InputMusic: React.FC<InputMusicProps> = ({ searchVal, reload }) => {
                 setData(errorItem)
             }
         }
-        catch {
+        catch (e: any) {
+            LogCMCError("WARNING", "REFERENCE", e);
             setData(errorItem);
         }
         setTableShown(true);

@@ -42,6 +42,7 @@ const PasswordField = (props: Props) => {
                 className="pt-2"
                 classNames={{
                     label: "font-bold text-lg text-black/50 dark:text-white/90",
+                    description: "text-black dark:text-white/90",
                     input: [
                         "bg-transparent",
                         "text-black/90 dark:text-white/90",

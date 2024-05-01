@@ -109,7 +109,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
                         fieldName={'username'} 
                         fieldValue={username} 
                         fieldType={'text'} 
-                        fieldPlaceholder={'Enter your username'} 
+                        fieldPlaceholder={'Username'} 
                         handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setUsername(e.target.value)} />
                 </div>
                 <div className='flex flex-col items-center'>
@@ -117,7 +117,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
                         labelText={'Password'} 
                         fieldName={'password'} 
                         fieldValue={password} 
-                        fieldPlaceholder={"Enter your password"} 
+                        fieldPlaceholder={"Password"} 
                         handleChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setPassword(e.target.value)} />
                 </div>
                 <Button

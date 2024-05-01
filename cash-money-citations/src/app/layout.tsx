@@ -4,6 +4,7 @@ import { AuthProvider } from "./Providers";
 import SideBar from "../components/SideBar";
 import Providers from "./Providers";
 import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
+import { ThemeProvider } from "next-themes";
 
 // Manages <head> HTML elements for built-in SEO support
 export const metadata = {
@@ -13,19 +14,22 @@ export const metadata = {
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en">
       <body className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-800">
         
         <Providers>
           <AuthProvider>
           <NavBar />
             <ReferenceProvider>
-              <main className="flex-grow">
-                <div className="ml-24 min-h-full">
-                  <div className="p-2">{children}</div>
-                </div>
-              </main>
+              <ThemeProvider attribute="class">
+                <main className="flex-grow">
+                  <div className="ml-24 min-h-full">
+                    <div className="p-2">{children}</div>
+                  </div>
+                </main>
+              </ThemeProvider>
             </ReferenceProvider>
           </AuthProvider>
 

@@ -75,19 +75,22 @@ export async function applyReferenceToTag (tag: Tag, refId: string) {
 }
 
 export const handleDelete = async (tagId: string, references: CSLBibInterface[], router: AppRouterInstance) => {
-  for (let i = 0; i < references.length; i++){
-    deleteTagIdFromReference(tagId, references[i]);
-  }
-  
-  try {
-    await fetch(`/api/tags/${tagId}`, {
-      method: "Delete",
-    });
-    router.push('/tag-center');
-    router.refresh();
-  } catch (error: any) {
-    LogCMCError("WARNING", 'TAG', error);
-    console.error(error);
+  const deleteConfirm = confirm("Are you sure you want to delete this tag?");
+  if (deleteConfirm){
+    for (let i = 0; i < references.length; i++){
+      deleteTagIdFromReference(tagId, references[i]);
+    }
+    
+    try {
+      await fetch(`/api/tags/${tagId}`, {
+        method: "Delete",
+      });
+      router.push('/tag-center');
+      router.refresh();
+    } catch (error: any) {
+      LogCMCError("WARNING", 'TAG', error);
+      console.log(error);
+    }
   }
 };
 

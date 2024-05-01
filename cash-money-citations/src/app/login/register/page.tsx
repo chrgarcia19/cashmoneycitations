@@ -8,7 +8,7 @@ const NewUser = () => {
         lastName: "",
         email: "",
         password: "",
-        verifyPassword: ""
+        verifyPassword: "",
     };
     return <Suspense><RegistrationForm formId="add-user-form" registrationForm={userForm}/></Suspense>
 };

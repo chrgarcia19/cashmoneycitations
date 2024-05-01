@@ -102,20 +102,24 @@ const RemoveReferenceFromGroup = (props: Props) => {
   
       async function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
-        const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-        /*Remove the Reference IDs from the group */
-        for (let i = 0; i < refs.length; i++){
-          await deleteReferenceIdFromGroup(refs[i], props.group);
-        }
-        
-        /*Remove GroupIDs from each reference*/
-        for (let i = 0; i < references.length; i++){
-          await deleteGroupIdFromReference(props.group._id, references[i]);
-        }
+        const deleteConfirm = confirm("Are you sure you want to delete this reference from the group?");
+        if (deleteConfirm){
+          const refs = Array.from(selectedKeys as Set<React.Key>).map(String);
 
-        router.push("/group-center");
-        router.refresh();
+          /*Remove the Reference IDs from the group */
+          for (let i = 0; i < refs.length; i++){
+            await deleteReferenceIdFromGroup(refs[i], props.group);
+          }
+          
+          /*Remove GroupIDs from each reference*/
+          for (let i = 0; i < references.length; i++){
+            await deleteGroupIdFromReference(props.group._id, references[i]);
+          }
+
+          router.push("/group-center");
+          router.refresh();
+        }
       }
 
     return (

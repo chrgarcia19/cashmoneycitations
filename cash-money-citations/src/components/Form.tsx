@@ -176,6 +176,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     "citation-label": referenceForm?.["citation-label"] ?? undefined,
     dimensions: referenceForm?.dimensions ?? undefined,
     division: referenceForm?.division ?? undefined,
+    event: referenceForm?.event ?? undefined,
     genre: referenceForm?.genre ?? undefined,
     jurisdiction: referenceForm?.jurisdiction ?? undefined,
     keyword: referenceForm?.keyword ?? undefined,
@@ -268,6 +269,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
     const id = searchParams.get("id");
     const userId = session?.user?.id;
 
+    if (form.type === "review-book") {
+      form["reviewed-genre"] = "Book";
+    }
+
     if (Object.keys(errs).length === 0) {
       if (forNewReference) {
         HandleManualReference(form, userId);
@@ -347,29 +352,274 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                     fieldValue={form.title}
                     fieldType="text"
                     fieldPlaceholder="Title"
-                    handleChange={handleChange} 
-                    required={true}/>
+                    handleChange={handleChange}
+                    required={true}
+                  />
+
+                  {form.type !== "software" && (
+                    <>
+                      <label
+                        className="font-bold"
+                        htmlFor={"abstract"}>
+                        Abstract
+                      </label>
+                      <textarea
+                        value={form.abstract}
+                        name={"abstract"}
+                        onChange={handleChange}
+                        placeholder={"Abstract"}
+                        className="dark:text-white">
+                      </textarea>
+                    </>
+                  )}
+                  {(form.type === "entry" ||
+                    form.type === "entry-dictionary" ||
+                    form.type === "hearing" ||
+                    form.type === "legislation" ||
+                    form.type === "bill" ||
+                    form.type === "broadcast") && (
+                    <FormField
+                      labelText="Number"
+                      fieldName="number"
+                      fieldValue={form.number}
+                      fieldType="text"
+                      fieldPlaceholder="Number"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "motion_picture" || form.type === "song" || form.type === "graphic" || form.type === "figure" || form.type === "interview" || form.type === "broadcast") && (
+                    <FormField
+                      labelText="Medium"
+                      fieldName="medium"
+                      fieldValue={form.medium}
+                      fieldType="text"
+                      fieldPlaceholder="Medium"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "motion_picture" || form.type === "manuscript") && (
+                    <FormField
+                      labelText="Type"
+                      fieldName="genre"
+                      fieldValue={form.genre}
+                      fieldType="text"
+                      fieldPlaceholder="Genre"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "motion_picture" || form.type === "song" || form.type === "broadcast") && (
+                    <FormField
+                      labelText="Running Time"
+                      fieldName="dimensions"
+                      fieldValue={form.dimensions}
+                      fieldType="text"
+                      fieldPlaceholder="Running Time"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "graphic" || form.type === "figure") && (
+                    <FormField
+                      labelText="Artwork Size"
+                      fieldName="dimensions"
+                      fieldValue={form.dimensions}
+                      fieldType="text"
+                      fieldPlaceholder="Artwork Size"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "review") && (
+                    <FormField
+                      labelText="Reviewed Genre"
+                      fieldName="reviewed-genre"
+                      fieldValue={form["reviewed-genre"]}
+                      fieldType="text"
+                      fieldPlaceholder="Reviewed Genre"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "review" || form.type === "review-book") && (
+                    <FormField
+                      labelText="Reviewed Title"
+                      fieldName="reviewed-title"
+                      fieldValue={form["reviewed-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Reviewed Title"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "software") && (
+                    <FormField
+                      labelText="Version"
+                      fieldName="version"
+                      fieldValue={form.version}
+                      fieldType="text"
+                      fieldPlaceholder="Version"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
                   {(form.type === "article-journal" ||
+                    form.type === "article" ||
+                    form.type === "chapter" ||
                     form.type === "article-magazine" ||
                     form.type === "article-newspaper" ||
-                    form.type === "webpage") && (
+                    form.type === "entry-encyclopedia" ||
+                    form.type === "entry-dictionary" ||
+                    form.type === "entry" ||
+                    form.type === "webpage" ||
+                    form.type === "map" ||
+                    form.type === "motion_picture" ||
+                    form.type === "paper-conference" ||
+                    form.type === "software" ||
+                    form.type === "review" ||
+                    form.type === "review-book") && (
                     <FormField
                       labelText="Title From Where the Source Came From"
                       fieldName="container-title"
                       fieldValue={form["container-title"]}
                       fieldType="text"
                       fieldPlaceholder="Source Title"
-                      handleChange={handleChange} 
-                      required={true}/>
+                      handleChange={handleChange}
+                      required={false}
+                    />
                   )}
-                  <div className="flex items-center justify-center">
+
+                  {(form.type === "broadcast") && (
+                    <FormField
+                      labelText="Publication Title"
+                      fieldName="container-title"
+                      fieldValue={form["container-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Publication Title"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "legal_case") && (
+                    <FormField
+                      labelText="Reporter"
+                      fieldName="container-title"
+                      fieldValue={form["container-title"]}
+                      fieldType="text"
+                      fieldPlaceholder="Reporter"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "legal_case") && (
+                    <FormField
+                      labelText="Court"
+                      fieldName="authority"
+                      fieldValue={form.authority}
+                      fieldType="text"
+                      fieldPlaceholder="Court"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "bill" || form.type === "legislation") && (
+                      <FormField
+                        labelText="Code"
+                        fieldName="container-title"
+                        fieldValue={form["container-title"]}
+                        fieldType="text"
+                        fieldPlaceholder="Code"
+                        handleChange={handleChange}
+                        required={false}
+                      />
+                    )}
+
+                  {(form.type === "legislation") && (
+                    <FormField
+                      labelText="Code Number"
+                      fieldName="volume"
+                      fieldValue={form.volume}
+                      fieldType="number"
+                      fieldPlaceholder="Code Number"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "hearing") && (
+                    <FormField
+                      labelText="Committee"
+                      fieldName="section"
+                      fieldValue={form.section}
+                      fieldType="number"
+                      fieldPlaceholder="Committee"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                  {(form.type === "legislation") && (
+                    <FormField
+                      labelText="Section"
+                      fieldName="section"
+                      fieldValue={form.section}
+                      fieldType="number"
+                      fieldPlaceholder="Section"
+                      handleChange={handleChange}
+                      required={false}
+                    />
+                  )}
+
+                    {(form.type === "bill" || form.type === "hearing" || form.type === "legislation") && (
+                      <FormField
+                        labelText="Legislative Body"
+                        fieldName="authority"
+                        fieldValue={form.authority}
+                        fieldType="text"
+                        fieldPlaceholder="Legislative Body"
+                        handleChange={handleChange}
+                        required={false}
+                      />
+                    )}
+
+                      {(form.type === "bill" || form.type === "hearing" || form.type === "legislation") && (
+                      <FormField
+                        labelText="Session of Congress"
+                        fieldName="chapter-number"
+                        fieldValue={form['chapter-number']}
+                        fieldType="number"
+                        fieldPlaceholder="Ex. 100"
+                        handleChange={handleChange}
+                        required={false}
+                      />
+                    )}
+
+                  <div className="flex items-center justify-center pt-5">
                     <ContributorForm
                       updateFormData={updateFormData}
                       contributors={form.contributors}
                     />
                   </div>
                   {(form.type === "book" ||
-                    form.type === "article-journal") && (
+                    form.type === "article-journal" ||
+                    form.type === "article" ||
+                    form.type === "map" ||
+                    form.type === "paper-conference" ||
+                    form.type === "review" ||
+                    form.type === "song") && (
                     <FormField
                       labelText="Collection Title (series)"
                       fieldName="collection-title"
@@ -382,10 +632,60 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Conference Name"
+                  fieldName="event"
+                  fieldValue={form.event}
+                  fieldType="text"
+                  fieldPlaceholder="Conference Name"
+                  handleChange={handleChange}
+                  required={false}
+                />
+              )}
+
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Location (City)"
+                  fieldName="eventPlaceCity"
+                  fieldValue={form.eventPlaceCity}
+                  fieldType="text"
+                  fieldPlaceholder="City"
+                  handleChange={handleChange}
+                  required={false}
+                />
+              )}
+
+              {(form.type === "paper-conference") && (
+                <FormField
+                  labelText="Location (Country)"
+                  fieldName="eventPlaceCountry"
+                  fieldValue={form.eventPlaceCountry}
+                  fieldType="text"
+                  fieldPlaceholder="Country"
+                  handleChange={handleChange}
+                  required={false}
+                />
+              )}
+
               {(form.type === "book" ||
+                form.type === "chapter" ||
                 form.type === "article-journal" ||
+                form.type === "article" ||
                 form.type === "article-magazine" ||
-                form.type === "article-newspaper") && (
+                form.type === "entry-encyclopedia" ||
+                form.type === "entry-dictionary" ||
+                form.type === "entry" ||
+                form.type === "article-newspaper" ||
+                form.type === "bill" ||
+                form.type === "map" ||
+                form.type === "paper-conference" ||
+                form.type === "review" ||
+                form.type === "legal_case" ||
+                form.type === "manuscript" ||
+                form.type === "review-book" ||
+                form.type === "hearing" ||
+                form.type === "legislation") && (
                 <>
                   <FormField
                     labelText="Number of Pages"
@@ -415,8 +715,19 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "book" ||
+                form.type === "entry-encyclopedia" ||
+                form.type === "entry-dictionary" ||
+                form.type === "entry" ||
+                form.type === "chapter" ||
                 form.type === "article-journal" ||
-                form.type === "article-magazine") && (
+                form.type === "article" ||
+                form.type === "article-magazine" ||
+                form.type === "bill" ||
+                form.type === "map" ||
+                form.type === "paper-conference" ||
+                form.type === "review" ||
+                form.type === "song" ||
+                form.type === "review-book") && (
                 <FormField
                   labelText="Volume"
                   fieldName="volume"
@@ -426,7 +737,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   handleChange={handleChange} required={false}                />
               )}
 
-              {form.type === "book" && (
+              {form.type === "book" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "song" || form.type === "hearing" && (
                 <FormField
                   labelText="Number of Volumes"
                   fieldName="number-of-volumes"
@@ -436,7 +747,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   handleChange={handleChange} required={false}                />
               )}
 
-              {form.type === "article-newspaper" && (
+              {(form.type === "book" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-encyclopedia" || form.type === "entry-dictionary" ||
+                form.type === "entry" || form.type === "map" || form.type === "paper-conference" || form.type === "song" || form.type === "manuscript" || form.type === "hearing"
+                || form.type === "broadcast"
+              ) && (
                 <>
                   <FormField
                     labelText="Publisher City"
@@ -455,7 +769,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                 </>
               )}
 
-              {(form.type === "book" || form.type === "article-newspaper") && (
+              {(form.type === "book" || form.type === "paper-conference" || form.type === "article-newspaper" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" || form.type === "map") && (
                 <FormField
                   labelText="Edition"
                   fieldName="edition"
@@ -465,15 +779,16 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   handleChange={handleChange} required={false}                />
               )}
 
-              {(form.type === "book" || form.type === "webpage") && (
+              {form.type && form.type !== "personal_communication" && form.type !== "legal_case" && (
                 <FormField
-                  labelText="Publisher"
-                  fieldName="publisher"
-                  fieldValue={form.publisher}
-                  fieldType="text"
-                  fieldPlaceholder="Publisher"
-                  handleChange={handleChange} 
-                  required={true}/>
+                labelText="Publisher"
+                fieldName="publisher"
+                fieldValue={form.publisher}
+                fieldType="text"
+                fieldPlaceholder="Publisher"
+                handleChange={handleChange}
+                required={false}
+              />
               )}
 
               {form.type && (
@@ -505,27 +820,22 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   fieldPlaceholder="Source Accessed By URL"
                   handleChange={handleChange} required={false}                />
               )}
+              
+              <DatePicker
+                masterLabelText="Date Accessed (Month, Day, Year)"
+                labelText={["Month", "Day", "Year"]}
+                fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
+                fieldValue={[
+                  form.monthAccessed,
+                  form.dayAccessed,
+                  form.yearAccessed,
+                ]}
+                fieldType="text"
+                fieldPlaceholder="Pick a Date"
+                handleChange={handleChange}
+              />
 
-              {(form.type === "article-journal" ||
-                form.type === "article-magazine" ||
-                form.type === "article-newspaper" ||
-                form.type === "webpage") && (
-                <DatePicker
-                  masterLabelText="Date Accessed"
-                  labelText={["Month", "Day", "Year"]}
-                  fieldName={["monthAccessed", "dayAccessed", "yearAccessed"]}
-                  fieldValue={[
-                    form.monthAccessed,
-                    form.dayAccessed,
-                    form.yearAccessed,
-                  ]}
-                  fieldType="text"
-                  fieldPlaceholder="Pick a Date"
-                  handleChange={handleChange}
-                />
-              )}
-
-              {form.type === "book" && (
+              {form.type === "book" || form.type === "chapter" || form.type === "entry-dictionary" || form.type === "entry-encyclopedia" || form.type === "entry" && (
                 <FormField
                   labelText="International Standard Book Number (ISBN)"
                   fieldName="ISBN"
@@ -536,7 +846,10 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
               )}
 
               {(form.type === "article-journal" ||
-                form.type === "article-magazine") && (
+                form.type === "article" ||
+                form.type === "article-magazine" ||
+                form.type === "review" ||
+                form.type === "review-book") && (
                 <FormField
                   labelText="Issue Number"
                   fieldName="number"
@@ -546,7 +859,9 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
                   handleChange={handleChange} required={false}                />
               )}
 
-              {form.type === "article-journal" && (
+              {(form.type === "article" ||
+                form.type === "article-journal"
+              ) && (
                 <FormField
                   labelText="Digital Object Identifier (DOI)"
                   fieldName="DOI"
@@ -558,6 +873,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
 
               {(form.type === "article-journal" ||
                 form.type === "article-magazine" ||
+                form.type === "article" ||
                 form.type === "article-newspaper") && (
                 <FormField
                   labelText="International Standard Serial Number (ISSN)"

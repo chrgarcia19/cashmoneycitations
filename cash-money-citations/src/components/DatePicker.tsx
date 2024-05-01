@@ -72,39 +72,70 @@ const DatePicker = (props: Props) => {
                     </div>
                     <div className="flex flex-col">
                         <label className="font-bold text-gray-800 dark:text-white p-1">{props.labelText[2]}</label> 
-                        <Input
-                            isRequired
-                            placeholder={props.fieldPlaceholder}
-                            size="sm"
-                            type={props.fieldType}
-                            defaultValue={props.fieldValue[2]}
-                            name={props.fieldName[2]}
-                            onChange={props.handleChange}
-                            radius="lg"
-                            classNames={{
-                                label: "font-bold text-lg text-black/50 dark:text-white/90",
-                                input: [
-                                    "bg-transparent",
-                                    "text-black/90 dark:text-white/90",
-                                    "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-                                ],
-                                innerWrapper: "bg-transparent",
-                                inputWrapper: [
-                                    "shadow-xl",
-                                    "bg-default-200/50",
-                                    "dark:bg-default/60",
-                                    "backdrop-blur-xl",
-                                    "backdrop-saturate-200",
-                                    "hover:bg-default-200/70",
-                                    "dark:hover:bg-default/70",
-                                    "group-data-[focused=true]:bg-default-200/50",
-                                    "dark:group-data-[focused=true]:bg-default/60",
-                                    "!cursor-text",
-                                    "px-0"
-                                ],
-                            }}
-                            >
-                        </Input>
+                        {props.masterLabelText === "Date Published (Month, Day, Year)" ? (
+                            <Input
+                                isRequired
+                                placeholder={props.fieldPlaceholder}
+                                size="sm"
+                                type={props.fieldType}
+                                defaultValue={props.fieldValue[2]}
+                                name={props.fieldName[2]}
+                                onChange={props.handleChange}
+                                radius="lg"
+                                classNames={{
+                                    label: "font-bold text-lg text-black/50 dark:text-white/90",
+                                    input: [
+                                        "bg-transparent",
+                                        "text-black/90 dark:text-white/90",
+                                        "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                    ],
+                                    innerWrapper: "bg-transparent",
+                                    inputWrapper: [
+                                        "shadow-xl",
+                                        "bg-default-200/50",
+                                        "dark:bg-default/60",
+                                        "backdrop-blur-xl",
+                                        "backdrop-saturate-200",
+                                        "hover:bg-default-200/70",
+                                        "dark:hover:bg-default/70",
+                                        "group-data-[focused=true]:bg-default-200/50",
+                                        "dark:group-data-[focused=true]:bg-default/60",
+                                        "!cursor-text",
+                                        "px-0"
+                                    ],
+                                }}/>
+                        ) : (
+                            <Input
+                                placeholder={props.fieldPlaceholder}
+                                size="sm"
+                                type={props.fieldType}
+                                defaultValue={props.fieldValue[2]}
+                                name={props.fieldName[2]}
+                                onChange={props.handleChange}
+                                radius="lg"
+                                classNames={{
+                                    label: "font-bold text-lg text-black/50 dark:text-white/90",
+                                    input: [
+                                        "bg-transparent",
+                                        "text-black/90 dark:text-white/90",
+                                        "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                                    ],
+                                    innerWrapper: "bg-transparent",
+                                    inputWrapper: [
+                                        "shadow-xl",
+                                        "bg-default-200/50",
+                                        "dark:bg-default/60",
+                                        "backdrop-blur-xl",
+                                        "backdrop-saturate-200",
+                                        "hover:bg-default-200/70",
+                                        "dark:hover:bg-default/70",
+                                        "group-data-[focused=true]:bg-default-200/50",
+                                        "dark:group-data-[focused=true]:bg-default/60",
+                                        "!cursor-text",
+                                        "px-0"
+                                    ],
+                                }}/>
+                        )}
                     </div>
                 </div> 
             </div>

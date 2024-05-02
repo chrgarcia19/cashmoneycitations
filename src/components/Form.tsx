@@ -280,7 +280,7 @@ const Form = ({ formId, referenceForm, forNewReference = true }: Props) => {
         router.refresh();
       } else {
         EditReference(form, id);
-        router.push("reference-table");
+        router.push("/reference-table");
         router.refresh();
       }
     } else {

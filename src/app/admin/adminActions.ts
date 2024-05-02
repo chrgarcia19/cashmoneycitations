@@ -43,25 +43,40 @@ export async function fetchDocumentsFromCollection(collectionName: string, page:
 
     }
 
-    if (!collection) {
+    const collectionFields: { [key: string]: string[] } = {
+      users: ['_id', 'username', 'createdAt', 'updatedAt'],
+      logs: ['name', 'logType', 'createdAt', 'updatedAt'],
+      references: ['title', 'isOwnedBy' ,'createdAt', 'updatedAt'],
+      cslstyles: ['title', 'isDependent', 'createdAt', 'updatedAt'],
+      locales: ['name', 'createdAt', 'updatedAt'],
+      tags: ['tagName', 'tagColor', 'createdAt', 'updatedAt'],
+      citations: ['name', 'style', 'createdAt', 'updatedAt'],
+
+    }
+
+    if (!collectionFields[collectionName]) {
       throw new Error(`Unknown collection: ${collectionName}`);
     }
 
+    const fields: { [key: string]: number } = collectionFields[collectionName].reduce((obj: { [key: string]: number }, field) => {
+      obj[field] = 1;
+      return obj;
+    }, {});
+
     const skip = (page - 1) * limit;
 
-    //let documents = await collection.collection.find().skip(skip).limit(limit).toArray();
-    let documents = await collection.find({}, {
-      _id: 1,
-      title: 1,
-      isOwnedBy: 1,
-      createdAt: 1,
-      updatedAt: 1,
-    }).skip(skip).limit(limit).populate('isOwnedBy').exec();
+    let documents = await collection?.find({}, fields)
+    .skip(skip)
+    .limit(limit)
+    .exec();
 
-    console.log(documents)
+    if (fields.isOwnedBy && collection) {
+      documents = await collection.populate(documents, { path: 'isOwnedBy' });
+    }
+  
     documents = toObjectRecursive(documents);
 
-    const totalDocuments = await collection.collection.countDocuments();
+    const totalDocuments = collection ? await collection.collection.countDocuments() : 0;
 
     return { documents, totalDocuments };
 

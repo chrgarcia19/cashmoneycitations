@@ -140,10 +140,10 @@ export default async function AdminDashboard() {
               <ImportCSLStyles handleCslSubmit={handleCslSubmit} />
               <ImportLocale handleLocaleSubmit={handleLocaleSubmit} />
             </div>
-            <div className="flex flex-row justify-evenly m-5">
+            {/* <div className="flex flex-row justify-evenly m-5">
               <GetCslStyles />
               <GetLocales />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

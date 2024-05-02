@@ -77,7 +77,7 @@ type CollectionStatisticObject = {
 export const ManageCollectionDocuments = ({ collectionName }: { collectionName: string }) => {
     const [documents, setDocuments] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [documentsPerPage,] = useState(10);
+    const [documentsPerPage,] = useState(20);
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [fieldNames, setFieldNames] = useState<string[]>([]);
 
@@ -102,8 +102,44 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
         // Implement your document editing logic here
     };
 
-    const deleteDocument = (docId: string) => {
-        // Implement your document deletion logic here
+    const deleteDocument = async (docId: string) => {
+        let collection;
+        switch(collectionName) {
+          case "references":
+            collection = `/references/${docId}`;
+            break;
+          case "citations":
+            collection = `/citations/${docId}`;
+            break;
+          case "users":
+            collection = `/auth/updateUser/${docId}`;
+            break;
+          case "tags":
+            collection = `/tags/${docId}`;
+            break;
+          case "cslstyles":
+            collection = `/csl/styles/${docId}`;
+            break;
+          case "locales":
+            collection = `/csl/locales/${docId}`;
+            break;
+          case "logs":
+            collection = `/logs/${docId}`;
+            break;
+        }
+
+
+        const response = await fetch(`/api/${collection}`, {
+            method: 'DELETE',
+        });
+    
+        if (!response.ok) {
+            throw new Error(`Failed to delete document with id ${docId} from collection ${collectionName}`);
+        }
+    
+        // Update the local state to reflect the deletion
+        setDocuments((prevDocuments) => prevDocuments.filter(doc => doc.id !== docId));
+        setTotalDocuments((prevTotalDocuments) => prevTotalDocuments - 1);
     };
 
     const handlePageChange = (pageNumber: number) => {

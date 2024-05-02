@@ -80,6 +80,9 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
     const [documentsPerPage,] = useState(20);
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [fieldNames, setFieldNames] = useState<string[]>([]);
+    const [error, setError] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const totalPages = Math.ceil(totalDocuments / documentsPerPage);
     const cachedDocuments = useMemo(() => documents, [documents]);
@@ -98,11 +101,16 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
         fetchDocuments();
     }, [collectionName, currentPage]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [collectionName])
+
     const editDocument = (docId: string, newDocData: any) => {
         // Implement your document editing logic here
     };
 
     const deleteDocument = async (docId: string) => {
+        setIsLoading(true);
         let collection;
         switch(collectionName) {
           case "references":
@@ -128,27 +136,45 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
             break;
         }
 
-
         const response = await fetch(`/api/${collection}`, {
             method: 'DELETE',
         });
     
         if (!response.ok) {
-            throw new Error(`Failed to delete document with id ${docId} from collection ${collectionName}`);
+            setError(response.statusText)
+            let e = `Failed to delete document with id ${docId} from collection ${collectionName}`;
+            LogCMCError('CRITICAL', 'DATABASE', e);
+            throw new Error(e);
         }
     
         // Update the local state to reflect the deletion
         setDocuments((prevDocuments) => prevDocuments.filter(doc => doc.id !== docId));
         setTotalDocuments((prevTotalDocuments) => prevTotalDocuments - 1);
+
+        LogCMCError('SUCCESS', 'DATABASE', `Deleted document: ${docId} from collection: ${collectionName}`)
+        setShowAlert(true);
+        setIsLoading(false);
+
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 2000);
     };
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
 
+
+
     return (
         <div className="flex flex-col items-center">
+            {showAlert && (
+                <div className="bg-red-500 text-white px-4 py-2 mb-4">
+                    Document deleted.
+                </div>
+            )}
         <div className="flex-grow">
+            {error}
             <table className='table-auto border-collapse border border-slate-400'>
                 <thead>
                     <tr>
@@ -175,7 +201,7 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
                             <td className='border border-slate-300'>
                                 <ButtonGroup>
                                     <Button isIconOnly size='sm' color='warning' onClick={() => editDocument(doc.id, {})}><BiEdit /></Button>
-                                    <Button isIconOnly size='sm' color='danger' onClick={() => deleteDocument(doc.id)}><DeleteIcon /></Button>
+                                    <Button isLoading={isLoading} isIconOnly size='sm' color='danger' onClick={() => deleteDocument(doc.id)}><DeleteIcon /></Button>
 
                                 </ButtonGroup>
                             </td>

@@ -1,8 +1,8 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import router from 'next/router';
-import React, { startTransition, useEffect, useState } from 'react';
-import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus } from '../adminActions';
+import React, { startTransition, useEffect, useMemo, useState } from 'react';
+import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus, fetchDocumentsFromCollection } from '../adminActions';
 import {Card, CardBody, CardHeader, CardFooter, Button} from '@nextui-org/react';
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
 import {Select, SelectSection, SelectItem} from "@nextui-org/react";
@@ -71,6 +71,115 @@ type CollectionStatisticObject = {
     totalSize: { label: string, value: number }
     count: { label: string, value: number } // Amount of documents in collection
 }
+
+export const ManageCollectionDocuments = ({ collectionName }: { collectionName: string }) => {
+    const [documents, setDocuments] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [documentsPerPage,] = useState(10);
+    const [totalDocuments, setTotalDocuments] = useState(0);
+    const [fieldNames, setFieldNames] = useState<string[]>([]);
+
+    const totalPages = Math.ceil(totalDocuments / documentsPerPage);
+    const cachedDocuments = useMemo(() => documents, [documents]);
+
+    useEffect(() => {
+        const fetchDocuments = async () => {
+            const response = await fetchDocumentsFromCollection(collectionName, currentPage, documentsPerPage);
+            if (response) {
+                const { documents, totalDocuments, fieldNames } = response;
+                setDocuments(documents as string[]);
+                setTotalDocuments(totalDocuments);
+                setFieldNames(fieldNames as string[]);
+            }
+        };
+
+        fetchDocuments();
+    }, [collectionName, currentPage]);
+
+    const editDocument = (docId: string, newDocData: any) => {
+        // Implement your document editing logic here
+    };
+
+    const deleteDocument = (docId: string) => {
+        // Implement your document deletion logic here
+    };
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    return (
+        <div className="flex flex-col items-center">
+        <div className="flex-grow">
+            <table>
+                <thead>
+                    <tr>
+                        {fieldNames.map((field) => (
+                            <th>
+                                {field.toLocaleUpperCase()}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {cachedDocuments.map((doc) => (
+                        <tr key={doc.id}>
+                            {fieldNames.map((field) => (
+                                <td className='font-mono text-sm'>
+                                    {doc[field]}
+                                </td>
+                            ))}
+
+                            <td>
+                                <Button onClick={() => editDocument(doc.id, {})}>Edit</Button>
+                                <Button onClick={() => deleteDocument(doc.id)}>Delete</Button>
+                            </td>
+                        </tr>
+                    ))}
+
+                </tbody>
+
+            </table>
+        </div>
+        <Pagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
+      </div>
+    );
+};
+
+type PaginationProps = {
+    currentPage: number;
+    totalPages: number;
+    handlePageChange: (page: number) => void;
+  };
+
+  const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, handlePageChange }) => {
+    return (
+      <div className="flex justify-center my-4">
+        <button
+          className={`px-4 py-2 mx-1 rounded bg-blue-500 text-white ${
+            currentPage === 1 && 'opacity-50 cursor-not-allowed'
+          }`}
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2 mx-1">
+          Page <span className="font-bold">{currentPage}</span>
+        </span>
+        <button
+            className={`px-4 py-2 mx-1 rounded bg-blue-500 text-white ${
+            currentPage === totalPages && 'opacity-50 cursor-not-allowed'
+            }`}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+        >
+            Next
+        </button>
+      </div>
+    );
+};
 
 export const DisplayCollectionStatistics = () => {
     const [collStats, setCollStats] = useState<CollectionStatisticObject | {}>({});
@@ -145,6 +254,9 @@ export const DisplayCollectionStatistics = () => {
                 </Table>
                 </div>
             </CardBody>
+            <CardFooter className="h-120 flex items-center justify-center border-t border-gray-200">
+                <ManageCollectionDocuments collectionName={selectedValue} />
+            </CardFooter>
             </Card>
         </div>
     )

@@ -57,6 +57,8 @@ export async function fetchDocumentsFromCollection(collectionName: string, page:
     if (!collectionFields[collectionName]) {
       throw new Error(`Unknown collection: ${collectionName}`);
     }
+    const fieldNames = collectionFields[collectionName];
+
 
     const fields: { [key: string]: number } = collectionFields[collectionName].reduce((obj: { [key: string]: number }, field) => {
       obj[field] = 1;
@@ -78,7 +80,7 @@ export async function fetchDocumentsFromCollection(collectionName: string, page:
 
     const totalDocuments = collection ? await collection.collection.countDocuments() : 0;
 
-    return { documents, totalDocuments };
+    return { documents, totalDocuments, fieldNames };
 
   } catch (e: any) {
     LogCMCError("CRITICAL", "DATABASE", e);

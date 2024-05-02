@@ -203,7 +203,7 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
 
                             <td className='border border-slate-300'>
                                 <ButtonGroup>
-                                    <Button isIconOnly size='sm' color='warning' onClick={() => editDocument(doc.id, {})}><BiEdit /></Button>
+                                    <Button isDisabled isIconOnly size='sm' color='warning' onClick={() => editDocument(doc.id, {})}><BiEdit /></Button>
                                     <Button isLoading={isLoading} isIconOnly size='sm' color='danger' onClick={() => deleteDocument(doc.id)}><DeleteIcon /></Button>
 
                                 </ButtonGroup>

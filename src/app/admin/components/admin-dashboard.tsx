@@ -3,10 +3,12 @@ import { useRouter } from 'next/navigation';
 import router from 'next/router';
 import React, { startTransition, useEffect, useMemo, useState } from 'react';
 import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus, fetchDocumentsFromCollection } from '../adminActions';
-import {Card, CardBody, CardHeader, CardFooter, Button} from '@nextui-org/react';
+import {Card, CardBody, CardHeader, CardFooter, Button, ButtonGroup} from '@nextui-org/react';
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
 import {Select, SelectSection, SelectItem} from "@nextui-org/react";
 import { LogCMCError } from '@/components/componentActions/logActions';
+import { BiEdit } from 'react-icons/bi';
+import { DeleteIcon } from '@/app/reference-table/components/DeleteIcon';
 
 export default function AdminDashboardClient() {
     const [userEmail, setUserEmail] = useState<string[]>([]);
@@ -111,14 +113,17 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
     return (
         <div className="flex flex-col items-center">
         <div className="flex-grow">
-            <table>
+            <table className='table-auto border-collapse border border-slate-400'>
                 <thead>
                     <tr>
                         {fieldNames.map((field) => (
-                            <th>
+                            <th className='font-mono border border-slate-300'>
                                 {field.toLocaleUpperCase()}
                             </th>
                         ))}
+                        <th className='font-mono border border-slate-300'>
+                            ACTIONS
+                        </th>
                     </tr>
                 </thead>
 
@@ -126,14 +131,17 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
                     {cachedDocuments.map((doc) => (
                         <tr key={doc.id}>
                             {fieldNames.map((field) => (
-                                <td className='font-mono text-sm'>
+                                <td className='font-mono text-xs px-2 max-h-1 border border-slate-300'>
                                     {doc[field]}
                                 </td>
                             ))}
 
-                            <td>
-                                <Button onClick={() => editDocument(doc.id, {})}>Edit</Button>
-                                <Button onClick={() => deleteDocument(doc.id)}>Delete</Button>
+                            <td className='border border-slate-300'>
+                                <ButtonGroup>
+                                    <Button isIconOnly size='sm' color='warning' onClick={() => editDocument(doc.id, {})}><BiEdit /></Button>
+                                    <Button isIconOnly size='sm' color='danger' onClick={() => deleteDocument(doc.id)}><DeleteIcon /></Button>
+
+                                </ButtonGroup>
                             </td>
                         </tr>
                     ))}

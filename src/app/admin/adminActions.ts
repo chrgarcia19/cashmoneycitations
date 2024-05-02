@@ -11,6 +11,93 @@ import CSLLocaleModel from "@/models/CSLLocale";
 import CMCLogModel from "@/models/Log";
 import { LogCMCError } from "@/components/componentActions/logActions";
 import Log from "@/models/Log";
+import mongoose from "mongoose";
+
+export async function fetchDocumentsFromCollection(collectionName: string, page: number, limit: number) {
+  try {
+    await dbConnect();
+
+    let collection;
+    switch(collectionName) {
+      case "references":
+        collection = CSLBibModel;
+        break;
+      case "citations":
+        collection = CitationModel;
+        break;
+      case "users":
+        collection = User;
+        break;
+      case "tags":
+        collection = Tag;
+        break;
+      case "cslstyles":
+        collection = CSLStyleModel;
+        break;
+      case "locales":
+        collection = CSLLocaleModel;
+        break;
+      case "logs":
+        collection = Log;
+        break;
+
+    }
+
+    if (!collection) {
+      throw new Error(`Unknown collection: ${collectionName}`);
+    }
+
+    const skip = (page - 1) * limit;
+
+    //let documents = await collection.collection.find().skip(skip).limit(limit).toArray();
+    let documents = await collection.find({}, {
+      _id: 1,
+      title: 1,
+      isOwnedBy: 1,
+      createdAt: 1,
+      updatedAt: 1,
+    }).skip(skip).limit(limit).populate('isOwnedBy').exec();
+
+    console.log(documents)
+    documents = toObjectRecursive(documents);
+
+    const totalDocuments = await collection.collection.countDocuments();
+
+    return { documents, totalDocuments };
+
+  } catch (e: any) {
+    LogCMCError("CRITICAL", "DATABASE", e);
+    console.error(e);
+  }
+}
+
+function toObjectRecursive(doc: any) {
+  if (doc instanceof mongoose.Document || doc instanceof mongoose.Types.DocumentArray) {
+    doc = doc.toObject({ getters: true, virtuals: true });
+    for (let key in doc) {
+      if (key === 'createdAt' || key === 'updatedAt') {
+        doc[key] = new Date(doc[key]).toISOString();
+      } else {
+        doc[key] = toObjectRecursive(doc[key]);
+      }
+    }
+  } else if (doc instanceof mongoose.Types.ObjectId) {
+    doc = doc.toString();
+  } else if (Array.isArray(doc)) {
+    for (let i = 0; i < doc.length; i++) {
+      doc[i] = toObjectRecursive(doc[i]);
+    }
+  } else if (typeof doc === 'object' && doc !== null) {
+    for (let key in doc) {
+      if (key === 'createdAt' || key === 'updatedAt') {
+        doc[key] = new Date(doc[key]).toISOString();
+      } else {
+        doc[key] = toObjectRecursive(doc[key]);
+      }
+    }
+  }
+  return doc;
+}
 
 export async function GetDatabaseStatus() {
 

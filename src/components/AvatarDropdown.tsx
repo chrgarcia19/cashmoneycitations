@@ -76,7 +76,7 @@ export default function AvatarDropdown(props: Props){
             <DropdownItem key="admin" href="/admin">
               Admin Dashboard
             </DropdownItem>
-            <DropdownItem key="settings">User Settings</DropdownItem>
+            <DropdownItem key="settings" href={`/profile/${props.session?.user?.id}?id=${props.session?.user?.id}`}>User Settings</DropdownItem>
             <DropdownItem key="logout" color="danger" onClick={() => signOut({ callbackUrl: '/login'})}>
               Logout
             </DropdownItem>

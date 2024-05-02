@@ -175,6 +175,9 @@ export const ManageCollectionDocuments = ({ collectionName }: { collectionName: 
             )}
         <div className="flex-grow">
             {error}
+            <div className='text-3xl font-mono text-center font-bold capitalize border-collapse border border-slate-200'>
+                {collectionName}
+            </div>
             <table className='table-auto border-collapse border border-slate-400'>
                 <thead>
                     <tr>
@@ -261,6 +264,14 @@ export const DisplayCollectionStatistics = () => {
     );
 
     useEffect(() => {
+        // Get the selected collection from local storage when the component mounts
+        const storedSelectedKeys = localStorage.getItem('selectedKeys');
+        if (storedSelectedKeys) {
+            setSelectedKeys(new Set([storedSelectedKeys]));
+        }
+    }, []);
+
+    useEffect(() => {
         const fetchCollStats = async() => {
             const stats = await GetCollectionStats(selectedValue);
             setCollStats(stats as CollectionStatisticObject);
@@ -271,6 +282,9 @@ export const DisplayCollectionStatistics = () => {
 
     const handleSelectChange = (value: any) => {
         setSelectedKeys(new Set([value.target.value]))
+
+        localStorage.setItem('selectedKeys', value.target.value);
+
     }
 
 
@@ -405,64 +419,3 @@ export const DisplayServerStatistics = () => {
 };
 
 
-export const DisplayCMCLogs = () => {
-    const [logs, setLogs] = useState<any[]>([]);
-
-    // Simulate fetching logs
-    useEffect(() => {
-        const fetchLogs = async () => {
-            // Replace this with actual API call
-            const fetchedLogs = await GetCMCLogs();
-            if (fetchedLogs) {
-                setLogs(fetchedLogs);
-            } else {
-                LogCMCError("WARNING", "DATABASE", `Failed to retrieve logs. Date: ${Date.now()}`)
-                console.error('Failed to retrieve logs.');
-            }
-        };
-
-        fetchLogs();
-    }, []);
-
-    return (
-        <div className="overflow-auto max-h-96 mt-8 mb-8">
-            <table className="w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                    <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Log Type
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Log Body
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Date Created
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody className="bg-white divide-y divide-gray-200">
-                    {logs.map((log, index) => (
-                        <tr key={index}>
-                            <td className="px-6 py-4 text-sm whitespace-wrap">
-                                {log.logType}
-                            </td>
-                            <td className="px-6 py-4 text-sm whitespace-wrap">
-                                {log.priority}
-                            </td>
-                            <td className="px-6 py-4 text-sm whitespace-wrap">
-                                {log.data}
-                            </td>
-                            <td className="px-6 py-4 text-sm whitespace-wrap">
-                                {log.createdAt}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
-};

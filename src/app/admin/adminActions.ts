@@ -45,7 +45,7 @@ export async function fetchDocumentsFromCollection(collectionName: string, page:
 
     const collectionFields: { [key: string]: string[] } = {
       users: ['_id', 'username', 'createdAt', 'updatedAt'],
-      logs: ['name', 'logType', 'createdAt', 'updatedAt'],
+      logs: ['name', 'data', 'priority', 'logType', 'createdAt', 'updatedAt'],
       references: ['title', 'isOwnedBy' ,'createdAt', 'updatedAt'],
       cslstyles: ['title', 'isDependent', 'createdAt', 'updatedAt'],
       locales: ['name', 'createdAt', 'updatedAt'],

@@ -42,6 +42,9 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
     }
 
     const addToDB = async (item: any) => {
+        // Generate a unique ID
+        const newId = Date.now().toString(); // Generate a timestamp-based ID
+    
         let i = 0;
         let newContributor: Contributor = {
             role: "",
@@ -51,24 +54,23 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             suffix: ""
         };
         let contributors = new Array<Contributor>();
-
-        // Loop through each contributor type
+    
         const contributorTypes = ['author', 'editor', 'translator', 'compiler'];
         for (const type of contributorTypes) {
             if (item[type]) {
-            for (i; i < item[type].length; i++) {
-                newContributor = {
-                role: type.charAt(0).toUpperCase() + type.slice(1),
-                given: item[type][i].given,
-                family: item[type][i].family,
-                middle: "",
-                suffix: ""
-                };
-                contributors.push(newContributor);
-            }
+                for (i; i < item[type].length; i++) {
+                    newContributor = {
+                        role: type.charAt(0).toUpperCase() + type.slice(1),
+                        given: item[type][i].given,
+                        family: item[type][i].family,
+                        middle: "",
+                        suffix: ""
+                    };
+                    contributors.push(newContributor);
+                }
             }
         }
-
+    
         let day = "";
         let month = "";
         let year = "";
@@ -97,9 +99,9 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             day = "1";
             year = "2000";
         }
-
-        // NEED TO ADD THE REST OF THE DATE FIELDS
+    
         let doiReference: any = {
+            id: newId, // Add the generated ID here
             type: "article-journal",
             title: item.title,
             "container-title": item['container-title'],
@@ -119,14 +121,22 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             abstract: item.abstract,
             apiSource: item.source
         };
-
-        let storedReferences = localStorage.getItem('guestReferences');
+    
+        // Log the created reference to see if the id is being set
+        // console.log("doiReference:", doiReference);
+    
+        let storedReferences = localStorage.getItem('references');
         let references = storedReferences ? JSON.parse(storedReferences) : [];
         references.push(doiReference);
-        localStorage.setItem('guestReferences', JSON.stringify(references));
+    
+        // Log the updated references array to ensure the id is being added
+        // console.log("Updated references:", references);
+    
+        localStorage.setItem('references', JSON.stringify(references));
         router.push("/guest/referenceTable");
         router.refresh();
     }
+    
 
     return (
         <>

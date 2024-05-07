@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-import { CitationChoice, CitationList } from '../../app/displayCitation/CitationDisplay';
+import { CitationChoice, CitationList } from './GuestCitationList';
 import { useReferenceContext } from '../../app/reference-table/components/ReferenceTable';
 
 export default function citationDisplay(){
@@ -10,6 +10,8 @@ export default function citationDisplay(){
   const [localeChoice, setLocaleChoice] = useState('en-US');
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds }  = useReferenceContext();
 
+
+  // console.log(referenceIds, "reference ids")
   return (
     <div className='center-content'>
       <div className='flex flex-row items-start w-screen'>

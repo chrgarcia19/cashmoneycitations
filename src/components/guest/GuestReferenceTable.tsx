@@ -1,10 +1,14 @@
-"use client"
+'use client'
 import React, { useEffect, useState } from "react";
 
+interface Contributor {
+  firstName?: string; // Make it optional to handle missing properties
+  lastName?: string; // Make it optional to handle missing properties
+}
+
 interface ReferenceData {
-  // Define the properties as they appear in your form data
   title?: string;
-  contributors?: string[];
+  contributors?: Contributor[];
   publisher?: string;
   yearPublished?: string;
   type?: string;
@@ -20,11 +24,17 @@ const GuestReferenceTable = () => {
 
   useEffect(() => {
     const loadedData = localStorage.getItem('references');
-    console.log('loadedData:', loadedData);
     if (loadedData) {
       setReferences(JSON.parse(loadedData));
+      // console.log(loadedData, "references")
     }
   }, []);
+
+  const getContributorName = (contributor: Contributor) => {
+    const firstName = contributor.firstName || 'Unknown';
+    const lastName = contributor.lastName || 'Contributor';
+    return `${firstName} ${lastName}`;
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -47,7 +57,9 @@ const GuestReferenceTable = () => {
           {references.map((reference, index) => (
             <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
               <td className="py-3 px-6 text-left whitespace-nowrap">{reference.title}</td>
-              <td className="py-3 px-6 text-left">{reference.contributors?.join(', ')}</td>
+              <td className="py-3 px-6 text-left">
+                {reference.contributors?.map(getContributorName).join(', ')}
+              </td>
               <td className="py-3 px-6 text-left">{reference.publisher}</td>
               <td className="py-3 px-6 text-left">{reference.yearPublished}</td>
               <td className="py-3 px-6 text-left">{reference.type}</td>

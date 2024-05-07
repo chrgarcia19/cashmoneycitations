@@ -130,7 +130,7 @@ function ModalCSLSelect() {
 
 
   const saveNewStyleList = async(cslSelect: string[] ) => {
-    await UpdateUserStyleList(cslSelect);
+    await UpdateUserStyleList(cslSelect, false);
   }
 
   let list = useAsyncList({
@@ -179,9 +179,9 @@ function ModalCSLSelect() {
 
   return (
     <>
-      <Button className="self-end px-2 py-1 text-sm" onPress={onOpen}>
+      {/* <Button className="self-end px-2 py-1 text-sm" onPress={onOpen}>
               More Styles
-      </Button>
+      </Button> */}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} 
       backdrop="transparent"
       radius="lg"

@@ -158,6 +158,7 @@ const GuestForm = ({ formId, referenceForm, forNewReference = true }: Props) => 
     /*Set initial state to website so the page is not blank*/
     // These form field names must match the field names of the Mongoose schema to be saved in the DB
     const [form, setForm] = useState({
+      id: referenceForm?.id ?? undefined, // Initialize the 'id' property
       archivePlaceCity: referenceForm?.archivePlaceCity ?? undefined,
       archivePlaceCountry: referenceForm?.archivePlaceCountry ?? undefined,
       eventPlaceCity: referenceForm?.eventPlaceCity ?? undefined,
@@ -289,21 +290,31 @@ const GuestForm = ({ formId, referenceForm, forNewReference = true }: Props) => 
     };
   
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const errs = formValidate();
-    
-        if (Object.keys(errs).length === 0) {
+      e.preventDefault();
+      const errs = formValidate();
+  
+      if (Object.keys(errs).length === 0) {
           const referencesString = localStorage.getItem('references');
-          let references = referencesString? JSON.parse(referencesString) : [];
-          references.push(form);
+          let references = referencesString ? JSON.parse(referencesString) : [];
+          
+          // Generate a unique ID using the current timestamp or a UUID library
+          const newId = Date.now().toString(); // Alternatively, use a UUID library
+          
+          // Add or update the 'id' property in the form data
+          const updatedForm = { ...form, id: newId };
+  
+          references.push(updatedForm);
           localStorage.setItem('references', JSON.stringify(references));
           setMessage('Reference saved successfully!');
+          
           // Optional: Clear form or navigate the user away
           router.push("/guest/referenceTable")
-        } else {
+      } else {
           setErrors(errs);
-        }
       }
+  }
+  
+
   
     return (
       <>

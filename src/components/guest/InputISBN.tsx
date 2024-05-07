@@ -97,7 +97,7 @@ const InputISBN: React.FC<InputISBNProps> = ({ searchVal, reload }) => {
   }
 
   const addToDB = async (item: any) => {
-    console.log(item);
+    // console.log(item);
     let i = 0;
     let authorArray = [];
     let newContributor: Contributor = {
@@ -109,109 +109,114 @@ const InputISBN: React.FC<InputISBNProps> = ({ searchVal, reload }) => {
     };
     let contributors = new Array<Contributor>();
 
-    //If item.volumeInfo.authors is populated, move forward on that, otherwise, handle the error appropriately
+    // If item.volumeInfo.authors is populated, move forward on that, otherwise, handle the error appropriately
     if (item.volumeInfo.authors) {
-      for (i; i < item.volumeInfo.authors.length; i++) {
-        //Splitting Contributor Names into first/last name/middle initial
-        let count = 0;
-        let firstName = "";
-        let lastName = "";
-        let middleI = "";
-        for (let j = 0; j < item.volumeInfo.authors[i].length; j++) {
-          if (item.volumeInfo.authors[i][j] === " ") {
-            count++;
-          }
-        }
-        if (count === 1) {
-          authorArray = item.volumeInfo.authors[i].split(" ");
-          firstName = authorArray[0];
-          lastName = authorArray[1];
-        } else if (count === 2) {
-          authorArray = item.volumeInfo.authors[i].split(" ");
-          firstName = authorArray[0];
-          middleI = authorArray[1];
-          lastName = authorArray[2];
-        }
+        for (i; i < item.volumeInfo.authors.length; i++) {
+            // Splitting Contributor Names into first/last name/middle initial
+            let count = 0;
+            let firstName = "";
+            let lastName = "";
+            let middleI = "";
+            for (let j = 0; j < item.volumeInfo.authors[i].length; j++) {
+                if (item.volumeInfo.authors[i][j] === " ") {
+                    count++;
+                }
+            }
+            if (count === 1) {
+                authorArray = item.volumeInfo.authors[i].split(" ");
+                firstName = authorArray[0];
+                lastName = authorArray[1];
+            } else if (count === 2) {
+                authorArray = item.volumeInfo.authors[i].split(" ");
+                firstName = authorArray[0];
+                middleI = authorArray[1];
+                lastName = authorArray[2];
+            }
 
-        //Acquire data from if/else statements, throw it into the contributor field
+            // Acquire data from if/else statements, throw it into the contributor field
+            newContributor = {
+                role: "Author",
+                given: firstName,
+                family: lastName,
+                middle: middleI,
+                suffix: "",
+            };
+            contributors.push(newContributor);
+        }
+    } else {
         newContributor = {
-          role: "Author",
-          given: firstName,
-          family: lastName,
-          middle: middleI,
-          suffix: "",
+            role: "Author",
+            given: "Unknown",
+            family: "Unknown",
+            middle: "",
+            suffix: "",
         };
         contributors.push(newContributor);
-      }
-    } else {
-      newContributor = {
-        role: "Author",
-        given: "Unknown",
-        family: "Unknown",
-        middle: "",
-        suffix: "",
-      };
-      contributors.push(newContributor);
     }
     let publishedArray = [];
     let year = "";
     let month = "";
     let day = "";
     let monthInt = 0;
-    //Splitting the publishedDate into month, year, day if appropriate
+    // Splitting the publishedDate into month, year, day if appropriate
     if (item.volumeInfo.publishedDate.includes("-")) {
-      publishedArray = item.volumeInfo.publishedDate.split("-");
-      year = publishedArray[0];
-      monthInt = parseInt(publishedArray[1]);
-      monthInt = monthInt - 1;
-      month = monthInt.toString();
-      day = publishedArray[2].replace("0", "");
+        publishedArray = item.volumeInfo.publishedDate.split("-");
+        year = publishedArray[0];
+        monthInt = parseInt(publishedArray[1]);
+        monthInt = monthInt - 1;
+        month = monthInt.toString();
+        day = publishedArray[2].replace("0", "");
     } else {
-      month = "0";
-      day = "1";
-      year = item.volumeInfo.publishedDate;
+        month = "0";
+        day = "1";
+        year = item.volumeInfo.publishedDate;
     }
 
-    //Handling image info
+    // Handling image info
     let imageLink = "";
-    if (item.volumeInfo.imageLinks.thumbnail) {
-      imageLink = item.volumeInfo.imageLinks.thumbnail;
+    if (item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail) {
+        imageLink = item.volumeInfo.imageLinks.thumbnail;
     } else {
-      imageLink =
-        "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3N2MTU5NDA3LWltYWdlLWt3dng3MmFlLmpwZw.jpg";
+        imageLink =
+            "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L3N2MTU5NDA3LWltYWdlLWt3dng3MmFlLmpwZw.jpg";
     }
 
-    //Handling publisher info
+    // Handling publisher info
     let publisher = "";
     if (item.volumeInfo.publisher) {
-      publisher = item.volumeInfo.publisher;
+        publisher = item.volumeInfo.publisher;
     } else {
-      publisher = "Unknown";
+        publisher = "Unknown";
     }
 
+    // Generate a unique ID
+    const newId = Date.now().toString(); // Generate a timestamp-based ID
+
     let isbnReference: any = {
-      type: item.volumeInfo.printType.toLowerCase(),
-      title: item.volumeInfo.title,
-      contributors: contributors,
-      publisher: publisher,
-      yearPublished: year,
-      dayPublished: day,
-      monthPublished: month,
-      "number-of-pages": item.volumeInfo.pageCount,
-      ISBN: staticSearchVal,
-      image_url: imageLink,
+        id: newId, // Add the generated ID here
+        type: item.volumeInfo.printType.toLowerCase(),
+        title: item.volumeInfo.title,
+        contributors: contributors,
+        publisher: publisher,
+        yearPublished: year,
+        dayPublished: day,
+        monthPublished: month,
+        "number-of-pages": item.volumeInfo.pageCount,
+        ISBN: staticSearchVal,
+        image_url: imageLink,
     };
 
     // Save to local storage
     const currentData = JSON.parse(localStorage.getItem("references") || "[]");
     localStorage.setItem(
-      "references",
-      JSON.stringify([...currentData, isbnReference])
+        "references",
+        JSON.stringify([...currentData, isbnReference])
     );
 
     router.push("/guest/referenceTable");
     router.refresh();
-  };
+};
+
 
   return (
     <>

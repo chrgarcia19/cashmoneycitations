@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import UserStyleList from './UserStyleList';
 
 const CSLStyleSchema = new Schema ({
     name: String,

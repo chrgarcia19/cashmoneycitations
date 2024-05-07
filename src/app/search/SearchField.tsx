@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import searchRefs from "./searchRefs";
 import { useSession } from "next-auth/react";
-import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { getUserReferences, getReferences } from '../../components/componentActions/actions';
 import { useRouter } from "next/navigation";
 

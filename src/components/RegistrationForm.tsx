@@ -98,8 +98,9 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
 
     return (
         <>
-        <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
-            <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white dark:bg-zinc-600 p-8">
+        <div className='relative w-full h-screen flex justify-center items-center'>
+            <form id={formId} onSubmit={handleSubmit} 
+                className="w-3/4 max-w-[800px] mx-auto bg-white dark:bg-zinc-600 p-8 rounded-xl shadow-xl overflow-hidden">
                 {emailInUse && <EmailInUseError />}
             <h2 className='text-4xl font-bold text-center py-4 text-green-600 dark:text-green-500'>Register</h2>
                 <FormField 

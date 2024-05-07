@@ -7,7 +7,7 @@ import {BibLatexParser} from "biblatex-csl-converter"
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import {Chip} from "@nextui-org/react";
-import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
+import { BiSolidTrash } from 'react-icons/bi';
 
 export function UploadBibModal() {
   const {theme} = useTheme()

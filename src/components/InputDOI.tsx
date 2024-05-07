@@ -126,8 +126,8 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             LogCMCError("INFORMATION", "REFERENCE", e);
             console.error(e);
         }
-        //router.push("/reference-table");
-        //router.refresh();
+        router.push("/reference-table");
+        router.refresh();
     }
 
     const columns = [
@@ -182,15 +182,6 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
                     {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
                 </TableHeader>
                 <TableBody items={data}>
-                    {/* {data.map(item => (
-                        <tr key={item.DOI} className="border-b hover:bg-gray-100">
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.DOI}</td>
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title}</td>
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
-                                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
-                            </td>
-                        </tr>
-                    ))} */}
                     {(item) => (
                         <TableRow key={item.DOI}>
                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

@@ -6,14 +6,11 @@ require('@citation-js/core')
 import { useEffect, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./actions";
-import { Tag } from "@/models/Tag";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button, Select, SelectItem, useDisclosure} from "@nextui-org/react";
-import { getSpecificTagById } from "@/components/componentActions/tagActions";
+import {Card, CardHeader, CardBody, Divider, Button, Select, SelectItem, useDisclosure} from "@nextui-org/react";
 import DisplayTags from "@/components/DisplayTags";
 import { useSession } from "next-auth/react";
 import {getUserReferences} from '../../../../components/componentActions/actions';
 import { HandleManualReference } from "@/components/componentActions/citationActions";
-import React, { Suspense, createContext, useContext } from "react";
 import { useReferenceContext } from "@/app/reference-table/components/ReferenceTable";
 
 const fetcher = (url: string) =>

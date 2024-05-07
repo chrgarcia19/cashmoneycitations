@@ -9,7 +9,7 @@ import {FcGoogle} from 'react-icons/fc'
 import { IconContext } from "react-icons";
 import PasswordField from './PasswordFormField';
 import FormField from './FormField';
-import { Button } from '@nextui-org/react';
+import { Button, Chip } from '@nextui-org/react';
 import { LogCMCError } from './componentActions/logActions';
 
 interface LoginData {
@@ -85,18 +85,25 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 <h2 className='text-4xl font-bold text-center py-4 dark:bg-gray-600 dark:text-white'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
                     <IconContext.Provider value={{ color: 'black', className: ''}}>
-                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('github', { callbackUrl })}>
+                        <Button className='shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center dark:bg-gray-400' 
+                                color='default'
+                                size='lg'
+                                onClick={() => signIn('github', { callbackUrl })}>
                             <FaGithubSquare className='h-6 w-6' name='GitHub'/>
-                            <div className='badge text-black px-2 py-2 relative flex items-center'>GitHub</div>
-                            
-                        </button>
+                            <Chip className='text-black px-2 py-2 relative flex items-center dark:bg-gray-400' color='default'>
+                                <div className='font-bold'>GitHub</div>
+                            </Chip>
+                        </Button>
 
-                        <button className='btn border shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center' type='button' onClick={() => signIn('google', { callbackUrl })}>
+                        <Button className='shadow-lg hover:shadow-xl px-6 py-2 relative flex items-center dark:bg-gray-400' 
+                                color='default'
+                                size='lg'
+                                onClick={() => signIn('google', { callbackUrl })}>
                             <FcGoogle className='h-6 w-6' name='Google'/>
-                            <div className='badge text-black px-2 py-2 relative flex items-center'>Google</div>
-                            
-                        </button>
-
+                            <Chip className='text-black px-2 py-2 relative flex items-center dark:bg-gray-400' color='default'>
+                            <div className='font-bold'>Google</div>
+                            </Chip>
+                        </Button>
                     </IconContext.Provider>
                     
                     
@@ -125,7 +132,6 @@ const LoginForm = ({formId, loginForm}: Props) => {
                     className='text-lg text-white w-full py-3 mt-8'>
                         Sign In
                 </Button>
-                {/*<button className='w-full py-3 mt-8 bg-indigo-600 hover:bg-indigo-500 relative text-white'>Sign In</button>*/}
     
                 {error && (
                     <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
@@ -134,7 +140,11 @@ const LoginForm = ({formId, loginForm}: Props) => {
                 )}
                 <br />
                 <br />
-                <Link className="bg-white dark:bg-gray-600 dark:text-white p-2 text-center" href={"/login/register"}>Not a member? Sign up now</Link>
+                <div className='flex items-center'>
+                    Not a member?
+                    <Link className="bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 p-2 text-center font-bold underline" href={"/login/register"}>Sign up now</Link>
+                </div>
+                
             </form>
         </div>
         </div>

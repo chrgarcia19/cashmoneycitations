@@ -80,8 +80,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
     return (
         <div className='relative w-full h-screen bg-gray-100 dark:bg-gray-800'>
         <div className='flex justify-center items-center h-full'>
-            
-            <form id={formId} onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white dark:bg-gray-600 p-8'>
+            <form id={formId} onSubmit={handleSubmit} className='max-w-[425px] w-full mx-auto bg-white dark:bg-gray-600 p-8 rounded-xl shadow-xl overflow-hidden'>
                 <h2 className='text-4xl font-bold text-center py-4 dark:bg-gray-600 dark:text-white'>Cash Money Citations</h2>
                 <div className='flex justify-between py-8'>
                     <IconContext.Provider value={{ color: 'black', className: ''}}>

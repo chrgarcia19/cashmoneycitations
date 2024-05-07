@@ -24,6 +24,7 @@ const DisplayGroups = async (props: Props) => {
         <>
             <Chip 
                 variant="flat"
+                size="sm"
                 className="bg-cyan-300 me-2 mb-2 dark:text-black">
                     {group.groupName}     
             </Chip>           

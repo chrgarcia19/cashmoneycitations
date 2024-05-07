@@ -24,6 +24,7 @@ const DisplayTags = async (props: Props) => {
         <>
             <Chip
                 variant="flat"
+                size="sm"
                 className="bg-teal-200 me-2 mb-2 dark:text-black">
                     {tag.tagName}     
             </Chip>      

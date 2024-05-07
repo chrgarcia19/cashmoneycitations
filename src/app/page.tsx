@@ -5,7 +5,6 @@ import MyAnimationComponent from "../components/MyAnimationComponent";
 import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import Dashboard from "../components/Dashboard";
 import { LogCMCError } from "@/components/componentActions/logActions";
 
 export default function Home() {

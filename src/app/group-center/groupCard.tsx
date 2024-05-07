@@ -55,7 +55,7 @@ const GroupCard = (props: Props) => {
         const end = start + rowsPerPage;
 
         return references.slice(start, end);
-    }, [page, references]);
+    }, [page, references, rowsPerPage]);
 
     const statusColorMap: Record<string, ChipProps["color"]> = {
         active: "success",

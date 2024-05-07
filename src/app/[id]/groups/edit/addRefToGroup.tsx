@@ -30,7 +30,7 @@ const AddReferenceToGroup = (props: Props) => {
         const end = start + rowsPerPage;
 
         return props.references.slice(start, end);
-    }, [page, props.references]);
+    }, [page, props.references, rowsPerPage]);
 
     const statusColorMap: Record<string, ChipProps["color"]> = {
         active: "success",

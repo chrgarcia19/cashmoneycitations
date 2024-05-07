@@ -7,6 +7,7 @@ import useSWR from "swr";
 import AddReferenceToGroup from "./addRefToGroup";
 import RemoveReferenceFromGroup from "./removeRefFromGroup";
 import CreateCard from "@/app/group-center/createGroup";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 
 type Props = {
     references: CSLBibInterface[];
@@ -32,7 +33,14 @@ export default function EditGroup(props: Props){
 
     const groupData = {
         groupName: group.groupName,
+        referenceId: group.referenceId,
     };
+
+    const referenceArr = new Array<CSLBibInterface>();
+    groupData.referenceId.map(async (id: any) => {
+        const referenceData = await getSpecificReferenceById(id);
+        referenceArr.push(referenceData);
+    });
 
     return (
         <>  
@@ -46,7 +54,7 @@ export default function EditGroup(props: Props){
                         <AddReferenceToGroup references={props.references} group={group} />
                     </Tab>
                     <Tab key="remove" title="Remove References from Group">
-                        <RemoveReferenceFromGroup referenceIds={group.referenceId} group={group} />
+                        <RemoveReferenceFromGroup refs={referenceArr} group={group} />
                     </Tab>
                 </Tabs>
                 </div>            

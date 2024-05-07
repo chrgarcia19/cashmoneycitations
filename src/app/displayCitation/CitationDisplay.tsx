@@ -14,10 +14,9 @@ import { GetCSLStyle, GetCSLLocale } from './actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
-import {Button, ButtonGroup, Divider, Spinner} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
 import {Select, SelectItem} from "@nextui-org/react";
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/react";
+import {Card, CardHeader, CardBody} from "@nextui-org/react";
 import { IoMdDownload } from "react-icons/io";
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {

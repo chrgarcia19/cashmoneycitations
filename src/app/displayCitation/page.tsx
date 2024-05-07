@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { CitationChoice, CitationList } from './CitationDisplay';
 import { useReferenceContext } from '../reference-table/components/ReferenceTable';
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
 import { ErrorBoundary } from '../error/boundary/errorBoundary';
 import Link from 'next/link';
 import { Button } from '@nextui-org/button';

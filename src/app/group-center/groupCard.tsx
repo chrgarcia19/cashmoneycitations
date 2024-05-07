@@ -21,7 +21,7 @@ type Props = {
 const GroupCard = (props: Props) => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-    const { referenceIds, setReferenceIds, setSelectedReferenceIds } = useReferenceContext();
+    const { setSelectedReferenceIds } = useReferenceContext();
 
     const router = useRouter();
 
@@ -107,9 +107,8 @@ const GroupCard = (props: Props) => {
 
     // Update currently selected referenceIds
     useEffect(() => {
-        setReferenceIds(props.referenceIds);
         if (selectedKeys === "all") {
-            setSelectedReferenceIds(referenceIds);
+            setSelectedReferenceIds(props.referenceIds);
         } else if (selectedKeys instanceof Set) {
             setSelectedReferenceIds(Array.from(selectedKeys));
         }
@@ -174,7 +173,7 @@ const GroupCard = (props: Props) => {
                                     <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                                     <TableColumn key="type">TYPE</TableColumn>
                                 </TableHeader>
-                                <TableBody items={references}>
+                                <TableBody emptyContent={"No references found"} items={references}>
                                     {(item: { _id: string }) => (
                                         <TableRow key={item._id}>
                                             {(columnKey) => <TableCell className="dark:text-white">{renderCell(item, columnKey)}</TableCell>}

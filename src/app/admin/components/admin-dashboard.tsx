@@ -1,11 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation';
-import router from 'next/router';
 import React, { startTransition, useEffect, useState } from 'react';
 import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus } from '../adminActions';
-import {Card, CardBody, CardHeader, CardFooter, Button} from '@nextui-org/react';
+import {Card, CardBody, CardHeader } from '@nextui-org/react';
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
-import {Select, SelectSection, SelectItem} from "@nextui-org/react";
+import {Select, SelectItem} from "@nextui-org/react";
 import { LogCMCError } from '@/components/componentActions/logActions';
 
 export default function AdminDashboardClient() {

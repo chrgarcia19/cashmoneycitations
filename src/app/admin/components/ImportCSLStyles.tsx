@@ -46,6 +46,7 @@ function ImportCSLStyles({ handleCslSubmit }: any) {
       formData.append("file", selectedFile);
 
       handleCslSubmit(formData, includeDependent);
+      router.refresh();
     }
   }
 

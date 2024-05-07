@@ -1,7 +1,5 @@
 import React from "react";
-import dbConnect from "@/utils/dbConnect";
-import User from "@/models/User";
-import AdminDashboardClient, { DisplayCMCLogs } from "./components/admin-dashboard";
+import { DisplayCMCLogs } from "./components/admin-dashboard";
 import ImportCSLStyles from "./components/ImportCSLStyles";
 import GetUsers from "./components/GetUsers";
 import { getServerSession } from "next-auth";

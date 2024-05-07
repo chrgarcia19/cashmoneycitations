@@ -1,11 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { startTransition, useState, useTransition } from "react";
-
-// Local imports
-import CustomDropdown from './CustomDropdown';
-
+import React, { startTransition, useState } from "react";
 
 export default function UserView(user: any) {
   const router = useRouter();

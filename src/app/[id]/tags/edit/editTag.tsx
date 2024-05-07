@@ -8,6 +8,7 @@ import useSWR from "swr";
 import AddReferenceToTag from "./addRefToTag";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import RemoveReferenceFromTag from "./removeRefFromTag";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 
 type Props = {
     references: CSLBibInterface[];
@@ -35,8 +36,14 @@ export default function EditTag(props: Props){
     const tagForm = {
         tagName: tag.tagName,
         tagColor: tag.tagColor,
-        referenceID: tag.referenceID
+        referenceId: tag.referenceId
     };
+
+    const referenceArr = new Array<CSLBibInterface>();
+    tagForm.referenceId.map(async (id: any) => {
+        const referenceData = await getSpecificReferenceById(id);
+        referenceArr.push(referenceData);
+    });
 
     return (
         <>
@@ -68,7 +75,7 @@ export default function EditTag(props: Props){
                     <AddReferenceToTag references={props.references} tag={tag} />
                 </Tab>
                 <Tab key="remove" title="Remove References from Tag">
-                    <RemoveReferenceFromTag referenceIds={tag.referenceId} tag={tag} />
+                    <RemoveReferenceFromTag refs={referenceArr} tag={tag} />
                 </Tab>
             </Tabs>
             </div> 

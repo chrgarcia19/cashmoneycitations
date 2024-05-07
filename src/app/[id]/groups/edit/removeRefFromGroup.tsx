@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Selection, Chip, ChipProps, Button } from "@nextui-org/react";
 import { CSLBibInterface } from "@/models/CSLBibTex";
-import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { useRouter } from "next/navigation";
 import { deleteGroupIdFromReference, deleteReferenceIdFromGroup } from "@/app/group-center/modifyGroups";
 import { Group } from "@/models/Group";
@@ -147,7 +146,7 @@ const RemoveReferenceFromGroup = (props: Props) => {
                       <TableColumn key="datePublished">DATE PUBLISHED</TableColumn>
                       <TableColumn key="type">TYPE</TableColumn>
                   </TableHeader>
-                  <TableBody items={items}>
+                  <TableBody emptyContent={"No References in Group"} items={items}>
                       {(item: { _id: string }) => (
                           <TableRow key={item._id}>
                               {(columnKey) => <TableCell className="dark:text-white">{renderCell(item, columnKey)}</TableCell>}

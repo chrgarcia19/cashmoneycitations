@@ -15,14 +15,11 @@ import {
   DropdownMenu,
   DropdownItem,
   Chip,
-  User,
   Pagination,
   Selection,
   ChipProps,
   SortDescriptor,
-  skeleton,
   Tooltip,
-  cn,
   ButtonGroup,
   DropdownSection
 } from "@nextui-org/react";
@@ -39,8 +36,8 @@ import Link from "next/link";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { useRouter } from "next/navigation";
 import { ExportMultipleReferences } from "../actions";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { TbEditOff, TbEdit } from "react-icons/tb";
+import { BsEye } from "react-icons/bs";
+import { TbEdit } from "react-icons/tb";
 import { localeLabelSelect } from "./language-selections"
 import DisplayGroups from "@/components/DisplayGroups";
 import { LogCMCError } from "@/components/componentActions/logActions";

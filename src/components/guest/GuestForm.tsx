@@ -325,25 +325,11 @@ const GuestForm = ({ formId, referenceForm, forNewReference = true }: Props) => 
           <div className="w-3/5 bg-white dark:bg-gray-600 rounded-xl shadow-xl overflow-hidden">
             <div className="flex flex-col p-6">
               <div className="text-center">
-                {forNewReference ? (
                   <div>
                     <h1 className="text-2xl mb-5 font-bold text-gray-800 dark:text-white">
                       Add Reference
                     </h1>
-                    <div className="flex flex-row justify-center">
-                    <div className="mx-5">
-                    <UploadBibModal />
-                    </div>
-                    <div className="mx-5">
-                    <UploadJSONModal />
-                    </div>
-                    </div>
                   </div>
-                ) : (
-                  <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-                    Edit Reference
-                  </h1>
-                )}
               </div>
   
               <form

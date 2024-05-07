@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { ClientSafeProvider, LiteralUnion, getProviders, signIn, useSession } from 'next-auth/react'
-import { redirect, useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { FaGithubSquare } from "react-icons/fa";
 import {FcGoogle} from 'react-icons/fc'
 import { IconContext } from "react-icons";

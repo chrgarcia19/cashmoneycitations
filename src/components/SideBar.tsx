@@ -2,18 +2,16 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { BsTable, BsList } from "react-icons/bs";
+import { BsTable } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
 import { HiDocumentAdd } from "react-icons/hi";
 import { IoPricetags } from "react-icons/io5";
-import { FaHome, FaBook, FaBarcode, FaArrowDown } from "react-icons/fa";
+import { FaHome, FaArrowDown } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdSpaceDashboard, MdGroup } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { Image } from "@nextui-org/react";
 import { IoMdArrowDropdown } from "react-icons/io";
-
-// import { getServerAuthSession } from "@/lib/auth";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // State to manage icons visibility

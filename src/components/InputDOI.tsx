@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
-import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell, getKeyValue} from "@nextui-org/react";
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell } from "@nextui-org/react";
 import { LogCMCError } from "./componentActions/logActions";
 
 interface InputDOIProps {

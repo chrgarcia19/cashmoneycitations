@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { getSpecificGroupById } from "./componentActions/groupActions";
+import { Chip } from "@nextui-org/react";
 
 type Props = {
     groupId: string;
@@ -21,9 +22,11 @@ const DisplayGroups = async (props: Props) => {
 
     return (
         <>
-            <div className={`badge badge-lg bg-cyan-300 me-2`}>
-                {group.groupName}           
-            </div>            
+            <Chip 
+                variant="flat"
+                className="bg-cyan-300 me-2 mb-2 dark:text-black">
+                    {group.groupName}     
+            </Chip>           
         </>
     )
 }

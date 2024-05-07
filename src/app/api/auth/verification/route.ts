@@ -1,8 +1,7 @@
 import dbConnect from "@/utils/dbConnect";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import bcrypt from 'bcryptjs';
 import User from "@/models/User";
-import LoginForm from "@/components/LoginForm";
 
 export const POST = async ( request: NextRequest) => {
     const credentials = await request.json();

@@ -1,6 +1,5 @@
 'use client'
-import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure, Chip} from "@nextui-org/react";
-import {Textarea} from "@nextui-org/react";
+import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, Button, useDisclosure, Chip, Textarea} from "@nextui-org/react";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { ParseJsonUpload, SaveJsonFileToDB } from "./JSONFileUpload";

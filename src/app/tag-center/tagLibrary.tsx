@@ -3,7 +3,7 @@
 import { LogCMCError } from "@/components/componentActions/logActions";
 import { getUserTags, handleNewTag } from "@/components/componentActions/tagActions";
 import { Tag } from "@/models/Tag"
-import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Selection, Tooltip } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

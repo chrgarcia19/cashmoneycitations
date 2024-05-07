@@ -2,10 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { editTag, handleNewTag } from "../../components/componentActions/tagActions";
 import { Button } from "@nextui-org/react";
-
+    
 interface TagData {
     tagName: string;
     tagColor: string;

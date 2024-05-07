@@ -7,7 +7,7 @@ import { Group } from "@/models/Group";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { handleDelete } from "./modifyGroups";
 import { useRouter } from "next/navigation";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getSpecificReferenceById } from "@/components/componentActions/actions";
 let { format } = require('@citation-js/date');
 import { useReferenceContext } from "../reference-table/components/ReferenceTable";

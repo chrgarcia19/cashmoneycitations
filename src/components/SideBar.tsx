@@ -10,7 +10,7 @@ import { FaHome, FaArrowDown } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdSpaceDashboard, MdGroup } from "react-icons/md";
 import { useSession } from "next-auth/react";
-import { Image } from "@nextui-org/react";
+import Image from "next/image";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 const Sidebar = () => {
@@ -37,9 +37,10 @@ const Sidebar = () => {
           >
             <div className="flex items-center">
               <Image 
-                src={"cashmoneycitations_logo.png"}
+                src={"/cashmoneycitations_logo.png"}
                 alt="Cash Money Citations Logo"
                 width={65}
+                height={65}
               />
               <IoMdArrowDropdown className="bg-black"/>
             </div>

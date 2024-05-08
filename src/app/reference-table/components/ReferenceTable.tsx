@@ -658,11 +658,11 @@ export default function ReferenceTable(userRefObject: any) {
             </span>
           </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">{refLength} Total References</span>
-          <label className="flex items-center text-default-400 text-small">
+          <span className="text-black dark:text-white text-small">{refLength} Total References</span>
+          <label className="flex items-center text-black dark:text-whitetext-small">
             Rows per page:
             <select
-              className="bg-transparent outline-none text-default-400 text-small"
+              className="bg-transparent outline-none text-black dark:text-white text-small"
               defaultValue={"10"}
               onChange={onRowsPerPageChange}
             >
@@ -693,7 +693,7 @@ export default function ReferenceTable(userRefObject: any) {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
+        <span className="w-[30%] text-small text-black dark:text-white">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${refLength} selected`}

@@ -9,7 +9,7 @@ import { ThemeProvider } from "next-themes";
 export const metadata = {
   title: 'Cash Money Citations',
   description: 'CashMoneyCitations',
-  icons: 'cashmoneycitations_logo.png'
+  icons: '/cashmoneycitations_logo.png'
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

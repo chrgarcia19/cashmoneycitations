@@ -11,7 +11,6 @@ type Props = {
 
 const CitationStyleCounter = (props: Props) => {
     const [citationStyleCount, setCitationStyleCount] = useState<number | never[]>(0);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setCitationStyleCount(props.styleCount)

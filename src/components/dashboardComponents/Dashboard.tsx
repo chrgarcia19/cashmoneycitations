@@ -1,13 +1,13 @@
 import React from "react";
 import UserReferenceCounter from "./UserReferenceCounter";
 import CitationStyleCounter from "./CitationStyleCounter";
-import MostUsedLanguage from "./MostUsedLanguage";
 import UserInfo from "./UserInfo";
 import { getSpecificUserById } from "../componentActions/actions";
 import { getServerAuthSession } from "@/lib/auth";
 import dbConnect from "@/utils/dbConnect";
 import CSLStyle from "@/models/CSLStyle";
 import { LogCMCError } from "../componentActions/logActions";
+import AddReferences from "./AddReferences";
 
 async function countCSLStyles() {
   await dbConnect();
@@ -37,9 +37,9 @@ const Dashboard = async () => {
     <UserInfo />
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <AddReferences />
       <UserReferenceCounter userReferenceCount={user.ownedReferences.length} />
       <CitationStyleCounter styleCount={cslStyleCount} />
-      <MostUsedLanguage />
     </div>
   </div>
   

@@ -3,9 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { FaRegListAlt } from "react-icons/fa";
 import Link from "next/link";
-import { useReferenceContext } from '../../app/reference-table/components/ReferenceTable'
-import { useSession } from "next-auth/react";
-import { getSpecificUserById } from "../componentActions/actions";
 import { Button } from "@nextui-org/react";
 
 type Props = {

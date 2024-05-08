@@ -71,7 +71,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     // Ensure item includes an ID field
     const itemWithId = { ...item, _id: undefined }; // Set _id to undefined to let MongoDB generate a new ID
     //Handling issues with tags
-    const itemWithoutTags = { ...itemWithId, tags: [] };
+    const itemWithoutTags = { ...itemWithId, tagId: undefined, groupId: undefined };
     HandleManualReference(itemWithoutTags, session?.user?.id)
     router.push("/reference-table");
     router.refresh();

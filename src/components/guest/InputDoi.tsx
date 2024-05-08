@@ -2,9 +2,6 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { HandleManualReference } from "@/components/componentActions/citationActions";
-import { useSession } from "next-auth/react";
-
 
 interface InputDOIProps {
     searchVal: string;
@@ -12,7 +9,6 @@ interface InputDOIProps {
 }
 
 const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
-    const { data: session } = useSession();
     const [tableShown, setTableShown] = useState<boolean>(false);
     const [data, setData] = useState<any[]>([]);
     const router = useRouter();

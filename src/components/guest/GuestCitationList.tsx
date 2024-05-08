@@ -4,7 +4,7 @@ import { getSpecificReferenceById } from '@/components/componentActions/actions'
 import { SelectionCSL, SelectionLocale } from '../../app/[id]/references/view/CSLComponents';
 import { SelectionGuestCSL } from '@/components/guest/GuestCSLComponents';
 import { CreateCitation } from '../../app/[id]/references/view/actions';
-import { DeleteCitation, GetRefCSLJson } from '../../app/displayCitation/actions';
+import { DeleteCitation } from '../../app/displayCitation/actions';
 import React from 'react';
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
@@ -16,10 +16,9 @@ import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
 import { useSession } from 'next-auth/react';
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
-import {Button, ButtonGroup, Divider, Spinner} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import {Select, SelectItem} from "@nextui-org/react";
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/react";
+import {Card, CardHeader, CardBody } from "@nextui-org/react";
 import { IoMdDownload } from "react-icons/io";
 
 interface Reference {

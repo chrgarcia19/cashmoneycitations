@@ -2,9 +2,7 @@
 // components/GuestAccess.tsx
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUser } from 'react-icons/fa';
 import { useSession } from "next-auth/react";
-
 import { Avatar, Tooltip } from '@nextui-org/react';
 
 const GuestAccess: React.FC = () => {

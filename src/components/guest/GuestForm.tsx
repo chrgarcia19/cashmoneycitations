@@ -3,15 +3,11 @@
 import { useState, useEffect } from "react";
 import { Contributor } from "@/models/Contributor";
 import { useRouter, useSearchParams } from "next/navigation";
-import { HandleManualReference } from "../componentActions/citationActions";
-import { EditReference } from "../componentActions/editReferenceActions";
 import FormField from "../FormField";
 import DatePicker from "../DatePicker";
 import ContributorForm from "../ContributorForm";
 import { useSession } from "next-auth/react";
-import { UploadBibModal } from "@/app/input-bibtex/components/Modal";
 import { CSLGeneralFields } from "@/models/CSLBibTex";
-import { UploadJSONModal } from "@/app/input-json/components/Modal";
 import React from "react";
 import { jwtDecode } from "jwt-decode";
 

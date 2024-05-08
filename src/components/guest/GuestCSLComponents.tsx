@@ -2,12 +2,11 @@
 
 import { ChevronDownIcon } from "@/app/reference-table/components/ChevronDownloadIcon";
 import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownSection, DropdownItem, Divider } from "@nextui-org/react";
-import { Suspense, memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { FilterCslStyleNames } from "@/app/[id]/references/view/actions";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
 import {useAsyncList} from "@react-stately/data";
-import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { FixedSizeList as List, areEqual } from "react-window";
 import memoize from 'memoize-one';
 import { UpdateUserStyleList } from "@/app/displayCitation/actions";

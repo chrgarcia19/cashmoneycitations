@@ -2,8 +2,6 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { HandleManualReference } from "@/components/componentActions/citationActions";
 
 interface InputISBNProps {
   searchVal: string;
@@ -11,7 +9,6 @@ interface InputISBNProps {
 }
 
 const InputISBN: React.FC<InputISBNProps> = ({ searchVal, reload }) => {
-  const { data: session } = useSession();
   const [tableShown, setTableShown] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const router = useRouter();

@@ -1,15 +1,8 @@
 'use server';
-import { getSpecificReferenceById } from "@/components/componentActions/actions";
 import { GetBibLaTexFile, GetBibTexFile, GetJSONFile } from "./GuestExportFunctions";
 
 export async function ExportMultipleReferences(exportType: string, references: any, lang: string) {
     
-
-    // for (const id of selectedReferenceIds) {
-    //     const reference = await getSpecificReferenceById(id);
-    //     references.push(reference);
-    // }
-
     let formattedReferences = '';
     switch (exportType) {
         case 'biblatex':

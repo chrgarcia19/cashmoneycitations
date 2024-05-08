@@ -1,7 +1,7 @@
 import React from "react";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
-import AdminDashboardClient, { DisplayCMCLogs } from "./components/admin-dashboard";
+import AdminDashboardClientfrom from "./components/admin-dashboard";
 import ImportCSLStyles from "./components/ImportCSLStyles";
 import GetUsers from "./components/GetUsers";
 import { getServerSession } from "next-auth";
@@ -140,10 +140,10 @@ export default async function AdminDashboard() {
               <ImportCSLStyles handleCslSubmit={handleCslSubmit} />
               <ImportLocale handleLocaleSubmit={handleLocaleSubmit} />
             </div>
-            <div className="flex flex-row justify-evenly m-5">
+            {/* <div className="flex flex-row justify-evenly m-5">
               <GetCslStyles />
               <GetLocales />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -169,8 +169,6 @@ const HeroSectionAdminHeader = () => {
 
           <DisplayServerStatistics />
           <DisplayCollectionStatistics />
-          <h2 className='font-bold text-3xl p-2'>Logs</h2>
-          <DisplayCMCLogs />
           <a
             href="/"
             aria-label="Scroll down"

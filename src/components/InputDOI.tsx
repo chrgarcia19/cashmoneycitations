@@ -120,14 +120,10 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             abstract: item.abstract,
             apiSource: item.source
         };
-        try {
-            HandleManualReference(doiReference, session?.user?.id)
-        } catch(e: any) {
-            LogCMCError("INFORMATION", "REFERENCE", e);
-            console.error(e);
-        }
+        HandleManualReference(doiReference, session?.user?.id)
         router.push("/reference-table");
         router.refresh();
+        
     }
 
     const columns = [
@@ -152,7 +148,7 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
           case "DOI":
             return (
                 <div>
-                    <p className="border-r border-b border-l border-zinc-500 py-2 px-2">{cellValue}</p>
+                    <p className="py-2 px-2">{cellValue}</p>
 
                 </div>
             );

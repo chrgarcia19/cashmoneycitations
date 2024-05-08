@@ -117,11 +117,19 @@ const InputMusic: React.FC<InputMusicProps> = ({ searchVal, reload }) => {
         if (item['first-release-date']){
             if (item['first-release-date'].includes("-")){
                 publishedArray = item['first-release-date'].split("-");
-                year = publishedArray[0];
-                monthInt = parseInt(publishedArray[1]);
-                monthInt = monthInt - 1;
-                month = monthInt.toString();
-                day = publishedArray[2].replace("0", "");
+                if (publishedArray.length === 3) {
+                    year = publishedArray[0];
+                    monthInt = parseInt(publishedArray[1]);
+                    monthInt = monthInt - 1;
+                    month = monthInt.toString();
+                    day = publishedArray[2].replace("0", "");
+                }
+                else{
+                    year = publishedArray[0];
+                    monthInt = parseInt(publishedArray[1]);
+                    monthInt = monthInt - 1;
+                    month = monthInt.toString();
+                }
             }
             else {
                 month = "0";

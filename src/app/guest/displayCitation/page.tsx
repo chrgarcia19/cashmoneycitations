@@ -1,10 +1,10 @@
 import React from 'react'
-import Dashboard from '@/components/dashboardComponents/Dashboard'
+import CitationDisplay from '@/components/guest/GuestCitationDisplay'
 
 const page = () => {
   return (
     <div>
-        <Dashboard  />
+      <CitationDisplay />
     </div>
   )
 }

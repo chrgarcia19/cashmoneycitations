@@ -36,7 +36,7 @@ const LoginForm = ({formId, loginForm}: Props) => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
 
     

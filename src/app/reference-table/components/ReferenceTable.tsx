@@ -252,14 +252,24 @@ export default function ReferenceTable(userRefObject: any) {
           </div>
         );
       case "yearPublished":
-        let datePublished = format(userRef.cslJson[0].issued);
-        datePublished = new Date(datePublished);
-        datePublished = datePublished.getFullYear();
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{datePublished}</p>
-          </div>
-        );
+        try {
+          let datePublished = format(userRef.cslJson[0].issued);
+          datePublished = new Date(datePublished);
+          datePublished = datePublished.getFullYear();
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">{datePublished}</p>
+            </div>
+          );
+
+        } catch(e) {
+          console.error(e);
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">"No Date Given"</p>
+            </div>
+          )
+        }
       case "contributors":
         return (
           <>

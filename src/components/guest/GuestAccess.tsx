@@ -23,8 +23,7 @@ const GuestAccess: React.FC = () => {
       // console.log(data, "data")
       sessionStorage.setItem('guestToken', guestTokenData.data);
       setStatusGuest('Guest session active. You have limited access.');
-      router.push('/guestAccess');
-      router.refresh();
+      router.push('/guest/access');
     } else {
       setStatusGuest('Failed to initiate guest session.');
     }

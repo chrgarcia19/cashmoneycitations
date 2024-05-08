@@ -2,7 +2,7 @@
 
 ## Cash Money Citations v1.0
 
-- GitHub Tag: 
+- GitHub Tag: https://github.com/chrgarcia19/cashmoneycitations/releases/tag/cmc.v1.0
 
 ### New Features
 - Guest users can now interact with Cash Money Citations in a limited fashion

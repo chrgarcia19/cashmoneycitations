@@ -52,11 +52,11 @@ stateDiagram-v2
 #### Input Types
 https://citation.js.org/api/0.3/tutorial-input_formats.html
 
-#### Schema feilds
+#### Schema fields
 
 Differing dates are requried for the different input types (DOI, Manual, ISBN, etc)
 
-#### BibLaTex Feilds
+#### BibLaTex Fields
 ``` TypeScript
 {
   abstract: [ 'field', 'literal' ],

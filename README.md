@@ -10,6 +10,25 @@ Cash Money Citations is a project aimed at maintaining unique lists of reference
 
 This project incorporates GitHub & Google OAuth alongside credential login for user/session management.
 
+**Note**: Cash Money Citations currently does not support a production build. This is due to a Type Error present in citation.js during the runtime of the production build. 
+
+## Special Thanks To...
+- The Citation Style Language (CSL) Project
+    - *Website:* https://citationstyles.org/
+    - *GitHub:* https://github.com/citation-style-language
+- The Citation.js Project
+    - *Citation.js Website:* https://citation.js.org/
+    - *Citation.js GitHub:* https://github.com/citation-js
+- Lars Willighagen from the Citation.js project
+    - *Lars Willighagen's Website:* https://larsgw.github.io/#/
+
+
+## Documentation
+- If you are interested in the inner workings of Cash Money Citations, please view the documentation in the docs/ directory. This directory contains the following information:
+    - *CSLProcessREADME.md:* This document details the entire CSL process with elements such as CSL Fields, CSL Types, Schemas, and more. 
+    - *OAuthREADME.md:* This document details how to configure the .env.local file on your server running Cash Money Citations. 
+    - *RELEASE_NOTES.md:* This document details the changes, upcoming additions, and bugs included in each release of Cash Money Citations.
+
 
 ## Features
 

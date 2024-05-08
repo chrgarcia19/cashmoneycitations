@@ -1,26 +1,32 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { getSpecificReferenceById } from '@/components/componentActions/actions';
-import { SelectionCSL, SelectionLocale } from '../[id]/references/view/CSLComponents';
+import { SelectionCSL, SelectionLocale } from '../../app/[id]/references/view/CSLComponents';
 import { SelectionGuestCSL } from '@/components/guest/GuestCSLComponents';
-import { CreateCitation } from '../[id]/references/view/actions';
-import { DeleteCitation, GetRefCSLJson } from './actions';
+import { CreateCitation } from '../../app/[id]/references/view/actions';
+import { DeleteCitation } from '../../app/displayCitation/actions';
 import React from 'react';
 const Cite = require('citation-js')
 require('@citation-js/plugin-bibtex')
 require('@citation-js/plugin-bibjson')
 require('@citation-js/core')
 const { plugins } = require('@citation-js/core')
-import { GetCSLStyle, GetCSLLocale } from './actions';
+import { GetCSLStyle, GetCSLLocale } from '../../app/displayCitation/actions';
 import parse, { domToReact } from 'html-react-parser';
 import ReactDOMServer from 'react-dom/server';
 import { htmlToText } from 'html-to-text';
 import { useSession } from 'next-auth/react';
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue} from "@nextui-org/react";
-import {Button, ButtonGroup, Divider, Spinner} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import {Select, SelectItem} from "@nextui-org/react";
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/react";
+import {Card, CardHeader, CardBody } from "@nextui-org/react";
 import { IoMdDownload } from "react-icons/io";
+
+interface Reference {
+    title: string;
+    author?: string;
+    year?: number;
+    [key: string]: any;
+}
 
 export function CitationList({ referenceId, styleChoice, localeChoice, citations, setCitations, referenceIds, selectedReferenceIds = [], setSelectedReferenceIds}: any) {
   // Fetch initial citation state
@@ -58,11 +64,20 @@ export function CitationList({ referenceId, styleChoice, localeChoice, citations
     },
   }
 
+  
+  
+
+
   const fetchCitations = async () => {
-    // Fetch citations for all referenceIds in parallel
-    const allCitations = await Promise.all(selectedReferenceIds.map(GetRefCSLJson));
-    // Create a Cite instance with the references' cslJson data
-    const citation = new Cite(allCitations);
+
+     // Step 1: Load references from local storage
+     const referencesString = localStorage.getItem('references');
+     const references: Reference[] = referencesString ? JSON.parse(referencesString) : [];
+
+     // Step 2: Convert references to CSL-JSON
+     const cslJsonArray = references.map((reference : Reference) => Cite.input(reference));
+     const citation = new Cite(cslJsonArray);
+
     // Create a custom template and style for each specified style/locale
     const templateName = styleChoice;
     const localeName = localeChoice;

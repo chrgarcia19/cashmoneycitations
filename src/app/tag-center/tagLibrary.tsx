@@ -36,7 +36,7 @@ const TagLibrary = (props: Props) => {
 
     const handleSubmit = async (tag: Tag) => {
         try {
-            const tagWithoutId = {...tag, _id: undefined };
+            const tagWithoutId = {...tag, _id: undefined, referenceId: undefined };
             handleNewTag(tagWithoutId, session?.user?.id);
             router.push("/tag-center");
             router.refresh();

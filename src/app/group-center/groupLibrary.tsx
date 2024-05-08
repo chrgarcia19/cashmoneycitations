@@ -91,7 +91,7 @@ const GroupLibrary = (props: Props) => {
     const handleSubmit = async (group: Group) => {
         try {
             const groupWithoutId = {...group, 
-                _id: undefined };
+                _id: undefined, referenceId: undefined };
             handleNewGroup(groupWithoutId, session?.user?.id);
             router.push("/group-center");
             router.refresh();

@@ -1,6 +1,6 @@
 'use client'
 
-import router, { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { startTransition, useState } from "react";
 
 export function CslStyleView(style: any) {

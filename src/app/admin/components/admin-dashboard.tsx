@@ -1,11 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation';
-import router from 'next/router';
 import React, { startTransition, useEffect, useMemo, useState } from 'react';
-import { GetCMCLogs, GetCollectionStats, GetDatabaseStatus, fetchDocumentsFromCollection } from '../adminActions';
+import {GetCollectionStats, GetDatabaseStatus, fetchDocumentsFromCollection } from '../adminActions';
 import {Card, CardBody, CardHeader, CardFooter, Button, ButtonGroup} from '@nextui-org/react';
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/react";
-import {Select, SelectSection, SelectItem} from "@nextui-org/react";
+import {Select, SelectItem} from "@nextui-org/react";
 import { LogCMCError } from '@/components/componentActions/logActions';
 import { BiEdit } from 'react-icons/bi';
 import { DeleteIcon } from '@/app/reference-table/components/DeleteIcon';

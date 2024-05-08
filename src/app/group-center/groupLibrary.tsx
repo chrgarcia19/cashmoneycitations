@@ -3,7 +3,7 @@ import { getSpecificUserById } from "@/components/componentActions/actions";
 import { getUserGroups, handleNewGroup } from "@/components/componentActions/groupActions";
 import { Group } from "@/models/Group";
 import { MdLibraryAdd } from "react-icons/md";
-import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue, useDisclosure, Selection, Tooltip } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure, Selection, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { Key, useCallback, useEffect, useMemo, useState } from "react";
@@ -91,7 +91,7 @@ const GroupLibrary = (props: Props) => {
     const handleSubmit = async (group: Group) => {
         try {
             const groupWithoutId = {...group, 
-                _id: undefined };
+                _id: undefined, referenceId: undefined };
             handleNewGroup(groupWithoutId, session?.user?.id);
             router.push("/group-center");
             router.refresh();

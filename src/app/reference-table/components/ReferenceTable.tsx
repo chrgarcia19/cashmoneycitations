@@ -15,14 +15,11 @@ import {
   DropdownMenu,
   DropdownItem,
   Chip,
-  User,
   Pagination,
   Selection,
   ChipProps,
   SortDescriptor,
-  skeleton,
   Tooltip,
-  cn,
   ButtonGroup,
   DropdownSection
 } from "@nextui-org/react";
@@ -39,8 +36,8 @@ import Link from "next/link";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import { useRouter } from "next/navigation";
 import { ExportMultipleReferences } from "../actions";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { TbEditOff, TbEdit } from "react-icons/tb";
+import { BsEye } from "react-icons/bs";
+import { TbEdit } from "react-icons/tb";
 import { localeLabelSelect } from "./language-selections"
 import DisplayGroups from "@/components/DisplayGroups";
 import { LogCMCError } from "@/components/componentActions/logActions";
@@ -107,7 +104,7 @@ export default function ReferenceTable(userRefObject: any) {
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [reference, setReference] = useState<CSLBibInterface[]>([]);
   const { references, setReferences, addReference, removeReference, referenceIds, setReferenceIds, selectedReferenceIds, setSelectedReferenceIds } = useContext(ReferenceContext);
   const [refLength, setRefLength] = useState(userRefObject.userRefObject.length);
@@ -298,9 +295,11 @@ export default function ReferenceTable(userRefObject: any) {
         return (
           <>
             {userRef.tagId.map((id: string) => (
-              <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
-                <DisplayTags tagId={id} />
-              </Suspense>
+              <div className="flex flex-wrap gap-1">
+                <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
+                  <DisplayTags tagId={id} />
+                </Suspense>
+              </div>
             ))}
           </>
         )
@@ -308,9 +307,11 @@ export default function ReferenceTable(userRefObject: any) {
           return (
             <>
               {userRef.groupId.map((id: string) => (
-                <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
-                  <DisplayGroups groupId={id} />
-                </Suspense>
+                <div className="flex flex-wrap gap-1">
+                  <Suspense key={id} fallback={<Skeleton className="h-3 w-2/5 rounded-lg bg-default-300"><span className="sm"/> </Skeleton>}>
+                    <DisplayGroups groupId={id} />
+                  </Suspense>
+                </div>
               ))}
             </>
           )
@@ -461,10 +462,33 @@ export default function ReferenceTable(userRefObject: any) {
             isClearable
             className="w-full sm:max-w-[44%]"
             placeholder="Search by title..."
-            startContent={<SearchIcon />}
+            startContent={<SearchIcon className="mx-2 my-0"/>}
             value={filterValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
+            classNames={{
+              label: "font-bold text-lg text-black/50 dark:text-white/90",
+              description: "text-black dark:text-white/90",
+              input: [
+                  "bg-transparent",
+                  "text-black/90 dark:text-white/90",
+                  "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              innerWrapper: "bg-transparent",
+              inputWrapper: [
+                  "shadow-xl",
+                  "bg-default-200/50",
+                  "dark:bg-default/60",
+                  "backdrop-blur-xl",
+                  "backdrop-saturate-200",
+                  "hover:bg-default-200/70",
+                  "dark:hover:bg-default/70",
+                  "group-data-[focused=true]:bg-default-200/50",
+                  "dark:group-data-[focused=true]:bg-default/60",
+                  "!cursor-text",
+                  "px-0"
+              ],
+            }}
           />
           <div className="flex gap-3 p-4">
             <Dropdown>
@@ -644,13 +668,16 @@ export default function ReferenceTable(userRefObject: any) {
             </span>
           </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">{refLength} Total References</span>
-          <label className="flex items-center text-default-400 text-small">
+          <span className="text-black dark:text-white text-small">{refLength} Total References</span>
+          <label className="flex items-center text-black dark:text-whitetext-small">
             Rows per page:
             <select
-              className="bg-transparent outline-none text-default-400 text-small"
+              className="bg-transparent outline-none text-black dark:text-white text-small"
+              defaultValue={"10"}
               onChange={onRowsPerPageChange}
             >
+              <option value="5">5</option>
+              <option value="10">10</option>
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100">100</option>
@@ -676,7 +703,7 @@ export default function ReferenceTable(userRefObject: any) {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
+        <span className="w-[30%] text-small text-black dark:text-white">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${refLength} selected`}

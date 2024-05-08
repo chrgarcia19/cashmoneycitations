@@ -1,10 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 function ImportLocale({ handleLocaleSubmit }: any) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const router = useRouter();
+  
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
@@ -33,6 +36,7 @@ function ImportLocale({ handleLocaleSubmit }: any) {
       formData.append("file", selectedFile);
 
       handleLocaleSubmit(formData);
+      router.refresh();      
     }
   }
 

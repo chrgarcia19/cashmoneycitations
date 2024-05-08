@@ -3,7 +3,7 @@
 import { LogCMCError } from "@/components/componentActions/logActions";
 import { getUserTags, handleNewTag } from "@/components/componentActions/tagActions";
 import { Tag } from "@/models/Tag"
-import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Selection, Tooltip } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ const TagLibrary = (props: Props) => {
 
     const handleSubmit = async (tag: Tag) => {
         try {
-            const tagWithoutId = {...tag, _id: undefined };
+            const tagWithoutId = {...tag, _id: undefined, referenceId: undefined };
             handleNewTag(tagWithoutId, session?.user?.id);
             router.push("/tag-center");
             router.refresh();

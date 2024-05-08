@@ -2,10 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import { editTag, handleNewTag } from "../../components/componentActions/tagActions";
-import { Button } from "@nextui-org/react";
-
+import { Button, Input } from "@nextui-org/react";
+    
 interface TagData {
     tagName: string;
     tagColor: string;
@@ -92,23 +92,44 @@ const TagForm = ({formID, tagForm, forNewTag = true} : Props) => {
         <div className="flex justify-center items-center">
           <form id={formID} onSubmit={handleSubmit}>
             {forNewTag && (
-              <div className="join join-horizontal">
-              <input
+              <div className="flex items-center gap-0.5 pb-2">
+                <Input 
+                  isRequired
                   type="text"
                   name="tagName"
-                  className="dark:text-white"
+                  size="sm"
+                  className="dark:text-white pt-5"
                   onChange={handleChange}
-                  value={form.tagName}
-                  required
-              /> 
-              <Button
-                type="submit"
-                color="success"
-                size="sm"
-                className="font-bold text-white hover:bg-green-900">
-                  Submit
-              </Button>
-            </div> 
+                  value={form.tagName} 
+                  classNames={{
+                    input: [
+                        "bg-transparent",
+                        "text-black/90 dark:text-white/90",
+                        "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                    ],
+                    innerWrapper: "bg-transparent",
+                    inputWrapper: [
+                        "shadow-xl",
+                        "bg-default-200/50",
+                        "dark:bg-default/60",
+                        "backdrop-blur-xl",
+                        "backdrop-saturate-200",
+                        "hover:bg-default-200/70",
+                        "dark:hover:bg-default/70",
+                        "group-data-[focused=true]:bg-default-200/50",
+                        "dark:group-data-[focused=true]:bg-default/60",
+                        "!cursor-text",
+                        "px-0",
+                    ],
+                }}/>
+                <Button
+                  type="submit"
+                  color="success"
+                  size="sm"
+                  className="font-bold text-sm text-white hover:bg-green-900">
+                    Submit
+                </Button>
+              </div> 
             )}
             {!forNewTag && (
               <>

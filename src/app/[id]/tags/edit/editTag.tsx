@@ -8,6 +8,7 @@ import useSWR from "swr";
 import AddReferenceToTag from "./addRefToTag";
 import { CSLBibInterface } from "@/models/CSLBibTex";
 import RemoveReferenceFromTag from "./removeRefFromTag";
+import { getSpecificReferenceById } from "@/components/componentActions/actions";
 
 type Props = {
     references: CSLBibInterface[];
@@ -35,8 +36,14 @@ export default function EditTag(props: Props){
     const tagForm = {
         tagName: tag.tagName,
         tagColor: tag.tagColor,
-        referenceID: tag.referenceID
+        referenceId: tag.referenceId
     };
+
+    const referenceArr = new Array<CSLBibInterface>();
+    tagForm.referenceId.map(async (id: any) => {
+        const referenceData = await getSpecificReferenceById(id);
+        referenceArr.push(referenceData);
+    });
 
     return (
         <>
@@ -47,12 +54,12 @@ export default function EditTag(props: Props){
                     <div className="flex justify-center items-center pt-5">
                         <Card className="py-4">
                             <CardHeader className="flex pb-0 pt-2 flex-col items-center">
-                                <div className="join join-horizontal">
+                                <div className="flex items-center justify-center pb-1">
                                     <h4 className="font-bold text-large">Edit Tag:</h4>
                                     <Divider orientation="vertical" className="m-2"/>
                                     <Chip
                                         variant="flat"
-                                        className="bg-teal-200 me-2 mb-2 dark:text-black">
+                                        className="bg-teal-200 dark:text-black">
                                             {tag.tagName}     
                                     </Chip>
                                 </div>
@@ -68,7 +75,7 @@ export default function EditTag(props: Props){
                     <AddReferenceToTag references={props.references} tag={tag} />
                 </Tab>
                 <Tab key="remove" title="Remove References from Tag">
-                    <RemoveReferenceFromTag referenceIds={tag.referenceId} tag={tag} />
+                    <RemoveReferenceFromTag refs={referenceArr} tag={tag} />
                 </Tab>
             </Tabs>
             </div> 

@@ -1,7 +1,6 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import { AuthProvider } from "./Providers";
-import SideBar from "../components/SideBar";
 import Providers from "./Providers";
 import { ReferenceProvider } from "./reference-table/components/ReferenceTable";
 import { ThemeProvider } from "next-themes";
@@ -10,7 +9,7 @@ import { ThemeProvider } from "next-themes";
 export const metadata = {
   title: 'Cash Money Citations',
   description: 'CashMoneyCitations',
-  icons: 'cashmoneycitations_logo.png'
+  icons: '/cashmoneycitations_logo.png'
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

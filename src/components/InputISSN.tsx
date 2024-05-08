@@ -3,7 +3,7 @@ import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { LogCMCError } from "./componentActions/logActions";
 
 interface InputISSNProps {

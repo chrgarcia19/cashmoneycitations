@@ -5,9 +5,8 @@ require('@citation-js/plugin-bibtex')
 require('@citation-js/core')
 let { parse, format } = require('@citation-js/date')
 import dbConnect from "@/utils/dbConnect";
-import CSLBibModel, { CSLGeneralFields } from "@/models/CSLBibTex";
+import CSLBibModel from "@/models/CSLBibTex";
 import { Contributor } from "@/models/Contributor";
-import { RedirectType, redirect } from "next/navigation";
 import User from "@/models/User";
 import { LogCMCError } from "./logActions"
 

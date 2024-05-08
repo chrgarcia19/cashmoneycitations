@@ -2,10 +2,6 @@
 
 import useSWR from "swr";
 import Form from "@/components/Form";
-import { getUserReferences } from "@/components/componentActions/actions";
-import { useState, useEffect } from 'react';
-import { ReferenceFormData } from "@/components/Form";
-let { parse, format } = require('@citation-js/date')
 
 const fetcher = (url: string) =>
   fetch(url)

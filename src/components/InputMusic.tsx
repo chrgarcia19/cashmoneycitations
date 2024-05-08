@@ -2,7 +2,7 @@
 import { Contributor } from "@/models/Contributor";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
 import { LogCMCError } from "./componentActions/logActions";
 
@@ -117,11 +117,19 @@ const InputMusic: React.FC<InputMusicProps> = ({ searchVal, reload }) => {
         if (item['first-release-date']){
             if (item['first-release-date'].includes("-")){
                 publishedArray = item['first-release-date'].split("-");
-                year = publishedArray[0];
-                monthInt = parseInt(publishedArray[1]);
-                monthInt = monthInt - 1;
-                month = monthInt.toString();
-                day = publishedArray[2].replace("0", "");
+                if (publishedArray.length === 3) {
+                    year = publishedArray[0];
+                    monthInt = parseInt(publishedArray[1]);
+                    monthInt = monthInt - 1;
+                    month = monthInt.toString();
+                    day = publishedArray[2].replace("0", "");
+                }
+                else{
+                    year = publishedArray[0];
+                    monthInt = parseInt(publishedArray[1]);
+                    monthInt = monthInt - 1;
+                    month = monthInt.toString();
+                }
             }
             else {
                 month = "0";

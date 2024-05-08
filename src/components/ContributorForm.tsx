@@ -3,7 +3,6 @@
 import { Contributor } from '@/models/Contributor';
 import React, { useState, useEffect } from 'react';
 import { BiSolidTrash, BiPlusCircle } from 'react-icons/bi';
-import FormField from './FormField';
 import { Input } from '@nextui-org/react';
 
 interface ContributorFormProps {

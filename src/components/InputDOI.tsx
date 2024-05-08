@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { useSession } from "next-auth/react";
-import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell, getKeyValue} from "@nextui-org/react";
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell } from "@nextui-org/react";
 import { LogCMCError } from "./componentActions/logActions";
 
 interface InputDOIProps {
@@ -120,14 +120,10 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
             abstract: item.abstract,
             apiSource: item.source
         };
-        try {
-            HandleManualReference(doiReference, session?.user?.id)
-        } catch(e: any) {
-            LogCMCError("INFORMATION", "REFERENCE", e);
-            console.error(e);
-        }
-        //router.push("/reference-table");
-        //router.refresh();
+        HandleManualReference(doiReference, session?.user?.id)
+        router.push("/reference-table");
+        router.refresh();
+        
     }
 
     const columns = [
@@ -152,7 +148,7 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
           case "DOI":
             return (
                 <div>
-                    <p className="border-r border-b border-l border-zinc-500 py-2 px-2">{cellValue}</p>
+                    <p className="py-2 px-2">{cellValue}</p>
 
                 </div>
             );
@@ -182,15 +178,6 @@ const InputDOI: React.FC<InputDOIProps> = ({ searchVal, reload }) => {
                     {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
                 </TableHeader>
                 <TableBody items={data}>
-                    {/* {data.map(item => (
-                        <tr key={item.DOI} className="border-b hover:bg-gray-100">
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.DOI}</td>
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">{item.title}</td>
-                            <td className="border-r border-b border-l border-zinc-500 py-2 px-2">
-                                <button className="text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg w-24" onClick={() => addToDB(item)}>Add to list</button>
-                            </td>
-                        </tr>
-                    ))} */}
                     {(item) => (
                         <TableRow key={item.DOI}>
                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

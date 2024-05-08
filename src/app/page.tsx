@@ -5,7 +5,7 @@ import MyAnimationComponent from "../components/MyAnimationComponent";
 import cmcLogo from "../../public/cashmoneycitations_logo.png";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { FaSearch, FaFileExport, FaGlobeAmericas, FaBook, FaBarcode, FaIdBadge, FaKey } from "react-icons/fa";
+import { FaFileExport, FaGlobeAmericas, FaBook, FaBarcode, FaIdBadge, FaKey } from "react-icons/fa";
 import { LogCMCError } from "@/components/componentActions/logActions";
 
 export default function Home() {

@@ -68,9 +68,12 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         if (!form.firstName){ err.firstName = "A first name is required!"};
         if (!form.lastName){ err.lastName = "A last name is required!"};
         if (!form.email){ err.email = "An email is required!"};
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email)){ err.email = "Please enter a valid email address!"}
         if (!form.password){ err.password = "A password is required!"};
         if (!form.verifyPassword){ err.verifyPassword = "Please verify your password!"};
         if (form.password !== form.verifyPassword){err.verifyPassword = "Passwords do not match!"};
+        if (form.username.length < 4){ err.username = "Your username must not be less than 4 characters!"};
+        if (form.password.length < 6){ err.password = "Your password must not be less than 6 characters!"};
         return err;
     }
 
@@ -93,13 +96,32 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
         } else {
             LogCMCError("FAILED", "USER", "REGISTRATION ERROR WITH SUBMISSION")
             setErrors( { errs });
+            if (errs.username) {
+                alert(errs.username);
+            }
+            if (errs.firstName) {
+                alert(errs.firstName);
+            }
+            if (errs.lastName) {
+                alert(errs.lastName);
+            }
+            if (errs.email) {
+                alert(errs.email);
+            }
+            if (errs.password) {
+                alert(errs.password);
+            }
+            if (errs.verifyPassword) {
+                alert(errs.verifyPassword);
+            }
         }
     };
 
     return (
         <>
-        <div className='relative w-full h-screen bg-zinc-900/90 flex justify-center items-center'>
-            <form id={formId} onSubmit={handleSubmit} className="w-3/4 max-w-[800px] mx-auto bg-white dark:bg-zinc-600 p-8">
+        <div className='relative w-full h-screen flex justify-center items-center'>
+            <form id={formId} onSubmit={handleSubmit} 
+                className="w-3/4 max-w-[800px] mx-auto bg-white dark:bg-zinc-600 p-8 rounded-xl shadow-xl overflow-hidden">
                 {emailInUse && <EmailInUseError />}
             <h2 className='text-4xl font-bold text-center py-4 text-green-600 dark:text-green-500'>Register</h2>
                 <FormField 
@@ -154,12 +176,6 @@ const RegistrationForm = ({formId, registrationForm}: Props) => {
 
                 <Button type="submit" color="success" className="text-white font-bold text-lg w-full py-3 mt-8">Sign Up</Button>
             </form>
-        <div>
-            <p>{message}</p>
-            {Object.keys(errors).map((err, index) => (
-                <li key={index}>{err}</li>
-            ))}
-        </div>
     </div>
     </>
     );

@@ -4,7 +4,7 @@ import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from "next/cache";
-import CSLBibModel, { CSLBibInterface } from "@/models/CSLBibTex";
+import CSLBibModel from "@/models/CSLBibTex";
 import UserStyleList from '@/models/UserStyleList'; 
 import mongoose from "mongoose";
 import { LogCMCError } from "./logActions";

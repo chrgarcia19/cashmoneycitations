@@ -1,7 +1,7 @@
 'use client'
 import React, { startTransition, useState } from "react";
 import useSWR from "swr";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Image, Button, Checkbox, CheckboxGroup} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Checkbox, CheckboxGroup} from "@nextui-org/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";

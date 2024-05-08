@@ -111,6 +111,7 @@ const AddReferenceToTag = (props: Props) => {
     return (
         <>
               <form id="add-references-to-tags" 
+                className="w-full"
                 onSubmit={async (e) => await handleSubmit(e)}>
                 <Table 
                     aria-label="Example table with custom cells, pagination and sorting"

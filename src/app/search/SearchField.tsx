@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import searchRefs from "./searchRefs";
 import { useSession } from "next-auth/react";
-import { CreateCslJsonDocument, HandleManualReference } from "@/components/componentActions/citationActions";
+import { HandleManualReference } from "@/components/componentActions/citationActions";
 import { getUserReferences, getReferences } from '../../components/componentActions/actions';
 import { useRouter } from "next/navigation";
 
@@ -71,7 +71,7 @@ const SearchField: React.FC<SearchFieldProps> = ({searchRefs}) => {
     // Ensure item includes an ID field
     const itemWithId = { ...item, _id: undefined }; // Set _id to undefined to let MongoDB generate a new ID
     //Handling issues with tags
-    const itemWithoutTags = { ...itemWithId, tags: [] };
+    const itemWithoutTags = { ...itemWithId, tagId: undefined, groupId: undefined };
     HandleManualReference(itemWithoutTags, session?.user?.id)
     router.push("/reference-table");
     router.refresh();

@@ -1,8 +1,6 @@
 import { Suspense } from 'react';
 import { Contributor } from "../../models/Contributor";
 import Form from "../../components/Form";
-import { EntryType } from '../../components/Form';
-import { ReferenceFormData } from '../../components/Form';
 
 const NewReference = () => {
   const referenceForm = {

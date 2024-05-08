@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react"
 import { getSpecificTagById } from "./componentActions/tagActions";
+import { Chip } from "@nextui-org/react";
 
 type Props = {
     tagId: string;
 }
 
 const DisplayTags = async (props: Props) => {
-    const [tags, setTags] = useState(Object);
+    const [tag, setTags] = useState(Object);
 
     useEffect(() => {
         fetchTag();
@@ -21,9 +22,12 @@ const DisplayTags = async (props: Props) => {
 
     return (
         <>
-            <div className={`badge badge-lg bg-teal-200 me-2`}>
-                {tags.tagName}           
-            </div>            
+            <Chip
+                variant="flat"
+                size="sm"
+                className="bg-teal-200 me-2 mb-2 dark:text-black">
+                    {tag.tagName}     
+            </Chip>      
         </>
     )
 }

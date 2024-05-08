@@ -1,5 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
-import TestRefTable from './ReferenceTable';
+import React, { createContext, useState } from 'react';
 import { CSLBibInterface } from '@/models/CSLBibTex';
 
 const ReferenceContext = createContext('');

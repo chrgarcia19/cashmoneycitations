@@ -1,9 +1,10 @@
 import "../../css/style.css";
 import "../../css/form.css";
 import Link from "next/link";
+import Image from "next/image"
 import { getServerAuthSession } from "../lib/auth";
 import GuestAccess from './guest/GuestAccess'
-import {Navbar, NavbarBrand, NavbarContent, Image} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
 import React from "react";
 import SideBar from "./SideBar";
 import AvatarDropdown from "./AvatarDropdown";
@@ -31,9 +32,10 @@ export default async function NavBar() {
               href="/">
               <div className="flex items-center">
                 <Image
-                  src={"cashmoneycitations_logo.png"}
+                  src={"/cashmoneycitations_logo.png"}
                   alt="Cash Money Citations Logo"
-                  width={65} />
+                  width={65}
+                  height={65} />
               </div>
             </Link>
             <span className="pl-2 self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-white">Cash Money Citations</span>

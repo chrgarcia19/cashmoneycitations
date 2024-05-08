@@ -2,7 +2,7 @@ import React from "react";
 import UserReferenceCounter from "./UserReferenceCounter";
 import CitationStyleCounter from "./CitationStyleCounter";
 import UserInfo from "./UserInfo";
-import { getSpecificUserById } from "../componentActions/actions";
+import { getSpecificUserById, getUserReferences } from "../componentActions/actions";
 import { getServerAuthSession } from "@/lib/auth";
 import dbConnect from "@/utils/dbConnect";
 import CSLStyle from "@/models/CSLStyle";
@@ -27,7 +27,9 @@ async function countCSLStyles() {
 const Dashboard = async () => {
 
   const session = await getServerAuthSession();
-  const user = await getSpecificUserById(session?.user?.id);
+  const user = await getSpecificUserById(session?.user?.id) ?? '';
+  const references = await getUserReferences(user.id);
+  const referenceCount = references?.length ?? 0; 
   const cslStyleCount = await countCSLStyles() ?? 0;
 
   return (
@@ -38,7 +40,7 @@ const Dashboard = async () => {
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <AddReferences />
-      <UserReferenceCounter userReferenceCount={user.ownedReferences.length} />
+      <UserReferenceCounter userReferenceCount={referenceCount} />
       <CitationStyleCounter styleCount={cslStyleCount} />
     </div>
   </div>

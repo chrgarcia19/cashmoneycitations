@@ -277,6 +277,13 @@ async function AddRef2User(userId: string | undefined, referenceId: string) {
             user.ownedReferences = [...user.ownedReferences, referenceId];
             await user.save();
         }
+
+        const ref = await CSLBibModel.findById(referenceId);
+
+        if (ref) {
+            ref.isOwnedBy = [...ref.isOwnedBy, userId];
+            await ref.save();
+        }
     } catch(e: any) {
         LogCMCError("INFORMATION", "USER", e);
         return 
@@ -417,6 +424,7 @@ export async function HandleManualReference(form: any, userId: any) {
             format: bibResponse.format,
             image_url: bibResponse.image_url,
             api_source: bibResponse.api_source,
+            isOwnedBy: userId,
         }
 
         // Add DB id to form
